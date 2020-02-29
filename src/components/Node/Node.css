@@ -1,0 +1,22 @@
+.wrapper{
+  background: #4b4f52;
+  border-radius: 5px;
+  box-shadow: 0px 5px 8px rgba(0,0,0,.4);
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+.label{
+  font-size: 13px;
+  text-transform: uppercase;
+  padding: 5px;
+  background: #3d4245;
+  border-radius: 5px 5px 0px 0px;
+  margin: 0px;
+  margin-bottom: 3px;
+  border-bottom: 1px solid rgba(0,0,0,.15);
+}

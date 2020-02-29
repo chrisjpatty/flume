@@ -1,0 +1,9 @@
+.wrapper{
+  width: 100%;
+  padding-right: 3px;
+  padding-top: 3px;
+  padding-bottom: 5px;
+}
+.label{
+  font-size: 14px;
+}

@@ -25,7 +25,8 @@ export default {
   plugins: [
     external(),
     postcss({
-      modules: true
+      modules: true,
+      plugins: [require('postcss-nested')]
     }),
     url(),
     svgr(),

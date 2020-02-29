@@ -1,0 +1,8 @@
+.wrapper{
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAALUlEQVQ4jWNUU9f8z0BFwAIyipeXl2omMlHTdaMGjho4auCogaMG0spABgYGAK6EAcZotCgmAAAAAElFTkSuQmCC');
+  position: relative;
+  overflow: scroll;
+}

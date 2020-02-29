@@ -1,0 +1,25 @@
+.wrapper{
+  font-size: 14px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: linear-gradient(to top, #5b5f62, #6f7477);
+  width: 100%;
+  border: 1px solid #3c3e40;
+  padding-right: 15px;
+  position: relative;
+  &::after{
+    content: "";
+    position: absolute;
+    background: none;
+    right: 5px;
+    top: 8px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 5px 0 5px;
+    border-color: #191b1c transparent transparent transparent;
+  }
+  &:hover{
+    background: linear-gradient(to top, #63676a, #777b7e);
+  }
+}

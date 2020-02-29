@@ -5,11 +5,10 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "node-editor": "link:..",
+    "normalize.css": "^8.0.1",
     "prop-types": "^15.6.2",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts": "^1.1.4",
-    "node-editor": "link:.."
+    "react-scripts": "^1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
