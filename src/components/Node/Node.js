@@ -1,42 +1,93 @@
 import React from "react";
 import styles from "./Node.css";
-import { NodeTypesContext } from '../../context'
-import IoPorts from '../IoPorts/IoPorts'
+import { NodeTypesContext } from "../../context";
+import { getPortRectsByNodes, getPortRect } from "../../connectionCalculator";
+import IoPorts from "../IoPorts/IoPorts";
 
-const Node = ({ id, width, height, x, y, delay = 6, stageRef, type, onDragEnd, onDrag }) => {
-  const nodeTypes = React.useContext(NodeTypesContext)
-  const {label, inputs = [], outputs = []} = nodeTypes[type]
+const Node = ({
+  id,
+  width,
+  height,
+  x,
+  y,
+  delay = 6,
+  stageRef,
+  connections,
+  type,
+  onDragEnd,
+  onDrag
+}) => {
+  const nodeTypes = React.useContext(NodeTypesContext);
+  const { label, inputs = [], outputs = [] } = nodeTypes[type];
 
-  const startCoordinates = React.useRef(null)
-  const [coordinates, setCoordinates] = React.useState({x,y})
-  const [isDragging, setIsDragging] = React.useState(false)
-  const offset = React.useRef()
-  const nodeWrapper = React.useRef()
+  const startCoordinates = React.useRef(null);
+  const [coordinates, setCoordinates] = React.useState({ x, y });
+  const [isDragging, setIsDragging] = React.useState(false);
+  const offset = React.useRef();
+  const nodeWrapper = React.useRef();
 
+  const updateConnectionsByTransput = (transput = {}, isOutput) => {
+    Object.entries(transput).forEach(([portName, outputs]) => {
+      outputs.forEach(output => {
+        const toRect = getPortRect(id, portName);
+        const fromRect = getPortRect(output.nodeId, output.portName);
+        const portHalf = fromRect.width / 2;
+        let combined;
+        if(isOutput){
+          combined = id + portName + output.nodeId + output.portName;
+        }else{
+          combined = output.nodeId + output.portName + id + portName;
+        }
+        const cnt = document.querySelector(
+          `[data-connection-id="${combined}"]`
+        );
+        cnt.x1.baseVal.value = toRect.x - stageRef.current.x + portHalf;
+        cnt.y1.baseVal.value = toRect.y - stageRef.current.y + portHalf;
+        cnt.x2.baseVal.value = fromRect.x - stageRef.current.x + portHalf;
+        cnt.y2.baseVal.value = fromRect.y - stageRef.current.y + portHalf;
+      })
+    });
+  }
+
+  const updateNodeConnections = () => {
+    if (connections) {
+      updateConnectionsByTransput(connections.inputs)
+      updateConnectionsByTransput(connections.outputs, true)
+    }
+  };
 
   const updateCoordinates = e => {
+    nodeWrapper.current.style.left = `${e.clientX -
+      stageRef.current.left -
+      offset.current.x}px`;
+    nodeWrapper.current.style.top = `${e.clientY -
+      stageRef.current.top -
+      offset.current.y}px`;
+    updateNodeConnections();
+  };
+
+  const stopDrag = e => {
     setCoordinates({
       x: e.clientX - stageRef.current.left - offset.current.x,
       y: e.clientY - stageRef.current.top - offset.current.y
-    })
-    onDrag(e)
-  }
-
-  const stopDrag = e => {
-    setIsDragging(false)
-    window.removeEventListener("mouseup", stopDrag)
-    window.removeEventListener("mousemove", updateCoordinates)
-    onDragEnd()
-  }
+    });
+    setIsDragging(false);
+    window.removeEventListener("mouseup", stopDrag);
+    window.removeEventListener("mousemove", updateCoordinates);
+    // onDragEnd();
+  };
 
   const startDrag = e => {
     const nodeRect = nodeWrapper.current.getBoundingClientRect();
-    offset.current = {x: startCoordinates.current.x - nodeRect.left, y: startCoordinates.current.y - nodeRect.top}
-    updateCoordinates(e)
-    setIsDragging(true)
-    window.addEventListener("mouseup", stopDrag)
-    window.addEventListener("mousemove", updateCoordinates)
-  }
+    offset.current = {
+      x: startCoordinates.current.x - nodeRect.left,
+      y: startCoordinates.current.y - nodeRect.top
+    };
+    updateCoordinates(e);
+    setIsDragging(true);
+    window.addEventListener("mouseup", stopDrag);
+    window.addEventListener("mousemove", updateCoordinates);
+  };
 
   const checkDragDelay = e => {
     let x;
@@ -76,7 +127,7 @@ const Node = ({ id, width, height, x, y, delay = 6, stageRef, type, onDragEnd, o
       x = e.clientX;
       y = e.clientY;
     }
-    startCoordinates.current = { x, y }
+    startCoordinates.current = { x, y };
     document.addEventListener("mouseup", endDragDelay);
     document.addEventListener("mousemove", checkDragDelay);
   };

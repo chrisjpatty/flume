@@ -4,6 +4,7 @@ import Stage from "./components/Stage/Stage";
 import Node from "./components/Node/Node";
 import Connection from "./components/Connection/Connection";
 import { NodeTypesContext, InputTypesContext } from "./context";
+import { getPortRectsByNodes } from './connectionCalculator'
 
 import styles from "./styles.css";
 
@@ -13,23 +14,8 @@ const NodeEditor = ({ nodes, nodeTypes, inputTypes }) => {
   const [portRects, setPortRects] = React.useState(null);
 
   const recalculateConnections = () => {
-    const portRects = Object.values(nodes).reduce((obj, node) => {
-      if (node.connections) {
-        Object.entries(node.connections).forEach(([inputName, output]) => {
-          obj[node.id + inputName] = document
-            .querySelector(
-              `[data-node-id="${node.id}"] [data-port-name="${inputName}"]`
-            )
-            .getBoundingClientRect();
-          obj[output.nodeId + output.portName] = document
-            .querySelector(
-              `[data-node-id="${output.nodeId}"] [data-port-name="${output.portName}"]`
-            )
-            .getBoundingClientRect();
-        });
-      }
-      return obj;
-    }, {});
+    const portRects = getPortRectsByNodes(nodes)
+    console.log(portRects);
     setPortRects(portRects);
   };
 
@@ -52,28 +38,30 @@ const NodeEditor = ({ nodes, nodeTypes, inputTypes }) => {
           ))}
           {portRects
             ? Object.values(nodes).flatMap(node =>
-                node.connections
-                  ? Object.entries(node.connections).map(
-                      ([inputName, output], k) => {
-                        const fromPort =
-                          portRects[output.nodeId + output.portName];
-                        const fromHalf = fromPort.width / 2;
-                        const toPort = portRects[node.id + inputName];
-                        const toHalf = toPort.width / 2;
-                        return (
-                          <Connection
-                            from={{
-                              x: fromPort.x - stage.current.x + fromHalf,
-                              y: fromPort.y - stage.current.y + fromHalf
-                            }}
-                            to={{
-                              x: toPort.x - stage.current.x + toHalf,
-                              y: toPort.y - stage.current.y + toHalf
-                            }}
-                            key={node.id + inputName + k}
-                          />
-                        );
-                      }
+                node.connections && node.connections.inputs
+                  ? Object.entries(node.connections.inputs).flatMap(
+                      ([inputName, outputs], k) => (
+                        outputs.map(output => {
+                          const fromPort =
+                            portRects[output.nodeId + output.portName];
+                          const portHalf = fromPort.width / 2;
+                          const toPort = portRects[node.id + inputName];
+                          return (
+                            <Connection
+                              id={output.nodeId + output.portName + node.id + inputName}
+                              from={{
+                                x: fromPort.x - stage.current.x + portHalf,
+                                y: fromPort.y - stage.current.y + portHalf
+                              }}
+                              to={{
+                                x: toPort.x - stage.current.x + portHalf,
+                                y: toPort.y - stage.current.y + portHalf
+                              }}
+                              key={node.id + inputName + k}
+                            />
+                          );
+                        })
+                      )
                     )
                   : []
               )
