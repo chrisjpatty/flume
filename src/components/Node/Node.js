@@ -147,7 +147,7 @@ const Node = ({
       data-node-id={id}
     >
       <h2 className={styles.label}>{label}</h2>
-      <IoPorts inputs={inputs} outputs={outputs} />
+      <IoPorts nodeId={id} inputs={inputs} outputs={outputs} />
     </div>
   );
 };

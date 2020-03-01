@@ -150,7 +150,8 @@ export default () => {
                     portName: "output"
                   }
                 ]
-              }
+              },
+              outputs: {}
             }
           },
           rriwo92: {
@@ -161,6 +162,7 @@ export default () => {
             width: 200,
             height: 300,
             connections: {
+              inputs: {},
               outputs: {
                 output: [
                   {
@@ -179,6 +181,7 @@ export default () => {
             width: 200,
             height: 300,
             connections: {
+              inputs: {},
               outputs: {
                 output: [
                   {
@@ -201,6 +204,7 @@ export default () => {
             width: 200,
             height: 300,
             connections: {
+              inputs: {},
               outputs: {
                 output: [
                   {
