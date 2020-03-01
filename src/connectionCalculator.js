@@ -1,6 +1,6 @@
-export const getPortRect = (nodeId, portName) =>
+export const getPortRect = (nodeId, portName, transputType="input") =>
   document
-    .querySelector(`[data-node-id="${nodeId}"] [data-port-name="${portName}"]`)
+    .querySelector(`[data-node-id="${nodeId}"] [data-port-name="${portName}"][data-port-transput-type="${transputType}"]`)
     .getBoundingClientRect();
 
 export const getPortRectsByNodes = (nodes, forEachConnection) =>
@@ -9,7 +9,7 @@ export const getPortRectsByNodes = (nodes, forEachConnection) =>
       Object.entries(node.connections.inputs).forEach(([inputName, outputs]) => {
         outputs.forEach(output => {
           const toRect = getPortRect(node.id, inputName);
-          const fromRect = getPortRect(output.nodeId, output.portName);
+          const fromRect = getPortRect(output.nodeId, output.portName, 'output');
           if(forEachConnection){
             forEachConnection({
               to: toRect,

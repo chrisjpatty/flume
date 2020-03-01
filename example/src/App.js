@@ -33,19 +33,67 @@ export default () => {
           string: {
             label: 'Text',
             acceptTypes: ["string"],
-            color: "green"
+            color: "green",
+            controls: [
+              {
+                type: "text",
+                name: "text",
+                label: "Text"
+              }
+            ]
+          },
+          number: {
+            label: 'Number',
+            acceptTypes: ["number"],
+            color: "red"
           },
           businessRules: {
             label: "Business Rules",
             acceptTypes: ["businessRules"],
             color: "purple"
+          },
+          value: {
+            label: 'Value',
+            acceptTypes: ["value"],
+            color: "yellow"
           }
         }}
         nodeTypes={{
+          field: {
+            label: 'Field',
+            description: 'Represents an existing field in the current wizard.',
+            type: 'field',
+            sortIndex: 0,
+            inputs: [
+              {
+                type: 'field',
+                name: 'fieldId'
+              }
+            ],
+            outputs: [
+              {
+                type: 'value',
+                name: 'value'
+              },
+              {
+                type: 'field',
+                name: 'fieldId',
+                label: 'Field'
+              }
+            ]
+          },
           fieldValueEquals: {
             label: "Field Value Equals",
+            description: "Outputs true if both values equal each other.",
+            addable: true,
+            deleteable: true,
+            type: "fieldValueEquals",
+            sortIndex: 1,
             inputs: [
-              { type: 'field' }
+              {
+                type: 'field',
+                name: 'fieldId'
+              }
             ],
             outputs: [
               {
@@ -55,23 +103,107 @@ export default () => {
               }
             ]
           },
+          text: {
+            label: "Text",
+            description: "Outputs a string of text.",
+            type: 'text',
+            inputs: [
+              {
+                type: 'string',
+                name: 'text'
+              }
+            ],
+            outputs: [
+              {
+                type: 'string',
+                name: 'text'
+              }
+            ]
+          },
+          and: {
+            label: "And",
+            description: "Outputs true if both values are true.",
+            type: "and",
+            inputs: [
+              {
+                type: "boolean",
+                name: "val1"
+              },
+              {
+                type: "boolean",
+                name: "val2"
+              }
+            ],
+            outputs: [
+              {
+                type: 'boolean',
+                name: 'output',
+                label: 'True/False'
+              }
+            ]
+          },
+          or: {
+            label: "Or",
+            description: "Outputs true if either value is true.",
+            type: "or",
+            inputs: [
+              {
+                type: "boolean",
+                name: "val1"
+              },
+              {
+                type: "boolean",
+                name: "val2"
+              }
+            ],
+            outputs: [
+              {
+                type: 'boolean',
+                name: 'output',
+                label: 'True/False'
+              }
+            ]
+          },
+          textToNumber: {
+            label: "Text to Number",
+            description: "Accepts text, and attempts to output it as a number.",
+            type: "textToNumber",
+            inputs: [
+              {
+                type: "string",
+                name: "text"
+              }
+            ],
+            outputs: [
+              {
+                type: 'number',
+                name: 'number'
+              }
+            ]
+          },
           output: {
-            label: "Wizard Attributes",
+            addable: false,
+            deleteable: false,
+            label: "Field Attributes",
+            type: "output",
             inputs: [
               {
                 type: "string",
                 name: "label",
-                label: "Label"
+                label: "Label",
+                noControls: true
               },
               {
                 type: "string",
                 name: "description",
-                label: "Description"
+                label: "Description",
+                noControls: true
               },
               {
                 type: "string",
                 name: "tooltip",
-                label: "Tooltip"
+                label: "Tooltip",
+                noControls: true
               },
               {
                 type: "boolean",

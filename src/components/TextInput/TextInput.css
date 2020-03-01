@@ -1,0 +1,16 @@
+.wrapper{
+  background: none;
+  border: none;
+}
+.input{
+  background: linear-gradient(to bottom, #5b5f62, #6f7477);
+  width: 100%;
+  border: 1px solid #3c3e40;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 5px;
+  resize: vertical;
+  &::placeholder{
+    color: rgb(47, 49, 50);
+  }
+}

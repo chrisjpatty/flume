@@ -55,7 +55,7 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
                             outputs.map(output => {
                               const fromPort =
                                 portRects[output.nodeId + output.portName];
-                              const portHalf = fromPort.width / 2;
+                              const portHalf = fromPort ? fromPort.width / 2 : 0;
                               const toPort = portRects[node.id + inputName];
                               return fromPort && toPort ? (
                                 <Connection

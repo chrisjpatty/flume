@@ -50,6 +50,7 @@
     "eslint-plugin-react-hooks": "1.x",
     "eslint-plugin-standard": "^3.1.0",
     "gh-pages": "^1.2.0",
+    "postcss-nested": "^4.2.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "^1.1.4",
@@ -65,7 +66,8 @@
     "dist"
   ],
   "dependencies": {
-    "postcss-nested": "^4.2.1",
+    "lodash": "^4.17.15",
+    "nanoid": "^2.1.11",
     "react-portal": "^4.2.1"
   }
 }

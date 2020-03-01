@@ -14,16 +14,6 @@ const Select = ({ options, placeholder = "", onChange = noop }) => {
 
   const closeDrawer = () => {
     setDrawerOpen(false);
-    document.removeEventListener("click", testClickOutside);
-  };
-
-  const testClickOutside = e => {
-    const selectDrawer = document.getElementById(
-      "__node_editor_select_wrapper__"
-    );
-    if (selectDrawer && !selectDrawer.contains(e.target)) {
-      closeDrawer();
-    }
   };
 
   const openDrawer = () => {
@@ -34,13 +24,11 @@ const Select = ({ options, placeholder = "", onChange = noop }) => {
         y: wrapperRect.y + wrapperRect.height
       });
       setDrawerOpen(true);
-      document.addEventListener("click", testClickOutside);
     }
   };
 
   const handleOptionSelected = option => {
     onChange(option.value);
-    closeDrawer();
   };
 
   return (
@@ -54,6 +42,7 @@ const Select = ({ options, placeholder = "", onChange = noop }) => {
           y={drawerCoordinates.y}
           options={options}
           onSelected={handleOptionSelected}
+          onRequestClose={closeDrawer}
         />
       )}
     </React.Fragment>

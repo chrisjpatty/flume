@@ -66,6 +66,9 @@
     margin-right: -11px;
     margin-left: 5px;
   }
+  &[data-port-color="red"]{
+    background: linear-gradient(to bottom, #e0608b, #a73f64);
+  }
   &[data-port-color="purple"]{
     background: linear-gradient(to bottom, #7e60e0, #553fa7);
   }
@@ -74,5 +77,8 @@
   }
   &[data-port-color="green"]{
     background: linear-gradient(to bottom, #47d680, #239d75);
+  }
+  &[data-port-color="yellow"]{
+    background: linear-gradient(to bottom, #d6bf47, #9d8923);
   }
 }

@@ -1,3 +1,5 @@
+const nanoid = require('nanoid')
+
 const addConnection = (nodes, input, output) => ({
   ...nodes,
   [input.nodeId]: {
@@ -43,6 +45,20 @@ const nodesReducer = (nodes, action={}) => {
         return addConnection(nodes, input, output);
       else
         return nodes
+    case 'ADD_NODE':
+      const { x, y, nodeType, width=200 } = action;
+      const newNodeId = nanoid(10)
+      return {
+        ...nodes,
+        [newNodeId]: {
+          id: newNodeId,
+          x, y, type: nodeType, width,
+          connections: {
+            inputs: {},
+            outputs: {}
+          }
+        }
+      }
     default:
       return nodes;
   }

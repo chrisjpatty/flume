@@ -29,8 +29,8 @@ const Node = ({
   const updateConnectionsByTransput = (transput = {}, isOutput) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
       outputs.forEach(output => {
-        const toRect = getPortRect(id, portName);
-        const fromRect = getPortRect(output.nodeId, output.portName);
+        const toRect = getPortRect(id, portName, isOutput ? 'output' : 'input');
+        const fromRect = getPortRect(output.nodeId, output.portName, isOutput ? 'input' : 'output');
         const portHalf = fromRect.width / 2;
         let combined;
         if(isOutput){
@@ -147,7 +147,7 @@ const Node = ({
       data-node-id={id}
     >
       <h2 className={styles.label}>{label}</h2>
-      <IoPorts nodeId={id} inputs={inputs} outputs={outputs} />
+      <IoPorts nodeId={id} inputs={inputs} outputs={outputs} updateNodeConnections={updateNodeConnections} />
     </div>
   );
 };
