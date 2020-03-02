@@ -10,7 +10,11 @@
   font-size: 13px;
   padding: 5px;
   resize: vertical;
+  outline: none;
   &::placeholder{
     color: rgb(47, 49, 50);
+  }
+  &:focus{
+    background: linear-gradient(to bottom, #676b6e, #75797c);
   }
 }
