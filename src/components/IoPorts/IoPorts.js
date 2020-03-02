@@ -13,7 +13,8 @@ const IoPorts = ({
   nodeId,
   inputs = [],
   outputs = [],
-  updateNodeConnections
+  updateNodeConnections,
+  connections
 }) => {
   const inputTypes = React.useContext(InputTypesContext);
 
@@ -26,6 +27,8 @@ const IoPorts = ({
             updateNodeConnections={updateNodeConnections}
             inputTypes={inputTypes}
             nodeId={nodeId}
+            inputs={connections.inputs}
+            outputs={connections.outputs}
             key={i}
           />
         ))}
@@ -38,6 +41,8 @@ const IoPorts = ({
               inputTypes={inputTypes}
               nodeId={nodeId}
               portOnRight
+              inputs={connections.inputs}
+              outputs={connections.outputs}
               key={i}
             />
           ))}
@@ -56,13 +61,15 @@ const Input = ({
   nodeId,
   inputTypes,
   noControls,
-  updateNodeConnections
+  updateNodeConnections,
+  inputs,
+  outputs,
 }) => {
   const { label: defaultLabel, color, controls = [] } = inputTypes[type] || {};
 
   return (
     <div className={styles.transput}>
-      <Port type={type} color={color} name={name} nodeId={nodeId} isInput />
+      <Port type={type} color={color} name={name} nodeId={nodeId} inputs={inputs} outputs={outputs} isInput />
       {!noControls
         ? controls.map(control => (
             <Control {...control} updateNodeConnections={updateNodeConnections} inputLabel={label} key={control.name} />
@@ -75,18 +82,18 @@ const Input = ({
   );
 };
 
-const Output = ({ label, name, nodeId, type, inputTypes }) => {
+const Output = ({ label, name, nodeId, type, inputTypes, inputs, outputs }) => {
   const { label: defaultLabel, color } = inputTypes[type] || {};
 
   return (
     <div className={styles.transput}>
       <label className={styles.portLabel}>{label || defaultLabel}</label>
-      <Port type={type} name={name} color={color} nodeId={nodeId} />
+      <Port type={type} name={name} color={color} nodeId={nodeId} inputs={inputs} outputs={outputs} />
     </div>
   );
 };
 
-const Port = ({ color = "grey", name = "", type, isInput, nodeId }) => {
+const Port = ({ color = "grey", name = "", type, isInput, nodeId, inputs, outputs }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const inputTypes = React.useContext(InputTypesContext);
   const setShouldRecalculateConnections = React.useContext(
@@ -99,32 +106,60 @@ const Port = ({ color = "grey", name = "", type, isInput, nodeId }) => {
   });
   const port = React.useRef();
   const line = React.useRef();
+  const lineInToPort = React.useRef();
 
   const handleDrag = e => {
     const stage = document
       .getElementById("__node_editor_stage__")
       .getBoundingClientRect();
-    line.current.setAttribute("x2", e.clientX - stage.x);
-    line.current.setAttribute("y2", e.clientY - stage.y);
+    if(isInput){
+      lineInToPort.current.setAttribute("x2", e.clientX - stage.x)
+      lineInToPort.current.setAttribute("y2", e.clientY - stage.y)
+    }else{
+      line.current.setAttribute("x2", e.clientX - stage.x);
+      line.current.setAttribute("y2", e.clientY - stage.y);
+    }
   };
 
   const handleDragEnd = e => {
-    if (e.target.dataset.portName) {
+    const droppedOnPort = !!e.target.dataset.portName
+
+    if(isInput){
       const {
-        portName: inputPortName,
-        nodeId: inputNodeId,
-        portType: inputNodeType
-      } = e.target.dataset;
-      const inputWillAcceptConnection = inputTypes[
-        inputNodeType
-      ].acceptTypes.includes(type);
-      if (inputWillAcceptConnection) {
+        inputNodeId,
+        inputPortName,
+        outputNodeId,
+        outputPortName
+      } = lineInToPort.current.dataset
+      console.log(droppedOnPort);
+      if(droppedOnPort){
+        console.log("Reattach");
+      }else{
         nodesDispatch({
-          type: "ADD_CONNECTION",
-          output: { nodeId, portName: name },
-          input: { nodeId: inputNodeId, portName: inputPortName }
-        });
-        setShouldRecalculateConnections(true);
+          type: "REMOVE_CONNECTION",
+          input: {nodeId: inputNodeId, portName: inputPortName},
+          output: {nodeId: outputNodeId, portName: outputPortName}
+        })
+        // setShouldRecalculateConnections(true);
+      }
+    }else{
+      if (droppedOnPort) {
+        const {
+          portName: inputPortName,
+          nodeId: inputNodeId,
+          portType: inputNodeType
+        } = e.target.dataset;
+        const inputWillAcceptConnection = inputTypes[
+          inputNodeType
+        ].acceptTypes.includes(type);
+        if (inputWillAcceptConnection) {
+          nodesDispatch({
+            type: "ADD_CONNECTION",
+            output: { nodeId, portName: name },
+            input: { nodeId: inputNodeId, portName: inputPortName }
+          });
+          setShouldRecalculateConnections(true);
+        }
       }
     }
     setIsDragging(false);
@@ -138,20 +173,31 @@ const Port = ({ color = "grey", name = "", type, isInput, nodeId }) => {
     const stage = document
       .getElementById("__node_editor_stage__")
       .getBoundingClientRect();
-    setDragStartCoordinates({
-      x: startPort.x - stage.x + startPort.width / 2,
-      y: startPort.y - stage.y + startPort.width / 2
-    });
-    setIsDragging(true);
-    document.addEventListener("mouseup", handleDragEnd);
-    document.addEventListener("mousemove", handleDrag);
+    if(isInput){
+      lineInToPort.current = document.querySelector(`[data-input-node-id="${nodeId}"][data-input-port-name="${name}"]`)
+      const portIsConnected = !!lineInToPort.current;
+      if(portIsConnected){
+        lineInToPort.current.parentNode.style.zIndex = 9999;
+        setIsDragging(true);
+        document.addEventListener("mouseup", handleDragEnd);
+        document.addEventListener("mousemove", handleDrag);
+      }
+    }else{
+      setDragStartCoordinates({
+        x: startPort.x - stage.x + startPort.width / 2,
+        y: startPort.y - stage.y + startPort.width / 2
+      });
+      setIsDragging(true);
+      document.addEventListener("mouseup", handleDragEnd);
+      document.addEventListener("mousemove", handleDrag);
+    }
   };
 
   return (
     <React.Fragment>
       <div
         style={{ zIndex: 999 }}
-        onMouseDown={isInput ? undefined : handleDragStart}
+        onMouseDown={handleDragStart}
         className={styles.port}
         data-port-color={color}
         data-port-name={name}

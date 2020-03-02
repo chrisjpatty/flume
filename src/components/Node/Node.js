@@ -3,6 +3,7 @@ import styles from "./Node.css";
 import { NodeTypesContext } from "../../context";
 import { getPortRectsByNodes, getPortRect } from "../../connectionCalculator";
 import IoPorts from "../IoPorts/IoPorts";
+import { ConnectionsState } from '../Connection/Connection'
 
 const Node = ({
   id,
@@ -41,10 +42,16 @@ const Node = ({
         const cnt = document.querySelector(
           `[data-connection-id="${combined}"]`
         );
-        cnt.x1.baseVal.value = toRect.x - stageRef.current.x + portHalf;
-        cnt.y1.baseVal.value = toRect.y - stageRef.current.y + portHalf;
-        cnt.x2.baseVal.value = fromRect.x - stageRef.current.x + portHalf;
-        cnt.y2.baseVal.value = fromRect.y - stageRef.current.y + portHalf;
+        // ConnectionsState.setConnection(combined, {
+        //   x1: toRect.x - stageRef.current.x + portHalf,
+        //   y1: toRect.y - stageRef.current.y + portHalf,
+        //   x2: fromRect.x - stageRef.current.x + portHalf,
+        //   y2: fromRect.y - stageRef.current.y + portHalf
+        // })
+        cnt.x1.baseVal.value = stageRef.current.x + portHalf;
+        cnt.y1.baseVal.value = stageRef.current.y + portHalf;
+        cnt.x2.baseVal.value = stageRef.current.x + portHalf;
+        cnt.y2.baseVal.value = stageRef.current.y + portHalf;
       })
     });
   }
@@ -147,7 +154,13 @@ const Node = ({
       data-node-id={id}
     >
       <h2 className={styles.label}>{label}</h2>
-      <IoPorts nodeId={id} inputs={inputs} outputs={outputs} updateNodeConnections={updateNodeConnections} />
+      <IoPorts
+        nodeId={id}
+        inputs={inputs}
+        outputs={outputs}
+        connections={connections}
+        updateNodeConnections={updateNodeConnections}
+      />
     </div>
   );
 };

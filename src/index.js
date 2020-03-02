@@ -23,7 +23,7 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
   const recalculateConnections = React.useCallback(() => {
     const portRects = getPortRectsByNodes(nodes);
     setPortRects(portRects);
-  }, [nodes]);
+  }, []);
 
   React.useLayoutEffect(() => {
     if(shouldRecalculateConnections){
@@ -59,6 +59,10 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
                               const toPort = portRects[node.id + inputName];
                               return fromPort && toPort ? (
                                 <Connection
+                                  outputNodeId={output.nodeId}
+                                  outputPortName={output.portName}
+                                  inputNodeId={node.id}
+                                  inputPortName={inputName}
                                   id={
                                     output.nodeId +
                                     output.portName +
