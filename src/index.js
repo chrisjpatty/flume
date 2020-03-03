@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Stage from "./components/Stage/Stage";
 import Node from "./components/Node/Node";
+import Connections from './components/Connections/Connections'
 import Connection from "./components/Connection/Connection";
 import {
   NodeTypesContext,
@@ -9,7 +10,7 @@ import {
   NodeDispatchContext,
   ConnectionRecalculateContext
 } from "./context";
-import { getPortRectsByNodes } from "./connectionCalculator";
+import { createConnections } from "./connectionCalculator";
 import nodesReducer from "./nodesReducer";
 
 import styles from "./styles.css";
@@ -17,12 +18,10 @@ import styles from "./styles.css";
 const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
   const [nodes, dispatchNodes] = React.useReducer(nodesReducer, initialNodes);
   const stage = React.useRef();
-  const [portRects, setPortRects] = React.useState(null);
   const [shouldRecalculateConnections, setShouldRecalculateConnections] = React.useState(true)
 
   const recalculateConnections = React.useCallback(() => {
-    const portRects = getPortRectsByNodes(nodes);
-    setPortRects(portRects);
+    createConnections(nodes)
   }, [nodes]);
 
   React.useLayoutEffect(() => {
@@ -41,46 +40,12 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
               {Object.values(nodes).map(node => (
                 <Node
                   stageRef={stage}
-                  onDrag={recalculateConnections}
                   onDragEnd={recalculateConnections}
                   {...node}
                   key={node.id}
                 />
               ))}
-              {portRects
-                ? Object.values(nodes).flatMap(node =>
-                    node.connections && node.connections.inputs
-                      ? Object.entries(node.connections.inputs).flatMap(
-                          ([inputName, outputs], k) =>
-                            outputs.map(output => {
-                              const fromPort =
-                                portRects[output.nodeId + output.portName];
-                              const portHalf = fromPort ? fromPort.width / 2 : 0;
-                              const toPort = portRects[node.id + inputName];
-                              return fromPort && toPort ? (
-                                <Connection
-                                  id={
-                                    output.nodeId +
-                                    output.portName +
-                                    node.id +
-                                    inputName
-                                  }
-                                  from={{
-                                    x: fromPort.x - stage.current.x + portHalf,
-                                    y: fromPort.y - stage.current.y + portHalf
-                                  }}
-                                  to={{
-                                    x: toPort.x - stage.current.x + portHalf,
-                                    y: toPort.y - stage.current.y + portHalf
-                                  }}
-                                  key={node.id + inputName + k}
-                                />
-                              ) : null;
-                            })
-                        )
-                      : []
-                  )
-                : null}
+              <Connections nodes={nodes} />
               <div
                 className={styles.dragWrapper}
                 id="__node_editor_drag_connection__"

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Node.css";
-import { NodeTypesContext } from "../../context";
+import { NodeTypesContext, NodeDispatchContext } from "../../context";
 import { getPortRectsByNodes, getPortRect } from "../../connectionCalculator";
 import IoPorts from "../IoPorts/IoPorts";
 
@@ -18,6 +18,7 @@ const Node = ({
   onDrag
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
+  const nodesDispatch = React.useContext(NodeDispatchContext)
   const { label, inputs = [], outputs = [] } = nodeTypes[type];
 
   const startCoordinates = React.useRef(null);
@@ -67,11 +68,17 @@ const Node = ({
   };
 
   const stopDrag = e => {
-    setCoordinates({
+    const coordinates = {
       x: e.clientX - stageRef.current.left - offset.current.x,
       y: e.clientY - stageRef.current.top - offset.current.y
-    });
+    }
+    setCoordinates(coordinates);
     setIsDragging(false);
+    nodesDispatch({
+      type: 'SET_NODE_COORDINATES',
+      ...coordinates,
+      nodeId: id
+    })
     window.removeEventListener("mouseup", stopDrag);
     window.removeEventListener("mousemove", updateCoordinates);
     // onDragEnd();

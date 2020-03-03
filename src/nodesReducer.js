@@ -59,6 +59,16 @@ const nodesReducer = (nodes, action={}) => {
           }
         }
       }
+    case 'SET_NODE_COORDINATES': {
+      const { x, y, nodeId } = action;
+      return {
+        ...nodes,
+        [nodeId]: {
+          ...nodes[nodeId],
+          x,y
+        }
+      }
+    }
     default:
       return nodes;
   }
