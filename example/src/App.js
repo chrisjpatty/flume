@@ -72,27 +72,43 @@ export default () => {
             ],
             outputs: [
               {
+                type: 'field',
+                name: 'fieldId',
+                label: 'Field'
+              },
+              {
                 type: 'value',
                 name: 'value'
               },
               {
-                type: 'field',
-                name: 'fieldId',
-                label: 'Field'
+                type: 'string',
+                name: 'label',
+                label: 'Label'
+              },
+              {
+                type: 'boolean',
+                name: 'visible',
+                label: 'Visible'
+              },
+              {
+                type: 'boolean',
+                name: 'disabled',
+                label: 'Disabled'
               }
             ]
           },
-          fieldValueEquals: {
-            label: "Field Value Equals",
-            description: "Outputs true if both values equal each other.",
-            addable: true,
-            deleteable: true,
-            type: "fieldValueEquals",
-            sortIndex: 1,
+          numberGreaterThan: {
+            label: "Greater Than",
+            description: "Outputs true if the first number is greater than the second number.",
+            type: "numberGreaterThan",
             inputs: [
               {
-                type: 'field',
-                name: 'fieldId'
+                type: 'number',
+                name: 'num1'
+              },
+              {
+                type: 'number',
+                name: 'num2'
               }
             ],
             outputs: [
@@ -120,10 +136,38 @@ export default () => {
               }
             ]
           },
+          textSwitch: {
+            label: "Text Switch",
+            description: "Outputs text based on a given true/false input.",
+            type: 'textSwitch',
+            inputs: [
+              {
+                type: "boolean",
+                name: "test"
+              },
+              {
+                type: "string",
+                name: "textIfTrue",
+                label: "Text if true"
+              },
+              {
+                type: "string",
+                name: "textIfFalse",
+                label: "Text if false"
+              }
+            ],
+            outputs: [
+              {
+                type: "string",
+                name: "output"
+              }
+            ]
+          },
           and: {
             label: "And",
             description: "Outputs true if both values are true.",
             type: "and",
+            sortIndex: 1,
             inputs: [
               {
                 type: "boolean",
@@ -146,6 +190,7 @@ export default () => {
             label: "Or",
             description: "Outputs true if either value is true.",
             type: "or",
+            sortIndex: 2,
             inputs: [
               {
                 type: "boolean",
@@ -161,6 +206,65 @@ export default () => {
                 type: 'boolean',
                 name: 'output',
                 label: 'True/False'
+              }
+            ]
+          },
+          valuesEqual: {
+            label: "Values Equal",
+            description: "Outputs whether two values equal each other.",
+            type: 'valuesEqual',
+            inputs: [
+              {
+                type: "value",
+                name: "val1"
+              },
+              {
+                type: "value",
+                name: "val2"
+              }
+            ],
+            outputs: [
+              {
+                type: "boolean",
+                name: "output"
+              }
+            ]
+          },
+          valuesDoNotEqual: {
+            label: "Values Do Not Equal",
+            description: "Outputs whether two values do not equal each other.",
+            type: 'valuesDoNotEqual',
+            inputs: [
+              {
+                type: "value",
+                name: "val1"
+              },
+              {
+                type: "value",
+                name: "val2"
+              }
+            ],
+            outputs: [
+              {
+                type: "boolean",
+                name: "output"
+              }
+            ]
+          },
+          booleanReverse: {
+            label: "Reverse Boolean",
+            description: "Outputs the opposite of a true/false",
+            type: 'booleanReverse',
+            inputs: [
+              {
+                type: "boolean",
+                name: "boolean"
+              }
+            ],
+            outputs: [
+              {
+                type: "boolean",
+                name: "output"
               }
             ]
           },
@@ -257,94 +361,8 @@ export default () => {
             width: 200,
             height: 300,
             connections: {
-              inputs: {
-                visible: [
-                  {
-                    nodeId: "vmkld29",
-                    portName: "output"
-                  }
-                ],
-                disabled: [
-                  {
-                    nodeId: "alkjlnq",
-                    portName: "output"
-                  }
-                ],
-                hideFieldOnForm: [
-                  {
-                    nodeId: "rriwo92",
-                    portName: "output"
-                  }
-                ],
-                required: [
-                  {
-                    nodeId: "alkjlnq",
-                    portName: "output"
-                  }
-                ]
-              },
+              inputs: {},
               outputs: {}
-            }
-          },
-          rriwo92: {
-            id: "rriwo92",
-            type: "fieldValueEquals",
-            x: 550,
-            y: 500,
-            width: 200,
-            height: 300,
-            connections: {
-              inputs: {},
-              outputs: {
-                output: [
-                  {
-                    nodeId: "io3daf9",
-                    portName: "hideFieldOnForm"
-                  }
-                ]
-              }
-            }
-          },
-          alkjlnq: {
-            id: "alkjlnq",
-            type: "fieldValueEquals",
-            x: 400,
-            y: 350,
-            width: 200,
-            height: 300,
-            connections: {
-              inputs: {},
-              outputs: {
-                output: [
-                  {
-                    nodeId: "io3daf9",
-                    portName: "disabled"
-                  },
-                  {
-                    nodeId: "io3daf9",
-                    portName: "required"
-                  }
-                ]
-              }
-            }
-          },
-          vmkld29: {
-            id: "vmkld29",
-            type: "fieldValueEquals",
-            x: 550,
-            y: 200,
-            width: 200,
-            height: 300,
-            connections: {
-              inputs: {},
-              outputs: {
-                output: [
-                  {
-                    nodeId: "io3daf9",
-                    portName: "visible"
-                  }
-                ]
-              }
             }
           }
         }}

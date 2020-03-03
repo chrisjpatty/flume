@@ -30,7 +30,7 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
       setShouldRecalculateConnections(false)
     }
   }, [shouldRecalculateConnections, recalculateConnections])
-  console.log(nodes);
+
   return (
     <InputTypesContext.Provider value={inputTypes}>
       <NodeTypesContext.Provider value={nodeTypes}>

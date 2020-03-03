@@ -6,7 +6,7 @@
   box-shadow: 0px 6px 7px rgba(0,0,0,.3);
   border: 1px solid rgba(0,0,0,.4);
   font-size: 14px;
-  max-width: 350px;
+  max-width: 300px;
 }
 @supports (backdrop-filter: blur(6px)){
   .menuWrapper{
@@ -27,7 +27,7 @@
   font-weight: 600;
 }
 .optionsWrapper{
-  max-height: 500px;
+  max-height: 300px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

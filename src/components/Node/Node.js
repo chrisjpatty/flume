@@ -18,7 +18,7 @@ const Node = ({
   onDrag
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
-  const nodesDispatch = React.useContext(NodeDispatchContext)
+  const nodesDispatch = React.useContext(NodeDispatchContext);
   const { label, inputs = [], outputs = [] } = nodeTypes[type];
 
   const startCoordinates = React.useRef(null);
@@ -30,13 +30,17 @@ const Node = ({
   const updateConnectionsByTransput = (transput = {}, isOutput) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
       outputs.forEach(output => {
-        const toRect = getPortRect(id, portName, isOutput ? 'output' : 'input');
-        const fromRect = getPortRect(output.nodeId, output.portName, isOutput ? 'input' : 'output');
+        const toRect = getPortRect(id, portName, isOutput ? "output" : "input");
+        const fromRect = getPortRect(
+          output.nodeId,
+          output.portName,
+          isOutput ? "input" : "output"
+        );
         const portHalf = fromRect.width / 2;
         let combined;
-        if(isOutput){
+        if (isOutput) {
           combined = id + portName + output.nodeId + output.portName;
-        }else{
+        } else {
           combined = output.nodeId + output.portName + id + portName;
         }
         const cnt = document.querySelector(
@@ -46,14 +50,14 @@ const Node = ({
         cnt.y1.baseVal.value = toRect.y - stageRef.current.y + portHalf;
         cnt.x2.baseVal.value = fromRect.x - stageRef.current.x + portHalf;
         cnt.y2.baseVal.value = fromRect.y - stageRef.current.y + portHalf;
-      })
+      });
     });
-  }
+  };
 
   const updateNodeConnections = () => {
     if (connections) {
-      updateConnectionsByTransput(connections.inputs)
-      updateConnectionsByTransput(connections.outputs, true)
+      updateConnectionsByTransput(connections.inputs);
+      updateConnectionsByTransput(connections.outputs, true);
     }
   };
 
@@ -71,14 +75,14 @@ const Node = ({
     const coordinates = {
       x: e.clientX - stageRef.current.left - offset.current.x,
       y: e.clientY - stageRef.current.top - offset.current.y
-    }
+    };
     setCoordinates(coordinates);
     setIsDragging(false);
     nodesDispatch({
-      type: 'SET_NODE_COORDINATES',
+      type: "SET_NODE_COORDINATES",
       ...coordinates,
       nodeId: id
-    })
+    });
     window.removeEventListener("mouseup", stopDrag);
     window.removeEventListener("mousemove", updateCoordinates);
     // onDragEnd();
@@ -154,7 +158,13 @@ const Node = ({
       data-node-id={id}
     >
       <h2 className={styles.label}>{label}</h2>
-      <IoPorts nodeId={id} inputs={inputs} outputs={outputs} updateNodeConnections={updateNodeConnections} />
+      <IoPorts
+        nodeId={id}
+        inputs={inputs}
+        outputs={outputs}
+        connections={connections}
+        updateNodeConnections={updateNodeConnections}
+      />
     </div>
   );
 };
