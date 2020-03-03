@@ -35,32 +35,28 @@ export const getPortRectsByNodes = (nodes, forEachConnection) =>
     return obj;
   }, {});
 
-/* <Connection
-  id={
-    output.nodeId +
-    output.portName +
-    node.id +
-    inputName
-  }
-  from={{
-    x: fromPort.x - stage.current.x + portHalf,
-    y: fromPort.y - stage.current.y + portHalf
-  }}
-  to={{
-    x: toPort.x - stage.current.x + portHalf,
-    y: toPort.y - stage.current.y + portHalf
-  }}
-  key={node.id + inputName + k}
-/> */
+export const deleteConnection = ({ id }) => {
+  const line = document.querySelector(`[data-connection-id="${id}"]`);
+  if(line) line.parentNode.remove();
+}
 
 export const updateConnection = ({ line, from, to }) => {
   line.setAttribute("x1", from.x);
   line.setAttribute("y1", from.y);
   line.setAttribute("x2", to.x);
   line.setAttribute("y2", to.y);
-}
+};
 
-export const createSVG = ({ from, to, stage, id }) => {
+export const createSVG = ({
+  from,
+  to,
+  stage,
+  id,
+  outputNodeId,
+  outputPortName,
+  inputNodeId,
+  inputPortName
+}) => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("class", styles.svg);
   // svg.setAttributeNS("http://www.w3.org/2000/svg", "xmlns")
@@ -73,6 +69,10 @@ export const createSVG = ({ from, to, stage, id }) => {
   line.setAttribute("stroke-width", "5");
   line.setAttribute("stroke-linecap", "round");
   line.setAttribute("data-connection-id", id);
+  line.setAttribute("data-output-node-id", outputNodeId);
+  line.setAttribute("data-output-port-name", outputPortName);
+  line.setAttribute("data-input-node-id", inputNodeId);
+  line.setAttribute("data-input-port-name", inputPortName);
   svg.appendChild(line);
   stage.appendChild(svg);
   return svg;
@@ -82,6 +82,7 @@ export const getStageRef = () =>
   document.getElementById("__node_editor_stage__");
 
 export const createConnections = nodes => {
+  console.log("Created connections");
   const stageRef = getStageRef();
   const stage = stageRef.getBoundingClientRect();
 
@@ -99,8 +100,10 @@ export const createConnections = nodes => {
             const portHalf = fromPort ? fromPort.width / 2 : 0;
             if (fromPort && toPort) {
               const id = output.nodeId + output.portName + node.id + inputName;
-              const existingLine = document.querySelector(`[data-connection-id="${id}"]`)
-              if(existingLine){
+              const existingLine = document.querySelector(
+                `[data-connection-id="${id}"]`
+              );
+              if (existingLine) {
                 updateConnection({
                   line: existingLine,
                   from: {
@@ -112,9 +115,13 @@ export const createConnections = nodes => {
                     y: toPort.y - stage.y + portHalf
                   }
                 });
-              }else{
+              } else {
                 createSVG({
                   id,
+                  outputNodeId: output.nodeId,
+                  outputPortName: output.portName,
+                  inputNodeId: node.id,
+                  inputPortName: inputName,
                   from: {
                     x: fromPort.x - stage.x + portHalf,
                     y: fromPort.y - stage.y + portHalf
