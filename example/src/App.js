@@ -18,6 +18,7 @@ export default () => {
                 name: "fieldId",
                 label: "Field",
                 placeholder: "Select a field",
+                defaultValue: "",
                 options: [
                   {value: "fjwnaiw", label: "Type of Limited Liability Company", description: "FILING_SUBTYPE_ID - Dropdown"},
                   {value: "lk2li21", label: "The appointment of the registered agent listed above is an affirmation by the represented entity that the agent has consented to serve as a registered agent.", description: "ATTESTATION - Checkbox"},
@@ -38,14 +39,23 @@ export default () => {
               {
                 type: "text",
                 name: "text",
-                label: "Text"
+                label: "Text",
+                defaultValue: ""
               }
             ]
           },
           number: {
             label: 'Number',
             acceptTypes: ["number"],
-            color: "red"
+            color: "red",
+            controls: [
+              {
+                type: "number",
+                name: "number",
+                label: "Number",
+                defaultValue: 0
+              }
+            ]
           },
           businessRules: {
             label: "Business Rules",
@@ -56,6 +66,11 @@ export default () => {
             label: 'Value',
             acceptTypes: ["value"],
             color: "yellow"
+          },
+          options: {
+            label: 'Options',
+            acceptTypes: ["options"],
+            color: "pink"
           }
         }}
         nodeTypes={{
@@ -64,6 +79,7 @@ export default () => {
             description: 'Represents an existing field in the current wizard.',
             type: 'field',
             sortIndex: 0,
+            initialWidth: 230,
             inputs: [
               {
                 type: 'field',
@@ -94,6 +110,11 @@ export default () => {
                 type: 'boolean',
                 name: 'disabled',
                 label: 'Disabled'
+              },
+              {
+                type: 'options',
+                name: 'options',
+                label: 'Options'
               }
             ]
           },
@@ -116,6 +137,24 @@ export default () => {
                 type: 'boolean',
                 name: 'output',
                 label: 'True/False'
+              }
+            ]
+          },
+          number: {
+            label: "Number",
+            description: "Outputs a number.",
+            type: "number",
+            initialWidth: 130,
+            inputs: [
+              {
+                type: 'number',
+                name: 'number'
+              }
+            ],
+            outputs: [
+              {
+                type: 'number',
+                name: 'number'
               }
             ]
           },
@@ -209,10 +248,31 @@ export default () => {
               }
             ]
           },
-          valuesEqual: {
+          valueEqualsText: {
+            label: "Value Equals Text",
+            description: "Outputs whether a value is equal to a text.",
+            type: 'valueEqualsText',
+            inputs: [
+              {
+                type: "value",
+                name: "value"
+              },
+              {
+                type: "string",
+                name: "text"
+              }
+            ],
+            outputs: [
+              {
+                type: "boolean",
+                name: "output"
+              }
+            ]
+          },
+          valueEqualsValue: {
             label: "Values Equal",
             description: "Outputs whether two values equal each other.",
-            type: 'valuesEqual',
+            type: 'valueEqualsValue',
             inputs: [
               {
                 type: "value",
@@ -230,10 +290,10 @@ export default () => {
               }
             ]
           },
-          valuesDoNotEqual: {
+          valueDoesNotEqualValue: {
             label: "Values Do Not Equal",
             description: "Outputs whether two values do not equal each other.",
-            type: 'valuesDoNotEqual',
+            type: 'valueDoesNotEqualValue',
             inputs: [
               {
                 type: "value",
@@ -270,18 +330,64 @@ export default () => {
           },
           textToNumber: {
             label: "Text to Number",
-            description: "Accepts text, and attempts to output it as a number.",
+            description: "Accepts text and converts it to a number.",
             type: "textToNumber",
             inputs: [
               {
-                type: "string",
-                name: "text"
+                type: 'string',
+                name: 'text'
               }
             ],
             outputs: [
               {
                 type: 'number',
                 name: 'number'
+              }
+            ]
+          },
+          numberToText: {
+            label: "Number to Text",
+            description: "Accepts text and converts it to a number.",
+            type: "numberToText",
+            inputs: [
+              {
+                type: 'number',
+                name: 'number'
+              }
+            ],
+            outputs: [
+              {
+                type: 'string',
+                name: 'text'
+              }
+            ]
+          },
+          option: {
+            label: "Option",
+            description: "Outputs the value and label of a selected option.",
+            type: "option",
+            inputs: [
+              {
+                type: 'options',
+                name: "options"
+              },
+              {
+                type: 'string',
+                name: 'selectedOptionValue',
+                label: 'Selected Option Value',
+                placeholder: "Select an option"
+              }
+            ],
+            outputs: [
+              {
+                type: 'string',
+                name: 'value',
+                label: 'Value'
+              },
+              {
+                type: 'string',
+                name: 'label',
+                label: 'Label'
               }
             ]
           },
@@ -363,7 +469,8 @@ export default () => {
             connections: {
               inputs: {},
               outputs: {}
-            }
+            },
+            inputData: {}
           }
         }}
       />

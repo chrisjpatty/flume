@@ -1,4 +1,4 @@
-import { deleteConnection } from './connectionCalculator'
+import { deleteConnection } from "./connectionCalculator";
 // import cloneDeep from 'lodash/cloneDeep'
 const nanoid = require("nanoid");
 
@@ -76,8 +76,23 @@ const removeConnection = (nodes, input, output) => {
   };
 };
 
-const nodesReducer = (nodes, action = {}) => {
+const getDefaultData = ({ nodeType, inputTypes }) =>
+  nodeType.inputs.reduce((obj, input) => {
+    const inputType = inputTypes[input.type];
+    obj[input.name || inputType.name] = (
+      input.controls ||
+      inputType.controls ||
+      []
+    ).reduce((obj2, control) => {
+      obj2[control.name] = control.defaultValue;
+      return obj2;
+    }, {});
+    return obj;
+  }, {});
+
+const nodesReducer = (nodes, action = {}, { nodeTypes, inputTypes }) => {
   switch (action.type) {
+
     case "ADD_CONNECTION": {
       const { input, output } = action;
       const inputIsNotConnected = !nodes[input.nodeId].connections.inputs[
@@ -89,12 +104,14 @@ const nodesReducer = (nodes, action = {}) => {
 
     case "REMOVE_CONNECTION": {
       const { input, output } = action;
-      deleteConnection({ id: output.nodeId + output.portName + input.nodeId + input.portName })
+      deleteConnection({
+        id: output.nodeId + output.portName + input.nodeId + input.portName
+      });
       return removeConnection(nodes, input, output);
     }
 
     case "ADD_NODE": {
-      const { x, y, nodeType, width = 200 } = action;
+      const { x, y, nodeType } = action;
       const newNodeId = nanoid(10);
       return {
         ...nodes,
@@ -103,10 +120,31 @@ const nodesReducer = (nodes, action = {}) => {
           x,
           y,
           type: nodeType,
-          width,
+          width: nodeTypes[nodeType].initialWidth || 200,
           connections: {
             inputs: {},
             outputs: {}
+          },
+          inputData: getDefaultData({
+            nodeType: nodeTypes[nodeType],
+            inputTypes
+          })
+        }
+      };
+    }
+
+    case "SET_PORT_DATA": {
+      const { nodeId, portName, controlName, data } = action;
+      return {
+        ...nodes,
+        [nodeId]: {
+          ...nodes[nodeId],
+          inputData: {
+            ...nodes[nodeId].inputData,
+            [portName]: {
+              ...nodes[nodeId].inputData[portName],
+              [controlName]: data
+            }
           }
         }
       };
@@ -123,9 +161,13 @@ const nodesReducer = (nodes, action = {}) => {
         }
       };
     }
+
     default:
       return nodes;
   }
 };
+
+export const connectNodesReducer = (reducer, environment) => (state, action) =>
+  reducer(state, action, environment);
 
 export default nodesReducer;

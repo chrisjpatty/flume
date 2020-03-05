@@ -1,6 +1,5 @@
 import React from 'react'
-import styles from './Connections'
-import { createConnections } from '../../connectionCalculator'
+import styles from './Connections.css'
 
 const Connections = ({ nodes }) => {
 

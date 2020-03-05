@@ -1,28 +1,54 @@
 import React from "react";
 import styles from "./Control.css";
-import Select from '../Select/Select'
-import TextInput from '../TextInput/TextInput'
+import Select from "../Select/Select";
+import TextInput from "../TextInput/TextInput";
+import { NodeDispatchContext } from "../../context";
 
-const Control = ({ type, label, inputLabel, options = [], placeholder, updateNodeConnections }) => {
+const Control = ({
+  type,
+  name,
+  nodeId,
+  portName,
+  label,
+  inputLabel,
+  data,
+  options = [],
+  placeholder,
+  triggerRecalculation
+}) => {
+  const nodesDispatch = React.useContext(NodeDispatchContext);
+
+  const onChange = data => {
+    nodesDispatch({
+      type: "SET_PORT_DATA",
+      data,
+      nodeId,
+      portName,
+      controlName: name
+    });
+  };
+
   const getControlByType = type => {
-    const commonProps = { updateNodeConnections }
+    const commonProps = { triggerRecalculation, onChange, data };
     switch (type) {
-      case 'select':
-        return <Select {...commonProps} placeholder={placeholder} options={options} />
-      case 'text':
-        return <TextInput {...commonProps} placeholder={inputLabel || label} />
+      case "select":
+        return (
+          <Select
+            {...commonProps}
+            placeholder={placeholder}
+            options={options}
+          />
+        );
+      case "text":
+        return <TextInput {...commonProps} placeholder={inputLabel || label} />;
+      case "number":
+        return <TextInput {...commonProps} type="number" placeholder={inputLabel || label} />;
       default:
-        return <div>Control</div>
+        return <div>Control</div>;
     }
-  }
+  };
 
-  return (
-    <div className={styles.wrapper}>
-      {
-        getControlByType(type)
-      }
-    </div>
-  );
+  return <div className={styles.wrapper}>{getControlByType(type)}</div>;
 };
 
 export default Control;

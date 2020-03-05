@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Stage from "./components/Stage/Stage";
 import Node from "./components/Node/Node";
-import Connections from './components/Connections/Connections'
+import Connections from "./components/Connections/Connections";
 import Connection from "./components/Connection/Connection";
 import {
   NodeTypesContext,
@@ -11,36 +11,46 @@ import {
   ConnectionRecalculateContext
 } from "./context";
 import { createConnections } from "./connectionCalculator";
-import nodesReducer from "./nodesReducer";
+import nodesReducer, { connectNodesReducer } from "./nodesReducer";
 
 import styles from "./styles.css";
 
 const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
-  const [nodes, dispatchNodes] = React.useReducer(nodesReducer, initialNodes);
+  const [nodes, dispatchNodes] = React.useReducer(
+    connectNodesReducer(nodesReducer, { nodeTypes, inputTypes }),
+    initialNodes
+  );
   const stage = React.useRef();
-  const [shouldRecalculateConnections, setShouldRecalculateConnections] = React.useState(true)
+  const [
+    shouldRecalculateConnections,
+    setShouldRecalculateConnections
+  ] = React.useState(true);
 
   const recalculateConnections = React.useCallback(() => {
-    createConnections(nodes)
+    createConnections(nodes);
   }, [nodes]);
 
   React.useLayoutEffect(() => {
-    if(shouldRecalculateConnections){
-      recalculateConnections()
-      setShouldRecalculateConnections(false)
+    if (shouldRecalculateConnections) {
+      recalculateConnections();
+      setShouldRecalculateConnections(false);
     }
-  }, [shouldRecalculateConnections, recalculateConnections])
+  }, [shouldRecalculateConnections, recalculateConnections]);
+
+  const triggerRecalculation = () => {
+    setShouldRecalculateConnections(true);
+  };
 
   return (
     <InputTypesContext.Provider value={inputTypes}>
       <NodeTypesContext.Provider value={nodeTypes}>
         <NodeDispatchContext.Provider value={dispatchNodes}>
-          <ConnectionRecalculateContext.Provider value={setShouldRecalculateConnections}>
+          <ConnectionRecalculateContext.Provider value={triggerRecalculation}>
             <Stage stageRef={stage}>
               {Object.values(nodes).map(node => (
                 <Node
                   stageRef={stage}
-                  onDragEnd={recalculateConnections}
+                  onDragEnd={triggerRecalculation}
                   {...node}
                   key={node.id}
                 />

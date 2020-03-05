@@ -14,6 +14,7 @@ const Node = ({
   stageRef,
   connections,
   type,
+  inputData,
   onDragEnd,
   onDrag
 }) => {
@@ -85,7 +86,6 @@ const Node = ({
     });
     window.removeEventListener("mouseup", stopDrag);
     window.removeEventListener("mousemove", updateCoordinates);
-    // onDragEnd();
   };
 
   const startDrag = e => {
@@ -164,6 +164,7 @@ const Node = ({
         outputs={outputs}
         connections={connections}
         updateNodeConnections={updateNodeConnections}
+        inputData={inputData}
       />
     </div>
   );

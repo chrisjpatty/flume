@@ -5,9 +5,14 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "nanoid": "^2.1.11",
     "node-editor": "link:..",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.6.2",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "^1.1.4"
   },
   "scripts": {

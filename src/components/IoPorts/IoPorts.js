@@ -10,11 +10,9 @@ import Connection from "../Connection/Connection";
 import { InputTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
 
-const IoPorts = ({ nodeId, inputs = [], outputs = [], connections }) => {
+const IoPorts = ({ nodeId, inputs = [], outputs = [], connections, inputData }) => {
   const inputTypes = React.useContext(InputTypesContext);
-  const setShouldRecalculateConnections = React.useContext(
-    ConnectionRecalculateContext
-  );
+  const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
 
   return (
     <div className={styles.wrapper}>
@@ -22,8 +20,9 @@ const IoPorts = ({ nodeId, inputs = [], outputs = [], connections }) => {
         {inputs.map((input, i) => (
           <Input
             {...input}
+            data={inputData[input.name]}
             isConnected={!!connections.inputs[input.name]}
-            setShouldRecalculateConnections={setShouldRecalculateConnections}
+            triggerRecalculation={triggerRecalculation}
             inputTypes={inputTypes}
             nodeId={nodeId}
             key={i}
@@ -35,7 +34,7 @@ const IoPorts = ({ nodeId, inputs = [], outputs = [], connections }) => {
           {outputs.map((output, i) => (
             <Output
               {...output}
-              setShouldRecalculateConnections={setShouldRecalculateConnections}
+              triggerRecalculation={triggerRecalculation}
               inputTypes={inputTypes}
               nodeId={nodeId}
               portOnRight
@@ -55,9 +54,10 @@ const Input = ({
   label,
   name,
   nodeId,
+  data,
   inputTypes,
   noControls,
-  setShouldRecalculateConnections,
+  triggerRecalculation,
   isConnected
 }) => {
   const { label: defaultLabel, color, controls = [] } = inputTypes[type] || {};
@@ -65,9 +65,9 @@ const Input = ({
 
   React.useEffect(() => {
     if (isConnected !== prevConnected) {
-      setShouldRecalculateConnections(true);
+      triggerRecalculation();
     }
-  }, [isConnected, prevConnected, setShouldRecalculateConnections]);
+  }, [isConnected, prevConnected, triggerRecalculation]);
 
   return (
     <div className={styles.transput}>
@@ -77,14 +77,17 @@ const Input = ({
         name={name}
         nodeId={nodeId}
         isInput
-        setShouldRecalculateConnections={setShouldRecalculateConnections}
+        triggerRecalculation={triggerRecalculation}
       />
       {!noControls && !isConnected
         ? controls.map(control => (
             <Control
               {...control}
-              setShouldRecalculateConnections={setShouldRecalculateConnections}
+              nodeId={nodeId}
+              portName={name}
+              triggerRecalculation={triggerRecalculation}
               inputLabel={label}
+              data={data[control.name]}
               key={control.name}
             />
           ))
@@ -102,7 +105,7 @@ const Output = ({
   nodeId,
   type,
   inputTypes,
-  setShouldRecalculateConnections
+  triggerRecalculation
 }) => {
   const { label: defaultLabel, color } = inputTypes[type] || {};
 
@@ -114,7 +117,7 @@ const Output = ({
         name={name}
         color={color}
         nodeId={nodeId}
-        setShouldRecalculateConnections={setShouldRecalculateConnections}
+        triggerRecalculation={triggerRecalculation}
       />
     </div>
   );
@@ -126,7 +129,7 @@ const Port = ({
   type,
   isInput,
   nodeId,
-  setShouldRecalculateConnections
+  triggerRecalculation
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const inputTypes = React.useContext(InputTypesContext);
@@ -188,7 +191,7 @@ const Port = ({
             output: { nodeId, portName: name },
             input: { nodeId: inputNodeId, portName: inputPortName }
           });
-          setShouldRecalculateConnections(true);
+          triggerRecalculation();
         }
       }
     }

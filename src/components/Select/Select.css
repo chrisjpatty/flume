@@ -23,3 +23,38 @@
     background: linear-gradient(to top, #63676a, #777b7e);
   }
 }
+
+.selectedWrapper{
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  background: linear-gradient(to top, #5b5f62, #6f7477);
+  width: 100%;
+  border: 1px solid #3c3e40;
+  font-size: 14px;
+  padding: 3px 6px;
+  padding-right: 15px;
+  position: relative;
+  &::after{
+    content: "";
+    position: absolute;
+    background: none;
+    right: 5px;
+    top: calc(50% - 4px);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 5px 0 5px;
+    border-color: #191b1c transparent transparent transparent;
+  }
+  label{
+    margin: 0px;
+  }
+  p{
+    margin: 0px;
+    margin-top: 5px;
+    font-size: 12px;
+    font-style: italic;
+    color: rgb(50, 50, 50);
+  }
+}

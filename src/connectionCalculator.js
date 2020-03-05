@@ -82,7 +82,6 @@ export const getStageRef = () =>
   document.getElementById("__node_editor_stage__");
 
 export const createConnections = nodes => {
-  console.log("Created connections");
   const stageRef = getStageRef();
   const stage = stageRef.getBoundingClientRect();
 
