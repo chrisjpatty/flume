@@ -231,6 +231,10 @@ form.form-body{
   padding: 20px;
   z-index: 99;
 }
+.modal-body h2{
+  margin: 0px;
+  padding-top: 5px;
+}
 button.attribute-button{
   padding: 10px 15px;
   border-radius: 4px;
@@ -243,6 +247,17 @@ button.attribute-button{
 }
 button.attribute-button:hover{
   background: linear-gradient(to bottom, rgb(82, 133, 255), rgb(48, 99, 219));
+}
+button.attribute-button.secondary{
+  background: linear-gradient(to bottom, rgb(221, 221, 221), rgb(201, 201, 201));
+  color: #000;
+}
+button.attribute-button.secondary:hover{
+  background: linear-gradient(to bottom, rgb(235, 235, 235), rgb(215, 215, 215));
+}
+button.attribute-button.small{
+  font-size: 14px;
+  padding: 8px 12px;
 }
 .options-editor input{
 

@@ -40,6 +40,11 @@ const fieldsReducer = (state, action) => {
         }
       };
     }
+
+    case "CLEAR_FORM": {
+      return { fields: {}, fieldsOrder: [] }
+    }
+
     default:
       return state;
   }

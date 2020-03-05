@@ -7,6 +7,9 @@ import {
 import fieldTypes from "./fieldTypes";
 import Checkbox from "../../components/Checkbox";
 import OptionsEditor from "../../components/OptionsEditor";
+import LogicEditor from '../../components/LogicEditor'
+import NodeTypes from './NodeTypes'
+import InputTypes from './InputTypes'
 
 export default () => {
   const designerState = React.useContext(DesignerStateContext);
@@ -43,7 +46,7 @@ const Attributes = ({ attributes = [], currentField }) => {
   ));
 };
 
-const hiddenLabelTypes = ["checkbox", "options"]
+const hiddenLabelTypes = ["checkbox", "options", "logic"]
 
 const Attribute = ({ field, label, name, type, value }) => {
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -57,6 +60,8 @@ const Attribute = ({ field, label, name, type, value }) => {
       value
     });
   };
+
+  const closeModal = () => setModalOpen(false)
 
   const getAttributeField = () => {
     switch (type) {
@@ -72,10 +77,26 @@ const Attribute = ({ field, label, name, type, value }) => {
               options={value}
               onChange={setAttribute}
               isOpen={modalOpen}
-              onCloseRequested={() => setModalOpen(false)}
+              onCloseRequested={closeModal}
             />
           </React.Fragment>
         );
+      case "logic":
+        return (
+          <React.Fragment>
+            <AttributeButton onClick={() => setModalOpen(true)}>
+              Edit Logic
+            </AttributeButton>
+            <LogicEditor
+              nodes={value}
+              onChange={setAttribute}
+              onCloseRequested={closeModal}
+              isOpen={modalOpen}
+              nodeTypes={NodeTypes}
+              inputTypes={InputTypes}
+            />
+          </React.Fragment>
+        )
       case "text":
       default:
         return (

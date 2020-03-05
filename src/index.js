@@ -15,7 +15,7 @@ import nodesReducer, { connectNodesReducer } from "./nodesReducer";
 
 import styles from "./styles.css";
 
-const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
+const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }, ref) => {
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(nodesReducer, { nodeTypes, inputTypes }),
     initialNodes
@@ -40,6 +40,12 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
   const triggerRecalculation = () => {
     setShouldRecalculateConnections(true);
   };
+
+  React.useImperativeHandle(ref, () => ({
+    getNodes: () => {
+      return nodes;
+    }
+  }));
 
   return (
     <InputTypesContext.Provider value={inputTypes}>
@@ -68,4 +74,4 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }) => {
   );
 };
 
-export default NodeEditor;
+export default React.forwardRef(NodeEditor);

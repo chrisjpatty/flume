@@ -46,7 +46,7 @@ export default ({
           </div>
         </div>
         {options.map((option, i) => (
-          <OptionRow {...option} onChange={opt => setOption(opt, i)} />
+          <OptionRow {...option} onChange={opt => setOption(opt, i)} key={i} />
         ))}
         <div className="flex-row controls-footer">
           <button className="add-button align-right" onClick={addOption}>

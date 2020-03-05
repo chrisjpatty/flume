@@ -3,7 +3,8 @@ import Sidebar from "./Sidebar";
 import Body from "./Body";
 import Attributes from "./Attributes";
 import fieldsReducer from "./fieldsReducer";
-import designerReducer from './designerReducer'
+import designerReducer from "./designerReducer";
+import ls from "local-storage";
 import "./Form.css";
 
 export const FieldsContext = React.createContext();
@@ -19,11 +20,27 @@ export default () => {
   const [
     { fields, fieldsOrder },
     dispatchFields
-  ] = React.useReducer(fieldsReducer, { fields: {}, fieldsOrder: [] });
+  ] = React.useReducer(fieldsReducer, {
+    fields: ls.get("FIELDS") || {},
+    fieldsOrder: ls.get("FIELDS_ORDER") || []
+  });
   const [designerState, dispatchDesignerState] = React.useReducer(
     designerReducer,
     initialDesignerState
   );
+
+  const clearForm = () => {
+    ls.remove("FIELDS");
+    ls.remove("FIELDS_ORDER");
+    dispatchFields({
+      type: "CLEAR_FORM"
+    });
+  };
+
+  const saveForm = () => {
+    ls.set("FIELDS", fields);
+    ls.set("FIELDS_ORDER", fieldsOrder);
+  };
 
   return (
     <FieldsContext.Provider value={fields}>
@@ -32,7 +49,12 @@ export default () => {
           <DesignerDispatchContext.Provider value={dispatchDesignerState}>
             <div className="form-wrapper">
               <Sidebar />
-              <Body fields={fields} fieldsOrder={fieldsOrder} />
+              <Body
+                fields={fields}
+                fieldsOrder={fieldsOrder}
+                clearForm={clearForm}
+                saveForm={saveForm}
+              />
               <Attributes />
             </div>
           </DesignerDispatchContext.Provider>

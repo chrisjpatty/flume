@@ -22,6 +22,12 @@ const commonAttributes = [
     label: "Required",
     defaultValue: false,
     type: "checkbox"
+  },
+  {
+    name: "logic",
+    label: "Logic",
+    defaultValue: {},
+    type: "logic"
   }
 ];
 
