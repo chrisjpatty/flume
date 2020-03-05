@@ -1,3 +1,5 @@
+import defaultNodes from './defaultNodes'
+
 const commonAttributes = [
   {
     name: "label",
@@ -26,7 +28,7 @@ const commonAttributes = [
   {
     name: "logic",
     label: "Logic",
-    defaultValue: {},
+    defaultValue: defaultNodes,
     type: "logic"
   }
 ];

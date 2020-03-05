@@ -9,9 +9,9 @@ import Checkbox from "../../components/Checkbox";
 import OptionsEditor from "../../components/OptionsEditor";
 import LogicEditor from '../../components/LogicEditor'
 import NodeTypes from './NodeTypes'
-import InputTypes from './InputTypes'
+import { getInputTypes } from './InputTypes'
 
-export default () => {
+export default ({ previewing }) => {
   const designerState = React.useContext(DesignerStateContext);
   const fields = React.useContext(FieldsContext);
 
@@ -20,7 +20,7 @@ export default () => {
 
   return (
     <div className="attributes">
-      <div className="form-sidebar form-attributes">
+      <div className="form-sidebar form-attributes" data-previewing={previewing}>
         <h2>Attributes</h2>
         {currentField && currentFieldType ? (
           <Attributes
@@ -51,6 +51,7 @@ const hiddenLabelTypes = ["checkbox", "options", "logic"]
 const Attribute = ({ field, label, name, type, value }) => {
   const [modalOpen, setModalOpen] = React.useState(false);
   const fieldsDispatch = React.useContext(FieldsDispatchContext);
+  const fields = React.useContext(FieldsContext)
 
   const setAttribute = value => {
     fieldsDispatch({
@@ -93,7 +94,7 @@ const Attribute = ({ field, label, name, type, value }) => {
               onCloseRequested={closeModal}
               isOpen={modalOpen}
               nodeTypes={NodeTypes}
-              inputTypes={InputTypes}
+              inputTypes={getInputTypes(fields)}
             />
           </React.Fragment>
         )

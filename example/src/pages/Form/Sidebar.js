@@ -2,11 +2,11 @@ import React from 'react'
 import fieldTypes from './fieldTypes'
 import { FieldsDispatchContext } from './Form'
 
-export default () => {
+export default ({ previewing }) => {
 
   return (
     <div>
-      <div className="form-sidebar">
+      <div className="form-sidebar" data-previewing={previewing}>
         <h2>Fields</h2>
         {
           Object.values(fieldTypes).map(fieldType => (

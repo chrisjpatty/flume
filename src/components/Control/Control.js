@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Control.css";
 import Select from "../Select/Select";
+import Checkbox from '../Checkbox/Checkbox'
 import TextInput from "../TextInput/TextInput";
 import { NodeDispatchContext } from "../../context";
 
@@ -43,6 +44,8 @@ const Control = ({
         return <TextInput {...commonProps} placeholder={inputLabel || label} />;
       case "number":
         return <TextInput {...commonProps} type="number" placeholder={inputLabel || label} />;
+      case "checkbox":
+        return <Checkbox {...commonProps} label={label} />
       default:
         return <div>Control</div>;
     }

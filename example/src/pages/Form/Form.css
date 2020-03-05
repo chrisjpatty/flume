@@ -1,26 +1,36 @@
-:root{
-  --input-background: linear-gradient(to bottom, #ededed 0%, #ffffff 35%, #ffffff 100%);
-  --input-background-disabled: linear-gradient(to bottom, #afafaf 0%, #cbcbcb 35%, #cbcbcb 100%);
+:root {
+  --input-background: linear-gradient(
+    to bottom,
+    #ededed 0%,
+    #ffffff 35%,
+    #ffffff 100%
+  );
+  --input-background-disabled: linear-gradient(
+    to bottom,
+    #afafaf 0%,
+    #cbcbcb 35%,
+    #cbcbcb 100%
+  );
 }
 
-.form-wrapper{
+.form-wrapper {
   display: flex;
   justify-content: center;
   font-family: "Roboto", sans-serif;
 }
-.form-sidebar{
+.form-sidebar {
   background: #fff;
   border-radius: 4px;
-  box-shadow: 0px 15px 32px -4px rgba(0,0,0,.3);
+  box-shadow: 0px 15px 32px -4px rgba(0, 0, 0, 0.3);
   padding: 20px;
   display: flex;
   flex-direction: column;
   width: 250px;
 }
-.form-attributes{
+.form-attributes {
   margin-left: 30px;
 }
-.form-sidebar-button{
+.form-sidebar-button {
   width: 100%;
   padding: 15px 5px;
   margin-bottom: 15px;
@@ -31,74 +41,80 @@
   font-weight: 600;
   outline: none;
 }
-.form-sidebar-button:last-child{
+.form-sidebar-button:last-child {
   margin-bottom: 0px;
 }
-.form-sidebar-button:hover{
+.form-sidebar-button:hover {
   background: rgb(217, 217, 217);
   cursor: grab;
 }
-form.form-body{
+form.form-body {
   width: 500px;
   min-height: 600px;
   margin-left: 30px;
   background: #fff;
   padding: 20px;
   border-radius: 4px;
-  box-shadow: 0px 15px 32px -4px rgba(0,0,0,.3);
+  box-shadow: 0px 15px 32px -4px rgba(0, 0, 0, 0.3);
 }
-.field-wrapper{
+.field-wrapper {
   padding: 15px;
   margin-left: -15px;
   margin-right: -15px;
   border-radius: 8px;
 }
-.field-wrapper:hover{
+.field-wrapper:hover {
   background: rgb(254, 250, 222);
 }
-.field-wrapper[data-selected="true"]{
+.field-wrapper[data-selected="true"] {
   background: rgb(255, 248, 193);
 }
-.field-wrapper[data-selected="true"][data-visible="false"]{
+.field-wrapper[data-selected="true"][data-visible="false"] {
   background: rgb(212, 207, 167);
 }
-.field-wrapper:first-child{
+.field-wrapper:first-child {
   margin-top: -10px;
 }
-.field-wrapper:last-child{
+.field-wrapper:last-child {
   margin-bottom: -10px;
 }
-.field-wrapper label{
+.field-wrapper label {
   margin-bottom: 3px;
   font-size: 16px;
   font-weight: 500;
 }
-.field-wrapper[data-required] label::after{
+.field-wrapper[data-required="true"] label::after {
   content: "*";
   margin-left: 5px;
   color: red;
 }
-.flex-column{
+.field-wrapper[data-required="true"] label.checkbox-box::after {
+  display: none;
+}
+.field-wrapper.unselectable{
+  background: none;
+}
+.flex-column {
   display: flex;
   flex-direction: column;
 }
-.flex-row{
+.flex-row {
   display: flex;
   flex-direction: row;
 }
-.align-center{
+.align-center {
   align-items: center;
 }
-.justify-center{
+.justify-center {
   justify-content: center;
 }
-.align-right{
+.align-right {
   margin-left: auto;
 }
-.half-column{
+.half-column {
   width: 50%;
 }
-.dummy-input{
+.dummy-input {
   width: 300px;
   height: 40px;
   border: 1px solid rgb(176, 176, 176);
@@ -108,7 +124,7 @@ form.form-body{
   padding: 5px;
   padding-right: 20px;
 }
-.dummy-select::after{
+.dummy-select::after {
   content: "";
   position: absolute;
   right: 8px;
@@ -119,14 +135,14 @@ form.form-body{
   border-width: 8px 6px 0 6px;
   border-color: #000000 transparent transparent transparent;
 }
-.dummy-checkbox-wrapper{
+.dummy-checkbox-wrapper {
   display: flex;
   align-items: center;
 }
-.dummy-checkbox-wrapper label{
+.dummy-checkbox-wrapper label {
   padding-top: 3px;
 }
-.dummy-checkbox{
+.dummy-checkbox {
   width: 24px;
   height: 24px;
   border: 1px solid rgb(176, 176, 176);
@@ -134,39 +150,49 @@ form.form-body{
   background: var(--input-background);
   margin-right: 10px;
 }
-.attributes h2, .form-sidebar h2, .form-body h2{
+.real-checkbox-wrapper label {
+  margin-bottom: 0px;
+}
+.real-checkbox-wrapper .checkbox-label {
+  padding-top: 0px;
+}
+.attributes h2,
+.form-sidebar h2,
+.form-body h2 {
   margin: 0px;
   margin-bottom: 15px;
 }
-.attribute-wrapper{
+.attribute-wrapper {
   padding: 10px 0px;
   display: flex;
   flex-direction: column;
 }
-.attribute-wrapper:last-child{
+.attribute-wrapper:last-child {
   margin-bottom: -10px;
 }
-.attribute-wrapper label{
+.attribute-wrapper label {
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 3px;
   user-select: none;
 }
-.attribute-wrapper input, .options-editor input{
+.attribute-wrapper input,
+.options-editor input {
   height: 33px;
   border: 1px solid rgb(176, 176, 176);
   border-radius: 4px;
   background: var(--input-background);
   padding: 8px;
 }
-.checkbox-wrapper{
+.checkbox-wrapper {
   display: flex;
   align-items: center;
 }
-.checkbox-wrapper input{
+.checkbox-wrapper input,
+.dummy-checkbox-wrapper input {
   width: 1px;
   height: 1px;
-  opacity: .01;
+  opacity: 0.01;
   background: transparent;
   border: none;
   position: absolute;
@@ -174,7 +200,7 @@ form.form-body{
   left: 0px;
   top: 0px;
 }
-.checkbox-box{
+.checkbox-box {
   width: 24px;
   height: 24px;
   border: 1px solid rgb(176, 176, 176);
@@ -187,25 +213,31 @@ form.form-body{
   text-align: center;
   padding-left: 4px;
 }
-.checkbox-wrapper input[value="true"] + .checkbox-box::after{
+.checkbox-wrapper input[value="true"] + .checkbox-box::after,
+.real-checkbox-wrapper input[value="true"] + .checkbox-box::after {
   content: "✔️";
   font-size: 18px;
 }
-.field-wrapper [data-disabled="true"]{
+.real-checkbox-wrapper .checkbox-box{
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 0px;
+}
+.field-wrapper [data-disabled="true"] {
   background: var(--input-background-disabled);
 }
-.field-wrapper[data-visible="false"]{
+.field-wrapper[data-visible="false"] {
   background: rgb(222, 222, 222);
   position: relative;
 }
-.field-wrapper[data-visible="false"]::after{
+.field-wrapper[data-visible="false"]::after {
   content: "👁";
   position: absolute;
   right: 7px;
   top: 7px;
   font-size: 18px;
 }
-.modal-wrapper{
+.modal-wrapper {
   position: fixed;
   left: 0px;
   top: 0px;
@@ -215,27 +247,27 @@ form.form-body{
   justify-content: center;
   align-items: center;
 }
-.modal-shade{
+.modal-shade {
   position: fixed;
   left: 0px;
   top: 0px;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,.2);
+  background: rgba(0, 0, 0, 0.2);
   z-index: 9;
 }
-.modal-body{
+.modal-body {
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0px 15px 32px -4px rgba(0,0,0,.3);
+  box-shadow: 0px 15px 32px -4px rgba(0, 0, 0, 0.3);
   padding: 20px;
   z-index: 99;
 }
-.modal-body h2{
+.modal-body h2 {
   margin: 0px;
   padding-top: 5px;
 }
-button.attribute-button{
+button.attribute-button {
   padding: 10px 15px;
   border-radius: 4px;
   border: none;
@@ -244,34 +276,42 @@ button.attribute-button{
   text-transform: uppercase;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
+  outline: none;
 }
-button.attribute-button:hover{
+button.attribute-button:hover {
   background: linear-gradient(to bottom, rgb(82, 133, 255), rgb(48, 99, 219));
 }
-button.attribute-button.secondary{
-  background: linear-gradient(to bottom, rgb(221, 221, 221), rgb(201, 201, 201));
+button.attribute-button.secondary {
+  background: linear-gradient(
+    to bottom,
+    rgb(221, 221, 221),
+    rgb(201, 201, 201)
+  );
   color: #000;
 }
-button.attribute-button.secondary:hover{
-  background: linear-gradient(to bottom, rgb(235, 235, 235), rgb(215, 215, 215));
+button.attribute-button.secondary:hover {
+  background: linear-gradient(
+    to bottom,
+    rgb(235, 235, 235),
+    rgb(215, 215, 215)
+  );
 }
-button.attribute-button.small{
+button.attribute-button.small {
   font-size: 14px;
   padding: 8px 12px;
 }
-.options-editor input{
-
+.options-editor input {
 }
-.options-editor input:last-child{
+.options-editor input:last-child {
   margin-left: 15px;
 }
-.options-editor .half-column:last-child label{
+.options-editor .half-column:last-child label {
   margin-left: 10px;
 }
-.options-editor .controls-row{
+.options-editor .controls-row {
   margin-bottom: 15px;
 }
-.options-editor .add-button{
+.options-editor .add-button {
   padding: 10px 15px;
   background: rgb(230, 230, 230);
   border-radius: 4px;
@@ -281,15 +321,19 @@ button.attribute-button.small{
   border: none;
   font-family: "Roboto", sans-serif;
 }
-.options-editor .add-button:hover{
+.options-editor .add-button:hover {
   background: rgb(240, 237, 237);
 }
-.options-editor .controls-footer{
+.options-editor .controls-footer {
   margin-top: 15px;
 }
-.options-editor .option-row{
+.options-editor .option-row {
   margin-bottom: 15px;
 }
-.options-editor .option-row:last-of-type{
+.options-editor .option-row:last-of-type {
   margin-bottom: 0px;
+}
+.form-sidebar[data-previewing="true"] {
+  opacity: 0.4;
+  pointer-events: none;
 }
