@@ -51,7 +51,7 @@ export default ({
         ))
         :
         fieldsOrder.map(fieldId => (
-          <PreviewField field={previewFields[fieldId]} key={fieldId} />
+          <PreviewField field={previewFields[fieldId]} fields={previewFields} key={fieldId} />
         ))
       }
     </form>

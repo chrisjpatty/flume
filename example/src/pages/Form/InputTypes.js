@@ -61,6 +61,18 @@ const InputTypes = {
         options: []
       }
     ]
+  },
+  options: {
+    type: "options",
+    label: "Options",
+    acceptTypes: ["options"],
+    color: "pink"
+  },
+  stringArray: {
+    type: "stringArray",
+    label: "Array of strings",
+    acceptTypes: ["stringArray"],
+    color: "gray"
   }
 }
 
@@ -74,9 +86,13 @@ export const getInputTypes = fields => {
       controls: [
         {
           ...InputTypes.fieldId.controls[0],
-          options: Object.values(fields).map(f => ({value: f.id, label: f.label, description: f.type}))
+          options: Object.values(fields).map(f => ({
+            value: f.id,
+            label: f.label,
+            description: f.type
+          }))
         }
       ]
     }
-  }
-}
+  };
+};

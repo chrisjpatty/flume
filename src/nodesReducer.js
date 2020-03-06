@@ -134,18 +134,22 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, inputTypes }) => {
     }
 
     case "SET_PORT_DATA": {
-      const { nodeId, portName, controlName, data } = action;
+      const { nodeId, portName, controlName, data, setValue } = action;
+      let newData = {
+        ...nodes[nodeId].inputData,
+        [portName]: {
+          ...nodes[nodeId].inputData[portName],
+          [controlName]: data
+        }
+      }
+      if(setValue){
+        newData = setValue(newData, nodes[nodeId].inputData)
+      }
       return {
         ...nodes,
         [nodeId]: {
           ...nodes[nodeId],
-          inputData: {
-            ...nodes[nodeId].inputData,
-            [portName]: {
-              ...nodes[nodeId].inputData[portName],
-              [controlName]: data
-            }
-          }
+          inputData: newData
         }
       };
     }

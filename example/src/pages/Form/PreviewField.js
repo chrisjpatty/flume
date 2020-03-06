@@ -1,9 +1,10 @@
 import React from "react";
 import { PreviewFieldsDispatchContext } from "./Form";
+import resolveLogic from './resolveLogic'
 const nanoid = require("nanoid");
 
-export default ({ field }) => {
-  const { label, value, disabled, required } = field;
+export default ({ field, fields }) => {
+  const { label, value, disabled, visible, required } = resolveLogic(field, fields) || {};
   const dispatchPreviewFields = React.useContext(PreviewFieldsDispatchContext);
 
   const handleChange = value => {
@@ -22,15 +23,27 @@ export default ({ field }) => {
             className="dummy-input"
             type="text"
             value={value}
+            required={required}
+            disabled={disabled}
             onChange={e => handleChange(e.target.value)}
           />
         );
       case "checkbox":
-        return <Checkbox value={value} label={label} onChange={handleChange} />;
+        return (
+          <Checkbox
+            label={label}
+            value={value}
+            disabled={disabled}
+            required={required}
+            onChange={handleChange}
+          />
+        );
       case "select":
         return (
           <Select
             value={value}
+            disabled={disabled}
+            required={required}
             options={field.options}
             onChange={handleChange}
           />
@@ -41,6 +54,7 @@ export default ({ field }) => {
   };
 
   return (
+    visible ?
     <FieldWrapper
       disabled={disabled}
       required={required}
@@ -49,6 +63,7 @@ export default ({ field }) => {
     >
       {getFieldByType()}
     </FieldWrapper>
+    : null
   );
 };
 
@@ -63,7 +78,7 @@ const FieldWrapper = ({ children, label, hideLabel, disabled, required }) => (
   </div>
 );
 
-const Checkbox = ({ value, label, onChange }) => {
+const Checkbox = ({ value, label, onChange, disabled, required }) => {
   const id = React.useRef(nanoid(10));
 
   return (
@@ -73,6 +88,8 @@ const Checkbox = ({ value, label, onChange }) => {
         type="checkbox"
         value={value}
         checked={value}
+        disabled={disabled}
+        required={required}
         onChange={e => onChange(e.target.checked)}
       />
       <label htmlFor={id.current} className="checkbox-box"></label>
@@ -83,10 +100,12 @@ const Checkbox = ({ value, label, onChange }) => {
   );
 };
 
-const Select = ({ value, onChange, options }) => (
+const Select = ({ value, disabled, onChange, options, required }) => (
   <select
     className="dummy-input"
     value={value}
+    disabled={disabled}
+    required={required}
     onChange={e => onChange(e.target.value)}
   >
     {options.map((option, i) => (

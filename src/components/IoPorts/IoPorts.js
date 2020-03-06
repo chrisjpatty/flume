@@ -10,7 +10,13 @@ import Connection from "../Connection/Connection";
 import { InputTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
 
-const IoPorts = ({ nodeId, inputs = [], outputs = [], connections, inputData }) => {
+const IoPorts = ({
+  nodeId,
+  inputs = [],
+  outputs = [],
+  connections,
+  inputData
+}) => {
   const inputTypes = React.useContext(InputTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
 
@@ -25,6 +31,7 @@ const IoPorts = ({ nodeId, inputs = [], outputs = [], connections, inputData }) 
             triggerRecalculation={triggerRecalculation}
             inputTypes={inputTypes}
             nodeId={nodeId}
+            inputData={inputData}
             key={i}
           />
         ))}
@@ -37,6 +44,7 @@ const IoPorts = ({ nodeId, inputs = [], outputs = [], connections, inputData }) 
               triggerRecalculation={triggerRecalculation}
               inputTypes={inputTypes}
               nodeId={nodeId}
+              inputData={inputData}
               portOnRight
               key={i}
             />
@@ -55,13 +63,19 @@ const Input = ({
   name,
   nodeId,
   data,
+  controls: localControls,
   inputTypes,
   noControls,
   triggerRecalculation,
-  isConnected
+  isConnected,
+  inputData,
+  hidePort
 }) => {
-  const { label: defaultLabel, color, controls = [] } = inputTypes[type] || {};
+  const { label: defaultLabel, color, controls: defaultControls = [] } =
+    inputTypes[type] || {};
   const prevConnected = usePrevious(isConnected);
+
+  const controls = localControls || defaultControls;
 
   React.useEffect(() => {
     if (isConnected !== prevConnected) {
@@ -71,14 +85,18 @@ const Input = ({
 
   return (
     <div className={styles.transput}>
-      <Port
-        type={type}
-        color={color}
-        name={name}
-        nodeId={nodeId}
-        isInput
-        triggerRecalculation={triggerRecalculation}
-      />
+      {
+        !hidePort ?
+        <Port
+          type={type}
+          color={color}
+          name={name}
+          nodeId={nodeId}
+          isInput
+          triggerRecalculation={triggerRecalculation}
+        />
+        : null
+      }
       {!noControls && !isConnected
         ? controls.map(control => (
             <Control
@@ -89,6 +107,7 @@ const Input = ({
               inputLabel={label}
               data={data[control.name]}
               key={control.name}
+              inputData={inputData}
             />
           ))
         : null}

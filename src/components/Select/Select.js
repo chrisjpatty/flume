@@ -4,7 +4,7 @@ import SelectDrawer from "../SelectDrawer/SelectDrawer";
 
 const MAX_LABEL_LENGTH = 50;
 
-const Select = ({ options, placeholder = "", onChange, data }) => {
+const Select = ({ options, placeholder = "[Select an option]", onChange, data }) => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [drawerCoordinates, setDrawerCoordinates] = React.useState({
     x: 0,

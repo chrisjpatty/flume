@@ -15,6 +15,14 @@ export const DesignerDispatchContext = React.createContext();
 export const PreviewFieldsContext = React.createContext();
 export const PreviewFieldsDispatchContext = React.createContext();
 
+export const previewState = {
+  getFields: () => {}
+}
+
+export const designerStore = {
+  getFields: () => {}
+}
+
 const initialDesignerState = {
   selectedFieldId: null
 };
@@ -63,6 +71,12 @@ export default () => {
       setPreviewing(true)
     }
   }
+
+  const getPreviewFields = () => previewFields
+  previewState.getFields = getPreviewFields
+
+  const getFields = () => fields
+  designerStore.getFields = getFields
 
   return (
     <FieldsContext.Provider value={fields}>

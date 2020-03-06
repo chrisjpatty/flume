@@ -1,3 +1,5 @@
+import { designerStore  } from './Form'
+
 const commonFieldOutputTypes = [
   {
     type: "string",
@@ -119,6 +121,13 @@ const NodeTypes = {
         type: "boolean",
         name: "val2"
       }
+    ],
+    outputs: [
+      {
+        type: 'boolean',
+        name: 'output',
+        label: 'True/False'
+      }
     ]
   },
   valueEqualsValue: {
@@ -154,6 +163,76 @@ const NodeTypes = {
       {
         type: "boolean",
         name: "boolean"
+      }
+    ],
+    outputs: [
+      {
+        type: "boolean",
+        name: "output"
+      }
+    ]
+  },
+  valueEqualsOneOfOptions: {
+    type: "valueEqualsOneOfOptions",
+    label: "Equals one of options",
+    description: "Outputs if a value equals one of several options.",
+    inputs: [
+      {
+        type: "fieldId",
+        name: "fieldId",
+        hidePort: true,
+        controls: [
+          {
+            type: "select",
+            name: "selectedFieldId",
+            label: "Field",
+            defaultValue: "",
+            placeholder: "[Select a Field]",
+            options: [],
+            setValue: (newData, oldData) => {
+              if(newData.fieldId.selectedFieldId !== oldData.fieldId.selectedFieldId){
+                return {
+                  ...newData,
+                  selectedOptions: {
+                    ...newData.selectedOptions,
+                    values: []
+                  }
+                }
+              }else{
+                return newData
+              }
+            },
+            getOptions: () => (
+              Object.values(designerStore.getFields())
+              .filter(f => f.type === "select")
+              .map(f => ({
+                value: f.id,
+                label: f.label,
+                description: f.type
+              }))
+            )
+          }
+        ]
+      },
+      {
+        type: "stringArray",
+        name: "selectedOptions",
+        hidePort: true,
+        controls: [
+          {
+            type: "multiselect",
+            name: "values",
+            getOptions: (inputData) => {
+              const field = designerStore.getFields()[inputData.fieldId.selectedFieldId] || {}
+              return field.options || []
+            },
+            defaultValue: []
+          }
+        ]
+      },
+      {
+        type: "value",
+        name: "value"
       }
     ],
     outputs: [
@@ -199,5 +278,49 @@ const NodeTypes = {
       }
     ]
   },
+  string: {
+    label: "Text",
+    description: "Outputs a string of text.",
+    type: "string",
+    inputs: [
+      {
+        type: 'string',
+        name: 'string'
+      }
+    ],
+    outputs: [
+      {
+        type: 'string',
+        name: 'string'
+      }
+    ]
+  },
+  textSwitch: {
+    label: "Text Switch",
+    description: "Outputs text based on a given true/false input.",
+    type: 'textSwitch',
+    inputs: [
+      {
+        type: "boolean",
+        name: "test"
+      },
+      {
+        type: "string",
+        name: "textIfTrue",
+        label: "Text if true"
+      },
+      {
+        type: "string",
+        name: "textIfFalse",
+        label: "Text if false"
+      }
+    ],
+    outputs: [
+      {
+        type: "string",
+        name: "output"
+      }
+    ]
+  }
 }
 export default NodeTypes

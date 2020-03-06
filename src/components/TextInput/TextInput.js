@@ -47,6 +47,7 @@ const TextInput = ({
           type="text"
           placeholder={placeholder}
           className={styles.input}
+          value={data}
         />
       )}
     </div>

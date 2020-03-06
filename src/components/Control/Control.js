@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "./Control.css";
 import Select from "../Select/Select";
-import Checkbox from '../Checkbox/Checkbox'
+import Checkbox from "../Checkbox/Checkbox";
 import TextInput from "../TextInput/TextInput";
+import Multiselect from "../Multiselect/Multiselect";
 import { NodeDispatchContext } from "../../context";
 
 const Control = ({
@@ -15,7 +16,10 @@ const Control = ({
   data,
   options = [],
   placeholder,
-  triggerRecalculation
+  inputData,
+  triggerRecalculation,
+  getOptions,
+  setValue
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
 
@@ -25,7 +29,8 @@ const Control = ({
       data,
       nodeId,
       portName,
-      controlName: name
+      controlName: name,
+      setValue
     });
   };
 
@@ -36,16 +41,31 @@ const Control = ({
         return (
           <Select
             {...commonProps}
+            options={getOptions ? getOptions(inputData) : options}
             placeholder={placeholder}
-            options={options}
           />
         );
       case "text":
         return <TextInput {...commonProps} placeholder={inputLabel || label} />;
       case "number":
-        return <TextInput {...commonProps} type="number" placeholder={inputLabel || label} />;
+        return (
+          <TextInput
+            {...commonProps}
+            type="number"
+            placeholder={inputLabel || label}
+          />
+        );
       case "checkbox":
-        return <Checkbox {...commonProps} label={label} />
+        return <Checkbox {...commonProps} label={label} />;
+      case "multiselect":
+        return (
+          <Multiselect
+            {...commonProps}
+            options={getOptions ? getOptions(inputData) : options}
+            placeholder={placeholder}
+            label={label}
+          />
+        );
       default:
         return <div>Control</div>;
     }

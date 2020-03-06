@@ -7,9 +7,9 @@
   );
   --input-background-disabled: linear-gradient(
     to bottom,
-    #afafaf 0%,
-    #cbcbcb 35%,
-    #cbcbcb 100%
+    #c4c2c2 0%,
+    #dedddd 15%,
+    #dedddd 100%
   );
 }
 
@@ -91,7 +91,7 @@ form.form-body {
 .field-wrapper[data-required="true"] label.checkbox-box::after {
   display: none;
 }
-.field-wrapper.unselectable{
+.field-wrapper.unselectable {
   background: none;
 }
 .flex-column {
@@ -101,6 +101,9 @@ form.form-body {
 .flex-row {
   display: flex;
   flex-direction: row;
+}
+.flex-wrap{
+  flex-wrap: wrap;
 }
 .align-center {
   align-items: center;
@@ -218,12 +221,14 @@ form.form-body {
   content: "✔️";
   font-size: 18px;
 }
-.real-checkbox-wrapper .checkbox-box{
+.real-checkbox-wrapper .checkbox-box {
   padding: 2px;
   padding-left: 4px;
   padding-right: 0px;
 }
-.field-wrapper [data-disabled="true"] {
+.field-wrapper [data-disabled="true"],
+.field-wrapper [disabled],
+.field-wrapper [disabled] + .checkbox-box {
   background: var(--input-background-disabled);
 }
 .field-wrapper[data-visible="false"] {
@@ -236,6 +241,9 @@ form.form-body {
   right: 7px;
   top: 7px;
   font-size: 18px;
+}
+.field-wrapper label{
+  user-select: none;
 }
 .modal-wrapper {
   position: fixed;
@@ -281,6 +289,9 @@ button.attribute-button {
 button.attribute-button:hover {
   background: linear-gradient(to bottom, rgb(82, 133, 255), rgb(48, 99, 219));
 }
+button.attribute-button:active{
+  background: linear-gradient(to top, rgb(55, 114, 255), rgb(39, 88, 204));
+}
 button.attribute-button.secondary {
   background: linear-gradient(
     to bottom,
@@ -292,6 +303,13 @@ button.attribute-button.secondary {
 button.attribute-button.secondary:hover {
   background: linear-gradient(
     to bottom,
+    rgb(235, 235, 235),
+    rgb(215, 215, 215)
+  );
+}
+button.attribute-button.secondary:active {
+  background: linear-gradient(
+    to top,
     rgb(235, 235, 235),
     rgb(215, 215, 215)
   );
