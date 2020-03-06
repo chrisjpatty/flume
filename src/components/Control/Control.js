@@ -32,6 +32,7 @@ const Control = ({
       controlName: name,
       setValue
     });
+    triggerRecalculation()
   };
 
   const getControlByType = type => {

@@ -33,7 +33,13 @@ const fireNodeFunction = (node, inputValues, nodeType) => {
       return field ? resolveLogic(field, fields) : {}
     }
     case "valueEqualsOneOfOptions": {
-      return { output: inputValues.selectedOptions.includes(inputValues.value) }
+      let value = inputValues.value
+      if(value === undefined){
+        const fields = previewState.getFields()
+        const field = fields[inputValues.fieldId] || {}
+        value = field.value
+      }
+      return { output: inputValues.selectedOptions.includes(value) }
     }
     default:
       return undefined
@@ -57,6 +63,8 @@ const resolveInputControls = (type, data) => {
       };
     case "stringArray":
       return data.values
+    case "value":
+      return Object.keys(data).length ? data : undefined
     default:
       return data;
   }

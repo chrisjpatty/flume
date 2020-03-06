@@ -232,7 +232,8 @@ const NodeTypes = {
       },
       {
         type: "value",
-        name: "value"
+        name: "value",
+        label: "Value (optional)"
       }
     ],
     outputs: [
