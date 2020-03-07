@@ -37,8 +37,17 @@ export const getPortRectsByNodes = (nodes, forEachConnection) =>
 
 export const deleteConnection = ({ id }) => {
   const line = document.querySelector(`[data-connection-id="${id}"]`);
-  if(line) line.parentNode.remove();
-}
+  if (line) line.parentNode.remove();
+};
+
+export const deleteConnectionsByNodeId = nodeId => {
+  const lines = document.querySelectorAll(
+    `[data-output-node-id="${nodeId}"], [data-input-node-id="${nodeId}"]`
+  );
+  for (const line of lines) {
+    line.parentNode.remove();
+  }
+};
 
 export const updateConnection = ({ line, from, to }) => {
   line.setAttribute("x1", from.x);
@@ -59,7 +68,6 @@ export const createSVG = ({
 }) => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("class", styles.svg);
-  // svg.setAttributeNS("http://www.w3.org/2000/svg", "xmlns")
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
   line.setAttribute("x1", from.x);
   line.setAttribute("y1", from.y);

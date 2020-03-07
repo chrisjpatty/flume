@@ -7,6 +7,7 @@
   border: 1px solid rgba(0,0,0,.4);
   font-size: 14px;
   max-width: 300px;
+  min-width: 150px;
 }
 @supports (backdrop-filter: blur(6px)){
   .menuWrapper{

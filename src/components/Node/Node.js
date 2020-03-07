@@ -1,7 +1,9 @@
 import React from "react";
 import styles from "./Node.css";
 import { NodeTypesContext, NodeDispatchContext } from "../../context";
-import { getPortRectsByNodes, getPortRect } from "../../connectionCalculator";
+import { getPortRect } from "../../connectionCalculator";
+import { Portal } from 'react-portal'
+import ContextMenu from '../ContextMenu/ContextMenu'
 import IoPorts from "../IoPorts/IoPorts";
 
 const Node = ({
@@ -27,6 +29,8 @@ const Node = ({
   const [isDragging, setIsDragging] = React.useState(false);
   const offset = React.useRef();
   const nodeWrapper = React.useRef();
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
 
   const updateConnectionsByTransput = (transput = {}, isOutput) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
@@ -143,6 +147,31 @@ const Node = ({
     document.addEventListener("mousemove", checkDragDelay);
   };
 
+  const handleContextMenu = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    setMenuCoordinates({ x: e.clientX, y: e.clientY });
+    setMenuOpen(true);
+    return false;
+  };
+
+  const closeContextMenu = () => {
+    setMenuOpen(false);
+  };
+
+  const handleMenuOption = ({ value }) => {
+    switch (value) {
+      case 'deleteNode':
+        nodesDispatch({
+          type: "REMOVE_NODE",
+          nodeId: id
+        })
+        break;
+      default:
+        return;
+    }
+  }
+
   return (
     <div
       className={styles.wrapper}
@@ -156,6 +185,7 @@ const Node = ({
       onTouchStart={startDragDelay}
       ref={nodeWrapper}
       data-node-id={id}
+      onContextMenu={handleContextMenu}
     >
       <h2 className={styles.label}>{label}</h2>
       <IoPorts
@@ -166,6 +196,19 @@ const Node = ({
         updateNodeConnections={updateNodeConnections}
         inputData={inputData}
       />
+      {menuOpen ? (
+        <Portal>
+          <ContextMenu
+            x={menuCoordinates.x}
+            y={menuCoordinates.y}
+            options={[{label: "Delete Node", value: "deleteNode", description: "Deletes a node and all its connections."}]}
+            onRequestClose={closeContextMenu}
+            onOptionSelected={handleMenuOption}
+            label="Node Options"
+            hideHeader
+          />
+        </Portal>
+      ) : null}
     </div>
   );
 };

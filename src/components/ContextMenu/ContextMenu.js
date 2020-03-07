@@ -7,7 +7,8 @@ const ContextMenu = ({
   options = [],
   onRequestClose,
   onOptionSelected,
-  label
+  label,
+  hideHeader
 }) => {
   const menuWrapper = React.useRef();
   const filterInput = React.useRef();
@@ -40,7 +41,9 @@ const ContextMenu = ({
   );
 
   React.useEffect(() => {
-    filterInput.current.focus();
+    if(filterInput.current){
+      filterInput.current.focus();
+    }
     setMenuWidth(menuWrapper.current.getBoundingClientRect().width);
     document.addEventListener("keydown", testEscape);
     document.addEventListener("click", testClickOutside);
@@ -62,17 +65,20 @@ const ContextMenu = ({
       style={{ left: x, top: y, width: filter ? menuWidth : "auto" }}
       ref={menuWrapper}
     >
-      <div className={styles.menuHeader}>
-        <label className={styles.menuLabel}>{label}</label>
-        <input
-          type="text"
-          placeholder="Filter options"
-          value={filter}
-          onChange={e => setFilter(e.target.value)}
-          className={styles.menuFilter}
-          ref={filterInput}
-        />
-      </div>
+      {
+        !hideHeader ?
+        <div className={styles.menuHeader}>
+          <label className={styles.menuLabel}>{label}</label>
+          <input
+            type="text"
+            placeholder="Filter options"
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+            className={styles.menuFilter}
+            ref={filterInput}
+          />
+        </div> : null
+      }
       <div className={styles.optionsWrapper}>
         {filteredOptions.map((option, i) => (
           <ContextOption

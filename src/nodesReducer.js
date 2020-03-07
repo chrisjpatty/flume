@@ -1,4 +1,4 @@
-import { deleteConnection } from "./connectionCalculator";
+import { deleteConnection, deleteConnectionsByNodeId } from "./connectionCalculator";
 // import cloneDeep from 'lodash/cloneDeep'
 const nanoid = require("nanoid");
 
@@ -76,6 +76,35 @@ const removeConnection = (nodes, input, output) => {
   };
 };
 
+const getFilteredTransputs = (transputs, nodeId) => (
+  Object.entries(transputs).reduce((obj, [portName, transput]) => {
+    const newTransputs = transput.filter(t => t.nodeId !== nodeId)
+    if(newTransputs.length){
+      obj[portName] = newTransputs
+    }
+    return obj
+  }, {})
+)
+
+const removeConnections = (connections, nodeId) => ({
+  inputs: getFilteredTransputs(connections.inputs, nodeId),
+  outputs: getFilteredTransputs(connections.outputs, nodeId)
+})
+
+const removeNode = (startNodes, nodeId) => {
+  let { [nodeId]: deletedNode, ...nodes } = startNodes;
+  nodes = Object.values(nodes).reduce((obj, node) => {
+    obj[node.id] = {
+      ...node,
+      connections: removeConnections(node.connections, nodeId)
+    }
+
+    return obj
+  }, {})
+  deleteConnectionsByNodeId(nodeId)
+  return nodes
+}
+
 const getDefaultData = ({ nodeType, inputTypes }) =>
   nodeType.inputs.reduce((obj, input) => {
     const inputType = inputTypes[input.type];
@@ -131,6 +160,11 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, inputTypes }) => {
           })
         }
       };
+    }
+
+    case "REMOVE_NODE": {
+      const { nodeId } = action;
+      return removeNode(nodes, nodeId)
     }
 
     case "SET_PORT_DATA": {
