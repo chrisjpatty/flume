@@ -1,0 +1,28 @@
+.record-blocks {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 30px 30px;
+  padding-top: 30px;
+}
+.record-block {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: 0px 15px 32px -4px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 15px;
+}
+.record-block h2{
+  margin: 0px;
+  margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: 500;
+  color: rgb(45, 53, 60);
+}
+.record-block p{
+  margin: 0px;
+  font-style: italic;
+  color: rgb(84, 103, 119);
+  font-size: 13px;
+}

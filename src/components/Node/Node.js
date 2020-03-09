@@ -22,7 +22,7 @@ const Node = ({
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
-  const { label, inputs = [], outputs = [] } = nodeTypes[type];
+  const { label, deletable, inputs = [], outputs = [] } = nodeTypes[type];
 
   const startCoordinates = React.useRef(null);
   const [coordinates, setCoordinates] = React.useState({ x, y });
@@ -201,11 +201,16 @@ const Node = ({
           <ContextMenu
             x={menuCoordinates.x}
             y={menuCoordinates.y}
-            options={[{label: "Delete Node", value: "deleteNode", description: "Deletes a node and all its connections."}]}
+            options={[
+              ...(deletable !== false ?
+              [{label: "Delete Node", value: "deleteNode", description: "Deletes a node and all of its connections."}]
+              : [])
+            ]}
             onRequestClose={closeContextMenu}
             onOptionSelected={handleMenuOption}
+            hideFilter
             label="Node Options"
-            hideHeader
+            emptyText="This node has no options."
           />
         </Portal>
       ) : null}

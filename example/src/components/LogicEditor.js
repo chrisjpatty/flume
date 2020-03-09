@@ -7,6 +7,7 @@ export default ({
   onCloseRequested,
   nodeTypes,
   inputTypes,
+  defaultNodes,
   nodes,
   onChange
 }) => {
@@ -34,6 +35,7 @@ export default ({
           <NodeEditor
             nodeTypes={nodeTypes}
             inputTypes={inputTypes}
+            defaultNodes={defaultNodes}
             nodes={nodes}
             ref={nodeEditor}
           />

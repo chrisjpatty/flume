@@ -72,3 +72,7 @@
     user-select: none;
   }
 }
+.emptyText{
+  color: #fff;
+  padding: 5px;
+}

@@ -1,9 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Stage from "./components/Stage/Stage";
 import Node from "./components/Node/Node";
 import Connections from "./components/Connections/Connections";
-import Connection from "./components/Connection/Connection";
 import {
   NodeTypesContext,
   InputTypesContext,
@@ -11,14 +9,14 @@ import {
   ConnectionRecalculateContext
 } from "./context";
 import { createConnections } from "./connectionCalculator";
-import nodesReducer, { connectNodesReducer } from "./nodesReducer";
+import nodesReducer, { connectNodesReducer, getInitialNodes } from "./nodesReducer";
 
 import styles from "./styles.css";
 
-const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes }, ref) => {
+const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[] }, ref) => {
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(nodesReducer, { nodeTypes, inputTypes }),
-    initialNodes
+    getInitialNodes(initialNodes, defaultNodes, nodeTypes, inputTypes)
   );
   const stage = React.useRef();
   const [

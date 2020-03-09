@@ -7,6 +7,8 @@
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
+    "axios": "^0.19.2",
+    "decode-query-string": "^0.1.2",
     "local-storage": "^2.0.0",
     "nanoid": "^2.1.11",
     "node-editor": "link:..",

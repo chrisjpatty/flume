@@ -6,8 +6,22 @@ const getAttributes = attributes =>
     return obj;
   }, {});
 
+const removeFieldByFieldId = (state, fieldId) => {
+  const { [fieldId]: deletedField, ...fields } = state.fields;
+
+  return {
+    fields,
+    fieldsOrder: state.fieldsOrder.filter(f => f !== fieldId)
+  }
+}
+
 const fieldsReducer = (state, action) => {
   switch (action.type) {
+    case "POPULATE_FIELDS": {
+      const { fields, fieldsOrder } = action;
+      return {...state, fields, fieldsOrder}
+    }
+
     case "ADD_FIELD": {
       const { fieldType } = action;
       const id = nanoid(10);
@@ -24,6 +38,11 @@ const fieldsReducer = (state, action) => {
         },
         fieldsOrder: [...state.fieldsOrder, id]
       };
+    }
+
+    case "REMOVE_FIELD": {
+      const { fieldId } = action;
+      return removeFieldByFieldId(state, fieldId)
     }
 
     case "SET_ATTRIBUTE_VALUE": {

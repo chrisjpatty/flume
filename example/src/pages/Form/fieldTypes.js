@@ -8,6 +8,12 @@ const commonAttributes = [
     type: "text"
   },
   {
+    name: "name",
+    label: "Name",
+    defaultValue: "FIELD_NAME",
+    type: "text"
+  },
+  {
     name: "visible",
     label: "Visible",
     defaultValue: true,

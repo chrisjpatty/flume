@@ -105,6 +105,22 @@ const removeNode = (startNodes, nodeId) => {
   return nodes
 }
 
+export const getInitialNodes = (initialNodes = {}, defaultNodes = [], nodeTypes, inputTypes) => {
+  if(Object.keys(initialNodes).length){
+    return initialNodes
+  }else{
+    return defaultNodes.reduce((nodes, dNode) => {
+      nodes = nodesReducer(nodes, {
+        type: "ADD_NODE",
+        x: dNode.x,
+        y: dNode.y,
+        nodeType: dNode.type
+      }, {nodeTypes, inputTypes})
+      return nodes
+    }, {})
+  }
+}
+
 const getDefaultData = ({ nodeType, inputTypes }) =>
   nodeType.inputs.reduce((obj, input) => {
     const inputType = inputTypes[input.type];

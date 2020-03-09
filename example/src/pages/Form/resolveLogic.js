@@ -1,5 +1,4 @@
 import NodeTypes from './NodeTypes'
-import InputTypes from './InputTypes'
 import { previewState } from './Form'
 
 const getRootNode = nodes =>

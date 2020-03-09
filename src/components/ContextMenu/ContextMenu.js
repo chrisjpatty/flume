@@ -8,7 +8,9 @@ const ContextMenu = ({
   onRequestClose,
   onOptionSelected,
   label,
-  hideHeader
+  hideHeader,
+  hideFilter,
+  emptyText
 }) => {
   const menuWrapper = React.useRef();
   const filterInput = React.useRef();
@@ -69,14 +71,17 @@ const ContextMenu = ({
         !hideHeader ?
         <div className={styles.menuHeader}>
           <label className={styles.menuLabel}>{label}</label>
-          <input
-            type="text"
-            placeholder="Filter options"
-            value={filter}
-            onChange={e => setFilter(e.target.value)}
-            className={styles.menuFilter}
-            ref={filterInput}
-          />
+          {
+            !hideFilter ?
+            <input
+              type="text"
+              placeholder="Filter options"
+              value={filter}
+              onChange={e => setFilter(e.target.value)}
+              className={styles.menuFilter}
+              ref={filterInput}
+            /> : null
+          }
         </div> : null
       }
       <div className={styles.optionsWrapper}>
@@ -89,6 +94,11 @@ const ContextMenu = ({
             {option.description ? <p>{option.description}</p> : null}
           </ContextOption>
         ))}
+        {
+          !options.length ?
+          <span className={styles.emptyText}>{emptyText}</span>
+          : null
+        }
       </div>
     </div>
   );
