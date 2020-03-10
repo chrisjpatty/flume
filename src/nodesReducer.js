@@ -145,7 +145,7 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, inputTypes }) => {
       ];
       if (inputIsNotConnected) return addConnection(nodes, input, output);
       else return nodes;
-    }
+  }ip
 
     case "REMOVE_CONNECTION": {
       const { input, output } = action;

@@ -26,7 +26,7 @@ const IoPorts = ({
         {inputs.map((input, i) => (
           <Input
             {...input}
-            data={inputData[input.name]}
+            data={inputData[input.name] || {}}
             isConnected={!!connections.inputs[input.name]}
             triggerRecalculation={triggerRecalculation}
             inputTypes={inputTypes}

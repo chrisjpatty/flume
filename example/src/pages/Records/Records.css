@@ -26,3 +26,15 @@
   color: rgb(84, 103, 119);
   font-size: 13px;
 }
+.record-attributes{
+  display: flex;
+  flex-direction: column;
+}
+.record-attribute-wrapper{
+  margin: 3px 0px;
+  color: rgb(56, 57, 59);
+  font-size: 15px;
+}
+.record-attribute-wrapper:last-child{
+  margin-bottom: 0px;
+}

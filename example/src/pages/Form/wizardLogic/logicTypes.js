@@ -1,4 +1,4 @@
-const statusOptions = [
+export const statusOptions = [
   {value: "review", label: "Pending Review"},
   {value: "approved", label: "Approved"},
   {value: "correction", label: "Needs Correction"}
@@ -19,8 +19,50 @@ export const NodeTypes = {
       },
       {
         type: "status",
-        lable: "Status",
-        name: "status"
+        label: "Status",
+        name: "status",
+        noControls: true
+      },
+      {
+        type: "number",
+        label: "Fee",
+        name: "fee",
+        noControls: true
+      }
+    ]
+  },
+  number: {
+    label: "Number",
+    description: "Outputs a number.",
+    type: "number",
+    initialWidth: 130,
+    inputs: [
+      {
+        type: 'number',
+        name: 'number'
+      }
+    ],
+    outputs: [
+      {
+        type: 'number',
+        name: 'number'
+      }
+    ]
+  },
+  string: {
+    label: "Text",
+    description: "Outputs a string of text.",
+    type: "string",
+    inputs: [
+      {
+        type: 'string',
+        name: 'string'
+      }
+    ],
+    outputs: [
+      {
+        type: 'string',
+        name: 'string'
       }
     ]
   },
@@ -30,9 +72,10 @@ export const NodeTypes = {
     description: "Outputs a selected status",
     inputs: [
       {
-        type: "string",
+        type: "status",
         label: "Selected Status",
         name: "statusValue",
+        hidePort: true,
         controls: [
           {
             type: "select",
@@ -158,6 +201,75 @@ export const NodeTypes = {
       }
     ]
   },
+  numberSwitch: {
+    label: "Number Switch",
+    description: "Outputs a number based on a given true/false input.",
+    type: 'numberSwitch',
+    initialWidth: 140,
+    inputs: [
+      {
+        type: "boolean",
+        name: "test"
+      },
+      {
+        type: "number",
+        name: "numberIfTrue",
+        label: "Number if true"
+      },
+      {
+        type: "number",
+        name: "numberIfFalse",
+        label: "Number if false"
+      }
+    ],
+    outputs: [
+      {
+        type: "number",
+        name: "output"
+      }
+    ]
+  },
+  valueToString: {
+    type: "valueToString",
+    label: "Value to Text",
+    description: "Converts a value to text",
+    initialWidth: 160,
+    inputs: [
+      {
+        type: "value",
+        name: "value"
+      }
+    ],
+    outputs: [
+      {
+        type: "string",
+        name: "string",
+        label: "Text"
+      }
+    ]
+  },
+  addText: {
+    type: "addText",
+    label: "Join Text",
+    description: "Joins together two strings of text.",
+    initialWidth: 160,
+    inputs: [
+      {
+        type: "string",
+        name: "string1"
+      },
+      {
+        type: "string",
+        name: "string2"
+      }
+    ],
+    outputs: [
+      {
+        type: "string",
+        name: "output"
+      }
+    ]
+  },
   user: {
     label: "User",
     description: "Outputs attributes of the current user.",
@@ -185,6 +297,7 @@ export const NodeTypes = {
     label: "Filing Value",
     description: "Outputs a value from the current filing",
     type: 'filingValue',
+    initialWidth: 140,
     inputs: [
       {
         type: "string",
@@ -242,6 +355,27 @@ export const NodeTypes = {
       }
     ]
   },
+  valueEqualsBoolean: {
+    label: "Value Equals Boolean",
+    description: "Outputs whether a value equals a given boolean.",
+    type: 'valueEqualsBoolean',
+    inputs: [
+      {
+        type: "value",
+        name: "val1"
+      },
+      {
+        type: "boolean",
+        name: "val2"
+      }
+    ],
+    outputs: [
+      {
+        type: "boolean",
+        name: "output"
+      }
+    ]
+  }
 }
 
 export const InputTypes = {
@@ -296,6 +430,7 @@ export const InputTypes = {
     type: "status",
     label: "Status",
     acceptTypes: ["status"],
-    color: "pink"
+    color: "pink",
+    hidePort: true
   }
 }
