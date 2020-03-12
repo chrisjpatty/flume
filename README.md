@@ -1,6 +1,8 @@
-# node-editor
+![](https://raw.githubusercontent.com/chrisjpatty/flume/master/logo.png?token=ADRZXIYFG4L7XWEYEIWYJC26OOQZS)
 
-> A node editor for 
+# Flume
+
+> A node editor for describing custom logic.
 
 [![NPM](https://img.shields.io/npm/v/node-editor.svg)](https://www.npmjs.com/package/node-editor) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -10,7 +12,7 @@
 npm install --save node-editor
 ```
 
-## Usage
+<!-- ## Usage
 
 ```jsx
 import React, { Component } from 'react'
@@ -24,7 +26,7 @@ class Example extends Component {
     )
   }
 }
-```
+``` -->
 
 ## License
 
