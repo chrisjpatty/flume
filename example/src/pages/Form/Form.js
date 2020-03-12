@@ -61,7 +61,7 @@ export default () => {
   const [previewing, setPreviewing] = React.useState(false);
   const [isFiling, setIsFiling] = React.useState(false)
   const [wizardLoading, setWizardLoading] = React.useState(true)
-
+  const { file: triggerFile } = React.useMemo(() => decodeQuery(location.search || "?"), [location])
   const clearForm = () => {
     ls.remove("FIELDS");
     ls.remove("FIELDS_ORDER");
@@ -116,8 +116,7 @@ export default () => {
 
   React.useEffect(() => {
     if (formId) {
-      const { file } = decodeQuery(location.search || "?")
-      setIsFiling(!!file)
+      setIsFiling(!!triggerFile)
       axios.get(`${BASE_URL}/forms/${formId}`).then(res => {
         if (res.data) {
           dispatchFields({
@@ -130,7 +129,7 @@ export default () => {
             wizardId: res.data.id,
             wizardLogic: res.data.definition.logic
           })
-          if(file){
+          if(triggerFile){
             dispatchPreviewFields({
               type: "POPULATE_FIELDS",
               fields: res.data.definition.fields

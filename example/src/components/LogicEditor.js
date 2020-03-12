@@ -9,7 +9,8 @@ export default ({
   inputTypes,
   defaultNodes,
   nodes,
-  onChange
+  onChange,
+  context = {}
 }) => {
   const nodeEditor = React.useRef();
 
@@ -33,6 +34,7 @@ export default ({
         </div>
         <div style={{ width: 1200, height: 850 }}>
           <NodeEditor
+            context={context}
             nodeTypes={nodeTypes}
             inputTypes={inputTypes}
             defaultNodes={defaultNodes}

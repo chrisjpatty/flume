@@ -4,7 +4,7 @@ import Select from "../Select/Select";
 import Checkbox from "../Checkbox/Checkbox";
 import TextInput from "../TextInput/TextInput";
 import Multiselect from "../Multiselect/Multiselect";
-import { NodeDispatchContext } from "../../context";
+import { NodeDispatchContext, ContextContext } from "../../context";
 
 const Control = ({
   type,
@@ -22,6 +22,7 @@ const Control = ({
   setValue
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
+  const executionContext = React.useContext(ContextContext)
 
   const onChange = data => {
     nodesDispatch({
@@ -42,7 +43,7 @@ const Control = ({
         return (
           <Select
             {...commonProps}
-            options={getOptions ? getOptions(inputData) : options}
+            options={getOptions ? getOptions(inputData, executionContext) : options}
             placeholder={placeholder}
           />
         );
@@ -62,7 +63,7 @@ const Control = ({
         return (
           <Multiselect
             {...commonProps}
-            options={getOptions ? getOptions(inputData) : options}
+            options={getOptions ? getOptions(inputData, executionContext) : options}
             placeholder={placeholder}
             label={label}
           />

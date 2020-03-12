@@ -44,6 +44,7 @@ export default ({ previewing, editingWizard }) => {
   }
 
   const setWizardLogic = logic => {
+    console.log(logic);
     designerDispatch({
       type: "SET_LOGIC",
       logic
@@ -84,7 +85,7 @@ export default ({ previewing, editingWizard }) => {
               />
             </AttributeWrapper>
             <AttributeWrapper>
-              <WizardLogic logic={designerState.wizardLogic} onChange={setWizardLogic} />
+              <WizardLogic logic={designerState.wizardLogic} fields={fields} onChange={setWizardLogic} />
             </AttributeWrapper>
           </React.Fragment>
         }
@@ -106,7 +107,7 @@ const Attributes = ({ attributes = [], currentField }) => {
 
 const hiddenLabelTypes = ["checkbox", "options", "logic"];
 
-const WizardLogic = ({logic, onChange}) => {
+const WizardLogic = ({logic, fields, onChange}) => {
   const [modalOpen, setModalOpen] = React.useState(false);
 
   const closeModal = () => setModalOpen(false);
@@ -121,6 +122,7 @@ const WizardLogic = ({logic, onChange}) => {
         onChange={onChange}
         onCloseRequested={closeModal}
         isOpen={modalOpen}
+        context={{fields}}
         nodeTypes={WizardNodeTypes}
         inputTypes={WizardInputTypes}
         defaultNodes={[

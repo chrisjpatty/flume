@@ -6,14 +6,15 @@ import {
   NodeTypesContext,
   InputTypesContext,
   NodeDispatchContext,
-  ConnectionRecalculateContext
+  ConnectionRecalculateContext,
+  ContextContext
 } from "./context";
 import { createConnections } from "./connectionCalculator";
 import nodesReducer, { connectNodesReducer, getInitialNodes } from "./nodesReducer";
 
 import styles from "./styles.css";
 
-const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[] }, ref) => {
+const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[], context={} }, ref) => {
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(nodesReducer, { nodeTypes, inputTypes }),
     getInitialNodes(initialNodes, defaultNodes, nodeTypes, inputTypes)
@@ -50,21 +51,23 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[
       <NodeTypesContext.Provider value={nodeTypes}>
         <NodeDispatchContext.Provider value={dispatchNodes}>
           <ConnectionRecalculateContext.Provider value={triggerRecalculation}>
-            <Stage stageRef={stage}>
-              {Object.values(nodes).map(node => (
-                <Node
-                  stageRef={stage}
-                  onDragEnd={triggerRecalculation}
-                  {...node}
-                  key={node.id}
-                />
-              ))}
-              <Connections nodes={nodes} />
-              <div
-                className={styles.dragWrapper}
-                id="__node_editor_drag_connection__"
-              ></div>
-            </Stage>
+            <ContextContext.Provider value={context}>
+              <Stage stageRef={stage}>
+                {Object.values(nodes).map(node => (
+                  <Node
+                    stageRef={stage}
+                    onDragEnd={triggerRecalculation}
+                    {...node}
+                    key={node.id}
+                  />
+                ))}
+                <Connections nodes={nodes} />
+                <div
+                  className={styles.dragWrapper}
+                  id="__node_editor_drag_connection__"
+                ></div>
+              </Stage>
+            </ContextContext.Provider>
           </ConnectionRecalculateContext.Provider>
         </NodeDispatchContext.Provider>
       </NodeTypesContext.Provider>

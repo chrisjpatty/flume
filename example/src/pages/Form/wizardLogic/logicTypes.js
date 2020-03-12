@@ -1,8 +1,10 @@
+import orderBy from "lodash/orderBy";
+
 export const statusOptions = [
-  {value: "review", label: "Pending Review"},
-  {value: "approved", label: "Approved"},
-  {value: "correction", label: "Needs Correction"}
-]
+  { value: "review", label: "Pending Review" },
+  { value: "approved", label: "Approved" },
+  { value: "correction", label: "Needs Correction" }
+];
 
 export const NodeTypes = {
   output: {
@@ -38,14 +40,14 @@ export const NodeTypes = {
     initialWidth: 130,
     inputs: [
       {
-        type: 'number',
-        name: 'number'
+        type: "number",
+        name: "number"
       }
     ],
     outputs: [
       {
-        type: 'number',
-        name: 'number'
+        type: "number",
+        name: "number"
       }
     ]
   },
@@ -55,14 +57,14 @@ export const NodeTypes = {
     type: "string",
     inputs: [
       {
-        type: 'string',
-        name: 'string'
+        type: "string",
+        name: "string"
       }
     ],
     outputs: [
       {
-        type: 'string',
-        name: 'string'
+        type: "string",
+        name: "string"
       }
     ]
   },
@@ -70,6 +72,7 @@ export const NodeTypes = {
     type: "status",
     label: "Status",
     description: "Outputs a selected status",
+    initialWidth: 150,
     inputs: [
       {
         type: "status",
@@ -111,9 +114,9 @@ export const NodeTypes = {
     ],
     outputs: [
       {
-        type: 'boolean',
-        name: 'output',
-        label: 'True/False'
+        type: "boolean",
+        name: "output",
+        label: "True/False"
       }
     ]
   },
@@ -134,9 +137,9 @@ export const NodeTypes = {
     ],
     outputs: [
       {
-        type: 'boolean',
-        name: 'output',
-        label: 'True/False'
+        type: "boolean",
+        name: "output",
+        label: "True/False"
       }
     ]
   },
@@ -144,7 +147,7 @@ export const NodeTypes = {
     label: "Reverse Boolean",
     description: "Outputs the opposite of a true/false",
     initialWidth: 150,
-    type: 'booleanReverse',
+    type: "booleanReverse",
     inputs: [
       {
         type: "boolean",
@@ -161,7 +164,7 @@ export const NodeTypes = {
   statusSwitch: {
     label: "Status Switch",
     description: "Outputs a status based on a given true/false input.",
-    type: 'statusSwitch',
+    type: "statusSwitch",
     inputs: [
       {
         type: "boolean",
@@ -173,8 +176,8 @@ export const NodeTypes = {
         label: "Status if true",
         controls: [
           {
-            type: 'select',
-            name: 'statusIfTrue',
+            type: "select",
+            name: "statusIfTrue",
             placeholder: "Status if True",
             options: statusOptions
           }
@@ -186,8 +189,8 @@ export const NodeTypes = {
         label: "Status if false",
         controls: [
           {
-            type: 'select',
-            name: 'statusIfFalse',
+            type: "select",
+            name: "statusIfFalse",
             placeholder: "Status if False",
             options: statusOptions
           }
@@ -204,7 +207,7 @@ export const NodeTypes = {
   numberSwitch: {
     label: "Number Switch",
     description: "Outputs a number based on a given true/false input.",
-    type: 'numberSwitch',
+    type: "numberSwitch",
     initialWidth: 140,
     inputs: [
       {
@@ -273,7 +276,7 @@ export const NodeTypes = {
   user: {
     label: "User",
     description: "Outputs attributes of the current user.",
-    type: 'user',
+    type: "user",
     inputs: [],
     outputs: [
       {
@@ -296,11 +299,11 @@ export const NodeTypes = {
   filingValue: {
     label: "Filing Value",
     description: "Outputs a value from the current filing",
-    type: 'filingValue',
-    initialWidth: 140,
+    type: "filingValue",
+    initialWidth: 170,
     inputs: [
       {
-        type: "string",
+        type: "fieldName",
         name: "fieldName",
         label: "Field Name"
       }
@@ -316,7 +319,7 @@ export const NodeTypes = {
   valueEqualsValue: {
     label: "Values Equal",
     description: "Outputs whether two values equal each other.",
-    type: 'valueEqualsValue',
+    type: "valueEqualsValue",
     inputs: [
       {
         type: "value",
@@ -337,7 +340,7 @@ export const NodeTypes = {
   valueEqualsText: {
     label: "Value Equals Text",
     description: "Outputs whether a value equals some given text.",
-    type: 'valueEqualsText',
+    type: "valueEqualsText",
     inputs: [
       {
         type: "value",
@@ -358,7 +361,7 @@ export const NodeTypes = {
   valueEqualsBoolean: {
     label: "Value Equals Boolean",
     description: "Outputs whether a value equals a given boolean.",
-    type: 'valueEqualsBoolean',
+    type: "valueEqualsBoolean",
     inputs: [
       {
         type: "value",
@@ -376,12 +379,12 @@ export const NodeTypes = {
       }
     ]
   }
-}
+};
 
 export const InputTypes = {
   string: {
     type: "string",
-    label: 'Text',
+    label: "Text",
     acceptTypes: ["string"],
     color: "green",
     controls: [
@@ -395,7 +398,7 @@ export const InputTypes = {
   },
   boolean: {
     type: "boolean",
-    label: 'True/False',
+    label: "True/False",
     acceptTypes: ["boolean"],
     controls: [
       {
@@ -408,7 +411,7 @@ export const InputTypes = {
   },
   number: {
     type: "number",
-    label: 'Number',
+    label: "Number",
     acceptTypes: ["number"],
     color: "red",
     controls: [
@@ -422,7 +425,7 @@ export const InputTypes = {
   },
   value: {
     type: "value",
-    label: 'Field Value',
+    label: "Field Value",
     acceptTypes: ["value", "number", "string", "boolean"],
     color: "yellow"
   },
@@ -430,7 +433,32 @@ export const InputTypes = {
     type: "status",
     label: "Status",
     acceptTypes: ["status"],
-    color: "pink",
+    color: "purple",
     hidePort: true
+  },
+  fieldName: {
+    type: "fieldName",
+    label: "Field Name",
+    acceptTypes: ["fieldName"],
+    color: "pink",
+    hidePort: true,
+    controls: [
+      {
+        type: "select",
+        name: "name",
+        placeholder: "[Pick a Field]",
+        getOptions: (data, context) => {
+          const fields = orderBy(
+            Object.values(context.fields).map(f => ({
+              label: f.label,
+              value: f.name,
+              description: f.name
+            })),
+            "label"
+          );
+          return fields;
+        }
+      }
+    ]
   }
-}
+};

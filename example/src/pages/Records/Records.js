@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../Form/Form";
 import { statusOptions } from '../Form/wizardLogic/logicTypes'
+import FloatingNavigation from '../../components/FloatingNavigation'
 import "./Records.css";
 
 export default () => {
@@ -36,6 +37,7 @@ export default () => {
           ))}
         </div>
       </div>
+      <FloatingNavigation />
     </div>
   );
 };
