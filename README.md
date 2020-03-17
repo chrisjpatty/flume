@@ -9,7 +9,7 @@
 ## Install
 
 ```bash
-npm install --save node-editor
+npm install --save flume
 ```
 
 <!-- ## Usage
