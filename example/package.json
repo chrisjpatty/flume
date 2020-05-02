@@ -9,6 +9,7 @@
     "@emotion/styled": "^10.0.27",
     "axios": "^0.19.2",
     "decode-query-string": "^0.1.2",
+    "docz": "^2.3.1",
     "local-storage": "^2.0.0",
     "nanoid": "^2.1.11",
     "node-editor": "link:..",
@@ -22,6 +23,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "docz:dev": "DOCZ_SOURCE=./src docz dev",
+    "docz:build": "DOCZ_SOURCE=./src docz build",
+    "docz:serve": "DOCZ_SOURCE=./src docz build && docz serve"
   }
 }
