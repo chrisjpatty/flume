@@ -26,7 +26,7 @@ const config = {
     {
       resolve: 'gatsby-theme-docz',
       options: {
-        themeConfig: {},
+        themeConfig: { initialColorMode: 'dark' },
         src: './src',
         gatsbyRoot: null,
         themesDir: 'src',
@@ -94,6 +94,7 @@ const config = {
           db:
             '/Users/chrispatty/projects/node-editor/example/.docz/app/db.json',
         },
+        DOCZ_SOURCE: './src',
       },
     },
   ],
