@@ -1,16 +1,14 @@
 {
   "config": {
-    "title": "Node Editor Example",
-    "description": "My awesome app using docz",
+    "title": "Flume",
+    "description": "Documentation for Flume: The React node editor.",
     "menu": [],
     "version": "0.0.0",
     "repository": null,
     "native": false,
-    "themeConfig": {
-      "initialColorMode": "dark"
-    },
+    "themeConfig": {},
     "separator": "-",
-    "DOCZ_SOURCE": "./src"
+    "src": "./src"
   },
   "entries": [
     {

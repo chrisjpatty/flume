@@ -1,6 +1,8 @@
 export default {
   themeConfig: {
-    initialColorMode: 'dark'
+    // initialColorMode: 'dark'
   },
-  DOCZ_SOURCE: './src'
+  title: "Flume",
+  description: "Documentation for Flume: The React node editor.",
+  src: './src'
 }

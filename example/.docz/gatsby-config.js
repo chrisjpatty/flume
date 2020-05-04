@@ -19,14 +19,14 @@ const config = {
   pathPrefix: '/',
 
   siteMetadata: {
-    title: 'Node Editor Example',
-    description: 'My awesome app using docz',
+    title: 'Flume',
+    description: 'Documentation for Flume: The React node editor.',
   },
   plugins: [
     {
       resolve: 'gatsby-theme-docz',
       options: {
-        themeConfig: { initialColorMode: 'dark' },
+        themeConfig: {},
         src: './src',
         gatsbyRoot: null,
         themesDir: 'src',
@@ -58,8 +58,8 @@ const config = {
         eb: 'master',
         'edit-branch': 'master',
         config: '',
-        title: 'Node Editor Example',
-        description: 'My awesome app using docz',
+        title: 'Flume',
+        description: 'Documentation for Flume: The React node editor.',
         host: 'localhost',
         port: 3000,
         p: 3000,
@@ -94,7 +94,6 @@ const config = {
           db:
             '/Users/chrispatty/projects/node-editor/example/.docz/app/db.json',
         },
-        DOCZ_SOURCE: './src',
       },
     },
   ],
