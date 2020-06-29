@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Node.css";
-import { NodeTypesContext, NodeDispatchContext } from "../../context";
+import { NodeTypesContext, NodeDispatchContext, StageContext } from "../../context";
 import { getPortRect } from "../../connectionCalculator";
 import { Portal } from 'react-portal'
 import ContextMenu from '../ContextMenu/ContextMenu'
@@ -22,6 +22,7 @@ const Node = ({
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
+  const stageState = React.useContext(StageContext);
   const { label, deletable, inputs = [], outputs = [] } = nodeTypes[type];
 
   const startCoordinates = React.useRef(null);
@@ -51,10 +52,14 @@ const Node = ({
         const cnt = document.querySelector(
           `[data-connection-id="${combined}"]`
         );
-        cnt.x1.baseVal.value = toRect.x - stageRef.current.x + portHalf;
-        cnt.y1.baseVal.value = toRect.y - stageRef.current.y + portHalf;
-        cnt.x2.baseVal.value = fromRect.x - stageRef.current.x + portHalf;
-        cnt.y2.baseVal.value = fromRect.y - stageRef.current.y + portHalf;
+        cnt.x1.baseVal.value =
+          toRect.x - stageRef.current.x + portHalf + stageState.translate.x;
+        cnt.y1.baseVal.value =
+          toRect.y - stageRef.current.y + portHalf + stageState.translate.y;
+        cnt.x2.baseVal.value =
+          fromRect.x - stageRef.current.x + portHalf + stageState.translate.x;
+        cnt.y2.baseVal.value =
+          fromRect.y - stageRef.current.y + portHalf + stageState.translate.y;
       });
     });
   };
@@ -69,17 +74,17 @@ const Node = ({
   const updateCoordinates = e => {
     nodeWrapper.current.style.left = `${e.clientX -
       stageRef.current.left -
-      offset.current.x}px`;
+      offset.current.x + stageState.translate.x}px`;
     nodeWrapper.current.style.top = `${e.clientY -
       stageRef.current.top -
-      offset.current.y}px`;
+      offset.current.y + stageState.translate.y}px`;
     updateNodeConnections();
   };
 
   const stopDrag = e => {
     const coordinates = {
-      x: e.clientX - stageRef.current.left - offset.current.x,
-      y: e.clientY - stageRef.current.top - offset.current.y
+      x: e.clientX - stageRef.current.left - offset.current.x + stageState.translate.x,
+      y: e.clientY - stageRef.current.top - offset.current.y + stageState.translate.y
     };
     setCoordinates(coordinates);
     setIsDragging(false);
@@ -186,6 +191,7 @@ const Node = ({
       ref={nodeWrapper}
       data-node-id={id}
       onContextMenu={handleContextMenu}
+      onDragStart={e=>{e.preventDefault(); e.stopPropagation()}}
     >
       <h2 className={styles.label}>{label}</h2>
       <IoPorts

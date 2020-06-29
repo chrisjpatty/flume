@@ -87,7 +87,7 @@ export const createSVG = ({
 };
 
 export const getStageRef = () =>
-  document.getElementById("__node_editor_stage__");
+  document.getElementById("__node_editor_connections__");
 
 export const createConnections = nodes => {
   const stageRef = getStageRef();

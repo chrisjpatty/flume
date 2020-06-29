@@ -3,7 +3,8 @@ import styles from "./IoPorts.css";
 import { Portal } from "react-portal";
 import {
   NodeDispatchContext,
-  ConnectionRecalculateContext
+  ConnectionRecalculateContext,
+  StageContext
 } from "../../context";
 import Control from "../Control/Control";
 import Connection from "../Connection/Connection";
@@ -84,7 +85,7 @@ const Input = ({
   }, [isConnected, prevConnected, triggerRecalculation]);
 
   return (
-    <div className={styles.transput}>
+    <div className={styles.transput} onDragStart={e => {e.preventDefault(); e.stopPropagation()}}>
       {
         !hidePort ?
         <Port
@@ -129,7 +130,7 @@ const Output = ({
   const { label: defaultLabel, color } = inputTypes[type] || {};
 
   return (
-    <div className={styles.transput}>
+    <div className={styles.transput} onDragStart={e => {e.preventDefault(); e.stopPropagation()}}>
       <label className={styles.portLabel}>{label || defaultLabel}</label>
       <Port
         type={type}
@@ -151,6 +152,7 @@ const Port = ({
   triggerRecalculation
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
+  const stageState = React.useContext(StageContext)
   const inputTypes = React.useContext(InputTypesContext);
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStartCoordinates, setDragStartCoordinates] = React.useState({
@@ -167,11 +169,11 @@ const Port = ({
       .getBoundingClientRect();
 
     if (isInput) {
-      lineInToPort.current.setAttribute("x2", e.clientX - stage.x);
-      lineInToPort.current.setAttribute("y2", e.clientY - stage.y);
+      lineInToPort.current.setAttribute("x2", e.clientX - stage.x + stageState.translate.x);
+      lineInToPort.current.setAttribute("y2", e.clientY - stage.y + stageState.translate.y);
     } else {
-      line.current.setAttribute("x2", e.clientX - stage.x);
-      line.current.setAttribute("y2", e.clientY - stage.y);
+      line.current.setAttribute("x2", e.clientX - stage.x + stageState.translate.x);
+      line.current.setAttribute("y2", e.clientY - stage.y + stageState.translate.y);
     }
   };
 
@@ -220,6 +222,7 @@ const Port = ({
   };
 
   const handleDragStart = e => {
+    e.preventDefault();
     e.stopPropagation();
     const startPort = port.current.getBoundingClientRect();
     const stage = document
@@ -239,8 +242,8 @@ const Port = ({
       }
     } else {
       setDragStartCoordinates({
-        x: startPort.x - stage.x + startPort.width / 2,
-        y: startPort.y - stage.y + startPort.width / 2
+        x: startPort.x - stage.x + (startPort.width / 2) + stageState.translate.x,
+        y: startPort.y - stage.y + (startPort.width / 2) + stageState.translate.y
       });
       setIsDragging(true);
       document.addEventListener("mouseup", handleDragEnd);
@@ -259,6 +262,7 @@ const Port = ({
         data-port-type={type}
         data-port-transput-type={isInput ? "input" : "output"}
         data-node-id={nodeId}
+        onDragStart={e => {e.preventDefault(); e.stopPropagation()}}
         ref={port}
       />
       {isDragging ? (
