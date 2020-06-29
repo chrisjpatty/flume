@@ -163,17 +163,19 @@ const Port = ({
   const line = React.useRef();
   const lineInToPort = React.useRef();
 
+  const byScale = value => (1 / stageState.scale) * value;
+
   const handleDrag = e => {
     const stage = document
       .getElementById("__node_editor_stage__")
       .getBoundingClientRect();
 
     if (isInput) {
-      lineInToPort.current.setAttribute("x2", e.clientX - stage.x + stageState.translate.x);
-      lineInToPort.current.setAttribute("y2", e.clientY - stage.y + stageState.translate.y);
+      lineInToPort.current.setAttribute("x2", byScale(e.clientX - stage.x - (stage.width / 2)) + byScale(stageState.translate.x));
+      lineInToPort.current.setAttribute("y2", byScale(e.clientY - stage.y - (stage.height / 2)) + byScale(stageState.translate.y));
     } else {
-      line.current.setAttribute("x2", e.clientX - stage.x + stageState.translate.x);
-      line.current.setAttribute("y2", e.clientY - stage.y + stageState.translate.y);
+      line.current.setAttribute("x2", byScale(e.clientX - stage.x - (stage.width / 2)) + byScale(stageState.translate.x));
+      line.current.setAttribute("y2", byScale(e.clientY - stage.y - (stage.height / 2)) + byScale(stageState.translate.y));
     }
   };
 
@@ -242,8 +244,8 @@ const Port = ({
       }
     } else {
       setDragStartCoordinates({
-        x: startPort.x - stage.x + (startPort.width / 2) + stageState.translate.x,
-        y: startPort.y - stage.y + (startPort.width / 2) + stageState.translate.y
+        x: byScale(startPort.x - stage.x + (startPort.width / 2) - (stage.width / 2)) + byScale(stageState.translate.x),
+        y: byScale(startPort.y - stage.y + (startPort.width / 2) - (stage.height / 2)) + byScale(stageState.translate.y)
       });
       setIsDragging(true);
       document.addEventListener("mouseup", handleDragEnd);

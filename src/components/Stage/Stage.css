@@ -7,3 +7,18 @@
   position: relative;
   overflow: hidden;
 }
+.transformWrapper{
+  transform-origin: center center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0px;
+  height: 0px;
+}
+.scaleWrapper{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 0px;
+  height: 0px;
+}

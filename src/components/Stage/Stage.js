@@ -92,12 +92,14 @@ const Stage = ({
     [nodeTypes]
   );
 
+  const byScale = value => (1 / scale) * value;
+
   const addNode = ({ node }) => {
     const wrapperRect = wrapper.current.getBoundingClientRect();
     nodesDispatch({
       type: "ADD_NODE",
-      x: menuCoordinates.x - wrapperRect.x + translate.x,
-      y: menuCoordinates.y - wrapperRect.y + translate.y,
+      x: byScale(menuCoordinates.x - wrapperRect.x - (wrapperRect.width / 2)) + byScale(translate.x),
+      y: byScale(menuCoordinates.y - wrapperRect.y - (wrapperRect.height / 2)) + byScale(translate.y),
       nodeType: node.type
     });
   };

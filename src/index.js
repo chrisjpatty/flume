@@ -29,8 +29,8 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[
   const [stageState, dispatchStageState] = React.useReducer(stageReducer, {scale: 1, translate: {x: 0, y: 0}})
 
   const recalculateConnections = React.useCallback(() => {
-    createConnections(nodes);
-  }, [nodes]);
+    createConnections(nodes, stageState);
+  }, [nodes, stageState]);
 
   React.useLayoutEffect(() => {
     if (shouldRecalculateConnections) {
@@ -59,7 +59,7 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[
                 <Stage scale={stageState.scale} translate={stageState.translate} dispatchStageState={dispatchStageState} stageRef={stage}>
                   {Object.values(nodes).map(node => (
                     <Node
-                      stageRef={stage}
+                      stageRect={stage}
                       onDragEnd={triggerRecalculation}
                       {...node}
                       key={node.id}
