@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Node.css";
-import { NodeTypesContext, NodeDispatchContext } from "../../context";
+import { NodeTypesContext, NodeDispatchContext, StageContext } from "../../context";
 import { getPortRect } from "../../connectionCalculator";
 import { Portal } from 'react-portal'
 import ContextMenu from '../ContextMenu/ContextMenu'
@@ -13,7 +13,7 @@ const Node = ({
   x,
   y,
   delay = 6,
-  stageRef,
+  stageRect,
   connections,
   type,
   inputData,
@@ -22,6 +22,7 @@ const Node = ({
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
+  const stageState = React.useContext(StageContext);
   const { label, deletable, inputs = [], outputs = [] } = nodeTypes[type];
 
   const startCoordinates = React.useRef(null);
@@ -31,6 +32,8 @@ const Node = ({
   const nodeWrapper = React.useRef();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
+
+  const byScale = value => (1 / stageState.scale) * value;
 
   const updateConnectionsByTransput = (transput = {}, isOutput) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
@@ -51,10 +54,14 @@ const Node = ({
         const cnt = document.querySelector(
           `[data-connection-id="${combined}"]`
         );
-        cnt.x1.baseVal.value = toRect.x - stageRef.current.x + portHalf;
-        cnt.y1.baseVal.value = toRect.y - stageRef.current.y + portHalf;
-        cnt.x2.baseVal.value = fromRect.x - stageRef.current.x + portHalf;
-        cnt.y2.baseVal.value = fromRect.y - stageRef.current.y + portHalf;
+        cnt.x1.baseVal.value =
+          byScale(toRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x);
+        cnt.y1.baseVal.value =
+          byScale(toRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y);
+        cnt.x2.baseVal.value =
+          byScale(fromRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x);
+        cnt.y2.baseVal.value =
+          byScale(fromRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y);
       });
     });
   };
@@ -66,21 +73,30 @@ const Node = ({
     }
   };
 
+  const getScaledCoordinates = e => {
+    const x =
+      byScale(e.clientX -
+      stageRect.current.left -
+      offset.current.x
+      - (stageRect.current.width / 2)) +
+      byScale(stageState.translate.x)
+    const y =
+      byScale(e.clientY -
+      stageRect.current.top -
+      offset.current.y
+      - (stageRect.current.height / 2)) +
+      byScale(stageState.translate.y)
+    return {x, y}
+  }
+
   const updateCoordinates = e => {
-    nodeWrapper.current.style.left = `${e.clientX -
-      stageRef.current.left -
-      offset.current.x}px`;
-    nodeWrapper.current.style.top = `${e.clientY -
-      stageRef.current.top -
-      offset.current.y}px`;
+    const { x, y } = getScaledCoordinates(e)
+    nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
     updateNodeConnections();
   };
 
   const stopDrag = e => {
-    const coordinates = {
-      x: e.clientX - stageRef.current.left - offset.current.x,
-      y: e.clientY - stageRef.current.top - offset.current.y
-    };
+    const coordinates = getScaledCoordinates(e)
     setCoordinates(coordinates);
     setIsDragging(false);
     nodesDispatch({
@@ -178,14 +194,14 @@ const Node = ({
       style={{
         width,
         // height,
-        left: coordinates.x,
-        top: coordinates.y
+        transform: `translate(${coordinates.x}px, ${coordinates.y}px)`
       }}
       onMouseDown={startDragDelay}
       onTouchStart={startDragDelay}
       ref={nodeWrapper}
       data-node-id={id}
       onContextMenu={handleContextMenu}
+      onDragStart={e=>{e.preventDefault(); e.stopPropagation()}}
     >
       <h2 className={styles.label}>{label}</h2>
       <IoPorts

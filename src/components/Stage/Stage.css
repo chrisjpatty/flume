@@ -3,6 +3,22 @@
   height: 100%;
   min-height: 100px;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAALUlEQVQ4jWNUU9f8z0BFwAIyipeXl2omMlHTdaMGjho4auCogaMG0spABgYGAK6EAcZotCgmAAAAAElFTkSuQmCC');
+  background-size: 14px 14px;
   position: relative;
-  overflow: scroll;
+  overflow: hidden;
+}
+.transformWrapper{
+  transform-origin: center center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0px;
+  height: 0px;
+}
+.scaleWrapper{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 0px;
+  height: 0px;
 }

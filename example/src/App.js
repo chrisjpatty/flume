@@ -462,8 +462,8 @@ export default () => {
           io3daf9: {
             id: "io3daf9",
             type: "output",
-            x: 900,
-            y: 240,
+            x: 300,
+            y: -150,
             width: 200,
             height: 300,
             connections: {
