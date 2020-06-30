@@ -30,7 +30,7 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[
 
   const recalculateConnections = React.useCallback(() => {
     createConnections(nodes, stageState);
-  }, [nodes, stageState]);
+  }, [nodes]);
 
   React.useLayoutEffect(() => {
     if (shouldRecalculateConnections) {

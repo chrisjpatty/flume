@@ -28,7 +28,7 @@ const Stage = ({
   const handleWheel = e => {
     dispatchStageState({
       type: "SET_SCALE",
-      scale: scale + -(clamp(e.deltaY, -6, 6) * 0.005)
+      scale: scale + -(clamp(e.deltaY, -10, 10) * 0.005)
     });
   };
 
