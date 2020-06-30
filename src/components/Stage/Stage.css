@@ -6,6 +6,7 @@
   background-size: 14px 14px;
   position: relative;
   overflow: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 .transformWrapper{
   transform-origin: center center;

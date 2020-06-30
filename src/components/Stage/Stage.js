@@ -25,12 +25,13 @@ const Stage = ({
     stageRef.current = wrapper.current.getBoundingClientRect();
   }, [stageRef]);
 
-  const handleWheel = e => {
-    dispatchStageState({
+  const handleWheel = React.useCallback(e => {
+    e.preventDefault()
+    dispatchStageState(({scale}) => ({
       type: "SET_SCALE",
-      scale: scale + -(clamp(e.deltaY, -10, 10) * 0.005)
-    });
-  };
+      scale: clamp(scale - (clamp(e.deltaY, -10, 10) * 0.005), .1, 7)
+    }));
+  }, [dispatchStageState]);
 
   const handleMouseDrag = e => {
     const xDistance = dragData.current.x - e.clientX;
@@ -104,13 +105,20 @@ const Stage = ({
     });
   };
 
+  React.useEffect(() => {
+    let stageWrapper = wrapper.current;
+    stageWrapper.addEventListener('wheel', handleWheel)
+    return () => {
+      stageWrapper.removeEventListener('wheel', handleWheel)
+    }
+  }, [handleWheel])
+
   return (
     <div
       id="__node_editor_stage__"
       className={styles.wrapper}
       ref={wrapper}
       onContextMenu={handleContextMenu}
-      onWheel={handleWheel}
       onDragStart={handleDragStart}
       draggable
     >
