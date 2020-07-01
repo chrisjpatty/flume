@@ -11,12 +11,25 @@ import {
   StageContext
 } from "./context";
 import { createConnections } from "./connectionCalculator";
-import nodesReducer, { connectNodesReducer, getInitialNodes } from "./nodesReducer";
-import stageReducer from './stageReducer'
+import nodesReducer, {
+  connectNodesReducer,
+  getInitialNodes
+} from "./nodesReducer";
+import stageReducer from "./stageReducer";
 
 import styles from "./styles.css";
 
-const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[], context={} }, ref) => {
+const NodeEditor = (
+  {
+    nodes: initialNodes,
+    nodeTypes,
+    inputTypes,
+    defaultNodes = [],
+    context = {},
+    debug
+  },
+  ref
+) => {
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(nodesReducer, { nodeTypes, inputTypes }),
     getInitialNodes(initialNodes, defaultNodes, nodeTypes, inputTypes)
@@ -26,7 +39,10 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[
     shouldRecalculateConnections,
     setShouldRecalculateConnections
   ] = React.useState(true);
-  const [stageState, dispatchStageState] = React.useReducer(stageReducer, {scale: 1, translate: {x: 0, y: 0}})
+  const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
+    scale: 1,
+    translate: { x: 0, y: 0 }
+  });
 
   const recalculateConnections = React.useCallback(() => {
     createConnections(nodes, stageState);
@@ -56,7 +72,20 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[
           <ConnectionRecalculateContext.Provider value={triggerRecalculation}>
             <ContextContext.Provider value={context}>
               <StageContext.Provider value={stageState}>
-                <Stage scale={stageState.scale} translate={stageState.translate} dispatchStageState={dispatchStageState} stageRef={stage}>
+                <Stage
+                  scale={stageState.scale}
+                  translate={stageState.translate}
+                  dispatchStageState={dispatchStageState}
+                  stageRef={stage}
+                  outerStageChildren={debug && (
+                    <button
+                      className={styles.debugButton}
+                      onClick={() => console.log(nodes)}
+                    >
+                      Log Nodes
+                    </button>
+                  )}
+                >
                   {Object.values(nodes).map(node => (
                     <Node
                       stageRect={stage}

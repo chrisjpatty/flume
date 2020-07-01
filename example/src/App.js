@@ -473,6 +473,7 @@ export default () => {
             inputData: {}
           }
         }}
+        debug
       />
     </div>
   );

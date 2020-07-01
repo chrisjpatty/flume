@@ -13,6 +13,7 @@ const Stage = ({
   translate,
   dispatchStageState,
   children,
+  outerStageChildren,
   stageRef
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
@@ -201,6 +202,7 @@ const Stage = ({
           {children}
         </div>
       </div>
+      {outerStageChildren}
     </div>
   );
 };

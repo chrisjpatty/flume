@@ -4,3 +4,8 @@
   left: 0px;
   top: 0px;
 }
+.debugButton{
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}
