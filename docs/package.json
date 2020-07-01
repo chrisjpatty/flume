@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "core-js": "^3.6.5",
     "docz": "^2.3.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
