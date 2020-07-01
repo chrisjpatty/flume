@@ -56,7 +56,9 @@ const removeConnection = (nodes, input, output) => {
   const filteredOutputNodes = outputNode.connections.outputs[
     output.portName
   ].filter(
-    cnx => cnx.nodeId !== input.nodeId && cnx.portName !== input.portName
+    cnx => {
+      return cnx.nodeId === input.nodeId ? cnx.portName !== input.portName : true
+    }
   );
   const newOutputNode = {
     ...outputNode,
@@ -145,7 +147,7 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, inputTypes }) => {
       ];
       if (inputIsNotConnected) return addConnection(nodes, input, output);
       else return nodes;
-  }ip
+  }
 
     case "REMOVE_CONNECTION": {
       const { input, output } = action;

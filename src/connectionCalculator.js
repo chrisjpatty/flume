@@ -87,11 +87,15 @@ export const createSVG = ({
 };
 
 export const getStageRef = () =>
-  document.getElementById("__node_editor_stage__");
+  document.getElementById("__node_editor_connections__");
 
-export const createConnections = nodes => {
+export const createConnections = (nodes, {scale}) => {
   const stageRef = getStageRef();
   const stage = stageRef.getBoundingClientRect();
+  const stageHalfWidth = stage.width / 2;
+  const stageHalfHeight = stage.height / 2;
+
+  const byScale = value => (1 / scale) * value;
 
   Object.values(nodes).forEach(node => {
     if (node.connections && node.connections.inputs) {
@@ -114,12 +118,12 @@ export const createConnections = nodes => {
                 updateConnection({
                   line: existingLine,
                   from: {
-                    x: fromPort.x - stage.x + portHalf,
-                    y: fromPort.y - stage.y + portHalf
+                    x: byScale(fromPort.x - stage.x + portHalf - stageHalfWidth),
+                    y: byScale(fromPort.y - stage.y + portHalf - stageHalfHeight)
                   },
                   to: {
-                    x: toPort.x - stage.x + portHalf,
-                    y: toPort.y - stage.y + portHalf
+                    x: byScale(toPort.x - stage.x + portHalf - stageHalfWidth),
+                    y: byScale(toPort.y - stage.y + portHalf - stageHalfHeight)
                   }
                 });
               } else {
@@ -130,12 +134,12 @@ export const createConnections = nodes => {
                   inputNodeId: node.id,
                   inputPortName: inputName,
                   from: {
-                    x: fromPort.x - stage.x + portHalf,
-                    y: fromPort.y - stage.y + portHalf
+                    x: byScale(fromPort.x - stage.x + portHalf - stageHalfWidth),
+                    y: byScale(fromPort.y - stage.y + portHalf - stageHalfHeight)
                   },
                   to: {
-                    x: toPort.x - stage.x + portHalf,
-                    y: toPort.y - stage.y + portHalf
+                    x: byScale(toPort.x - stage.x + portHalf - stageHalfWidth),
+                    y: byScale(toPort.y - stage.y + portHalf - stageHalfHeight)
                   },
                   stage: stageRef
                 });

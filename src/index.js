@@ -7,14 +7,29 @@ import {
   InputTypesContext,
   NodeDispatchContext,
   ConnectionRecalculateContext,
-  ContextContext
+  ContextContext,
+  StageContext
 } from "./context";
 import { createConnections } from "./connectionCalculator";
-import nodesReducer, { connectNodesReducer, getInitialNodes } from "./nodesReducer";
+import nodesReducer, {
+  connectNodesReducer,
+  getInitialNodes
+} from "./nodesReducer";
+import stageReducer from "./stageReducer";
 
 import styles from "./styles.css";
 
-const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[], context={} }, ref) => {
+const NodeEditor = (
+  {
+    nodes: initialNodes,
+    nodeTypes,
+    inputTypes,
+    defaultNodes = [],
+    context = {},
+    debug
+  },
+  ref
+) => {
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(nodesReducer, { nodeTypes, inputTypes }),
     getInitialNodes(initialNodes, defaultNodes, nodeTypes, inputTypes)
@@ -24,9 +39,13 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[
     shouldRecalculateConnections,
     setShouldRecalculateConnections
   ] = React.useState(true);
+  const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
+    scale: 1,
+    translate: { x: 0, y: 0 }
+  });
 
   const recalculateConnections = React.useCallback(() => {
-    createConnections(nodes);
+    createConnections(nodes, stageState);
   }, [nodes]);
 
   React.useLayoutEffect(() => {
@@ -52,21 +71,36 @@ const NodeEditor = ({ nodes: initialNodes, nodeTypes, inputTypes, defaultNodes=[
         <NodeDispatchContext.Provider value={dispatchNodes}>
           <ConnectionRecalculateContext.Provider value={triggerRecalculation}>
             <ContextContext.Provider value={context}>
-              <Stage stageRef={stage}>
-                {Object.values(nodes).map(node => (
-                  <Node
-                    stageRef={stage}
-                    onDragEnd={triggerRecalculation}
-                    {...node}
-                    key={node.id}
-                  />
-                ))}
-                <Connections nodes={nodes} />
-                <div
-                  className={styles.dragWrapper}
-                  id="__node_editor_drag_connection__"
-                ></div>
-              </Stage>
+              <StageContext.Provider value={stageState}>
+                <Stage
+                  scale={stageState.scale}
+                  translate={stageState.translate}
+                  dispatchStageState={dispatchStageState}
+                  stageRef={stage}
+                  outerStageChildren={debug && (
+                    <button
+                      className={styles.debugButton}
+                      onClick={() => console.log(nodes)}
+                    >
+                      Log Nodes
+                    </button>
+                  )}
+                >
+                  {Object.values(nodes).map(node => (
+                    <Node
+                      stageRect={stage}
+                      onDragEnd={triggerRecalculation}
+                      {...node}
+                      key={node.id}
+                    />
+                  ))}
+                  <Connections nodes={nodes} />
+                  <div
+                    className={styles.dragWrapper}
+                    id="__node_editor_drag_connection__"
+                  ></div>
+                </Stage>
+              </StageContext.Provider>
             </ContextContext.Provider>
           </ConnectionRecalculateContext.Provider>
         </NodeDispatchContext.Provider>
