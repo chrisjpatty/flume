@@ -6,6 +6,8 @@ import { NodeTypesContext, NodeDispatchContext } from "../../context";
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
 
+const DRAG_DELAY = 5;
+
 const Stage = ({
   scale,
   translate,
@@ -20,10 +22,19 @@ const Stage = ({
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
   const dragData = React.useRef({ x: 0, y: 0 });
+  const dragDelayStartCoordinates = React.useRef({ x: 0, y: 0});
+
+  const setStageRect = React.useCallback(() => {
+    stageRef.current = wrapper.current.getBoundingClientRect();
+  }, [])
 
   React.useEffect(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
-  }, [stageRef]);
+    window.addEventListener('resize', setStageRect)
+    return () => {
+      window.removeEventListener('resize', setStageRect)
+    }
+  }, [stageRef, setStageRect]);
 
   const handleWheel = React.useCallback(e => {
     e.preventDefault()
@@ -51,8 +62,8 @@ const Stage = ({
         y: tran.y + yDistance
       }
     }));
-    document.removeEventListener("mousemove", handleMouseDrag);
-    document.removeEventListener("mouseup", handleMouseUp);
+    wrapper.current.removeEventListener("mousemove", handleMouseDrag);
+    wrapper.current.removeEventListener("mouseup", handleMouseUp);
   };
 
   const handleDragStart = e => {
@@ -61,8 +72,8 @@ const Stage = ({
       x: e.clientX,
       y: e.clientY
     };
-    document.addEventListener("mousemove", handleMouseDrag);
-    document.addEventListener("mouseup", handleMouseUp);
+    wrapper.current.addEventListener("mousemove", handleMouseDrag);
+    wrapper.current.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleContextMenu = e => {
@@ -105,6 +116,50 @@ const Stage = ({
     });
   };
 
+  const checkDragDelay = e => {
+    let x;
+    let y;
+    if ("ontouchstart" in window && e.touches) {
+      x = e.touches[0].clientX;
+      y = e.touches[0].clientY;
+    } else {
+      e.preventDefault();
+      x = e.clientX;
+      y = e.clientY;
+    }
+    let a = Math.abs(dragDelayStartCoordinates.current.x - x);
+    let b = Math.abs(dragDelayStartCoordinates.current.y - y);
+    let distance = Math.round(Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)));
+    let dragDistance = DRAG_DELAY;
+    if (distance >= dragDistance) {
+      handleDragStart(e);
+      endDragDelay();
+    }
+  };
+
+  const endDragDelay = () => {
+    document.removeEventListener("mouseup", endDragDelay);
+    document.removeEventListener("mousemove", checkDragDelay);
+    dragDelayStartCoordinates.current = null;
+  };
+
+  const startDragDelay = e => {
+    e.stopPropagation();
+    let x;
+    let y;
+    if ("ontouchstart" in window && e.touches) {
+      x = e.touches[0].clientX;
+      y = e.touches[0].clientY;
+    } else {
+      e.preventDefault();
+      x = e.clientX;
+      y = e.clientY;
+    }
+    dragDelayStartCoordinates.current = { x, y };
+    document.addEventListener("mouseup", endDragDelay);
+    document.addEventListener("mousemove", checkDragDelay);
+  };
+
   React.useEffect(() => {
     let stageWrapper = wrapper.current;
     stageWrapper.addEventListener('wheel', handleWheel)
@@ -119,8 +174,8 @@ const Stage = ({
       className={styles.wrapper}
       ref={wrapper}
       onContextMenu={handleContextMenu}
-      onDragStart={handleDragStart}
-      draggable
+      onMouseDown={startDragDelay}
+      onTouchStart={startDragDelay}
     >
       {menuOpen ? (
         <Portal>

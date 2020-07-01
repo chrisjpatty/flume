@@ -4,7 +4,7 @@
 
 > A node editor for describing custom logic.
 
-[![NPM](https://img.shields.io/npm/v/node-editor.svg)](https://www.npmjs.com/package/node-editor) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/flume.svg)](https://www.npmjs.com/package/flume) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Minzip Size](https://badgen.net/bundlephobia/minzip/flume)](https://bundlephobia.com/result?p=flume)
 
 ## Install
 
@@ -19,7 +19,7 @@ npm install --save flume
 ```jsx
 import React, { Component } from 'react'
 
-import MyComponent from 'node-editor'
+import MyComponent from 'flume'
 
 class Example extends Component {
   render () {

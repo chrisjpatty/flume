@@ -148,6 +148,7 @@ const Node = ({
   };
 
   const startDragDelay = e => {
+    e.stopPropagation();
     let x;
     let y;
     if ("ontouchstart" in window && e.touches) {

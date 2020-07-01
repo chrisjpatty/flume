@@ -14,6 +14,7 @@ const TextInput = ({
   };
 
   const handleMouseMove = e => {
+    e.stopPropagation();
     triggerRecalculation();
   };
 
@@ -41,6 +42,7 @@ const TextInput = ({
           placeholder={placeholder}
           className={styles.input}
           value={data}
+          onDragStart={e => e.stopPropagation()}
         />
       ) : (
         <textarea
@@ -50,6 +52,7 @@ const TextInput = ({
           placeholder={placeholder}
           className={styles.input}
           value={data}
+          onDragStart={e => e.stopPropagation()}
         />
       )}
     </div>
