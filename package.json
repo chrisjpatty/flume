@@ -19,7 +19,10 @@
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn install && yarn run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "docz:dev": "docz dev",
+    "docz:build": "docz build",
+    "docz:serve": "docz build && docz serve"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4"
@@ -34,8 +37,8 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "core-js": "^3.6.5",
     "cross-env": "^5.1.4",
+    "docz": "^2.3.1",
     "eslint": "6.x",
     "eslint-config-react-app": "^5.2.0",
     "eslint-config-standard": "^11.0.0",
