@@ -46,7 +46,7 @@ const config = {
         o: null,
         open: null,
         'open-browser': null,
-        root: '/Users/chrispatty/projects/node-editor/example/.docz',
+        root: '/Users/christopherpatty/projects/flume/example/.docz',
         base: '/',
         source: './src',
         'gatsby-root': null,
@@ -61,38 +61,38 @@ const config = {
         title: 'Flume',
         description: 'Documentation for Flume: The React node editor.',
         host: 'localhost',
-        port: 3000,
+        port: 3003,
         p: 3000,
         separator: '-',
         paths: {
-          root: '/Users/chrispatty/projects/node-editor/example',
+          root: '/Users/christopherpatty/projects/flume/example',
           templates:
-            '/Users/chrispatty/projects/node-editor/example/node_modules/docz-core/dist/templates',
-          docz: '/Users/chrispatty/projects/node-editor/example/.docz',
-          cache: '/Users/chrispatty/projects/node-editor/example/.docz/.cache',
-          app: '/Users/chrispatty/projects/node-editor/example/.docz/app',
+            '/Users/christopherpatty/projects/flume/example/node_modules/docz-core/dist/templates',
+          docz: '/Users/christopherpatty/projects/flume/example/.docz',
+          cache: '/Users/christopherpatty/projects/flume/example/.docz/.cache',
+          app: '/Users/christopherpatty/projects/flume/example/.docz/app',
           appPackageJson:
-            '/Users/chrispatty/projects/node-editor/example/package.json',
+            '/Users/christopherpatty/projects/flume/example/package.json',
           appTsConfig:
-            '/Users/chrispatty/projects/node-editor/example/tsconfig.json',
+            '/Users/christopherpatty/projects/flume/example/tsconfig.json',
           gatsbyConfig:
-            '/Users/chrispatty/projects/node-editor/example/gatsby-config.js',
+            '/Users/christopherpatty/projects/flume/example/gatsby-config.js',
           gatsbyBrowser:
-            '/Users/chrispatty/projects/node-editor/example/gatsby-browser.js',
+            '/Users/christopherpatty/projects/flume/example/gatsby-browser.js',
           gatsbyNode:
-            '/Users/chrispatty/projects/node-editor/example/gatsby-node.js',
+            '/Users/christopherpatty/projects/flume/example/gatsby-node.js',
           gatsbySSR:
-            '/Users/chrispatty/projects/node-editor/example/gatsby-ssr.js',
+            '/Users/christopherpatty/projects/flume/example/gatsby-ssr.js',
           importsJs:
-            '/Users/chrispatty/projects/node-editor/example/.docz/app/imports.js',
+            '/Users/christopherpatty/projects/flume/example/.docz/app/imports.js',
           rootJs:
-            '/Users/chrispatty/projects/node-editor/example/.docz/app/root.jsx',
+            '/Users/christopherpatty/projects/flume/example/.docz/app/root.jsx',
           indexJs:
-            '/Users/chrispatty/projects/node-editor/example/.docz/app/index.jsx',
+            '/Users/christopherpatty/projects/flume/example/.docz/app/index.jsx',
           indexHtml:
-            '/Users/chrispatty/projects/node-editor/example/.docz/app/index.html',
+            '/Users/christopherpatty/projects/flume/example/.docz/app/index.html',
           db:
-            '/Users/chrispatty/projects/node-editor/example/.docz/app/db.json',
+            '/Users/christopherpatty/projects/flume/example/.docz/app/db.json',
         },
       },
     },
