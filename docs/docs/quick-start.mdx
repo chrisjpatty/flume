@@ -1,0 +1,39 @@
+---
+title: Quick Start
+id: quick-start
+---
+
+## Installation
+
+Flume can be installed from npm like so:
+
+```bash
+npm install flume
+```
+
+or alternatively
+
+```bash
+yarn add flume
+```
+
+## Basic Usage
+
+To get started, import and render the node editor like so:
+
+```jsx
+import React from 'react'
+import { NodeEditor } from "flume";
+
+const App = () => {
+  const [nodes, setNodes] = React.useState({})
+
+  return (
+    <NodeEditor
+      nodes={nodes}
+    />
+  )
+}
+```
+
+As you may guess, this alone will render only a blank editor grid with no nodes.

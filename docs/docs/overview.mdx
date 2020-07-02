@@ -1,0 +1,20 @@
+---
+title: Overview
+id: overview
+---
+
+## The Problem
+
+As most apps grow and mature, developers are often faced with an important problem: How to present a user-interface to end-users for customizing business logic. Solving this problem gives rise to a large number of complex, bespoke UIs. This problem becomes especially apparent in apps designed to serve a wide variety of users with unique business logic needs. Flume is an attempt to help developers standardize logic editing around a standard (albeit, customizable) user interface: a node editor.
+
+## Why a Node Editor?
+
+One could argue that node editors have become a standard for visual logic editing. They allow for a wide variety of logical structures, but also allow developers to define their own "guardrails" to prevent end-users from defining invalid logic. In many applications, node editors have become a common compromise between UI complexity, and full logical expression. Following are just a few examples of node editors found in popular desktop applications (Flume itself is inspired by many of these node-editor implementations).
+
+![A grid of node editor screenshots including, Blender, Unreal Engine, Substance Designer, and GoDot](/img/example_editors.png)
+
+## Logic Extraction
+
+As a side benefit, putting complex business logic into the hands of users, frees developers from the complexity of maintaining complex logic in code. This reduces the surface area for bugs and makes defining business logic accessible for non-programmers in your organization.
+
+Additionally, because business logic can be stored in JSON structures in your database, business logic can be swapped out in your application remotely without requiring a new build of your application's code.

@@ -14,21 +14,24 @@
 npm install --save flume
 ```
 
-<!-- ## Usage
+## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import React from 'react'
+import { NodeEditor } from 'flume'
 
-import MyComponent from 'flume'
+const App = () => {
 
-class Example extends Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
+  return (
+    <NodeEditor
+      nodeTypes={{}}
+      portTypes={{}}
+      nodes={{}}
+      defaultNodes={{}}
+    />
+  )
 }
-``` -->
+```
 
 ## License
 

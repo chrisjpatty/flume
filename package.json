@@ -22,9 +22,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "prop-types": "^15.5.4",
-    "react": "^15.0.0 || ^16.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0"
+    "prop-types": "^15.5.4"
   },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
@@ -51,8 +49,6 @@
     "eslint-plugin-standard": "^3.1.0",
     "gh-pages": "^1.2.0",
     "postcss-nested": "^4.2.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
     "react-scripts": "^1.1.4",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^3.0.7",
@@ -68,6 +64,8 @@
   "dependencies": {
     "lodash": "^4.17.15",
     "nanoid": "^2.1.11",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-portal": "^4.2.1"
   }
 }

@@ -1,0 +1,29 @@
+---
+title: Type Safety
+id: type-safety
+---
+
+## User-Defined Logic
+
+Allowing users to define custom logic can seem like a scary proposition at first. When considering it you may find yourself asking questions like:
+
+- "How will my users know to setup their logic in a way that won't crash?"
+- "How will my users know what nodes are compatible with each other?"
+
+The answer is *type safety*. Typescript developers will already be familiar with this concept, and flume extends this concept to end users in a user-friendly way.
+
+> As a note, while familiarity with the concept of type safety may be helpful for developing with Flume, using Typescript itself is *not* required to use Flume (although it is supported).
+
+With Flume, you can ensure that users can't define invalid logic. This is accomplished by typing two key components of flume: **Nodes**, and **Ports**.
+
+## Node Types
+
+Flume makes no assumptions about the kinds of nodes you will present to your users, so you describe your nodes by creating "Node types". The specifics of how to do this will be discussed later, but suffice it to say that each node in your graph is defined as a single type. This definition describes how each node behaves internally, and how it interacts with other nodes.
+
+## Port Types
+
+Port types are a key component of Flume, and define how your nodes are allowed to be connected to each other. These types become the basis for creating "guardrails" for users, ensuring that they can only create nodes in valid configurations. Take the following Flume grid for example:
+
+![A flume grid showing a true/false node and a text node connected successfully to a text switch node.](/img/valid_port_types.png)
+
+In this simple example, a "True/False" node (more commonly called a boolean), outputs a single true or false value, the "Text" node outputs a single string value, and the "Text Switch" node takes in a "True/False" connection and up to two "Text" connections, and outputs one string if the boolean is true, and the other string if the boolean is false. Because of the way these ports have been "typed", it's impossible to connect these nodes in an invalid way. Better still, for the convenience of users, these different "types" of ports are color-coded to make the rules of connections simple and intuitive.
