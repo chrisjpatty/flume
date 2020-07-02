@@ -1,7 +1,7 @@
 module.exports = {
   title: 'Flume',
   tagline: 'React-powered node editor',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://flumejs.netlify.app',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
   organizationName: 'chrisjpatty', // Usually your GitHub org/user name.
