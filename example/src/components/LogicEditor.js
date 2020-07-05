@@ -36,7 +36,7 @@ export default ({
           <NodeEditor
             context={context}
             nodeTypes={nodeTypes}
-            inputTypes={inputTypes}
+            portTypes={inputTypes}
             defaultNodes={defaultNodes}
             nodes={nodes}
             ref={nodeEditor}

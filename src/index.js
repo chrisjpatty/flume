@@ -4,7 +4,7 @@ import Node from "./components/Node/Node";
 import Connections from "./components/Connections/Connections";
 import {
   NodeTypesContext,
-  InputTypesContext,
+  PortTypesContext,
   NodeDispatchContext,
   ConnectionRecalculateContext,
   ContextContext,
@@ -22,8 +22,8 @@ import styles from "./styles.css";
 export let NodeEditor = (
   {
     nodes: initialNodes,
-    nodeTypes,
-    inputTypes,
+    nodeTypes = {},
+    portTypes = {},
     defaultNodes = [],
     context = {},
     debug
@@ -31,8 +31,8 @@ export let NodeEditor = (
   ref
 ) => {
   const [nodes, dispatchNodes] = React.useReducer(
-    connectNodesReducer(nodesReducer, { nodeTypes, inputTypes }),
-    getInitialNodes(initialNodes, defaultNodes, nodeTypes, inputTypes)
+    connectNodesReducer(nodesReducer, { nodeTypes, portTypes }),
+    getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes)
   );
   const stage = React.useRef();
   const [
@@ -66,7 +66,7 @@ export let NodeEditor = (
   }));
 
   return (
-    <InputTypesContext.Provider value={inputTypes}>
+    <PortTypesContext.Provider value={portTypes}>
       <NodeTypesContext.Provider value={nodeTypes}>
         <NodeDispatchContext.Provider value={dispatchNodes}>
           <ConnectionRecalculateContext.Provider value={triggerRecalculation}>
@@ -113,7 +113,7 @@ export let NodeEditor = (
           </ConnectionRecalculateContext.Provider>
         </NodeDispatchContext.Provider>
       </NodeTypesContext.Provider>
-    </InputTypesContext.Provider>
+    </PortTypesContext.Provider>
   );
 };
 NodeEditor = React.forwardRef(NodeEditor);

@@ -7,7 +7,7 @@ export default () => {
   return (
     <div className="wrapper">
       <NodeEditor
-        inputTypes={{
+        portTypes={{
           number: {
             label: "Number",
             name: "number",
