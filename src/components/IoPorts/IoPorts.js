@@ -8,7 +8,7 @@ import {
 } from "../../context";
 import Control from "../Control/Control";
 import Connection from "../Connection/Connection";
-import { InputTypesContext } from "../../context";
+import { PortTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
 
 const IoPorts = ({
@@ -18,7 +18,7 @@ const IoPorts = ({
   connections,
   inputData
 }) => {
-  const inputTypes = React.useContext(InputTypesContext);
+  const inputTypes = React.useContext(PortTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
 
   return (
@@ -153,7 +153,7 @@ const Port = ({
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext)
-  const inputTypes = React.useContext(InputTypesContext);
+  const inputTypes = React.useContext(PortTypesContext);
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStartCoordinates, setDragStartCoordinates] = React.useState({
     x: 0,

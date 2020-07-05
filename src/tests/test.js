@@ -18,7 +18,7 @@ describe("<NodeEditor/>", () => {
       <NodeEditor
         nodes={exampleNodes}
         nodeTypes={nodeTypes}
-        inputTypes={portTypes}
+        portTypes={portTypes}
       />
     );
   });
@@ -33,7 +33,7 @@ describe("<Node/>", () => {
         <NodeEditor
           nodes={exampleNodes}
           nodeTypes={nodeTypes}
-          inputTypes={portTypes}
+          portTypes={portTypes}
           debug
         />
       </div>

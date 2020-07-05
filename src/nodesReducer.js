@@ -107,7 +107,7 @@ const removeNode = (startNodes, nodeId) => {
   return nodes
 }
 
-export const getInitialNodes = (initialNodes = {}, defaultNodes = [], nodeTypes, inputTypes) => {
+export const getInitialNodes = (initialNodes = {}, defaultNodes = [], nodeTypes, portTypes) => {
   if(Object.keys(initialNodes).length){
     return initialNodes
   }else{
@@ -117,15 +117,15 @@ export const getInitialNodes = (initialNodes = {}, defaultNodes = [], nodeTypes,
         x: dNode.x,
         y: dNode.y,
         nodeType: dNode.type
-      }, {nodeTypes, inputTypes})
+      }, {nodeTypes, portTypes})
       return nodes
     }, {})
   }
 }
 
-const getDefaultData = ({ nodeType, inputTypes }) =>
+const getDefaultData = ({ nodeType, portTypes }) =>
   nodeType.inputs.reduce((obj, input) => {
-    const inputType = inputTypes[input.type];
+    const inputType = portTypes[input.type];
     obj[input.name || inputType.name] = (
       input.controls ||
       inputType.controls ||
@@ -137,7 +137,7 @@ const getDefaultData = ({ nodeType, inputTypes }) =>
     return obj;
   }, {});
 
-const nodesReducer = (nodes, action = {}, { nodeTypes, inputTypes }) => {
+const nodesReducer = (nodes, action = {}, { nodeTypes, portTypes }) => {
   switch (action.type) {
 
     case "ADD_CONNECTION": {
@@ -174,7 +174,7 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, inputTypes }) => {
           },
           inputData: getDefaultData({
             nodeType: nodeTypes[nodeType],
-            inputTypes
+            portTypes
           })
         }
       };
