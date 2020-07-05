@@ -22,5 +22,9 @@
 #   }
 # }
 {
-  "extends": "react-app"
+  "extends": "react-app",
+  "globals": {
+    "cy": true,
+    "Cypress": true
+  }
 }

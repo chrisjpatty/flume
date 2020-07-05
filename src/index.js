@@ -19,7 +19,7 @@ import stageReducer from "./stageReducer";
 
 import styles from "./styles.css";
 
-const NodeEditor = (
+export let NodeEditor = (
   {
     nodes: initialNodes,
     nodeTypes,
@@ -78,12 +78,20 @@ const NodeEditor = (
                   dispatchStageState={dispatchStageState}
                   stageRef={stage}
                   outerStageChildren={debug && (
-                    <button
-                      className={styles.debugButton}
-                      onClick={() => console.log(nodes)}
-                    >
-                      Log Nodes
-                    </button>
+                    <div className={styles.debugWrapper}>
+                      <button
+                        className={styles.debugButton}
+                        onClick={() => console.log(nodes)}
+                      >
+                        Log Nodes
+                      </button>
+                      <button
+                        className={styles.debugButton}
+                        onClick={() => console.log(JSON.stringify(nodes))}
+                      >
+                        Export Nodes
+                      </button>
+                    </div>
                   )}
                 >
                   {Object.values(nodes).map(node => (
@@ -108,5 +116,4 @@ const NodeEditor = (
     </InputTypesContext.Provider>
   );
 };
-
-export default React.forwardRef(NodeEditor);
+NodeEditor = React.forwardRef(NodeEditor);

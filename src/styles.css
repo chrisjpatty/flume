@@ -4,8 +4,10 @@
   left: 0px;
   top: 0px;
 }
-.debugButton{
+.debugWrapper{
+  display: flex;
   position: absolute;
   left: 10px;
   bottom: 10px;
+  gap: 15px;
 }

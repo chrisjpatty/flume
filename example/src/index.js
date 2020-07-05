@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import App from "./App";
+import TestEditor from './TestRoutes/TestEditor'
 import Form from "./pages/Form/Form";
 import Forms from "./pages/Forms/Forms";
 import Records from "./pages/Records/Records";
@@ -53,6 +54,13 @@ ReactDOM.render(
             <FormStyles />
             <Form />
           </React.Fragment>
+        )}
+      />
+      <Route
+        exact
+        path="/test"
+        render={() => (
+          <TestEditor />
         )}
       />
     </Switch>

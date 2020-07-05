@@ -3,9 +3,24 @@ import "normalize.css";
 
 import { NodeEditor } from "node-editor";
 
+const Log = console.log;
+
 export default () => {
+  const [output, setOutput] = React.useState();
+
+  React.useEffect(() => {
+    console.log = log => {
+      Log(log);
+      if(typeof log === 'object'){
+        setOutput(JSON.stringify(log))
+      }
+    }
+    return () => {
+      console.log = Log
+    }
+  })
   return (
-    <div className="wrapper">
+    <div className="wrapper" style={{width: 800, height: 600}}>
       <NodeEditor
         inputTypes={{
           number: {
@@ -56,6 +71,7 @@ export default () => {
         nodes={{}}
         debug
       />
+      <div id="OUTPUT" style={{display: 'none'}}>{output}</div>
     </div>
   );
 };

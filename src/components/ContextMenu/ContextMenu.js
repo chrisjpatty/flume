@@ -84,7 +84,7 @@ const ContextMenu = ({
           }
         </div> : null
       }
-      <div className={styles.optionsWrapper}>
+      <div className={styles.optionsWrapper} role="menu">
         {filteredOptions.map((option, i) => (
           <ContextOption
             onClick={() => handleOptionSelected(option)}
@@ -106,7 +106,7 @@ const ContextMenu = ({
 
 const ContextOption = ({ children, onClick }) => {
   return (
-    <div className={styles.option} onClick={onClick}>
+    <div className={styles.option} role="menuitem" onClick={onClick}>
       {children}
     </div>
   );

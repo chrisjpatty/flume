@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "./Modal";
-import NodeEditor from "node-editor";
+import { NodeEditor } from "node-editor";
 
 export default ({
   isOpen,
