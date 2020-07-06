@@ -1,6 +1,6 @@
 {
   "name": "flume",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A node editor for React",
   "author": "chrisjpatty",
   "license": "MIT",
@@ -22,7 +22,9 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "prop-types": "^15.5.4"
+    "prop-types": "^15.5.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
@@ -53,6 +55,8 @@
     "jest-puppeteer": "^4.4.0",
     "postcss-nested": "^4.2.1",
     "react-scripts": "^1.1.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.3",
@@ -68,8 +72,6 @@
     "@testing-library/react": "^10.4.3",
     "lodash": "^4.17.15",
     "nanoid": "^2.1.11",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
     "react-portal": "^4.2.1"
   }
 }
