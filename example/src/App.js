@@ -47,7 +47,7 @@ export default () => {
   return (
     <div className="wrapper">
       <NodeEditor
-        inputTypes={flumeConfig.portTypes}
+        portTypes={flumeConfig.portTypes}
         nodeTypes={flumeConfig.nodeTypes}
         debug
       />
