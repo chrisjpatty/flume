@@ -23,12 +23,7 @@ import { NodeEditor } from 'flume'
 const App = () => {
 
   return (
-    <NodeEditor
-      nodeTypes={{}}
-      portTypes={{}}
-      nodes={{}}
-      defaultNodes={{}}
-    />
+    <NodeEditor />
   )
 }
 ```
