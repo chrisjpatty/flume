@@ -117,3 +117,4 @@ export let NodeEditor = (
   );
 };
 NodeEditor = React.forwardRef(NodeEditor);
+export { FlumeConfig, Controls, Colors } from './typeBuilders'

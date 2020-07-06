@@ -1,59 +1,54 @@
 import React from "react";
 import "normalize.css";
 
-import { NodeEditor } from "node-editor";
+import { NodeEditor, FlumeConfig, Controls, Colors } from "node-editor";
+
+const flumeConfig = new FlumeConfig()
+flumeConfig
+  .addPortType({
+    type: "number",
+    name: "number",
+    label: "Number",
+    color: Colors.red,
+    controls: [
+      Controls.number({
+        name: "num",
+        label: "Number"
+      })
+    ]
+  })
+  .addNodeType({
+    type: "number",
+    label: "Number",
+    initialWidth: 150,
+    inputs: ports => [
+      ports.number()
+    ],
+    outputs: ports => [
+      ports.number()
+    ]
+  })
+  .addNodeType({
+    type: "addNumbers",
+    label: "Add Numbers",
+    initialWidth: 150,
+    inputs: ports => [
+      ports.number({name: "num1"}),
+      ports.number({name: "num2"})
+    ],
+    outputs: ports => [
+      ports.number({name: "result"})
+    ]
+  })
+
+console.log(flumeConfig);
 
 export default () => {
   return (
     <div className="wrapper">
       <NodeEditor
-        portTypes={{
-          number: {
-            label: "Number",
-            name: "number",
-            acceptTypes: ["number"],
-            color: "red",
-            controls: [
-              {
-                type: "number",
-                name: "number",
-                label: "Number",
-                defaultValue: 0
-              }
-            ]
-          }
-        }}
-        nodeTypes={{
-          number: {
-            type: "number",
-            label: "Number",
-            initialWidth: 150,
-            inputs: [{ type: "number", name: "number" }],
-            outputs: [
-              {
-                type: "number",
-                name: "number"
-              }
-            ]
-          },
-          addNumbers: {
-            type: "addNumbers",
-            label: "Add Numbers",
-            initialWidth: 150,
-            inputs: [
-              {
-                type: "number",
-                name: "num1"
-              },
-              {
-                type: "number",
-                name: "num2"
-              }
-            ],
-            outputs: [{ type: "number", name: "result" }]
-          }
-        }}
-        nodes={{}}
+        portTypes={flumeConfig.portTypes}
+        nodeTypes={flumeConfig.nodeTypes}
         debug
       />
     </div>
