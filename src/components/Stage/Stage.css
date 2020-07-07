@@ -7,6 +7,10 @@
   position: relative;
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
+  font-family: Helvetica, sans-serif;
+}
+.wrapper *{
+  box-sizing: border-box;
 }
 .transformWrapper{
   transform-origin: center center;
