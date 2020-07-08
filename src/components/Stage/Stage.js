@@ -5,7 +5,7 @@ import ContextMenu from "../ContextMenu/ContextMenu";
 import { NodeTypesContext, NodeDispatchContext } from "../../context";
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
-import { STAGE_WRAPPER_ID } from '../../index'
+import { STAGE_WRAPPER_ID } from '../../constants'
 
 const DRAG_DELAY = 5;
 

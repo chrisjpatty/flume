@@ -79,7 +79,8 @@ export class FlumeConfig{
     }
     const node = {
       type: config.type,
-      label: config.label !== undefined ? config.label : ""
+      label: define(config.label, ""),
+      description: define(config.description, "")
     }
     if(config.initialWidth){
       node.initialWidth = config.initialWidth
@@ -132,8 +133,8 @@ export class FlumeConfig{
     const port = {
       type: config.type,
       name: config.name,
-      label: config.label !== undefined ? config.label : "",
-      color: config.color !== undefined ? config.color : "grey"
+      label: define(config.label, ""),
+      color: define(config.color, Colors.grey)
     };
 
     if(config.acceptTypes === undefined){

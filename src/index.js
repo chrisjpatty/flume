@@ -16,10 +16,9 @@ import nodesReducer, {
   getInitialNodes
 } from "./nodesReducer";
 import stageReducer from "./stageReducer";
+import { STAGE_WRAPPER_ID } from './constants'
 
 import styles from "./styles.css";
-
-export const STAGE_WRAPPER_ID = "__node_editor_stage__";
 
 export let NodeEditor = (
   {
