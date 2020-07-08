@@ -3,6 +3,13 @@ import "normalize.css";
 
 import { NodeEditor, FlumeConfig, Controls, Colors } from "node-editor";
 
+const colors = [
+  {value: "blue", label: "Blue"},
+  {value: "red", label: "Red"},
+  {value: "green", label: "Green"},
+  {value: "orange", label: "Orange"},
+]
+
 const flumeConfig = new FlumeConfig()
 flumeConfig
   .addPortType({
@@ -31,12 +38,9 @@ flumeConfig
     name: "color",
     label: "Color",
     controls: [
-      Controls.select({name: "color", getOptions: () => [
-        {value: "blue", label: "Blue"},
-        {value: "red", label: "Red"},
-        {value: "green", label: "Green"},
-        {value: "orange", label: "Orange"},
-      ]})
+      Controls.select({name: "color", getOptions: () => {
+        return colors.map(color => color)
+      }})
     ]
   })
   .addNodeType({
