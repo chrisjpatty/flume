@@ -26,6 +26,19 @@ flumeConfig
       Controls.checkbox({name: "boolean", label: "True/False"})
     ]
   })
+  .addPortType({
+    type: "color",
+    name: "color",
+    label: "Color",
+    controls: [
+      Controls.select({name: "color", getOptions: () => [
+        {value: "blue", label: "Blue"},
+        {value: "red", label: "Red"},
+        {value: "green", label: "Green"},
+        {value: "orange", label: "Orange"},
+      ]})
+    ]
+  })
   .addNodeType({
     type: "number",
     label: "Number",
@@ -58,6 +71,17 @@ flumeConfig
     ],
     outputs: ports => [
       ports.boolean()
+    ]
+  })
+  .addNodeType({
+    type: "color",
+    label: "Color",
+    initialWidth: 170,
+    inputs: ports => [
+      ports.color()
+    ],
+    outputs: ports => [
+      ports.color()
     ]
   })
 

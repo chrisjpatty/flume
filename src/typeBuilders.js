@@ -1,14 +1,20 @@
-const define = (value, defaultValue) => value !== undefined ? value : defaultValue
+const define = (value, defaultValue) =>
+  value !== undefined ? value : defaultValue;
 
-const buildControlType = (defaultConfig, validate = ()=>{}) => config => {
+const buildControlType = (
+  defaultConfig,
+  validate = () => {},
+  setup = () => ({})
+) => config => {
   validate(config);
   return {
     type: defaultConfig.type,
     label: define(config.label, defaultConfig.label || ""),
     name: define(config.name, defaultConfig.name || ""),
-    defaultValue: define(config.defaultValue, defaultConfig.defaultValue)
-  }
-}
+    defaultValue: define(config.defaultValue, defaultConfig.defaultValue),
+    ...setup(config)
+  };
+};
 
 export const Controls = {
   text: buildControlType({
@@ -16,11 +22,19 @@ export const Controls = {
     name: "text",
     defaultValue: ""
   }),
-  select: buildControlType({
-    type: "select",
-    name: "select",
-    defaultValue: ""
-  }),
+  select: buildControlType(
+    {
+      type: "select",
+      name: "select",
+      options: [],
+      defaultValue: ""
+    },
+    () => {},
+    config => ({
+      options: define(config.options, []),
+      getOptions: define(config.getOptions, undefined)
+    })
+  ),
   number: buildControlType({
     type: "number",
     name: "number",
@@ -31,12 +45,20 @@ export const Controls = {
     name: "checkbox",
     defaultValue: false
   }),
-  multiselect: buildControlType({
-    type: "multiselect",
-    name: "multiselect",
-    defaultValue: []
-  }),
-}
+  multiselect: buildControlType(
+    {
+      type: "multiselect",
+      name: "multiselect",
+      options: [],
+      defaultValue: []
+    },
+    () => {},
+    config => ({
+      options: define(config.options, []),
+      getOptions: define(config.getOptions, undefined)
+    })
+  )
+};
 
 export const Colors = {
   red: "red",
@@ -46,37 +68,49 @@ export const Colors = {
   pink: "pink",
   grey: "grey",
   yellow: "yellow"
-}
+};
 
-export const getPortBuilders = ports => Object.values(ports).reduce((obj, port) => {
-  obj[port.type] = (config = {}) => {
-    return {
-      type: port.type,
-      name: config.name || port.name,
-      label: config.label || port.label,
-      noControls: define(config.noControls, false)
-    }
-  }
-  return obj
-}, {})
+export const getPortBuilders = ports =>
+  Object.values(ports).reduce((obj, port) => {
+    obj[port.type] = (config = {}) => {
+      return {
+        type: port.type,
+        name: config.name || port.name,
+        label: config.label || port.label,
+        noControls: define(config.noControls, false)
+      };
+    };
+    return obj;
+  }, {});
 
-export class FlumeConfig{
-  constructor(){
-    this.nodeTypes = {}
-    this.portTypes = {}
+export class FlumeConfig {
+  constructor() {
+    this.nodeTypes = {};
+    this.portTypes = {};
   }
-  addNodeType(config){
-    if(typeof config !== "object" && config !== null){
-      throw new Error("You must provide a configuration object when calling addNodeType.")
+  addNodeType(config) {
+    if (typeof config !== "object" && config !== null) {
+      throw new Error(
+        "You must provide a configuration object when calling addNodeType."
+      );
     }
-    if(typeof config.type !== "string"){
-      throw new Error(`Required key, "type" must be a string when calling addNodeType.`)
+    if (typeof config.type !== "string") {
+      throw new Error(
+        `Required key, "type" must be a string when calling addNodeType.`
+      );
     }
-    if(typeof config.initialWidth !== "undefined" && typeof config.initialWidth !== "number"){
-      throw new Error(`Optional key, "initialWidth" must be a number when calling addNodeType.`)
+    if (
+      typeof config.initialWidth !== "undefined" &&
+      typeof config.initialWidth !== "number"
+    ) {
+      throw new Error(
+        `Optional key, "initialWidth" must be a number when calling addNodeType.`
+      );
     }
-    if(this.nodeTypes[config.type] !== undefined){
-      throw new Error(`A node with type "${config.type}" has already been declared.`)
+    if (this.nodeTypes[config.type] !== undefined) {
+      throw new Error(
+        `A node with type "${config.type}" has already been declared.`
+      );
     }
     const node = {
       type: config.type,
@@ -84,53 +118,65 @@ export class FlumeConfig{
       description: define(config.description, ""),
       addable: define(config.addable, true),
       deletable: define(config.deletable, true)
+    };
+    if (config.initialWidth) {
+      node.initialWidth = config.initialWidth;
     }
-    if(config.initialWidth){
-      node.initialWidth = config.initialWidth
-    }
-    if(typeof config.inputs === "function"){
-      const inputs = config.inputs(getPortBuilders(this.portTypes))
-      if(!Array.isArray(inputs)){
-        throw new Error(`When providing a function to the "inputs" key, you must return an array.`)
+    if (typeof config.inputs === "function") {
+      const inputs = config.inputs(getPortBuilders(this.portTypes));
+      if (!Array.isArray(inputs)) {
+        throw new Error(
+          `When providing a function to the "inputs" key, you must return an array.`
+        );
       }
       node.inputs = inputs;
-    }else if(config.inputs === undefined){
+    } else if (config.inputs === undefined) {
       node.inputs = [];
-    }else if(!Array.isArray(config.inputs)){
-      throw new Error(`Optional key, "inputs" must be an array.`)
-    }else{
-      node.inputs = config.inputs
+    } else if (!Array.isArray(config.inputs)) {
+      throw new Error(`Optional key, "inputs" must be an array.`);
+    } else {
+      node.inputs = config.inputs;
     }
 
-    if(typeof config.outputs === "function"){
-      const outputs = config.outputs(getPortBuilders(this.portTypes))
-      if(!Array.isArray(outputs)){
-        throw new Error(`When providing a function to the "inputs" key, you must return an array.`)
+    if (typeof config.outputs === "function") {
+      const outputs = config.outputs(getPortBuilders(this.portTypes));
+      if (!Array.isArray(outputs)) {
+        throw new Error(
+          `When providing a function to the "inputs" key, you must return an array.`
+        );
       }
       node.outputs = outputs;
-    }else if(config.outputs === undefined){
+    } else if (config.outputs === undefined) {
       node.outputs = [];
-    }else if(config.outputs !== undefined && !Array.isArray(config.outputs)){
-      throw new Error(`Optional key, "outputs" must be an array.`)
-    }else{
-      node.outputs = config.outputs
+    } else if (config.outputs !== undefined && !Array.isArray(config.outputs)) {
+      throw new Error(`Optional key, "outputs" must be an array.`);
+    } else {
+      node.outputs = config.outputs;
     }
 
     this.nodeTypes[config.type] = node;
     return this;
   }
-  addPortType(config){
-    if(typeof config !== "object" && config !== null){
-      throw new Error("You must provide a configuration object when calling addPortType")
+  addPortType(config) {
+    if (typeof config !== "object" && config !== null) {
+      throw new Error(
+        "You must provide a configuration object when calling addPortType"
+      );
     }
-    if(typeof config.type !== "string"){
-      throw new Error(`Required key, "type" must be a string when calling addPortType.`)
+    if (typeof config.type !== "string") {
+      throw new Error(
+        `Required key, "type" must be a string when calling addPortType.`
+      );
     }
-    if(this.portTypes[config.type] !== undefined){
-      throw new Error(`A port with type "${config.type}" has already been declared.`)
+    if (this.portTypes[config.type] !== undefined) {
+      throw new Error(
+        `A port with type "${config.type}" has already been declared.`
+      );
     }
-    if(typeof config.name !== "string"){
-      throw new Error(`Required key, "name" must be a string when calling addPortType.`)
+    if (typeof config.name !== "string") {
+      throw new Error(
+        `Required key, "name" must be a string when calling addPortType.`
+      );
     }
 
     const port = {
@@ -140,20 +186,20 @@ export class FlumeConfig{
       color: define(config.color, Colors.grey)
     };
 
-    if(config.acceptTypes === undefined){
-      port.acceptTypes = [config.type]
-    }else if(!Array.isArray(config.acceptTypes)){
-      throw new Error(`Optional key, "acceptTypes" must be an array.`)
-    }else{
-      port.acceptTypes = config.acceptTypes
+    if (config.acceptTypes === undefined) {
+      port.acceptTypes = [config.type];
+    } else if (!Array.isArray(config.acceptTypes)) {
+      throw new Error(`Optional key, "acceptTypes" must be an array.`);
+    } else {
+      port.acceptTypes = config.acceptTypes;
     }
 
-    if(config.controls === undefined){
-      port.controls = []
-    }else if(!Array.isArray(config.controls)){
-      throw new Error(`Optional key, "controls" must be an array.`)
-    }else{
-      port.controls = config.controls
+    if (config.controls === undefined) {
+      port.controls = [];
+    } else if (!Array.isArray(config.controls)) {
+      throw new Error(`Optional key, "controls" must be an array.`);
+    } else {
+      port.controls = config.controls;
     }
 
     this.portTypes[config.type] = port;
