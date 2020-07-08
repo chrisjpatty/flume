@@ -80,7 +80,9 @@ export class FlumeConfig{
     const node = {
       type: config.type,
       label: define(config.label, ""),
-      description: define(config.description, "")
+      description: define(config.description, ""),
+      addable: define(config.addable, true),
+      deletable: define(config.deletable, true)
     }
     if(config.initialWidth){
       node.initialWidth = config.initialWidth

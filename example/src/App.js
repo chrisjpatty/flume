@@ -17,6 +17,15 @@ flumeConfig
       })
     ]
   })
+  .addPortType({
+    type: "boolean",
+    name: "boolean",
+    label: "True/False",
+    color: Colors.grey,
+    controls: [
+      Controls.checkbox({name: "boolean", label: "True/False"})
+    ]
+  })
   .addNodeType({
     type: "number",
     label: "Number",
@@ -38,6 +47,17 @@ flumeConfig
     ],
     outputs: ports => [
       ports.number({name: "result"})
+    ]
+  })
+  .addNodeType({
+    type: "boolean",
+    label: "True/False",
+    initialWidth: 150,
+    inputs: ports => [
+      ports.boolean()
+    ],
+    outputs: ports => [
+      ports.boolean()
     ]
   })
 
