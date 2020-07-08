@@ -53,7 +53,8 @@ export const getPortBuilders = ports => Object.values(ports).reduce((obj, port) 
     return {
       type: port.type,
       name: config.name || port.name,
-      label: config.label || port.label
+      label: config.label || port.label,
+      noControls: define(config.noControls, false)
     }
   }
   return obj
