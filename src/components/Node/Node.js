@@ -17,6 +17,7 @@ const Node = ({
   connections,
   type,
   inputData,
+  onDragStart,
   onDragEnd,
   onDrag
 }) => {
@@ -109,6 +110,7 @@ const Node = ({
   };
 
   const startDrag = e => {
+    onDragStart()
     const nodeRect = nodeWrapper.current.getBoundingClientRect();
     offset.current = {
       x: startCoordinates.current.x - nodeRect.left,

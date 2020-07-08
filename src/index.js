@@ -19,6 +19,8 @@ import stageReducer from "./stageReducer";
 
 import styles from "./styles.css";
 
+export const STAGE_WRAPPER_ID = "__node_editor_stage__";
+
 export let NodeEditor = (
   {
     nodes: initialNodes,
@@ -47,6 +49,10 @@ export let NodeEditor = (
   const recalculateConnections = React.useCallback(() => {
     createConnections(nodes, stageState);
   }, [nodes]);
+
+  const recalculateStageRect = () => {
+    stage.current = document.getElementById(STAGE_WRAPPER_ID).getBoundingClientRect()
+  }
 
   React.useLayoutEffect(() => {
     if (shouldRecalculateConnections) {
@@ -98,6 +104,7 @@ export let NodeEditor = (
                     <Node
                       stageRect={stage}
                       onDragEnd={triggerRecalculation}
+                      onDragStart={recalculateStageRect}
                       {...node}
                       key={node.id}
                     />

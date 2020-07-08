@@ -5,6 +5,7 @@ import ContextMenu from "../ContextMenu/ContextMenu";
 import { NodeTypesContext, NodeDispatchContext } from "../../context";
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
+import { STAGE_WRAPPER_ID } from '../../index'
 
 const DRAG_DELAY = 5;
 
@@ -171,7 +172,7 @@ const Stage = ({
 
   return (
     <div
-      id="__node_editor_stage__"
+      id={STAGE_WRAPPER_ID}
       className={styles.wrapper}
       ref={wrapper}
       onContextMenu={handleContextMenu}

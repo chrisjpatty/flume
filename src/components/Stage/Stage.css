@@ -12,6 +12,9 @@
 .wrapper *{
   box-sizing: border-box;
 }
+.wrapper input, textarea, select{
+  font-family: Helvetica, sans-serif;
+}
 .transformWrapper{
   transform-origin: center center;
   position: absolute;

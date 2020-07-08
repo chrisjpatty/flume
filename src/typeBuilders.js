@@ -45,6 +45,7 @@ export const Colors = {
   green: "green",
   pink: "pink",
   grey: "grey",
+  yellow: "yellow"
 }
 
 export const getPortBuilders = ports => Object.values(ports).reduce((obj, port) => {
