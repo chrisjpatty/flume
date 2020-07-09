@@ -80,7 +80,9 @@ export const getPortBuilders = ports =>
         type: port.type,
         name: config.name || port.name,
         label: config.label || port.label,
-        noControls: define(config.noControls, false)
+        noControls: define(config.noControls, false),
+        color: config.color || port.color,
+        hidePort: define(config.hidePort, port.hidePort)
       };
     };
     return obj;
@@ -186,7 +188,8 @@ export class FlumeConfig {
       type: config.type,
       name: config.name,
       label: define(config.label, ""),
-      color: define(config.color, Colors.grey)
+      color: define(config.color, Colors.grey),
+      hidePort: define(config.hidePort, false)
     };
 
     if (config.acceptTypes === undefined) {
