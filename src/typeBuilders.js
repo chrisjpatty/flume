@@ -12,6 +12,7 @@ const buildControlType = (
     label: define(config.label, defaultConfig.label || ""),
     name: define(config.name, defaultConfig.name || ""),
     defaultValue: define(config.defaultValue, defaultConfig.defaultValue),
+    setValue: define(config.setValue, undefined),
     ...setup(config)
   };
 };
@@ -32,7 +33,8 @@ export const Controls = {
     () => {},
     config => ({
       options: define(config.options, []),
-      getOptions: define(config.getOptions, undefined)
+      getOptions: define(config.getOptions, undefined),
+      placeholder: define(config.placeholder, undefined)
     })
   ),
   number: buildControlType({
@@ -55,7 +57,8 @@ export const Controls = {
     () => {},
     config => ({
       options: define(config.options, []),
-      getOptions: define(config.getOptions, undefined)
+      getOptions: define(config.getOptions, undefined),
+      placeholder: define(config.placeholder, undefined)
     })
   )
 };
