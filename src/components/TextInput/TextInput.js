@@ -28,12 +28,12 @@ const TextInput = ({
     <div className={styles.wrapper}>
       {type === "number" ? (
         <input
-          onChange={e =>{
+          onChange={e => {
             const value = parseFloat(e.target.value.replace(/e/g, ""), 10);
-            if(Number.isNaN(value)){
-              onChange(0)
-            }else{
-              onChange(value)
+            if (Number.isNaN(value)) {
+              onChange(0);
+            } else {
+              onChange(value);
             }
           }}
           step="0.01"
