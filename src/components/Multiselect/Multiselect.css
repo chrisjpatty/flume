@@ -31,6 +31,9 @@
   font-weight: bold;
   opacity: 0;
 }
+.deleteButton:focus{
+  opacity: 1;
+}
 .deleteButton:hover{
   background: linear-gradient(to top, #64696c, #797f82);
 }
