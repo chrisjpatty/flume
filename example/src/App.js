@@ -25,6 +25,18 @@ flumeConfig
     ]
   })
   .addPortType({
+    type: "text",
+    name: "text",
+    label: "Text",
+    color: Colors.green,
+    controls: [
+      Controls.text({
+        name: "text",
+        label: "Text"
+      })
+    ]
+  })
+  .addPortType({
     type: "boolean",
     name: "boolean",
     label: "True/False",
@@ -88,15 +100,30 @@ flumeConfig
       ports.color()
     ]
   })
-
-console.log(flumeConfig);
+  .addNodeType({
+    type: "text",
+    label: "Text",
+    initialWidth: 170,
+    inputs: ports => [
+      ports.text()
+    ],
+    outputs: ports => [
+      ports.text()
+    ]
+  })
 
 export default () => {
+  const [nodes, setNodes] = React.useState({})
   return (
     <div className="wrapper">
       <NodeEditor
         portTypes={flumeConfig.portTypes}
         nodeTypes={flumeConfig.nodeTypes}
+        nodes={nodes}
+        onChange={nodes => {
+          console.log(nodes);
+          setNodes(nodes)
+        }}
         debug
       />
     </div>

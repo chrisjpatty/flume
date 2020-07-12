@@ -17,6 +17,7 @@ import nodesReducer, {
 } from "./nodesReducer";
 import stageReducer from "./stageReducer";
 import { STAGE_WRAPPER_ID } from './constants'
+import usePrevious from './hooks/usePrevious'
 
 import styles from "./styles.css";
 
@@ -27,6 +28,7 @@ export let NodeEditor = (
     portTypes = {},
     defaultNodes = [],
     context = {},
+    onChange,
     debug
   },
   ref
@@ -69,6 +71,14 @@ export let NodeEditor = (
       return nodes;
     }
   }));
+
+  const previousNodes = usePrevious(nodes);
+
+  React.useEffect(() => {
+    if(onChange && nodes !== previousNodes){
+      onChange(nodes)
+    }
+  }, [nodes, previousNodes, onChange])
 
   return (
     <PortTypesContext.Provider value={portTypes}>
