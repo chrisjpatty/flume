@@ -49,10 +49,24 @@ flumeConfig
     type: "color",
     name: "color",
     label: "Color",
+    color: Colors.blue,
     controls: [
       Controls.select({name: "color", getOptions: () => {
         return colors.map(color => color)
       }})
+    ]
+  })
+  .addPortType({
+    type: "animals",
+    name: "animals",
+    label: "Animals",
+    controls: [
+      Controls.multiselect({
+        name: "values",
+        label: "Animals",
+        options: ["Cow", "Snake", "Butterfly", "Horse", "Lizard", "Tiger"]
+          .map(animal => ({value: animal.toLowerCase(), label: animal}))
+      })
     ]
   })
   .addNodeType({
@@ -109,6 +123,17 @@ flumeConfig
     ],
     outputs: ports => [
       ports.text()
+    ]
+  })
+  .addNodeType({
+    type: "animals",
+    label: "Animals",
+    initialWidth: 160,
+    inputs: ports => [
+      ports.animals()
+    ],
+    outputs: ports => [
+      ports.animals()
     ]
   })
 

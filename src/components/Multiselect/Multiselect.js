@@ -1,7 +1,7 @@
 import React from "react";
 import selectStyles from "../Select/Select.css";
 import SelectDrawer from "../SelectDrawer/SelectDrawer";
-import styles from './Multiselect.css'
+import styles from "./Multiselect.css";
 
 const Multiselect = ({
   options = [],
@@ -32,33 +32,37 @@ const Multiselect = ({
   };
 
   const handleOptionSelected = option => {
-    onChange([
-      ...data,
-      option.value
-    ]);
+    onChange([...data, option.value]);
   };
 
-  const getFilteredOptions = () => (
-    options.filter(opt => !data.includes(opt.value))
-  )
+  const handleOptionDeleted = optionIndex => {
+    onChange([
+      ...data.slice(0, optionIndex),
+      ...data.slice(optionIndex + 1)
+    ])
+  };
+
+  const getFilteredOptions = () =>
+    options.filter(opt => !data.includes(opt.value));
 
   return (
     <React.Fragment>
-      {
-        data.length ?
+      {data.length ? (
         <div className={styles.chipsWrapper}>
-          {
-            data.map(val => {
-              const optLabel = (options.find(opt => opt.value === val) || {}).label || ""
-              return (
-                <OptionChip key={val}>{optLabel}</OptionChip>
-              )
-            })
-          }
+          {data.map((val, i) => {
+            const optLabel =
+              (options.find(opt => opt.value === val) || {}).label || "";
+            return (
+              <OptionChip
+                onRequestDelete={() => handleOptionDeleted(i)}
+                key={val}
+              >
+                {optLabel}
+              </OptionChip>
+            );
+          })}
         </div>
-        :
-        null
-      }
+      ) : null}
       <div className={selectStyles.wrapper} ref={wrapper} onClick={openDrawer}>
         {placeholder}
       </div>
@@ -77,6 +81,17 @@ const Multiselect = ({
 
 export default Multiselect;
 
-const OptionChip = ({children}) => (
-  <div className={styles.chipWrapper}>{children}</div>
-)
+const OptionChip = ({ children, onRequestDelete }) => (
+  <div className={styles.chipWrapper}>
+    {children}
+    <button
+      className={styles.deleteButton}
+      onMouseDown={e => {
+        e.stopPropagation();
+      }}
+      onClick={onRequestDelete}
+    >
+      ✕
+    </button>
+  </div>
+);
