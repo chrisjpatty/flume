@@ -127,6 +127,9 @@ export class FlumeConfig {
     if (config.initialWidth) {
       node.initialWidth = config.initialWidth;
     }
+    if(config.sortIndex !== undefined){
+      node.sortIndex = config.sortIndex
+    }
     if (typeof config.inputs === "function") {
       const inputs = config.inputs(getPortBuilders(this.portTypes));
       if (!Array.isArray(inputs)) {
