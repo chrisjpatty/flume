@@ -82,7 +82,8 @@ export const getPortBuilders = ports =>
         label: config.label || port.label,
         noControls: define(config.noControls, false),
         color: config.color || port.color,
-        hidePort: define(config.hidePort, port.hidePort)
+        hidePort: define(config.hidePort, port.hidePort),
+        controls: define(config.controls, port.controls)
       };
     };
     return obj;

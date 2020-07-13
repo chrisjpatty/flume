@@ -136,6 +136,27 @@ flumeConfig
       ports.animals()
     ]
   })
+  .addNodeType({
+    type: 'stringEquals',
+    label: "Text Equals",
+    description: "Outputs if text equals another string of text.",
+    initialWidth: 170,
+    sortIndex: 33,
+    inputs: ports => [
+      ports.text({ name: "string1", label: "First String" }),
+      ports.text({ name: "string2", label: "Second String" }),
+      ports.boolean({ name: "caseSensitive", controls: [
+        Controls.checkbox({
+          label: "Case Sensitive",
+          name: "boolean",
+          defaultValue: true
+        })
+      ] })
+    ],
+    outputs: ports => [
+      ports.boolean({ name: "result"})
+    ]
+  })
 
 export default () => {
   const [nodes, setNodes] = React.useState({})
