@@ -108,16 +108,18 @@ const removeNode = (startNodes, nodeId) => {
 }
 
 export const getInitialNodes = (initialNodes = {}, defaultNodes = [], nodeTypes, portTypes) => {
-  if(Object.keys(initialNodes).length){
-    return initialNodes
-  }else{
-    return defaultNodes.reduce((nodes, dNode) => {
-      nodes = nodesReducer(nodes, {
-        type: "ADD_NODE",
-        x: dNode.x,
-        y: dNode.y,
-        nodeType: dNode.type
-      }, {nodeTypes, portTypes})
+  return {
+    ...initialNodes,
+    ...defaultNodes.reduce((nodes, dNode) => {
+      const nodeNotAdded = !Object.values(initialNodes).find(n => n.type === dNode.type)
+      if(nodeNotAdded){
+        nodes = nodesReducer(nodes, {
+          type: "ADD_NODE",
+          x: dNode.x || 0,
+          y: dNode.y || 0,
+          nodeType: dNode.type
+        }, {nodeTypes, portTypes})
+      }
       return nodes
     }, {})
   }
