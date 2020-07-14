@@ -189,14 +189,18 @@ const Port = ({
         outputNodeId,
         outputPortName
       } = lineInToPort.current.dataset;
-      if (droppedOnPort) {
-        console.log("Reattach");
-      } else {
+      nodesDispatch({
+        type: "REMOVE_CONNECTION",
+        input: { nodeId: inputNodeId, portName: inputPortName },
+        output: { nodeId: outputNodeId, portName: outputPortName }
+      });
+      if(droppedOnPort){
+        const { portName: connectToPortName, nodeId: connectToNodeId } = e.target.dataset;
         nodesDispatch({
-          type: "REMOVE_CONNECTION",
-          input: { nodeId: inputNodeId, portName: inputPortName },
+          type: 'ADD_CONNECTION',
+          input: { nodeId: connectToNodeId  , portName: connectToPortName },
           output: { nodeId: outputNodeId, portName: outputPortName }
-        });
+        })
       }
     } else {
       if (droppedOnPort) {
@@ -267,7 +271,7 @@ const Port = ({
         onDragStart={e => {e.preventDefault(); e.stopPropagation()}}
         ref={port}
       />
-      {isDragging ? (
+      {isDragging && !isInput ? (
         <Portal
           node={document.getElementById("__node_editor_drag_connection__")}
         >
