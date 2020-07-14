@@ -107,9 +107,35 @@ const removeNode = (startNodes, nodeId) => {
   return nodes
 }
 
+const reconcileNodes = (nodes, nodeTypes, portTypes) => {
+  return Object.values(nodes).reduce((nodesObj, node) => {
+    const nodeType = nodeTypes[node.type]
+    if(nodeType){
+      const defaultInputData = getDefaultData({nodeType, portTypes})
+      const currentInputData = Object.entries(node.inputData).reduce((dataObj, [key, data]) => {
+        if(defaultInputData[key] !== undefined){
+          dataObj[key] = data;
+        }
+        return dataObj;
+      }, {})
+      const newInputData = {
+        ...defaultInputData,
+        ...currentInputData
+      }
+      nodesObj[node.id] = {
+        ...node,
+        inputData: newInputData
+      }
+    }
+    return nodesObj
+  }, {})
+}
+
 export const getInitialNodes = (initialNodes = {}, defaultNodes = [], nodeTypes, portTypes) => {
+  const reconciledNodes = reconcileNodes(initialNodes, nodeTypes, portTypes)
+
   return {
-    ...initialNodes,
+    ...reconciledNodes,
     ...defaultNodes.reduce((nodes, dNode) => {
       const nodeNotAdded = !Object.values(initialNodes).find(n => n.type === dNode.type)
       if(nodeNotAdded){
