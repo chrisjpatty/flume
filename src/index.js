@@ -35,7 +35,8 @@ export let NodeEditor = (
 ) => {
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(nodesReducer, { nodeTypes, portTypes }),
-    getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes)
+    {},
+    () => getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes)
   );
   const stage = React.useRef();
   const [

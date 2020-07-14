@@ -107,28 +107,43 @@ const removeNode = (startNodes, nodeId) => {
   return nodes
 }
 
-const reconcileNodes = (nodes, nodeTypes, portTypes) => {
-  return Object.values(nodes).reduce((nodesObj, node) => {
+const reconcileNodes = (initialNodes, nodeTypes, portTypes) => {
+  let nodes = {...initialNodes}
+
+  // Delete extraneous nodes
+  let nodesToDelete = Object.values(nodes)
+    .map(node => !nodeTypes[node.type] ? node.id : undefined)
+    .filter(x => x)
+
+  nodesToDelete.forEach(nodeId => {
+    nodes = nodesReducer(nodes, {
+      type: "REMOVE_NODE",
+      nodeId
+    }, {nodeTypes, portTypes})
+  })
+
+  // Reconcile input data for each node
+  const reconciledNodes = Object.values(nodes).reduce((nodesObj, node) => {
     const nodeType = nodeTypes[node.type]
-    if(nodeType){
-      const defaultInputData = getDefaultData({nodeType, portTypes})
-      const currentInputData = Object.entries(node.inputData).reduce((dataObj, [key, data]) => {
-        if(defaultInputData[key] !== undefined){
-          dataObj[key] = data;
-        }
-        return dataObj;
-      }, {})
-      const newInputData = {
-        ...defaultInputData,
-        ...currentInputData
+    const defaultInputData = getDefaultData({nodeType, portTypes})
+    const currentInputData = Object.entries(node.inputData).reduce((dataObj, [key, data]) => {
+      if(defaultInputData[key] !== undefined){
+        dataObj[key] = data;
       }
-      nodesObj[node.id] = {
-        ...node,
-        inputData: newInputData
-      }
+      return dataObj;
+    }, {})
+    const newInputData = {
+      ...defaultInputData,
+      ...currentInputData
+    }
+    nodesObj[node.id] = {
+      ...node,
+      inputData: newInputData
     }
     return nodesObj
   }, {})
+
+  return reconciledNodes
 }
 
 export const getInitialNodes = (initialNodes = {}, defaultNodes = [], nodeTypes, portTypes) => {
