@@ -92,6 +92,7 @@ export let NodeEditor = (
                   translate={stageState.translate}
                   dispatchStageState={dispatchStageState}
                   stageRef={stage}
+                  numNodes={Object.keys(nodes).length}
                   outerStageChildren={debug && (
                     <div className={styles.debugWrapper}>
                       <button

@@ -5,7 +5,7 @@ import ContextMenu from "../ContextMenu/ContextMenu";
 import { NodeTypesContext, NodeDispatchContext } from "../../context";
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
-import { STAGE_WRAPPER_ID } from '../../constants'
+import { STAGE_WRAPPER_ID } from "../../constants";
 
 const DRAG_DELAY = 5;
 
@@ -15,6 +15,7 @@ const Stage = ({
   dispatchStageState,
   children,
   outerStageChildren,
+  numNodes,
   stageRef
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
@@ -24,32 +25,39 @@ const Stage = ({
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
   const dragData = React.useRef({ x: 0, y: 0 });
-  const dragDelayStartCoordinates = React.useRef({ x: 0, y: 0});
+  const dragDelayStartCoordinates = React.useRef({ x: 0, y: 0 });
 
   const setStageRect = React.useCallback(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
-  }, [])
+  }, []);
 
   React.useEffect(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
-    window.addEventListener('resize', setStageRect)
+    window.addEventListener("resize", setStageRect);
     return () => {
-      window.removeEventListener('resize', setStageRect)
-    }
+      window.removeEventListener("resize", setStageRect);
+    };
   }, [stageRef, setStageRect]);
 
-  const handleWheel = React.useCallback(e => {
-    e.preventDefault()
-    dispatchStageState(({scale}) => ({
-      type: "SET_SCALE",
-      scale: clamp(scale - (clamp(e.deltaY, -10, 10) * 0.005), .1, 7)
-    }));
-  }, [dispatchStageState]);
+  const handleWheel = React.useCallback(
+    e => {
+      e.preventDefault();
+      if (numNodes > 0) {
+        dispatchStageState(({ scale }) => ({
+          type: "SET_SCALE",
+          scale: clamp(scale - clamp(e.deltaY, -10, 10) * 0.005, 0.1, 7)
+        }));
+      }
+    },
+    [dispatchStageState, numNodes]
+  );
 
   const handleMouseDrag = e => {
     const xDistance = dragData.current.x - e.clientX;
     const yDistance = dragData.current.y - e.clientY;
-    translateWrapper.current.style.transform = `translate(${-(translate.x + xDistance)}px, ${-(translate.y + yDistance)}px)`
+    translateWrapper.current.style.transform = `translate(${-(
+      translate.x + xDistance
+    )}px, ${-(translate.y + yDistance)}px)`;
   };
 
   const handleMouseUp = e => {
@@ -112,8 +120,12 @@ const Stage = ({
     const wrapperRect = wrapper.current.getBoundingClientRect();
     nodesDispatch({
       type: "ADD_NODE",
-      x: byScale(menuCoordinates.x - wrapperRect.x - (wrapperRect.width / 2)) + byScale(translate.x),
-      y: byScale(menuCoordinates.y - wrapperRect.y - (wrapperRect.height / 2)) + byScale(translate.y),
+      x:
+        byScale(menuCoordinates.x - wrapperRect.x - wrapperRect.width / 2) +
+        byScale(translate.x),
+      y:
+        byScale(menuCoordinates.y - wrapperRect.y - wrapperRect.height / 2) +
+        byScale(translate.y),
       nodeType: node.type
     });
   };
@@ -147,28 +159,30 @@ const Stage = ({
 
   const startDragDelay = e => {
     e.stopPropagation();
-    let x;
-    let y;
-    if ("ontouchstart" in window && e.touches) {
-      x = e.touches[0].clientX;
-      y = e.touches[0].clientY;
-    } else {
-      e.preventDefault();
-      x = e.clientX;
-      y = e.clientY;
+    if(numNodes > 0){
+      let x;
+      let y;
+      if ("ontouchstart" in window && e.touches) {
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+      } else {
+        e.preventDefault();
+        x = e.clientX;
+        y = e.clientY;
+      }
+      dragDelayStartCoordinates.current = { x, y };
+      document.addEventListener("mouseup", endDragDelay);
+      document.addEventListener("mousemove", checkDragDelay);
     }
-    dragDelayStartCoordinates.current = { x, y };
-    document.addEventListener("mouseup", endDragDelay);
-    document.addEventListener("mousemove", checkDragDelay);
   };
 
   React.useEffect(() => {
     let stageWrapper = wrapper.current;
-    stageWrapper.addEventListener('wheel', handleWheel)
+    stageWrapper.addEventListener("wheel", handleWheel);
     return () => {
-      stageWrapper.removeEventListener('wheel', handleWheel)
-    }
-  }, [handleWheel])
+      stageWrapper.removeEventListener("wheel", handleWheel);
+    };
+  }, [handleWheel]);
 
   return (
     <div
