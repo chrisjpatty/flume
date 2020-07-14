@@ -195,12 +195,15 @@ const Port = ({
         output: { nodeId: outputNodeId, portName: outputPortName }
       });
       if(droppedOnPort){
-        const { portName: connectToPortName, nodeId: connectToNodeId } = e.target.dataset;
-        nodesDispatch({
-          type: 'ADD_CONNECTION',
-          input: { nodeId: connectToNodeId  , portName: connectToPortName },
-          output: { nodeId: outputNodeId, portName: outputPortName }
-        })
+        const { portName: connectToPortName, nodeId: connectToNodeId, portType: connectToPortType } = e.target.dataset;
+        const inputWillAcceptConnection = inputTypes[connectToPortType].acceptTypes.includes(type);
+        if(inputWillAcceptConnection){
+          nodesDispatch({
+            type: 'ADD_CONNECTION',
+            input: { nodeId: connectToNodeId  , portName: connectToPortName },
+            output: { nodeId: outputNodeId, portName: outputPortName }
+          })
+        }
       }
     } else {
       if (droppedOnPort) {

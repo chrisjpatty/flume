@@ -2,41 +2,44 @@ import { deleteConnection, deleteConnectionsByNodeId } from "./connectionCalcula
 // import cloneDeep from 'lodash/cloneDeep'
 const nanoid = require("nanoid");
 
-const addConnection = (nodes, input, output) => ({
-  ...nodes,
-  [input.nodeId]: {
-    ...nodes[input.nodeId],
-    connections: {
-      ...nodes[input.nodeId].connections,
-      inputs: {
-        ...nodes[input.nodeId].connections.inputs,
-        [input.portName]: [
-          ...(nodes[input.nodeId].connections.inputs[input.portName] || []),
-          {
-            nodeId: output.nodeId,
-            portName: output.portName
-          }
-        ]
+const addConnection = (nodes, input, output, portTypes) => {
+  const newNodes = {
+    ...nodes,
+    [input.nodeId]: {
+      ...nodes[input.nodeId],
+      connections: {
+        ...nodes[input.nodeId].connections,
+        inputs: {
+          ...nodes[input.nodeId].connections.inputs,
+          [input.portName]: [
+            ...(nodes[input.nodeId].connections.inputs[input.portName] || []),
+            {
+              nodeId: output.nodeId,
+              portName: output.portName
+            }
+          ]
+        }
       }
-    }
-  },
-  [output.nodeId]: {
-    ...nodes[output.nodeId],
-    connections: {
-      ...nodes[output.nodeId].connections,
-      outputs: {
-        ...nodes[output.nodeId].connections.outputs,
-        [output.portName]: [
-          ...(nodes[output.nodeId].connections.outputs[output.portName] || []),
-          {
-            nodeId: input.nodeId,
-            portName: input.portName
-          }
-        ]
+    },
+    [output.nodeId]: {
+      ...nodes[output.nodeId],
+      connections: {
+        ...nodes[output.nodeId].connections,
+        outputs: {
+          ...nodes[output.nodeId].connections.outputs,
+          [output.portName]: [
+            ...(nodes[output.nodeId].connections.outputs[output.portName] || []),
+            {
+              nodeId: input.nodeId,
+              portName: input.portName
+            }
+          ]
+        }
       }
     }
   }
-});
+  return newNodes
+};
 
 const removeConnection = (nodes, input, output) => {
   const inputNode = nodes[input.nodeId];
@@ -188,7 +191,7 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, portTypes }) => {
       const inputIsNotConnected = !nodes[input.nodeId].connections.inputs[
         input.portName
       ];
-      if (inputIsNotConnected) return addConnection(nodes, input, output);
+      if (inputIsNotConnected) return addConnection(nodes, input, output, portTypes);
       else return nodes;
   }
 
