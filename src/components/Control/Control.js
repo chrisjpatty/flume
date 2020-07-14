@@ -14,6 +14,7 @@ const Control = ({
   label,
   inputLabel,
   data,
+  render,
   options = [],
   placeholder,
   inputData,
@@ -68,6 +69,8 @@ const Control = ({
             label={label}
           />
         );
+      case "custom":
+        return render(data, onChange, executionContext, triggerRecalculation)
       default:
         return <div>Control</div>;
     }

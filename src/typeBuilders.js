@@ -60,6 +60,18 @@ export const Controls = {
       getOptions: define(config.getOptions, undefined),
       placeholder: define(config.placeholder, undefined)
     })
+  ),
+  custom: buildControlType(
+    {
+      type: "custom",
+      name: "custom",
+      render: () => {},
+      defaultValue: undefined
+    },
+    () => {},
+    config => ({
+      render: define(config.render, () => {})
+    })
   )
 };
 

@@ -3,6 +3,33 @@ import "normalize.css";
 
 import { NodeEditor, FlumeConfig, Controls, Colors } from "node-editor";
 
+const BusinessRules = ({rules, onChange, context, redraw}) => {
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const fruit = React.useRef();
+
+  const handleChange = e => {
+    const value = e.target.value;
+    onChange({fruit: value});
+  }
+
+  React.useEffect(() => {
+    redraw()
+  }, [modalOpen, redraw])
+
+  return (
+    <div>
+      <button onClick={() => setModalOpen(x => !x)}>Business Rules</button>
+      {
+        modalOpen &&
+        <div>
+          The modal is open
+          <input onMouseDown={e => e.stopPropagation()} ref={fruit} type="text" onChange={handleChange} />
+        </div>
+      }
+    </div>
+  )
+}
+
 const colors = [
   {value: "blue", label: "Blue"},
   {value: "red", label: "Red"},
@@ -78,6 +105,21 @@ flumeConfig
         label: "This has no options",
         placeholder: '[Select an Option]',
         options: []
+      })
+    ]
+  })
+  .addPortType({
+    type: "businessRules",
+    name: "businessRules",
+    label: "Business Rules",
+    controls: [
+      Controls.custom({
+        name: "businessRules",
+        label: "Custom Business Rules",
+        defaultValue: {},
+        render: (data, onChange, context, redraw) => (
+          <BusinessRules rules={data} onChange={onChange} context={context} redraw={redraw} />
+        )
       })
     ]
   })
@@ -177,6 +219,17 @@ flumeConfig
     deletable: false,
     inputs: ports => [
       ports.noOptions()
+    ]
+  })
+  .addNodeType({
+    type: "businessRules",
+    label: "Business Rules",
+    description: "Lets you choose alternative business rules",
+    inputs: ports => [
+      ports.businessRules()
+    ],
+    outputs: ports => [
+      ports.businessRules()
     ]
   })
 
