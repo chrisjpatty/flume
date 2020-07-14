@@ -64,6 +64,7 @@ const ContextMenu = ({
   return (
     <div
       className={styles.menuWrapper}
+      onMouseDown={e => e.stopPropagation()}
       style={{ left: x, top: y, width: filter ? menuWidth : "auto" }}
       ref={menuWrapper}
     >
