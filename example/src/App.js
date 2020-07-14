@@ -69,6 +69,18 @@ flumeConfig
       })
     ]
   })
+  .addPortType({
+    type: "noOptions",
+    name: "noOptions",
+    label: "No Options",
+    controls: [
+      Controls.select({
+        label: "This has no options",
+        placeholder: '[Select an Option]',
+        options: []
+      })
+    ]
+  })
   .addNodeType({
     type: "number",
     label: "Number",
@@ -155,6 +167,16 @@ flumeConfig
     ],
     outputs: ports => [
       ports.boolean({ name: "result"})
+    ]
+  })
+  .addNodeType({
+    type: "noOptions",
+    label: "No Options",
+    description: "This node shows the empty state",
+    initialWidth: 170,
+    deletable: false,
+    inputs: ports => [
+      ports.noOptions()
     ]
   })
 

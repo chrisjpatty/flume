@@ -43,6 +43,11 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
             </div>
           ))
         }
+        {
+          !options.length ?
+          <div className={styles.emptyText}>There are no options available.</div>
+          : null
+        }
       </div>
     </Portal>
   );
