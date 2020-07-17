@@ -1,4 +1,5 @@
 import styles from "./components/Connection/Connection.css";
+import { line, curveBasis } from 'd3-shape'
 
 export const getPortRect = (nodeId, portName, transputType = "input") =>
   document
@@ -35,6 +36,18 @@ export const getPortRectsByNodes = (nodes, forEachConnection) =>
     return obj;
   }, {});
 
+export const calculateCurve = (from, to) => {
+  const length = to.x - from.x;
+  const thirdLength = length / 3;
+  const curve = line().curve(curveBasis)([
+    [from.x, from.y],
+    [from.x + thirdLength, from.y],
+    [from.x + thirdLength * 2, to.y],
+    [to.x, to.y]
+  ]);
+  return curve;
+};
+
 export const deleteConnection = ({ id }) => {
   const line = document.querySelector(`[data-connection-id="${id}"]`);
   if (line) line.parentNode.remove();
@@ -50,10 +63,7 @@ export const deleteConnectionsByNodeId = nodeId => {
 };
 
 export const updateConnection = ({ line, from, to }) => {
-  line.setAttribute("x1", from.x);
-  line.setAttribute("y1", from.y);
-  line.setAttribute("x2", to.x);
-  line.setAttribute("y2", to.y);
+  line.setAttribute("d", calculateCurve(from, to));
 };
 
 export const createSVG = ({
@@ -68,20 +78,26 @@ export const createSVG = ({
 }) => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("class", styles.svg);
-  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-  line.setAttribute("x1", from.x);
-  line.setAttribute("y1", from.y);
-  line.setAttribute("x2", to.x);
-  line.setAttribute("y2", to.y);
-  line.setAttribute("stroke", "rgb(185, 186, 189)");
-  line.setAttribute("stroke-width", "5");
-  line.setAttribute("stroke-linecap", "round");
-  line.setAttribute("data-connection-id", id);
-  line.setAttribute("data-output-node-id", outputNodeId);
-  line.setAttribute("data-output-port-name", outputPortName);
-  line.setAttribute("data-input-node-id", inputNodeId);
-  line.setAttribute("data-input-port-name", inputPortName);
-  svg.appendChild(line);
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  const curve = calculateCurve(from, to)
+    // .x(function(d) { return x(d.date); })
+    // .y(function(d) { return y(d.value); })
+    // .curve(curveCatmullRom.alpha(0.5));
+  // line.setAttribute("x1", from.x);
+  // line.setAttribute("y1", from.y);
+  // line.setAttribute("x2", to.x);
+  // line.setAttribute("y2", to.y);
+  path.setAttribute("d", curve)
+  path.setAttribute("stroke", "rgb(185, 186, 189)");
+  path.setAttribute("stroke-width", "3");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("fill", "none");
+  path.setAttribute("data-connection-id", id);
+  path.setAttribute("data-output-node-id", outputNodeId);
+  path.setAttribute("data-output-port-name", outputPortName);
+  path.setAttribute("data-input-node-id", inputNodeId);
+  path.setAttribute("data-input-port-name", inputPortName);
+  svg.appendChild(path);
   stage.appendChild(svg);
   return svg;
 };

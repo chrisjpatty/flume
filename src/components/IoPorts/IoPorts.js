@@ -10,6 +10,7 @@ import Control from "../Control/Control";
 import Connection from "../Connection/Connection";
 import { PortTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
+import { calculateCurve, getPortRect } from '../../connectionCalculator'
 
 const IoPorts = ({
   nodeId,
@@ -159,6 +160,7 @@ const Port = ({
     x: 0,
     y: 0
   });
+  const dragStartCoordinatesCache = React.useRef(dragStartCoordinates)
   const port = React.useRef();
   const line = React.useRef();
   const lineInToPort = React.useRef();
@@ -171,11 +173,17 @@ const Port = ({
       .getBoundingClientRect();
 
     if (isInput) {
-      lineInToPort.current.setAttribute("x2", byScale(e.clientX - stage.x - (stage.width / 2)) + byScale(stageState.translate.x));
-      lineInToPort.current.setAttribute("y2", byScale(e.clientY - stage.y - (stage.height / 2)) + byScale(stageState.translate.y));
+      const to = {
+        x: byScale(e.clientX - stage.x - (stage.width / 2)) + byScale(stageState.translate.x),
+        y: byScale(e.clientY - stage.y - (stage.height / 2)) + byScale(stageState.translate.y)
+      }
+      lineInToPort.current.setAttribute("d", calculateCurve(dragStartCoordinatesCache.current, to));
     } else {
-      line.current.setAttribute("x2", byScale(e.clientX - stage.x - (stage.width / 2)) + byScale(stageState.translate.x));
-      line.current.setAttribute("y2", byScale(e.clientY - stage.y - (stage.height / 2)) + byScale(stageState.translate.y));
+      const to = {
+        x: byScale(e.clientX - stage.x - (stage.width / 2)) + byScale(stageState.translate.x),
+        y: byScale(e.clientY - stage.y - (stage.height / 2)) + byScale(stageState.translate.y)
+      }
+      line.current.setAttribute("d", calculateCurve(dragStartCoordinatesCache.current, to));
     }
   };
 
@@ -245,15 +253,24 @@ const Port = ({
       const portIsConnected = !!lineInToPort.current;
       if (portIsConnected) {
         lineInToPort.current.parentNode.style.zIndex = 9999;
+        const outputPort = getPortRect(lineInToPort.current.dataset.outputNodeId, lineInToPort.current.dataset.outputPortName, "output")
+        const coordinates = {
+          x: byScale(outputPort.x - stage.x + (outputPort.width / 2) - (stage.width / 2)) + byScale(stageState.translate.x),
+          y: byScale(outputPort.y - stage.y + (outputPort.width / 2) - (stage.height / 2)) + byScale(stageState.translate.y)
+        }
+        setDragStartCoordinates(coordinates);
+        dragStartCoordinatesCache.current = coordinates
         setIsDragging(true);
         document.addEventListener("mouseup", handleDragEnd);
         document.addEventListener("mousemove", handleDrag);
       }
     } else {
-      setDragStartCoordinates({
+      const coordinates = {
         x: byScale(startPort.x - stage.x + (startPort.width / 2) - (stage.width / 2)) + byScale(stageState.translate.x),
         y: byScale(startPort.y - stage.y + (startPort.width / 2) - (stage.height / 2)) + byScale(stageState.translate.y)
-      });
+      }
+      setDragStartCoordinates(coordinates);
+      dragStartCoordinatesCache.current = coordinates
       setIsDragging(true);
       document.addEventListener("mouseup", handleDragEnd);
       document.addEventListener("mousemove", handleDrag);
