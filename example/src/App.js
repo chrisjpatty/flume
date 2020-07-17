@@ -232,6 +232,18 @@ flumeConfig
       ports.businessRules()
     ]
   })
+  .addNodeType({
+    type: "homePage",
+    label: "Home Page Attributes",
+    description: "Represents the resulting home page",
+    inputs: ports => [
+      ports.text({ label: "Homepage Title", name: "homepageTitle", noControls: true }),
+      ports.text({ label: "Homepage Subtitle", name: "homepageSubtitle", noControls: true }),
+      ports.boolean({ label: "Show Dashboard", name: "showDashboard", noControls: true }),
+      ports.boolean({ label: "Show Contact Form", name: "showContactForm", noControls: true }),
+      ports.boolean({ label: "Show Login Button", name: "showLoginButton", noControls: true }),
+    ]
+  })
 
 export default () => {
   const [nodes, setNodes] = React.useState({})
