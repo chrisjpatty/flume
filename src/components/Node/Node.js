@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Node.css";
 import { NodeTypesContext, NodeDispatchContext, StageContext } from "../../context";
-import { getPortRect } from "../../connectionCalculator";
+import { getPortRect, calculateCurve } from "../../connectionCalculator";
 import { Portal } from 'react-portal'
 import ContextMenu from '../ContextMenu/ContextMenu'
 import IoPorts from "../IoPorts/IoPorts";
@@ -55,14 +55,15 @@ const Node = ({
         const cnt = document.querySelector(
           `[data-connection-id="${combined}"]`
         );
-        cnt.x1.baseVal.value =
-          byScale(toRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x);
-        cnt.y1.baseVal.value =
-          byScale(toRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y);
-        cnt.x2.baseVal.value =
-          byScale(fromRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x);
-        cnt.y2.baseVal.value =
-          byScale(fromRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y);
+        const from = {
+          x: byScale(toRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x),
+          y: byScale(toRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y)
+        }
+        const to = {
+          x: byScale(fromRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x),
+          y: byScale(fromRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y)
+        }
+        cnt.setAttribute("d", calculateCurve(from, to))
       });
     });
   };
