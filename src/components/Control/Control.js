@@ -20,10 +20,11 @@ const Control = ({
   inputData,
   triggerRecalculation,
   getOptions,
-  setValue
+  setValue,
+  defaultValue
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
-  const executionContext = React.useContext(ContextContext)
+  const executionContext = React.useContext(ContextContext);
 
   const onChange = data => {
     nodesDispatch({
@@ -34,7 +35,7 @@ const Control = ({
       controlName: name,
       setValue
     });
-    triggerRecalculation()
+    triggerRecalculation();
   };
 
   const getControlByType = type => {
@@ -44,7 +45,9 @@ const Control = ({
         return (
           <Select
             {...commonProps}
-            options={getOptions ? getOptions(inputData, executionContext) : options}
+            options={
+              getOptions ? getOptions(inputData, executionContext) : options
+            }
             placeholder={placeholder}
           />
         );
@@ -64,13 +67,21 @@ const Control = ({
         return (
           <Multiselect
             {...commonProps}
-            options={getOptions ? getOptions(inputData, executionContext) : options}
+            options={
+              getOptions ? getOptions(inputData, executionContext) : options
+            }
             placeholder={placeholder}
             label={label}
           />
         );
       case "custom":
-        return render(data, onChange, executionContext, triggerRecalculation)
+        return render(data, onChange, executionContext, triggerRecalculation, {
+          label,
+          name,
+          portName,
+          inputLabel,
+          defaultValue
+        });
       default:
         return <div>Control</div>;
     }
