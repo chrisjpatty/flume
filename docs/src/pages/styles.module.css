@@ -218,8 +218,8 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 70px;
-  grid-row-gap: 70px;
+  grid-column-gap: 9vw;
+  grid-row-gap: 9vw;
 }
 .gridWrapper > div {
   background: var(--background-dark);
@@ -233,7 +233,7 @@
   width: 70%;
   left: -3%;
   top: 5%;
-  font-size: 3.6vw;
+  font-size: 3vw;
 }
 .featureSubtext {
   font-size: 2vw;
@@ -439,7 +439,7 @@
     padding-top: 50%;
   }
   .featureText{
-    font-size: 7.2vw;
+    font-size: 6.8vw;
   }
   .featureSubtext{
     font-size: 3.4vw;
