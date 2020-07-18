@@ -376,6 +376,7 @@
   }
   .heroTextBlock {
     width: 100%;
+    min-height: 80vh;
   }
   .heroTextBlock .heroSubtitle {
     font-size: 30px;
