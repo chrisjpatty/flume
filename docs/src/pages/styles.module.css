@@ -4,34 +4,453 @@
  * CSS files with the .module.css suffix will be treated as CSS modules
  * and scoped locally.
  */
-
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.mobile,
+.mobileInline {
+  display: none;
 }
-
-@media screen and (max-width: 966px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.homePageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--primary-font);
 }
-
-.buttons {
+.homeHeader {
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  font-family: var(--primary-font);
+}
+.alignRight {
+  margin-left: auto;
+}
+.logo {
+  width: 150px;
+}
+.navLinks {
+  margin-left: 40px;
+  height: 100%;
   display: flex;
   align-items: center;
+}
+.navLinks a {
+  color: #fff;
+  font-size: 20px;
+}
+.heroBlock {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  background: var(--background-dark);
+}
+.heroTextBlock {
+  display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 55%;
 }
-
-.features {
+.heroTextInnerWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.heroTextBlock h1 {
+  display: flex;
+  flex-direction: column;
+  font-weight: 800;
+  font-family: "Paralucent", sans-serif;
+  font-size: 110px;
+  line-height: 0.95;
+  margin-bottom: 0px;
+}
+.heroTextBlock .heroSubtitle {
+  color: #606060;
+  font-size: 45px;
+  margin-top: 0px;
+}
+.blueText {
+  color: var(--blue-color);
+}
+.greenText {
+  color: var(--green-color);
+}
+.redText {
+  color: var(--red-color);
+}
+.whiteText {
+  color: #fff;
+}
+.heroImageBlock {
+  height: 100%;
+  flex: 1 1 auto;
+  display: flex;
+}
+.heroImageBlock img {
+  height: calc(100% - 300px);
+  position: absolute;
+  right: 0px;
+  top: 150px;
+}
+.license {
+  margin-left: 25px;
+  color: rgb(96, 96, 96);
+  font-size: 20px;
+}
+.pillButton {
+  border-radius: 100px;
+  background: var(--blue-color);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 24px;
+  border: none;
+  font-family: var(--primary-font);
+  white-space: nowrap;
+}
+.pillButton:hover {
+  text-decoration: none;
+  background: var(--blue-light-color);
+  color: #fff;
+}
+.pillButton:hover svg {
+  text-decoration: none;
+  background: var(--blue-light-color);
+  color: #fff;
+  transform: translateX(5px);
+}
+.pillButton svg {
+  width: 24px;
+  margin-left: 7px;
+  transition: transform 150ms;
+}
+.pillSmall {
+  font-size: 18px;
+  padding: 8px 20px;
+}
+.pillWhite {
+  background: #fff;
+  color: var(--background-dark);
+}
+.pageCurve {
+  width: 100%;
+  margin-top: -100%;
+}
+.exampleBlock {
+  width: 100%;
+  margin-top: 50px;
+  background: var(--background-light);
+  padding-bottom: 30vh;
+}
+.exampleInnerWrapper {
+  padding: 0px 8vw;
+}
+.exampleTextBlock {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.exampleTitleBlock {
+  display: flex;
+  flex-direction: column;
+  font-size: 80px;
+  line-height: 1.1;
+}
+.exampleTextBlock p {
+  font-size: 35px;
+  line-height: 1.4;
+}
+.flumeWrapper {
+  width: 100%;
+  height: 60vh;
+  border-radius: 40px;
+  background: var(--background-dark);
+  overflow: hidden;
+  margin-top: 20px;
+  color: #000;
+}
+.flumeWrapper p {
+  margin: 0;
+  padding: 0;
+}
+.darkFill {
+  background: var(--background-dark);
+}
+.typeSafeWrapper {
+  width: 100%;
+  padding-bottom: 20vh;
+  background-color: var(--background-dark);
+}
+.typeSafeInnerWrapper {
+  display: flex;
+  flex-direction: row;
+  padding: 0px 8vw;
+  /* padding-right: 6vw; */
+}
+.halfTextBlock {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.typeSafeImageWrapper {
+  width: 45%;
+  transform: translate(7%, 6%);
   display: flex;
   align-items: center;
-  padding: 2rem 0;
+}
+.typeSafeImage {
+  margin-top: 4%;
+  width: 100%;
+  max-width: 650px;
+}
+.innerTextWrapper {
+  max-width: 700px;
+}
+.featuresBlock {
+  width: 100%;
+  background: var(--background-light);
+  padding-bottom: 20vh;
+}
+.featuresBlockInnerWrapper {
+  padding: 0px 8vw;
+  padding-top: 8vh;
+  padding-bottom: 10vh;
+}
+.gridWrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 70px;
+  grid-row-gap: 70px;
+}
+.gridWrapper > div {
+  background: var(--background-dark);
+  padding-top: 50%;
+  padding-bottom: 0%;
+  border-radius: 30px;
+  position: relative;
+}
+.featureText {
+  position: absolute;
+  width: 70%;
+  left: -3%;
+  top: 5%;
+  font-size: 3.6vw;
+}
+.featureSubtext {
+  font-size: 2vw;
+  font-weight: 400;
+  transform: translateY(-35%);
+  display: inline-block;
+}
+.grid1 {
+
+}
+.grid1 img {
+  position: absolute;
+  right: -6%;
+  bottom: -15%;
+  width: 52%;
+}
+.grid2 {
+  transform: translateY(60px);
+}
+.grid2 .featureText {
+  width: 100%;
+  top: auto;
+  bottom: 0%;
+}
+.grid2 img {
+  position: absolute;
+  right: -6%;
+  top: -20%;
+  width: 78%;
+}
+.grid3 {
+
+}
+.grid3 .featureText {
+  text-align: right;
+  left: auto;
+  right: -3%;
+}
+.grid3 img {
+  position: absolute;
+  left: -6%;
+  bottom: -6%;
+  width: 50%;
+}
+.grid4 {
+  transform: translateY(60px);
+}
+.grid4 .featureText {
+  text-align: right;
+  left: auto;
+  right: -3%;
+  top: auto;
+  bottom: 0;
+  width: 100%;
+}
+.grid4 .sizeWrapper{
+  position: absolute;
+  left: -3%;
+  top: -30%;
+  transform: rotate(-11deg);
+}
+.grid4 .sizeTextWrapper{
+  display: flex;
+  align-items: flex-end;
+}
+.grid4 .size{
+  font-size: 15vw;
+  font-weight: 800;
+  color: var(--green-color);
+  line-height: 1;
+}
+.grid4 .sizeUnit{
+  font-size: 4.5vw;
+  font-weight: 800;
+}
+.grid4 .sizeHint{
+  font-size: 1.85vw;
+  font-weight: 800;
+  line-height: 1;
+  display: block;
+  margin-top: -7%;
+  margin-left: 3%;
+  width: 105%;
+}
+.callToActionWrapper{
   width: 100%;
 }
 
-.featureImage {
-  height: 200px;
-  width: 200px;
+@media screen and (max-width: 1200px) {
+  .heroImageBlock img {
+    max-width: 500px;
+    top: 100px;
+  }
+  .heroTextInnerWrapper h1 {
+    font-size: 90px;
+  }
+  .heroTextBlock .heroSubtitle {
+    font-size: 35px;
+  }
+  .heroBlock {
+    min-height: calc(100vh - 250px);
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: inline-block;
+  }
+  .mobileInline {
+    display: inline;
+  }
+  .heroImageBlock {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-left: 30px;
+    padding-top: 80px;
+    padding-bottom: 100px;
+  }
+  .heroImageBlock img {
+    position: relative;
+    width: 124%;
+    margin-left: -24%;
+    height: auto;
+    max-width: none;
+    top: 0px;
+  }
+  .heroTextInnerWrapper {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .heroTextInnerWrapper h1 {
+    font-size: calc(20px + 15vw);
+    text-align: center;
+    padding-left: 10px;
+  }
+  .heroTextBlock {
+    width: 100%;
+  }
+  .heroTextBlock .heroSubtitle {
+    font-size: 30px;
+    text-align: center;
+  }
+  .heroBlock {
+    flex-direction: column;
+    min-height: auto;
+    padding-top: 50px;
+  }
+  .exampleBlock {
+    padding-bottom: 12vh;
+    margin-top: 0px;
+  }
+  .exampleTitleBlock {
+    font-size: 55px;
+    display: inline-block;
+  }
+  .exampleTextBlock p {
+    font-size: 24px;
+  }
+  .flumeWrapper {
+    pointer-events: none;
+    height: 30vh;
+    border-radius: 25px;
+  }
+  .typeSafeWrapper{
+    padding-bottom: 12vh;
+  }
+  .typeSafeInnerWrapper {
+    flex-direction: column;
+  }
+  .halfTextBlock {
+    width: 100%;
+  }
+  .typeSafeImageWrapper {
+    width: 100%;
+    transform: none;
+  }
+  .mobileColumnCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .license {
+    margin-left: 0px;
+    margin-top: 10px;
+  }
+  .featuresBlock{
+    padding-bottom: 5vh;
+  }
+  .gridWrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    grid-row-gap: 20vw;
+  }
+  .grid1, .grid2, .grid3, .grid4 {
+    transform: none ;
+  }
+  .gridWrapper > div{
+    padding-top: 50%;
+  }
+  .featureText{
+    font-size: 7.2vw;
+  }
+  .featureSubtext{
+    font-size: 3.4vw;
+  }
+  .grid4 .size{
+    font-size: 32vw;
+  }
+  .grid4 .sizeUnit{
+    font-size: 13vw;
+  }
+  .grid4 .sizeHint{
+    font-size: 4vw;
+  }
 }

@@ -8,7 +8,7 @@ module.exports = {
   projectName: 'flume', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'Flume',
+      title: '',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
@@ -17,7 +17,7 @@ module.exports = {
         {
           to: 'docs/',
           activeBasePath: 'docs',
-          label: 'Docs',
+          label: 'Documentation',
           position: 'left',
         },
         // {to: 'blog', label: 'Blog', position: 'left'},
@@ -32,7 +32,7 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Documentation',
           items: [
             {
               label: 'Overview',
