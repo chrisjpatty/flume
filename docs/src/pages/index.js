@@ -12,9 +12,27 @@ import { NodeEditor } from "flume";
 import config, { nodes } from "../exampleFlumeConfig";
 import Helmet from "react-helmet";
 
+const getScreenSize = () => {
+  if (window.matchMedia("(max-width: 700px)").matches) return "extra-small";
+  if (window.matchMedia("(max-width: 960px)").matches) return "small";
+  if (window.matchMedia("(max-width: 1200px)").matches) return "medium";
+  return "large";
+};
+
+const BlueSpan = ({ children }) => (
+  <span className={styles.blueText}>{children}</span>
+);
+const GreenSpan = ({ children }) => (
+  <span className={styles.greenText}>{children}</span>
+);
+const RedSpan = ({ children }) => (
+  <span className={styles.redText}>{children}</span>
+);
+
 function Home() {
   // const context = useDocusaurusContext();
   // const {siteConfig = {}} = context;
+  const initialScreenSize = React.useRef(getScreenSize());
   return (
     // <Layout
     //   title={`Flume | Extract business logic from your apps with a user-friendly node editor powered by React.`}
@@ -32,7 +50,7 @@ function Home() {
       </Helmet>
       <HomeNavigation />
       <HeroBlock />
-      <ExampleBlock />
+      <ExampleBlock initialScreenSize={initialScreenSize.current} />
       <TypeSafetyBlock />
       <FeatureBlocks />
       <CallToActionBlock />
@@ -78,9 +96,9 @@ const HeroBlock = () => {
       <div className={styles.heroTextBlock}>
         <div className={styles.heroTextInnerWrapper}>
           <h1>
-            <span className={styles.blueText}>Model.</span>
-            <span className={styles.greenText}>Extract.</span>
-            <span className={styles.redText}>Run.</span>
+            <BlueSpan>Model.</BlueSpan>
+            <GreenSpan>Extract.</GreenSpan>
+            <RedSpan>Run.</RedSpan>
           </h1>
           <p className={styles.heroSubtitle}>
             Build better apps with{" "}
@@ -101,18 +119,30 @@ const HeroBlock = () => {
   );
 };
 
-const ExampleBlock = () => {
+const getInitialScale = size => {
+  switch (size) {
+    case "extra-small":
+      return 0.4;
+    case "small":
+      return 0.6;
+    case "medium":
+      return 0.8;
+    default:
+      return 1;
+  }
+};
+
+const ExampleBlock = ({ initialScreenSize }) => {
   return (
     <div className={styles.exampleBlock}>
       <PageCurve className={styles.pageCurve} />
       <div className={styles.exampleInnerWrapper}>
         <div className={styles.exampleTextBlock}>
           <h2 className={styles.exampleTitleBlock}>
-            <span className={styles.greenText}>Extract</span>{" "}
-            <span>business logic</span>{" "}
+            <GreenSpan>Extract</GreenSpan> <span>business logic</span>{" "}
             <span>
               <span className={styles.whiteText}>into</span>{" "}
-              <span className={styles.greenText}>JSON graphs</span>
+              <GreenSpan>JSON graphs</GreenSpan>
             </span>
           </h2>
           <p className={styles.desktop}>
@@ -130,6 +160,7 @@ const ExampleBlock = () => {
           <NodeEditor
             nodeTypes={config.nodeTypes}
             portTypes={config.portTypes}
+            initialScale={getInitialScale(initialScreenSize)}
             nodes={nodes}
           />
         </div>
@@ -147,10 +178,10 @@ const TypeSafetyBlock = () => {
           <div className={styles.innerTextWrapper}>
             <h2 className={styles.exampleTitleBlock}>
               <span>
-                Let <span className={styles.redText}>users</span> code{" "}
+                Let <RedSpan>users</RedSpan> code{" "}
               </span>
               <span>
-                with <span className={styles.redText}>type safety</span>
+                with <RedSpan>type safety</RedSpan>
               </span>
             </h2>
             <p>
@@ -177,49 +208,81 @@ const FeatureBlocks = () => {
     <div className={styles.featuresBlock}>
       <PageCurve className={styles.pageCurve} />
       <div className={styles.featuresBlockInnerWrapper}>
-        <div className={styles.gridWrapper}>
-          <div className={styles.grid1}>
-            <h3 className={styles.featureText}>
-              <span className={styles.blueText}>Butter-smooth</span> performance
-              <br />
-              on <span className={styles.blueText}>every</span> <br />
-              device
-            </h3>
-            <img src="img/60fps.svg" alt="60 frames per second plus" />
+        <div className={styles.featureTile}>
+          <div className={styles.featureImageWrapper}>
+            <img
+              className={styles.featureImage}
+              src="img/react-tile.svg"
+              alt="React JS logo"
+            />
           </div>
-          <div className={styles.grid2}>
-            <h3 className={styles.featureText}>
-              Preset <br />
-              and <span className={styles.greenText}>custom</span>
-              <br />
-              controls supported
+          <div className={styles.featureTextColumn}>
+            <h3 className={styles.featureTitle}>
+              Powered by <BlueSpan>React</BlueSpan>
             </h3>
-            <img src="img/controls.svg" alt="Custom control icons" />
+            <p className={styles.featureDescription}>
+              Rendering a node editor is as easy as rendering a single React
+              component. All required styles are automatically included.
+            </p>
           </div>
-          <div className={styles.grid3}>
-            <h3 className={styles.featureText}>
-              Custom <span className={styles.redText}>styling</span>
-              <br /> and <span className={styles.redText}>theme</span>
-              <br /> support
-              <br />
-              <span className={styles.featureSubtext}>(Coming Soon)</span>
-            </h3>
-            <img src="img/theme.svg" alt="Paint chips" />
+        </div>
+        <div className={styles.featureTile}>
+          <div className={styles.featureImageWrapper}>
+            <img
+              className={styles.featureImage}
+              src="img/performance-tile.svg"
+              alt="Speedometer"
+            />
           </div>
-          <div className={styles.grid4}>
-            <h3 className={styles.featureText}>
-              Packed
-              <br /> with <span className={styles.blueText}>features</span>,
-              <br /> <span className={styles.blueText}>lightweight</span>{" "}
-              footprint
+          <div className={styles.featureTextColumn}>
+            <h3 className={styles.featureTitle}>
+              <GreenSpan>Buttery</GreenSpan> 60fps+ performance
             </h3>
-            <div className={styles.sizeWrapper}>
-              <div className={styles.sizeTextWrapper}>
-                <span className={styles.size}>20</span>
-                <span className={styles.sizeUnit}>kb</span>
-              </div>
-              <span className={styles.sizeHint}>Minified + GZipped</span>
-            </div>
+            <p className={styles.featureDescription}>
+              Flume bypasses React renders for smooth rendering of
+              drag-and-drop, zoom, and pan animations, resulting in smooth
+              60fps+ performance on every device.
+            </p>
+          </div>
+        </div>
+        <div className={styles.featureTile}>
+          <div className={styles.featureImageWrapper}>
+            <img
+              className={styles.featureImage}
+              src="img/theme-tile.svg"
+              alt="Paint chips"
+            />
+          </div>
+          <div className={styles.featureTextColumn}>
+            <h3 className={styles.featureTitle}>
+              Custom <RedSpan>themes</RedSpan>{" "}
+              <span className={styles.mobileSmallInline}>
+                and <RedSpan>styling</RedSpan>
+              </span>
+            </h3>
+            <p className={styles.featureDescription}>
+              (Coming Soon). In a upcoming version, Flume provides provides a stable
+              API for creating sharable themes for the node editor.
+            </p>
+          </div>
+        </div>
+        <div className={styles.featureTile}>
+          <div className={styles.featureImageWrapper}>
+            <img
+              className={styles.featureImage}
+              src="img/size-tile.svg"
+              alt="20kb Minified + GZipped"
+            />
+          </div>
+          <div className={styles.featureTextColumn}>
+            <h3 className={styles.featureTitle}>
+              <BlueSpan>Lightweight</BlueSpan> footprint
+            </h3>
+            <p className={styles.featureDescription}>
+              Flume was built from scratch to minimize dependencies and other
+              bloating code. The result is a library that is fast, light, and
+              packed with features.
+            </p>
           </div>
         </div>
       </div>

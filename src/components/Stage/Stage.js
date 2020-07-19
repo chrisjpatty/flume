@@ -72,8 +72,8 @@ const Stage = ({
         y: tran.y + yDistance
       }
     }));
-    wrapper.current.removeEventListener("mousemove", handleMouseDrag);
-    wrapper.current.removeEventListener("mouseup", handleMouseUp);
+    document.removeEventListener("mousemove", handleMouseDrag);
+    document.removeEventListener("mouseup", handleMouseUp);
   };
 
   const handleDragStart = e => {
@@ -82,8 +82,8 @@ const Stage = ({
       x: e.clientX,
       y: e.clientY
     };
-    wrapper.current.addEventListener("mousemove", handleMouseDrag);
-    wrapper.current.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mousemove", handleMouseDrag);
+    document.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleContextMenu = e => {
