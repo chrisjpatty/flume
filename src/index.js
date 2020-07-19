@@ -18,6 +18,7 @@ import nodesReducer, {
 import stageReducer from "./stageReducer";
 import { STAGE_WRAPPER_ID } from './constants'
 import usePrevious from './hooks/usePrevious'
+import clamp from "lodash/clamp";
 
 import styles from "./styles.css";
 
@@ -29,6 +30,7 @@ export let NodeEditor = (
     defaultNodes = [],
     context = {},
     onChange,
+    initialScale,
     debug
   },
   ref
@@ -44,7 +46,7 @@ export let NodeEditor = (
     setShouldRecalculateConnections
   ] = React.useState(true);
   const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
-    scale: 1,
+    scale: typeof initialScale === "number" ? clamp(initialScale, .1, 7) : 1,
     translate: { x: 0, y: 0 }
   });
 

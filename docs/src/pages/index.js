@@ -122,7 +122,8 @@ const ExampleBlock = () => {
           </p>
           <p className={styles.mobileInline}>
             Build apps that are resilient to changing requirements by modeling
-            your business logic as a JSON graph.
+            your business logic as a JSON graph. Visit this page on a desktop
+            browser to try out a live node editor.
           </p>
         </div>
         <div className={styles.flumeWrapper}>
@@ -181,8 +182,7 @@ const FeatureBlocks = () => {
             <h3 className={styles.featureText}>
               <span className={styles.blueText}>Butter-smooth</span> performance
               <br />
-              on <span className={styles.blueText}>every</span>{" "}
-              <br />
+              on <span className={styles.blueText}>every</span> <br />
               device
             </h3>
             <img src="img/60fps.svg" alt="60 frames per second plus" />
@@ -199,8 +199,7 @@ const FeatureBlocks = () => {
           <div className={styles.grid3}>
             <h3 className={styles.featureText}>
               Custom <span className={styles.redText}>styling</span>
-              <br /> and{" "}
-              <span className={styles.redText}>theme</span>
+              <br /> and <span className={styles.redText}>theme</span>
               <br /> support
               <br />
               <span className={styles.featureSubtext}>(Coming Soon)</span>
@@ -210,14 +209,14 @@ const FeatureBlocks = () => {
           <div className={styles.grid4}>
             <h3 className={styles.featureText}>
               Packed
-              <br /> with{" "}
-              <span className={styles.blueText}>features</span>,
-              <br />{" "}
-              <span className={styles.blueText}>lightweight</span> footprint
+              <br /> with <span className={styles.blueText}>features</span>,
+              <br /> <span className={styles.blueText}>lightweight</span>{" "}
+              footprint
             </h3>
             <div className={styles.sizeWrapper}>
               <div className={styles.sizeTextWrapper}>
-                <span className={styles.size}>20</span><span className={styles.sizeUnit}>kb</span>
+                <span className={styles.size}>20</span>
+                <span className={styles.sizeUnit}>kb</span>
               </div>
               <span className={styles.sizeHint}>Minified + GZipped</span>
             </div>
@@ -229,10 +228,9 @@ const FeatureBlocks = () => {
 };
 
 const CallToActionBlock = () => {
-
   return (
     <div className={styles.callToActionWrapper}>
       <PageCurveDark className={styles.pageCurve} />
     </div>
-  )
-}
+  );
+};
