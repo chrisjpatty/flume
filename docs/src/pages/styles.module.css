@@ -13,6 +13,7 @@
   flex-direction: column;
   align-items: center;
   font-family: var(--primary-font);
+  color: #fff;
 }
 .homeHeader {
   display: flex;
