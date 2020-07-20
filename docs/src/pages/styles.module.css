@@ -86,8 +86,32 @@
 .redText {
   color: var(--red-color);
 }
+.redText a:hover{
+  color: var(--red-light-color);
+}
+.redStroke path{
+  stroke: var(--red-color);
+}
 .whiteText {
   color: #fff;
+}
+.inlineCtaLink{
+  color: inherit;
+  height: 1em;
+  display: inline-block;
+  margin-top: 15px;
+}
+.inlineCtaLink:hover{
+  color: inherit;
+  text-decoration: none;
+}
+.inlineCtaLink:hover svg{
+  transform: translateX(5px);
+}
+.inlineCtaLink svg{
+  width: .9em;
+  margin-left: .3em;
+  transition: transform 150ms;
 }
 .heroImageBlock {
   height: 100%;
