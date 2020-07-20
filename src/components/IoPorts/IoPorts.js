@@ -10,7 +10,7 @@ import Control from "../Control/Control";
 import Connection from "../Connection/Connection";
 import { PortTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
-import { calculateCurve, getPortRect } from '../../connectionCalculator'
+import { calculateCurve, getPortRect } from "../../connectionCalculator";
 
 const IoPorts = ({
   nodeId,
@@ -25,21 +25,23 @@ const IoPorts = ({
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.inputs}>
-        {inputs.map((input, i) => (
-          <Input
-            {...input}
-            data={inputData[input.name] || {}}
-            isConnected={!!connections.inputs[input.name]}
-            triggerRecalculation={triggerRecalculation}
-            updateNodeConnections={updateNodeConnections}
-            inputTypes={inputTypes}
-            nodeId={nodeId}
-            inputData={inputData}
-            key={i}
-          />
-        ))}
-      </div>
+      {inputs.length ? (
+        <div className={styles.inputs}>
+          {inputs.map((input, i) => (
+            <Input
+              {...input}
+              data={inputData[input.name] || {}}
+              isConnected={!!connections.inputs[input.name]}
+              triggerRecalculation={triggerRecalculation}
+              updateNodeConnections={updateNodeConnections}
+              inputTypes={inputTypes}
+              nodeId={nodeId}
+              inputData={inputData}
+              key={i}
+            />
+          ))}
+        </div>
+      ) : null}
       {!!outputs.length && (
         <div className={styles.outputs}>
           {outputs.map((output, i) => (
@@ -89,9 +91,15 @@ const Input = ({
   }, [isConnected, prevConnected, triggerRecalculation]);
 
   return (
-    <div className={styles.transput} onDragStart={e => {e.preventDefault(); e.stopPropagation()}}>
-      {
-        !hidePort ?
+    <div
+      className={styles.transput}
+      data-controlless={isConnected}
+      onDragStart={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
+      {!hidePort ? (
         <Port
           type={type}
           color={color}
@@ -100,8 +108,7 @@ const Input = ({
           isInput
           triggerRecalculation={triggerRecalculation}
         />
-        : null
-      }
+      ) : null}
       {!noControls && !isConnected
         ? controls.map(control => (
             <Control
@@ -136,7 +143,14 @@ const Output = ({
   const { label: defaultLabel, color } = inputTypes[type] || {};
 
   return (
-    <div className={styles.transput} onDragStart={e => {e.preventDefault(); e.stopPropagation()}}>
+    <div
+      className={styles.transput}
+      data-controlless={true}
+      onDragStart={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <label className={styles.portLabel}>{label || defaultLabel}</label>
       <Port
         type={type}
@@ -158,14 +172,14 @@ const Port = ({
   triggerRecalculation
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
-  const stageState = React.useContext(StageContext)
+  const stageState = React.useContext(StageContext);
   const inputTypes = React.useContext(PortTypesContext);
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStartCoordinates, setDragStartCoordinates] = React.useState({
     x: 0,
     y: 0
   });
-  const dragStartCoordinatesCache = React.useRef(dragStartCoordinates)
+  const dragStartCoordinatesCache = React.useRef(dragStartCoordinates);
   const port = React.useRef();
   const line = React.useRef();
   const lineInToPort = React.useRef();
@@ -179,16 +193,30 @@ const Port = ({
 
     if (isInput) {
       const to = {
-        x: byScale(e.clientX - stage.x - (stage.width / 2)) + byScale(stageState.translate.x),
-        y: byScale(e.clientY - stage.y - (stage.height / 2)) + byScale(stageState.translate.y)
-      }
-      lineInToPort.current.setAttribute("d", calculateCurve(dragStartCoordinatesCache.current, to));
+        x:
+          byScale(e.clientX - stage.x - stage.width / 2) +
+          byScale(stageState.translate.x),
+        y:
+          byScale(e.clientY - stage.y - stage.height / 2) +
+          byScale(stageState.translate.y)
+      };
+      lineInToPort.current.setAttribute(
+        "d",
+        calculateCurve(dragStartCoordinatesCache.current, to)
+      );
     } else {
       const to = {
-        x: byScale(e.clientX - stage.x - (stage.width / 2)) + byScale(stageState.translate.x),
-        y: byScale(e.clientY - stage.y - (stage.height / 2)) + byScale(stageState.translate.y)
-      }
-      line.current.setAttribute("d", calculateCurve(dragStartCoordinatesCache.current, to));
+        x:
+          byScale(e.clientX - stage.x - stage.width / 2) +
+          byScale(stageState.translate.x),
+        y:
+          byScale(e.clientY - stage.y - stage.height / 2) +
+          byScale(stageState.translate.y)
+      };
+      line.current.setAttribute(
+        "d",
+        calculateCurve(dragStartCoordinatesCache.current, to)
+      );
     }
   };
 
@@ -207,15 +235,21 @@ const Port = ({
         input: { nodeId: inputNodeId, portName: inputPortName },
         output: { nodeId: outputNodeId, portName: outputPortName }
       });
-      if(droppedOnPort){
-        const { portName: connectToPortName, nodeId: connectToNodeId, portType: connectToPortType } = e.target.dataset;
-        const inputWillAcceptConnection = inputTypes[connectToPortType].acceptTypes.includes(type);
-        if(inputWillAcceptConnection){
+      if (droppedOnPort) {
+        const {
+          portName: connectToPortName,
+          nodeId: connectToNodeId,
+          portType: connectToPortType
+        } = e.target.dataset;
+        const inputWillAcceptConnection = inputTypes[
+          connectToPortType
+        ].acceptTypes.includes(type);
+        if (inputWillAcceptConnection) {
           nodesDispatch({
-            type: 'ADD_CONNECTION',
-            input: { nodeId: connectToNodeId  , portName: connectToPortName },
+            type: "ADD_CONNECTION",
+            input: { nodeId: connectToNodeId, portName: connectToPortName },
             output: { nodeId: outputNodeId, portName: outputPortName }
-          })
+          });
         }
       }
     } else {
@@ -258,24 +292,40 @@ const Port = ({
       const portIsConnected = !!lineInToPort.current;
       if (portIsConnected) {
         lineInToPort.current.parentNode.style.zIndex = 9999;
-        const outputPort = getPortRect(lineInToPort.current.dataset.outputNodeId, lineInToPort.current.dataset.outputPortName, "output")
+        const outputPort = getPortRect(
+          lineInToPort.current.dataset.outputNodeId,
+          lineInToPort.current.dataset.outputPortName,
+          "output"
+        );
         const coordinates = {
-          x: byScale(outputPort.x - stage.x + (outputPort.width / 2) - (stage.width / 2)) + byScale(stageState.translate.x),
-          y: byScale(outputPort.y - stage.y + (outputPort.width / 2) - (stage.height / 2)) + byScale(stageState.translate.y)
-        }
+          x:
+            byScale(
+              outputPort.x - stage.x + outputPort.width / 2 - stage.width / 2
+            ) + byScale(stageState.translate.x),
+          y:
+            byScale(
+              outputPort.y - stage.y + outputPort.width / 2 - stage.height / 2
+            ) + byScale(stageState.translate.y)
+        };
         setDragStartCoordinates(coordinates);
-        dragStartCoordinatesCache.current = coordinates
+        dragStartCoordinatesCache.current = coordinates;
         setIsDragging(true);
         document.addEventListener("mouseup", handleDragEnd);
         document.addEventListener("mousemove", handleDrag);
       }
     } else {
       const coordinates = {
-        x: byScale(startPort.x - stage.x + (startPort.width / 2) - (stage.width / 2)) + byScale(stageState.translate.x),
-        y: byScale(startPort.y - stage.y + (startPort.width / 2) - (stage.height / 2)) + byScale(stageState.translate.y)
-      }
+        x:
+          byScale(
+            startPort.x - stage.x + startPort.width / 2 - stage.width / 2
+          ) + byScale(stageState.translate.x),
+        y:
+          byScale(
+            startPort.y - stage.y + startPort.width / 2 - stage.height / 2
+          ) + byScale(stageState.translate.y)
+      };
       setDragStartCoordinates(coordinates);
-      dragStartCoordinatesCache.current = coordinates
+      dragStartCoordinatesCache.current = coordinates;
       setIsDragging(true);
       document.addEventListener("mouseup", handleDragEnd);
       document.addEventListener("mousemove", handleDrag);
@@ -293,7 +343,10 @@ const Port = ({
         data-port-type={type}
         data-port-transput-type={isInput ? "input" : "output"}
         data-node-id={nodeId}
-        onDragStart={e => {e.preventDefault(); e.stopPropagation()}}
+        onDragStart={e => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
         ref={port}
       />
       {isDragging && !isInput ? (

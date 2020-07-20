@@ -4062,10 +4062,10 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.3.tgz#c1283ac9f27b368abc1e36d1ff7b04501a30356b"
   integrity sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg==
 
-flume@^0.1.22:
-  version "0.1.25"
-  resolved "https://registry.yarnpkg.com/flume/-/flume-0.1.25.tgz#4cc98312a613cafdb1f2ebc079d312ddf94cfadc"
-  integrity sha512-puakfRVT7sgsdQrPyG/ty7XeVN/7aEuVjs2cZ2vrgopiT4p6q7zp7cxKYPipReZz3su+A+Eo/CwcTNDan9RXdg==
+flume@^0.1.25:
+  version "0.1.26"
+  resolved "https://registry.yarnpkg.com/flume/-/flume-0.1.26.tgz#6116a35c922be267a2c2454599eeeabfb5cd33f4"
+  integrity sha512-HUq2nlIF5CGVEjK2zYkkofklXw6m4XuJiLMDuNBywub5439F8aXEpETamgrSLqEoITy+b4AdMdfDh9BAyVHoOw==
   dependencies:
     d3-shape "^1.3.7"
     lodash "^4.17.15"

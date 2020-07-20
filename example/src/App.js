@@ -183,7 +183,18 @@ flumeConfig
       ports.boolean({ label: "Show Contact Form", name: "showContactForm" }),
       ports.boolean({ label: "Show Login Button", name: "showLoginButton" })
     ]
-  });
+  })
+  .addNodeType({
+    type: "user",
+    label: "Current User",
+    description: "Represents the current user",
+    initialWidth: 130,
+    outputs: ports => [
+      ports.text({name: "firstName", label: "First Name"}),
+      ports.text({name: "lastName", label: "Last Name"}),
+      ports.boolean({name: "isAdmin", label: "Is Logged-in"})
+    ]
+  })
 
 const engine = new RootEngine(
   flumeConfig,
