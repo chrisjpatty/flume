@@ -4063,9 +4063,9 @@ flatten@^1.0.2:
   integrity sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg==
 
 flume@^0.1.25:
-  version "0.1.26"
-  resolved "https://registry.yarnpkg.com/flume/-/flume-0.1.26.tgz#6116a35c922be267a2c2454599eeeabfb5cd33f4"
-  integrity sha512-HUq2nlIF5CGVEjK2zYkkofklXw6m4XuJiLMDuNBywub5439F8aXEpETamgrSLqEoITy+b4AdMdfDh9BAyVHoOw==
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/flume/-/flume-0.1.27.tgz#9aa1a2f598d2608f3d1adba54c0c7cc5ff332040"
+  integrity sha512-pi1cruh76ivRXqKYRnrqZyjadIC4NWoUghQjEy6D69heUlSAKstZrtpju0D53VoHWL++2rRXSVI81lSSO4PeYw==
   dependencies:
     d3-shape "^1.3.7"
     lodash "^4.17.15"

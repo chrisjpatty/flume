@@ -11,6 +11,7 @@
   max-height: 500px;
   overflow-y: auto;
   font-family: Helvetica, sans-serif;
+  line-height: 1.15;
 }
 @supports (backdrop-filter: blur(6px)){
   .wrapper{
@@ -33,6 +34,9 @@
   label{
     margin-bottom: 5px;
     user-select: none;
+    &:last-child{
+      margin-bottom: 0px;
+    }
   }
   p{
     margin: 0px;

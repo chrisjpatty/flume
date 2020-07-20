@@ -9,6 +9,7 @@
   max-width: 300px;
   min-width: 150px;
   font-family: Helvetica, sans-serif;
+  line-height: 1.15;
 }
 @supports (backdrop-filter: blur(6px)){
   .menuWrapper{

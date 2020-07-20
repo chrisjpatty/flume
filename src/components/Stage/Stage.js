@@ -41,6 +41,9 @@ const Stage = ({
 
   const handleWheel = React.useCallback(
     e => {
+      if(e.target.nodeName === "TEXTAREA"){
+        if(e.target.clientHeight < e.target.scrollHeight) return;
+      };
       e.preventDefault();
       if (numNodes > 0) {
         dispatchStageState(({ scale }) => ({

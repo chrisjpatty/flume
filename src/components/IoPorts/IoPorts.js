@@ -93,7 +93,7 @@ const Input = ({
   return (
     <div
       className={styles.transput}
-      data-controlless={isConnected}
+      data-controlless={isConnected || noControls}
       onDragStart={e => {
         e.preventDefault();
         e.stopPropagation();

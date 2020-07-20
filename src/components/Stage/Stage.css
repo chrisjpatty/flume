@@ -33,6 +33,7 @@
   -webkit-overflow-scrolling: touch;
   font-family: Helvetica, sans-serif;
   text-align: left;
+  line-height: 1;
 }
 .wrapper * {
   box-sizing: border-box;

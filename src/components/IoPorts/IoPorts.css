@@ -41,17 +41,23 @@
       }
     }
   }
+  &:first-child{
+    margin-top: 5px;
+  }
 }
 .transput{
   display: flex;
   align-items: center;
-  margin-top: 3px;
+  margin-top: 4px;
   &:first-child{
     margin-top: 0px;
   }
   &[data-controlless="true"]{
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    &:first-child{
+      margin-top: 0px;
+    }
   }
 }
 .portLabel{

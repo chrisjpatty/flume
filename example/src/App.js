@@ -227,7 +227,7 @@ const engine = new RootEngine(
 export default () => {
   const [nodes, setNodes] = React.useState({});
   return (
-    <div className="wrapper">
+    <div className="wrapper" style={{lineHeight: 1.8}}>
       <NodeEditor
         portTypes={flumeConfig.portTypes}
         nodeTypes={flumeConfig.nodeTypes}

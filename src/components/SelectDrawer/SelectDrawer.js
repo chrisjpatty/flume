@@ -39,7 +39,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
           options.map((option, i) => (
             <div className={styles.option} onClick={() => handleClick(option)} key={option.value + i}>
               <label>{option.label}</label>
-              <p>{option.description}</p>
+              {option.description ? <p>{option.description}</p> : null}
             </div>
           ))
         }
