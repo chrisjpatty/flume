@@ -1,5 +1,5 @@
 .wrapper{
-  background: rgba(77, 81, 84, 0.9);
+  background: rgba(91, 96, 99, 0.9);
   border-radius: 5px;
   box-shadow: 0px 5px 8px rgba(0,0,0,.4);
   position: absolute;
@@ -14,7 +14,7 @@
   font-size: 13px;
   text-transform: uppercase;
   padding: 5px;
-  background: #3d4245;
+  background: #464b4e;
   border-radius: 5px 5px 0px 0px;
   margin: 0px;
   margin-bottom: 3px;

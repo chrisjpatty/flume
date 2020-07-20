@@ -32,6 +32,7 @@
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
   font-family: Helvetica, sans-serif;
+  text-align: left;
 }
 .wrapper * {
   box-sizing: border-box;

@@ -45,13 +45,14 @@
 .transput{
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 2px;
   &:first-child{
     margin-top: 0px;
   }
 }
 .portLabel{
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 400;
 }
 .port{
   width: 12px;

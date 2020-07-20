@@ -22,10 +22,13 @@ const Control = ({
   updateNodeConnections,
   getOptions,
   setValue,
-  defaultValue
+  defaultValue,
+  isMonoControl
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const executionContext = React.useContext(ContextContext);
+
+  const calculatedLabel = isMonoControl ? inputLabel : label
 
   const onChange = data => {
     nodesDispatch({
@@ -53,17 +56,17 @@ const Control = ({
           />
         );
       case "text":
-        return <TextInput {...commonProps} placeholder={inputLabel || label} />;
+        return <TextInput {...commonProps} placeholder={placeholder} />;
       case "number":
         return (
           <TextInput
             {...commonProps}
             type="number"
-            placeholder={inputLabel || label}
+            placeholder={placeholder}
           />
         );
       case "checkbox":
-        return <Checkbox {...commonProps} label={inputLabel || label} />;
+        return <Checkbox {...commonProps} label={calculatedLabel} />;
       case "multiselect":
         return (
           <Multiselect
@@ -88,7 +91,10 @@ const Control = ({
     }
   };
 
-  return <div className={styles.wrapper}>{getControlByType(type)}</div>;
+  return <div className={styles.wrapper}>
+    {calculatedLabel && type !== "checkbox" && <label className={styles.controlLabel}>{calculatedLabel}</label>}
+    {getControlByType(type)}
+  </div>;
 };
 
 export default Control;

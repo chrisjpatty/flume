@@ -11,7 +11,7 @@ class RootEngine {
       obj[input.name] = input.value;
       return obj;
     }, {});
-  resolveInputValues = (node, nodeType, nodes) => {
+  resolveInputValues = (node, nodeType, nodes, context) => {
     return nodeType.inputs.reduce((obj, input) => {
       const inputConnections = node.connections.inputs[input.name] || [];
       if (inputConnections.length > 0) {
@@ -19,24 +19,27 @@ class RootEngine {
       } else {
         obj[input.name] = this.resolveInputControls(
           input.type,
-          node.inputData[input.name]
+          node.inputData[input.name],
+          context
         );
       }
       return obj;
     }, {});
   };
-  getValueOfConnection = (connection, nodes) => {
+  getValueOfConnection = (connection, nodes, context) => {
     const outputNode = nodes[connection.nodeId];
     const outputNodeType = this.config.nodeTypes[outputNode.type];
     const inputValues = this.resolveInputValues(
       outputNode,
       outputNodeType,
-      nodes
+      nodes,
+      context
     );
     const outputResult = this.fireNodeFunction(
       outputNode,
       inputValues,
-      outputNodeType
+      outputNodeType,
+      context
     )[connection.portName];
     return outputResult;
   };
@@ -49,7 +52,8 @@ class RootEngine {
         (obj, input) => {
           obj[input.name] = this.resolveInputControls(
             input.type,
-            rootNode.inputData[input.name]
+            rootNode.inputData[input.name],
+            options.context
           );
           return obj;
         },
@@ -60,7 +64,7 @@ class RootEngine {
         (inputName, connection) => {
           return {
             name: inputName,
-            value: this.getValueOfConnection(connection[0], nodes)
+            value: this.getValueOfConnection(connection[0], nodes, options.context)
           };
         }
       );

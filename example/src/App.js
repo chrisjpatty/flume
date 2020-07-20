@@ -199,7 +199,7 @@ const engine = new RootEngine(
         return {};
     }
   },
-  (node, inputValues, nodeType) => {
+  (node, inputValues, nodeType, context) => {
     switch (node.type) {
       case "text":
         return { text: inputValues.text };
@@ -247,7 +247,7 @@ const Website = ({ nodes }) => {
     showDashboard,
     showContactForm,
     showLoginButton
-  } = useRootEngine(nodes, engine);
+  } = useRootEngine(nodes, engine, {someContext: true});
 
   return (
     <div className="website-wrapper">

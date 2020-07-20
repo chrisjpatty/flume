@@ -114,6 +114,7 @@ const Input = ({
               data={data[control.name]}
               key={control.name}
               inputData={inputData}
+              isMonoControl={controls.length === 1}
             />
           ))
         : null}
