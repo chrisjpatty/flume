@@ -13,10 +13,10 @@ import config, { nodes } from "../exampleFlumeConfig";
 import Helmet from "react-helmet";
 
 const getScreenSize = () => {
-  if(window){
-    if (window.matchMedia("(max-width: 700px)").matches) return "extra-small";
-    if (window.matchMedia("(max-width: 960px)").matches) return "small";
-    if (window.matchMedia("(max-width: 1200px)").matches) return "medium";
+  if(global.window){
+    if (global.window.matchMedia("(max-width: 700px)").matches) return "extra-small";
+    if (global.window.matchMedia("(max-width: 960px)").matches) return "small";
+    if (global.window.matchMedia("(max-width: 1200px)").matches) return "medium";
     return "large";
   }
   return "large";
