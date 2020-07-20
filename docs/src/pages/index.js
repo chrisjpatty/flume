@@ -150,13 +150,16 @@ const ExampleBlock = ({ initialScreenSize }) => {
           </h2>
           <p className={styles.desktop}>
             Build apps that are resilient to changing requirements by modeling
-            your business logic as a JSON graph. This is a live Flume node
-            editor. Go ahead, take it for a spin!
+            your business logic as a JSON graph. Flume provides a sleek UI for
+            creating and editing these graphs. <br />
+            <br /> This is a live Flume node editor. Go ahead, take it for a
+            spin!
           </p>
           <p className={styles.mobileInline}>
             Build apps that are resilient to changing requirements by modeling
-            your business logic as a JSON graph. Visit this page on a desktop
-            browser to try out a live node editor.
+            your business logic as a JSON graph. Flume provides a sleek UI for
+            creating and editing these graphs. Visit this page on a desktop
+            browser to try it out live!
           </p>
         </div>
         <div className={styles.flumeWrapper}>
@@ -264,8 +267,8 @@ const FeatureBlocks = () => {
               </span>
             </h3>
             <p className={styles.featureDescription}>
-              (Coming Soon). In a upcoming version, Flume provides provides a stable
-              API for creating sharable themes for the node editor.
+              (Coming Soon). In a upcoming version, Flume provides a stable API
+              for creating sharable themes for the node editor.
             </p>
           </div>
         </div>
