@@ -12,6 +12,9 @@ import { NodeEditor } from "flume";
 import config, { nodes } from "../exampleFlumeConfig";
 import Helmet from "react-helmet";
 
+const TITLE = "Flume"
+const DESCRIPTION = "Extract business logic from your apps with a user-friendly node editor powered by React."
+
 const getScreenSize = () => {
   if(global.window){
     if (global.window.matchMedia("(max-width: 700px)").matches) return "extra-small";
@@ -37,12 +40,13 @@ function Home() {
   // const {siteConfig = {}} = context;
   const initialScreenSize = React.useRef(getScreenSize());
   return (
-    // <Layout
-    //   title={`Flume | Extract business logic from your apps with a user-friendly node editor powered by React.`}
-    //   description="Description will go into a meta tag in <head />"
-    // >
     <div className={styles.homePageWrapper}>
       <Helmet>
+        <title>{TITLE + " | " + DESCRIPTION}</title>
+        <meta property="og:title" content={TITLE} data-react-helmet="true"/>
+        <meta name="description" content={DESCRIPTION} data-react-helmet="true"/>
+        <meta property="og:description" content={DESCRIPTION} data-react-helmet="true"/>
+        <meta property="og:url" content="https://flumejs.netlify.app/" data-react-helmet="true"/>
         <style>
           {`
             body{

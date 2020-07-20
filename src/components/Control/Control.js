@@ -62,7 +62,7 @@ const Control = ({
           />
         );
       case "checkbox":
-        return <Checkbox {...commonProps} label={label} />;
+        return <Checkbox {...commonProps} label={inputLabel || label} />;
       case "multiselect":
         return (
           <Multiselect
