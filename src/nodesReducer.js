@@ -206,23 +206,27 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, portTypes }) => {
     case "ADD_NODE": {
       const { x, y, nodeType } = action;
       const newNodeId = nanoid(10);
+      const newNode = {
+        id: newNodeId,
+        x,
+        y,
+        type: nodeType,
+        width: nodeTypes[nodeType].initialWidth || 200,
+        connections: {
+          inputs: {},
+          outputs: {}
+        },
+        inputData: getDefaultData({
+          nodeType: nodeTypes[nodeType],
+          portTypes
+        })
+      }
+      if(nodeTypes[nodeType].root){
+        newNode.root = true;
+      }
       return {
         ...nodes,
-        [newNodeId]: {
-          id: newNodeId,
-          x,
-          y,
-          type: nodeType,
-          width: nodeTypes[nodeType].initialWidth || 200,
-          connections: {
-            inputs: {},
-            outputs: {}
-          },
-          inputData: getDefaultData({
-            nodeType: nodeTypes[nodeType],
-            portTypes
-          })
-        }
+        [newNodeId]: newNode
       };
     }
 

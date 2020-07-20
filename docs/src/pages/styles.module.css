@@ -69,6 +69,12 @@
 .heroTextBlock .heroSubtitle {
   color: #606060;
   font-size: 45px;
+  margin-top: 15px;
+  line-height: .6;
+}
+.heroTextBlock .heroSubSubtitle{
+  font-size: 28px;
+  line-height: 1.2;
   margin-top: 0px;
 }
 .blueText {
@@ -259,6 +265,9 @@
   .heroTextBlock .heroSubtitle {
     font-size: 35px;
   }
+  .heroTextBlock .heroSubSubtitle {
+    font-size: 23px;
+  }
   .heroBlock {
     min-height: calc(100vh - 250px);
   }
@@ -307,6 +316,10 @@
   .heroTextBlock .heroSubtitle {
     font-size: 30px;
     text-align: center;
+    line-height: 1;
+  }
+  .heroTextBlock .heroSubSubtitle {
+    font-size: 24px;
   }
   .heroBlock {
     flex-direction: column;

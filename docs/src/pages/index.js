@@ -104,6 +104,9 @@ const HeroBlock = () => {
             Build better apps with{" "}
             <span className={styles.whiteText}>Flume.</span>
           </p>
+          <p className={clsx(styles.heroSubtitle, styles.heroSubSubtitle)}>
+            A React-powered node editor and runtime engine
+          </p>
           <div className={styles.mobileColumnCenter}>
             <Link className={styles.pillButton} to="/docs/quick-start">
               Get Started <ArrowRightIcon />

@@ -1,43 +1,22 @@
 import React from "react";
 import "normalize.css";
-
-import { NodeEditor, FlumeConfig, Controls, Colors } from "node-editor";
-
-const BusinessRules = ({rules, onChange, context, redraw}) => {
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const fruit = React.useRef();
-
-  const handleChange = e => {
-    const value = e.target.value;
-    onChange({fruit: value});
-  }
-
-  React.useEffect(() => {
-    redraw()
-  }, [modalOpen, redraw])
-
-  return (
-    <div>
-      <button onClick={() => setModalOpen(x => !x)}>Business Rules</button>
-      {
-        modalOpen &&
-        <div>
-          The modal is open
-          <input onMouseDown={e => e.stopPropagation()} ref={fruit} type="text" onChange={handleChange} />
-        </div>
-      }
-    </div>
-  )
-}
+import {
+  NodeEditor,
+  FlumeConfig,
+  Controls,
+  Colors,
+  RootEngine,
+  useRootEngine
+} from "node-editor";
 
 const colors = [
-  {value: "blue", label: "Blue"},
-  {value: "red", label: "Red"},
-  {value: "green", label: "Green"},
-  {value: "orange", label: "Orange"},
-]
+  { value: "blue", label: "Blue" },
+  { value: "red", label: "Red" },
+  { value: "green", label: "Green" },
+  { value: "orange", label: "Orange" }
+];
 
-const flumeConfig = new FlumeConfig()
+const flumeConfig = new FlumeConfig();
 flumeConfig
   .addPortType({
     type: "number",
@@ -68,9 +47,7 @@ flumeConfig
     name: "boolean",
     label: "True/False",
     color: Colors.grey,
-    controls: [
-      Controls.checkbox({name: "boolean", label: "True/False"})
-    ]
+    controls: [Controls.checkbox({ name: "boolean", label: "True/False" })]
   })
   .addPortType({
     type: "color",
@@ -78,9 +55,12 @@ flumeConfig
     label: "Color",
     color: Colors.blue,
     controls: [
-      Controls.select({name: "color", getOptions: () => {
-        return colors.map(color => color)
-      }})
+      Controls.select({
+        name: "color",
+        getOptions: () => {
+          return colors.map(color => color);
+        }
+      })
     ]
   })
   .addPortType({
@@ -91,8 +71,14 @@ flumeConfig
       Controls.multiselect({
         name: "values",
         label: "Animals",
-        options: ["Cow", "Snake", "Butterfly", "Horse", "Lizard", "Tiger"]
-          .map(animal => ({value: animal.toLowerCase(), label: animal}))
+        options: [
+          "Cow",
+          "Snake",
+          "Butterfly",
+          "Horse",
+          "Lizard",
+          "Tiger"
+        ].map(animal => ({ value: animal.toLowerCase(), label: animal }))
       })
     ]
   })
@@ -103,23 +89,8 @@ flumeConfig
     controls: [
       Controls.select({
         label: "This has no options",
-        placeholder: '[Select an Option]',
+        placeholder: "[Select an Option]",
         options: []
-      })
-    ]
-  })
-  .addPortType({
-    type: "businessRules",
-    name: "businessRules",
-    label: "Business Rules",
-    controls: [
-      Controls.custom({
-        name: "businessRules",
-        label: "Custom Business Rules",
-        defaultValue: {},
-        render: (data, onChange, context, redraw) => (
-          <BusinessRules rules={data} onChange={onChange} context={context} redraw={redraw} />
-        )
       })
     ]
   })
@@ -127,71 +98,49 @@ flumeConfig
     type: "number",
     label: "Number",
     initialWidth: 150,
-    inputs: ports => [
-      ports.number()
-    ],
-    outputs: ports => [
-      ports.number()
-    ]
+    inputs: ports => [ports.number()],
+    outputs: ports => [ports.number()]
   })
   .addNodeType({
     type: "addNumbers",
     label: "Add Numbers",
     initialWidth: 150,
     inputs: ports => [
-      ports.number({name: "num1"}),
-      ports.number({name: "num2"})
+      ports.number({ name: "num1" }),
+      ports.number({ name: "num2" })
     ],
-    outputs: ports => [
-      ports.number({name: "result"})
-    ]
+    outputs: ports => [ports.number({ name: "result" })]
   })
   .addNodeType({
     type: "boolean",
     label: "True/False",
     initialWidth: 150,
-    inputs: ports => [
-      ports.boolean()
-    ],
-    outputs: ports => [
-      ports.boolean()
-    ]
+    inputs: ports => [ports.boolean()],
+    outputs: ports => [ports.boolean()]
   })
   .addNodeType({
     type: "color",
     label: "Color",
     initialWidth: 170,
-    inputs: ports => [
-      ports.color()
-    ],
-    outputs: ports => [
-      ports.color()
-    ]
+    inputs: ports => [ports.color()],
+    outputs: ports => [ports.color()]
   })
   .addNodeType({
     type: "text",
     label: "Text",
     initialWidth: 170,
-    inputs: ports => [
-      ports.text()
-    ],
-    outputs: ports => [
-      ports.text()
-    ]
+    inputs: ports => [ports.text()],
+    outputs: ports => [ports.text()]
   })
   .addNodeType({
     type: "animals",
     label: "Animals",
     initialWidth: 160,
-    inputs: ports => [
-      ports.animals()
-    ],
-    outputs: ports => [
-      ports.animals()
-    ]
+    inputs: ports => [ports.animals()],
+    outputs: ports => [ports.animals()]
   })
   .addNodeType({
-    type: 'stringEquals',
+    type: "stringEquals",
     label: "Text Equals",
     description: "Outputs if text equals another string of text.",
     initialWidth: 170,
@@ -199,17 +148,18 @@ flumeConfig
     inputs: ports => [
       ports.text({ name: "string1", label: "First String" }),
       ports.text({ name: "string2", label: "Second String" }),
-      ports.boolean({ name: "caseSensitive", controls: [
-        Controls.checkbox({
-          label: "Case Sensitive",
-          name: "boolean",
-          defaultValue: true
-        })
-      ] })
+      ports.boolean({
+        name: "caseSensitive",
+        controls: [
+          Controls.checkbox({
+            label: "Case Sensitive",
+            name: "boolean",
+            defaultValue: true
+          })
+        ]
+      })
     ],
-    outputs: ports => [
-      ports.boolean({ name: "result"})
-    ]
+    outputs: ports => [ports.boolean({ name: "result" })]
   })
   .addNodeType({
     type: "noOptions",
@@ -217,36 +167,54 @@ flumeConfig
     description: "This node shows the empty state",
     initialWidth: 170,
     deletable: false,
-    inputs: ports => [
-      ports.noOptions()
-    ]
-  })
-  .addNodeType({
-    type: "businessRules",
-    label: "Business Rules",
-    description: "Lets you choose alternative business rules",
-    inputs: ports => [
-      ports.businessRules()
-    ],
-    outputs: ports => [
-      ports.businessRules()
-    ]
+    inputs: ports => [ports.noOptions()]
   })
   .addNodeType({
     type: "homePage",
     label: "Home Page Attributes",
     description: "Represents the resulting home page",
+    deletable: false,
+    addable: false,
+    root: true,
     inputs: ports => [
-      ports.text({ label: "Homepage Title", name: "homepageTitle", noControls: true }),
-      ports.text({ label: "Homepage Subtitle", name: "homepageSubtitle", noControls: true }),
-      ports.boolean({ label: "Show Dashboard", name: "showDashboard", noControls: true }),
-      ports.boolean({ label: "Show Contact Form", name: "showContactForm", noControls: true }),
-      ports.boolean({ label: "Show Login Button", name: "showLoginButton", noControls: true }),
+      ports.text({ label: "Homepage Title", name: "homepageTitle" }),
+      ports.text({ label: "Homepage Subtitle", name: "homepageSubtitle" }),
+      ports.boolean({ label: "Show Dashboard", name: "showDashboard" }),
+      ports.boolean({ label: "Show Contact Form", name: "showContactForm" }),
+      ports.boolean({ label: "Show Login Button", name: "showLoginButton" })
     ]
-  })
+  });
+
+const engine = new RootEngine(
+  flumeConfig,
+  (type, data) => {
+    switch (type) {
+      case "text":
+        return data.text;
+      case "boolean":
+        return data.boolean;
+      case "number":
+        return data.number;
+      default:
+        return {};
+    }
+  },
+  (node, inputValues, nodeType) => {
+    switch (node.type) {
+      case "text":
+        return { text: inputValues.text };
+      case "boolean":
+        return { boolean: inputValues.boolean };
+      case "number":
+        return { number: inputValues.number };
+      default:
+        return {};
+    }
+  }
+);
 
 export default () => {
-  const [nodes, setNodes] = React.useState({})
+  const [nodes, setNodes] = React.useState({});
   return (
     <div className="wrapper">
       <NodeEditor
@@ -254,11 +222,40 @@ export default () => {
         nodeTypes={flumeConfig.nodeTypes}
         nodes={nodes}
         onChange={nodes => {
-          console.log(nodes);
-          setNodes(nodes)
+          setNodes(nodes);
         }}
+        defaultNodes={[
+          {
+            type: "homePage",
+            x: 400,
+            y: -200
+          }
+        ]}
         debug
       />
+      <div style={{ marginTop: 30 }}>
+        <Website nodes={nodes} />
+      </div>
+    </div>
+  );
+};
+
+const Website = ({ nodes }) => {
+  const {
+    homepageTitle,
+    homepageSubtitle,
+    showDashboard,
+    showContactForm,
+    showLoginButton
+  } = useRootEngine(nodes, engine);
+
+  return (
+    <div className="website-wrapper">
+      <h1>{homepageTitle}</h1>
+      <p>{homepageSubtitle}</p>
+      {showDashboard && <div>Dashboard</div>}
+      {showContactForm && <div>Contact Form</div>}
+      {showLoginButton && <button>Login</button>}
     </div>
   );
 };

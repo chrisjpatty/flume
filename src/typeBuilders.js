@@ -140,8 +140,8 @@ export class FlumeConfig {
     if (config.initialWidth) {
       node.initialWidth = config.initialWidth;
     }
-    if(config.sortIndex !== undefined){
-      node.sortIndex = config.sortIndex
+    if (config.sortIndex !== undefined) {
+      node.sortIndex = config.sortIndex;
     }
     if (typeof config.inputs === "function") {
       const inputs = config.inputs(getPortBuilders(this.portTypes));
@@ -173,6 +173,18 @@ export class FlumeConfig {
       throw new Error(`Optional key, "outputs" must be an array.`);
     } else {
       node.outputs = config.outputs;
+    }
+
+    if (config.root !== undefined) {
+      if (typeof config.root !== "boolean") {
+        throw new Error(`Optional key, "root" must be a boolean.`);
+      } else if (Object.values(this.nodeTypes).find(node => node.root)) {
+        throw new Error(
+          "A root node has already been defined. For root-style graphs only one node may be marked as the root node."
+        );
+      } else {
+        node.root = config.root;
+      }
     }
 
     this.nodeTypes[config.type] = node;

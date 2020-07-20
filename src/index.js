@@ -78,7 +78,7 @@ export let NodeEditor = (
   const previousNodes = usePrevious(nodes);
 
   React.useEffect(() => {
-    if(onChange && nodes !== previousNodes){
+    if(previousNodes && onChange && nodes !== previousNodes){
       onChange(nodes)
     }
   }, [nodes, previousNodes, onChange])
@@ -138,3 +138,6 @@ export let NodeEditor = (
 };
 NodeEditor = React.forwardRef(NodeEditor);
 export { FlumeConfig, Controls, Colors } from './typeBuilders'
+export RootEngine from './RootEngine'
+export const useRootEngine = (nodes, engine) =>
+  Object.keys(nodes).length ? engine.resolveRootNode(nodes) : {};
