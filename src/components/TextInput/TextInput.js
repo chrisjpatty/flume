@@ -3,7 +3,7 @@ import styles from "./TextInput.css";
 
 const TextInput = ({
   placeholder,
-  triggerRecalculation,
+  updateNodeConnections,
   onChange,
   data,
   type
@@ -15,7 +15,7 @@ const TextInput = ({
 
   const handleMouseMove = e => {
     e.stopPropagation();
-    triggerRecalculation();
+    updateNodeConnections();
   };
 
   const handlePossibleResize = e => {

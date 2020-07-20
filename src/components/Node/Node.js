@@ -52,7 +52,7 @@ const Node = ({
         } else {
           combined = output.nodeId + output.portName + id + portName;
         }
-        const cnt = document.querySelector(
+        const cnx = document.querySelector(
           `[data-connection-id="${combined}"]`
         );
         const from = {
@@ -63,7 +63,7 @@ const Node = ({
           x: byScale(fromRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x),
           y: byScale(fromRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y)
         }
-        cnt.setAttribute("d", calculateCurve(from, to))
+        cnx.setAttribute("d", calculateCurve(from, to))
       });
     });
   };

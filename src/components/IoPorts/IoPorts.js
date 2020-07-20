@@ -17,7 +17,8 @@ const IoPorts = ({
   inputs = [],
   outputs = [],
   connections,
-  inputData
+  inputData,
+  updateNodeConnections
 }) => {
   const inputTypes = React.useContext(PortTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
@@ -31,6 +32,7 @@ const IoPorts = ({
             data={inputData[input.name] || {}}
             isConnected={!!connections.inputs[input.name]}
             triggerRecalculation={triggerRecalculation}
+            updateNodeConnections={updateNodeConnections}
             inputTypes={inputTypes}
             nodeId={nodeId}
             inputData={inputData}
@@ -69,6 +71,7 @@ const Input = ({
   inputTypes,
   noControls,
   triggerRecalculation,
+  updateNodeConnections,
   isConnected,
   inputData,
   hidePort
@@ -106,6 +109,7 @@ const Input = ({
               nodeId={nodeId}
               portName={name}
               triggerRecalculation={triggerRecalculation}
+              updateNodeConnections={updateNodeConnections}
               inputLabel={label}
               data={data[control.name]}
               key={control.name}

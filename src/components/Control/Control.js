@@ -19,6 +19,7 @@ const Control = ({
   placeholder,
   inputData,
   triggerRecalculation,
+  updateNodeConnections,
   getOptions,
   setValue,
   defaultValue
@@ -39,7 +40,7 @@ const Control = ({
   };
 
   const getControlByType = type => {
-    const commonProps = { triggerRecalculation, onChange, data };
+    const commonProps = { triggerRecalculation, updateNodeConnections, onChange, data };
     switch (type) {
       case "select":
         return (
