@@ -126,7 +126,7 @@ const reconcileNodes = (initialNodes, nodeTypes, portTypes) => {
   })
 
   // Reconcile input data for each node
-  const reconciledNodes = Object.values(nodes).reduce((nodesObj, node) => {
+  let reconciledNodes = Object.values(nodes).reduce((nodesObj, node) => {
     const nodeType = nodeTypes[node.type]
     const defaultInputData = getDefaultData({nodeType, portTypes})
     const currentInputData = Object.entries(node.inputData).reduce((dataObj, [key, data]) => {
@@ -144,6 +144,22 @@ const reconcileNodes = (initialNodes, nodeTypes, portTypes) => {
       inputData: newInputData
     }
     return nodesObj
+  }, {})
+
+  // Reconcile node attributes for each node
+  reconciledNodes = Object.values(reconciledNodes).reduce((nodesObj, node) => {
+    let newNode = { ...node }
+    const nodeType = nodeTypes[node.type]
+    if(nodeType.root !== node.root){
+      if(nodeType.root && !node.root){
+        newNode.root = nodeType.root
+      }
+      else if(!nodeType.root && node.root){
+        delete newNode.root;
+      }
+    }
+    nodesObj[node.id] = newNode
+    return nodesObj;
   }, {})
 
   return reconciledNodes
