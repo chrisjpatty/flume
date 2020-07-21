@@ -68,7 +68,11 @@ class RootEngine {
           };
         }
       );
-      return { ...controlValues, ...inputValues };
+      if(options.onlyResolveConnected){
+        return inputValues
+      }else{
+        return { ...controlValues, ...inputValues };
+      }
     } else {
       console.error("A root node was not found. The Root Engine requires that exactly one node be marked as the root node.")
       return {}
