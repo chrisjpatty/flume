@@ -12,6 +12,7 @@ import PageCurveDark from "@site/static/img/page-curve-dark.svg";
 import { NodeEditor } from "flume";
 import config, { nodes } from "../exampleFlumeConfig";
 import Helmet from "react-helmet";
+import TypeSafeAnimation from '../components/TypeSafe'
 
 const TITLE = "Flume";
 const DESCRIPTION =
@@ -42,7 +43,12 @@ const RedSpan = ({ children }) => (
 function Home() {
   // const context = useDocusaurusContext();
   // const {siteConfig = {}} = context;
-  const initialScreenSize = React.useRef(getScreenSize());
+  const [initialScreenSize, setInitialScreenSize] = React.useState(getScreenSize());
+
+  React.useEffect(() => {
+    setInitialScreenSize(getScreenSize())
+  }, [])
+
   return (
     <div className={styles.homePageWrapper}>
       <Helmet>
@@ -78,7 +84,6 @@ function Home() {
       <FeatureBlocks />
       <CallToActionBlock />
     </div>
-    // </Layout>
   );
 }
 
@@ -227,10 +232,8 @@ const TypeSafetyBlock = () => {
           </div>
         </div>
         <div className={styles.typeSafeImageWrapper}>
-          <img
+          <TypeSafeAnimation
             className={styles.typeSafeImage}
-            src="img/type-safe-nodes.svg"
-            alt="Nodes demonstrating type safety"
           />
         </div>
       </div>

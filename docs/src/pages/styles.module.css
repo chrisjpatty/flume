@@ -226,14 +226,16 @@
 }
 .typeSafeImageWrapper {
   width: 45%;
+  max-width: 600px;
   transform: translate(7%, 6%);
   display: flex;
   align-items: center;
+  margin-top: -15vh;
 }
 .typeSafeImage {
   margin-top: 4%;
   width: 100%;
-  max-width: 650px;
+  max-width: 500px;
 }
 .innerTextWrapper {
   max-width: 700px;
@@ -295,6 +297,12 @@
   .heroBlock {
     min-height: calc(100vh - 250px);
   }
+  .exampleTitleBlock{
+    font-size: 60px;
+  }
+  .exampleTextBlock p{
+    font-size: 28px;
+  }
 }
 
 @media screen and (max-width: 960px) {
@@ -335,7 +343,7 @@
   }
   .heroTextBlock {
     width: 100%;
-    min-height: 80vh;
+    min-height: 75vh;
   }
   .heroTextBlock .heroSubtitle {
     font-size: 30px;
@@ -367,10 +375,11 @@
     border-radius: 25px;
   }
   .typeSafeWrapper{
-    padding-bottom: 12vh;
+    padding-bottom: 6vh;
   }
   .typeSafeInnerWrapper {
     flex-direction: column;
+    align-items: center;
   }
   .halfTextBlock {
     width: 100%;
@@ -378,6 +387,13 @@
   .typeSafeImageWrapper {
     width: 100%;
     transform: none;
+    justify-content: center;
+    max-width: 500px;
+    margin-top: -8vh;
+    margin-bottom: 3vw;
+  }
+  .typeSafeImage{
+    margin-top: 0px;
   }
   .mobileColumnCenter {
     display: flex;

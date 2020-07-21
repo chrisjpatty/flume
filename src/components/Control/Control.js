@@ -28,7 +28,7 @@ const Control = ({
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const executionContext = React.useContext(ContextContext);
 
-  const calculatedLabel = isMonoControl ? inputLabel : label
+  const calculatedLabel = isMonoControl ? inputLabel : label;
 
   const onChange = data => {
     nodesDispatch({
@@ -43,7 +43,12 @@ const Control = ({
   };
 
   const getControlByType = type => {
-    const commonProps = { triggerRecalculation, updateNodeConnections, onChange, data };
+    const commonProps = {
+      triggerRecalculation,
+      updateNodeConnections,
+      onChange,
+      data
+    };
     switch (type) {
       case "select":
         return (
@@ -59,11 +64,7 @@ const Control = ({
         return <TextInput {...commonProps} placeholder={placeholder} />;
       case "number":
         return (
-          <TextInput
-            {...commonProps}
-            type="number"
-            placeholder={placeholder}
-          />
+          <TextInput {...commonProps} type="number" placeholder={placeholder} />
         );
       case "checkbox":
         return <Checkbox {...commonProps} label={calculatedLabel} />;
@@ -91,10 +92,14 @@ const Control = ({
     }
   };
 
-  return <div className={styles.wrapper}>
-    {calculatedLabel && type !== "checkbox" && <label className={styles.controlLabel}>{calculatedLabel}</label>}
-    {getControlByType(type)}
-  </div>;
+  return (
+    <div className={styles.wrapper}>
+      {calculatedLabel && type !== "checkbox" && type !== "checkbox" && (
+        <label className={styles.controlLabel}>{calculatedLabel}</label>
+      )}
+      {getControlByType(type)}
+    </div>
+  );
 };
 
 export default Control;

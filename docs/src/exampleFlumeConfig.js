@@ -180,7 +180,7 @@ export const nodes = {
   vKwUIZVHKC: {
     id: "vKwUIZVHKC",
     x: 319.5,
-    y: -108.484375,
+    y: -98.484375,
     type: "pageAttributes",
     width: 160,
     connections: {
@@ -201,7 +201,7 @@ export const nodes = {
   "0-C_tbjpFz": {
     id: "0-C_tbjpFz",
     x: -433.5,
-    y: -208.484375,
+    y: -198.484375,
     type: "user",
     width: 130,
     connections: {
@@ -220,8 +220,8 @@ export const nodes = {
   },
   GgUjDuZ5NO: {
     id: "GgUjDuZ5NO",
-    x: -445.5,
-    y: 26.515625,
+    x: -425.5,
+    y: -16.515625,
     type: "window",
     width: 120,
     connections: {
@@ -232,8 +232,8 @@ export const nodes = {
   },
   nBTq1DExea: {
     id: "nBTq1DExea",
-    x: -273.5,
-    y: 3.515625,
+    x: -263.5,
+    y: 50.515625,
     type: "isLessThan",
     width: 120,
     connections: {
@@ -245,7 +245,7 @@ export const nodes = {
   "pLJO3-S19X": {
     id: "pLJO3-S19X",
     x: -204.5,
-    y: -254.484375,
+    y: -244.484375,
     type: "joinStrings",
     width: 150,
     connections: {
@@ -257,7 +257,7 @@ export const nodes = {
   v0wTiY0tkd: {
     id: "v0wTiY0tkd",
     x: 63.5,
-    y: -253.484375,
+    y: -243.484375,
     type: "stringSwitch",
     width: 180,
     connections: {
@@ -276,7 +276,7 @@ export const nodes = {
   "76wBOXsawD": {
     id: "76wBOXsawD",
     x: -105.5,
-    y: -49.484375,
+    y: -39.484375,
     type: "and",
     width: 100,
     connections: {
@@ -291,7 +291,7 @@ export const nodes = {
   "Oa-DLmE0-J": {
     id: "Oa-DLmE0-J",
     x: 26.5,
-    y: 71.515625,
+    y: 81.515625,
     type: "and",
     width: 100,
     connections: {
@@ -306,7 +306,7 @@ export const nodes = {
   Vos5ZL3HOQ: {
     id: "Vos5ZL3HOQ",
     x: 157.5,
-    y: -9.484375,
+    y: 1.484375,
     type: "reverseBoolean",
     width: 100,
     connections: {
