@@ -4,7 +4,15 @@ class RootEngine {
     this.fireNodeFunction = fireNodeFunction;
     this.resolveInputControls = resolveInputControls;
   }
-  getRootNode = nodes => Object.values(nodes).find(n => n.root);
+  getRootNode = nodes => {
+    const roots = Object.values(nodes).filter(n => n.root);
+    if (roots.length > 1) {
+      throw new Error(
+        "The root engine must not be called with more than one root node."
+      );
+    }
+    return roots[0];
+  };
   reduceRootInputs = (inputs, callback) =>
     Object.entries(inputs).reduce((obj, [inputName, connection]) => {
       const input = callback(inputName, connection);
@@ -64,18 +72,24 @@ class RootEngine {
         (inputName, connection) => {
           return {
             name: inputName,
-            value: this.getValueOfConnection(connection[0], nodes, options.context)
+            value: this.getValueOfConnection(
+              connection[0],
+              nodes,
+              options.context
+            )
           };
         }
       );
-      if(options.onlyResolveConnected){
-        return inputValues
-      }else{
+      if (options.onlyResolveConnected) {
+        return inputValues;
+      } else {
         return { ...controlValues, ...inputValues };
       }
     } else {
-      console.error("A root node was not found. The Root Engine requires that exactly one node be marked as the root node.")
-      return {}
+      console.error(
+        "A root node was not found. The Root Engine requires that exactly one node be marked as the root node."
+      );
+      return {};
     }
   }
 }

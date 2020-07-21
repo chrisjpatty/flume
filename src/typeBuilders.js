@@ -178,10 +178,6 @@ export class FlumeConfig {
     if (config.root !== undefined) {
       if (typeof config.root !== "boolean") {
         throw new Error(`Optional key, "root" must be a boolean.`);
-      } else if (Object.values(this.nodeTypes).find(node => node.root)) {
-        throw new Error(
-          "A root node has already been defined. For root-style graphs only one node may be marked as the root node."
-        );
       } else {
         node.root = config.root;
       }
