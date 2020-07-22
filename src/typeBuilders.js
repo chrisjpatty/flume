@@ -102,9 +102,14 @@ export const getPortBuilders = ports =>
   }, {});
 
 export class FlumeConfig {
-  constructor() {
-    this.nodeTypes = {};
-    this.portTypes = {};
+  constructor(config) {
+    if(config){
+      this.nodeTypes = config.nodeType || {};
+      this.portTypes = config.portTypes || {};
+    }else{
+      this.nodeTypes = {};
+      this.portTypes = {};
+    }
   }
   addNodeType(config) {
     if (typeof config !== "object" && config !== null) {
@@ -186,6 +191,13 @@ export class FlumeConfig {
     this.nodeTypes[config.type] = node;
     return this;
   }
+  removeNodeType(type) {
+    if (!this.nodeTypes[type]) {
+      console.error(`Non-existent node type "${type}" cannot be removed.`);
+    } else {
+      delete this.nodeTypes[type];
+    }
+  }
   addPortType(config) {
     if (typeof config !== "object" && config !== null) {
       throw new Error(
@@ -234,5 +246,25 @@ export class FlumeConfig {
 
     this.portTypes[config.type] = port;
     return this;
+  }
+  removePortType(type) {
+    if (!this.portTypes[type]) {
+      console.error(`Non-existent port type "${type}" cannot be removed.`);
+    }else{
+      const affectedNodes = Object.values(this.nodeTypes).filter(
+        node =>
+          node.inputs.find(p => p.type === type) ||
+          node.outputs.find(p => p.type === type)
+      );
+      if (affectedNodes.length) {
+        throw new Error(
+          `Cannot delete port type "${type}" without first deleting all node types using these ports: [${affectedNodes.map(
+            n => `${n.type}`
+          ).join(", ")}]`
+        );
+      }else{
+        delete this.portTypes[type]
+      }
+    }
   }
 }
