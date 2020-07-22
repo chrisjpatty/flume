@@ -37,11 +37,17 @@ export const Controls = {
       placeholder: define(config.placeholder, undefined)
     })
   ),
-  number: buildControlType({
-    type: "number",
-    name: "number",
-    defaultValue: 0
-  }),
+  number: buildControlType(
+    {
+      type: "number",
+      name: "number",
+      defaultValue: 0
+    },
+    () => {},
+    config => ({
+      step: define(config.step, undefined)
+    })
+  ),
   checkbox: buildControlType({
     type: "checkbox",
     name: "checkbox",
@@ -103,10 +109,10 @@ export const getPortBuilders = ports =>
 
 export class FlumeConfig {
   constructor(config) {
-    if(config){
-      this.nodeTypes = {...config.nodeTypes};
-      this.portTypes = {...config.portTypes};
-    }else{
+    if (config) {
+      this.nodeTypes = { ...config.nodeTypes };
+      this.portTypes = { ...config.portTypes };
+    } else {
       this.nodeTypes = {};
       this.portTypes = {};
     }
@@ -195,8 +201,8 @@ export class FlumeConfig {
     if (!this.nodeTypes[type]) {
       console.error(`Non-existent node type "${type}" cannot be removed.`);
     } else {
-      const {[type]: deleted, ...nodeTypes} = this.nodeTypes;
-      this.nodeTypes = nodeTypes
+      const { [type]: deleted, ...nodeTypes } = this.nodeTypes;
+      this.nodeTypes = nodeTypes;
     }
     return this;
   }
@@ -252,7 +258,7 @@ export class FlumeConfig {
   removePortType(type) {
     if (!this.portTypes[type]) {
       console.error(`Non-existent port type "${type}" cannot be removed.`);
-    }else{
+    } else {
       const affectedNodes = Object.values(this.nodeTypes).filter(
         node =>
           node.inputs.find(p => p.type === type) ||
@@ -260,13 +266,13 @@ export class FlumeConfig {
       );
       if (affectedNodes.length) {
         throw new Error(
-          `Cannot delete port type "${type}" without first deleting all node types using these ports: [${affectedNodes.map(
-            n => `${n.type}`
-          ).join(", ")}]`
+          `Cannot delete port type "${type}" without first deleting all node types using these ports: [${affectedNodes
+            .map(n => `${n.type}`)
+            .join(", ")}]`
         );
-      }else{
-        const {[type]: deleted, ...portTypes} = this.portTypes;
-        this.portTypes = portTypes
+      } else {
+        const { [type]: deleted, ...portTypes } = this.portTypes;
+        this.portTypes = portTypes;
       }
     }
     return this;
