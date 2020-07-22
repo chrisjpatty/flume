@@ -104,8 +104,8 @@ export const getPortBuilders = ports =>
 export class FlumeConfig {
   constructor(config) {
     if(config){
-      this.nodeTypes = config.nodeTypes || {};
-      this.portTypes = config.portTypes || {};
+      this.nodeTypes = {...config.nodeTypes};
+      this.portTypes = {...config.portTypes};
     }else{
       this.nodeTypes = {};
       this.portTypes = {};
@@ -195,7 +195,8 @@ export class FlumeConfig {
     if (!this.nodeTypes[type]) {
       console.error(`Non-existent node type "${type}" cannot be removed.`);
     } else {
-      delete this.nodeTypes[type];
+      const {[type]: deleted, ...nodeTypes} = this.nodeTypes;
+      this.nodeTypes = nodeTypes
     }
     return this;
   }
@@ -264,7 +265,8 @@ export class FlumeConfig {
           ).join(", ")}]`
         );
       }else{
-        delete this.portTypes[type]
+        const {[type]: deleted, ...portTypes} = this.portTypes;
+        this.portTypes = portTypes
       }
     }
     return this;
