@@ -16,7 +16,8 @@ const Stage = ({
   children,
   outerStageChildren,
   numNodes,
-  stageRef
+  stageRef,
+  spaceToPan
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
@@ -26,6 +27,7 @@ const Stage = ({
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
   const dragData = React.useRef({ x: 0, y: 0 });
   const dragDelayStartCoordinates = React.useRef({ x: 0, y: 0 });
+  const [spaceIsPressed, setSpaceIsPressed] = React.useState(false)
 
   const setStageRect = React.useCallback(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
@@ -161,23 +163,48 @@ const Stage = ({
   };
 
   const startDragDelay = e => {
-    e.stopPropagation();
-    if(numNodes > 0){
-      let x;
-      let y;
-      if ("ontouchstart" in window && e.touches) {
-        x = e.touches[0].clientX;
-        y = e.touches[0].clientY;
-      } else {
-        e.preventDefault();
-        x = e.clientX;
-        y = e.clientY;
+    wrapper.current.focus()
+    if(spaceToPan ? spaceIsPressed : true){
+      e.stopPropagation();
+      if(numNodes > 0){
+        let x;
+        let y;
+        if ("ontouchstart" in window && e.touches) {
+          x = e.touches[0].clientX;
+          y = e.touches[0].clientY;
+        } else {
+          e.preventDefault();
+          x = e.clientX;
+          y = e.clientY;
+        }
+        dragDelayStartCoordinates.current = { x, y };
+        document.addEventListener("mouseup", endDragDelay);
+        document.addEventListener("mousemove", checkDragDelay);
       }
-      dragDelayStartCoordinates.current = { x, y };
-      document.addEventListener("mouseup", endDragDelay);
-      document.addEventListener("mousemove", checkDragDelay);
     }
   };
+
+  const handleDocumentKeyUp = e => {
+    if(e.which === 32){
+      setSpaceIsPressed(false)
+      document.removeEventListener('keyup', handleDocumentKeyUp)
+    }
+  }
+
+  const handleKeyDown = e => {
+    if(e.which === 32 && document.activeElement === wrapper.current){
+      e.preventDefault()
+      e.stopPropagation()
+      setSpaceIsPressed(true)
+      document.addEventListener('keyup', handleDocumentKeyUp)
+    }
+  }
+
+  const handleMouseEnter = () => {
+    if(!wrapper.current.contains(document.activeElement)){
+      wrapper.current.focus()
+    }
+  }
 
   React.useEffect(() => {
     let stageWrapper = wrapper.current;
@@ -193,8 +220,12 @@ const Stage = ({
       className={styles.wrapper}
       ref={wrapper}
       onContextMenu={handleContextMenu}
+      onMouseEnter={handleMouseEnter}
       onMouseDown={startDragDelay}
       onTouchStart={startDragDelay}
+      onKeyDown={handleKeyDown}
+      tabIndex={-1}
+      style={{cursor: spaceIsPressed && spaceToPan ? 'grab' : ''}}
     >
       {menuOpen ? (
         <Portal>

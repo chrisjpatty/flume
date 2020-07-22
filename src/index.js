@@ -31,6 +31,7 @@ export let NodeEditor = (
     context = {},
     onChange,
     initialScale,
+    spaceToPan = false,
     debug
   },
   ref
@@ -93,6 +94,7 @@ export let NodeEditor = (
                 <Stage
                   scale={stageState.scale}
                   translate={stageState.translate}
+                  spaceToPan={spaceToPan}
                   dispatchStageState={dispatchStageState}
                   stageRef={stage}
                   numNodes={Object.keys(nodes).length}
