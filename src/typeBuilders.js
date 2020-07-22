@@ -197,6 +197,7 @@ export class FlumeConfig {
     } else {
       delete this.nodeTypes[type];
     }
+    return this;
   }
   addPortType(config) {
     if (typeof config !== "object" && config !== null) {
@@ -266,5 +267,6 @@ export class FlumeConfig {
         delete this.portTypes[type]
       }
     }
+    return this;
   }
 }
