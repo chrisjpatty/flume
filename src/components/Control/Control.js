@@ -15,6 +15,7 @@ const Control = ({
   inputLabel,
   data,
   render,
+  step,
   options = [],
   placeholder,
   inputData,
@@ -64,7 +65,7 @@ const Control = ({
         return <TextInput {...commonProps} placeholder={placeholder} />;
       case "number":
         return (
-          <TextInput {...commonProps} type="number" placeholder={placeholder} />
+          <TextInput {...commonProps} step={step} type="number" placeholder={placeholder} />
         );
       case "checkbox":
         return <Checkbox {...commonProps} label={calculatedLabel} />;

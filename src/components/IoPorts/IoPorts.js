@@ -241,15 +241,18 @@ const Port = ({
           nodeId: connectToNodeId,
           portType: connectToPortType
         } = e.target.dataset;
-        const inputWillAcceptConnection = inputTypes[
-          connectToPortType
-        ].acceptTypes.includes(type);
-        if (inputWillAcceptConnection) {
-          nodesDispatch({
-            type: "ADD_CONNECTION",
-            input: { nodeId: connectToNodeId, portName: connectToPortName },
-            output: { nodeId: outputNodeId, portName: outputPortName }
-          });
+        const isNotSameNode = outputNodeId !== connectToNodeId;
+        if (isNotSameNode) {
+          const inputWillAcceptConnection = inputTypes[
+            connectToPortType
+          ].acceptTypes.includes(type);
+          if (inputWillAcceptConnection) {
+            nodesDispatch({
+              type: "ADD_CONNECTION",
+              input: { nodeId: connectToNodeId, portName: connectToPortName },
+              output: { nodeId: outputNodeId, portName: outputPortName }
+            });
+          }
         }
       }
     } else {
@@ -259,16 +262,19 @@ const Port = ({
           nodeId: inputNodeId,
           portType: inputNodeType
         } = e.target.dataset;
-        const inputWillAcceptConnection = inputTypes[
-          inputNodeType
-        ].acceptTypes.includes(type);
-        if (inputWillAcceptConnection) {
-          nodesDispatch({
-            type: "ADD_CONNECTION",
-            output: { nodeId, portName: name },
-            input: { nodeId: inputNodeId, portName: inputPortName }
-          });
-          triggerRecalculation();
+        const isNotSameNode = inputNodeId !== nodeId;
+        if (isNotSameNode) {
+          const inputWillAcceptConnection = inputTypes[
+            inputNodeType
+          ].acceptTypes.includes(type);
+          if (inputWillAcceptConnection) {
+            nodesDispatch({
+              type: "ADD_CONNECTION",
+              output: { nodeId, portName: name },
+              input: { nodeId: inputNodeId, portName: inputPortName }
+            });
+            triggerRecalculation();
+          }
         }
       }
     }

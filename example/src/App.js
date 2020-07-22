@@ -190,11 +190,11 @@ flumeConfig
     description: "Represents the current user",
     initialWidth: 130,
     outputs: ports => [
-      ports.text({name: "firstName", label: "First Name"}),
-      ports.text({name: "lastName", label: "Last Name"}),
-      ports.boolean({name: "isAdmin", label: "Is Logged-in"})
+      ports.text({ name: "firstName", label: "First Name" }),
+      ports.text({ name: "lastName", label: "Last Name" }),
+      ports.boolean({ name: "isAdmin", label: "Is Logged-in" })
     ]
-  })
+  });
 
 const engine = new RootEngine(
   flumeConfig,
@@ -227,7 +227,7 @@ const engine = new RootEngine(
 export default () => {
   const [nodes, setNodes] = React.useState({});
   return (
-    <div className="wrapper" style={{lineHeight: 1.8}}>
+    <div className="wrapper" style={{ lineHeight: 1.8 }}>
       <NodeEditor
         portTypes={flumeConfig.portTypes}
         nodeTypes={flumeConfig.nodeTypes}
@@ -258,7 +258,7 @@ const Website = ({ nodes }) => {
     showDashboard,
     showContactForm,
     showLoginButton
-  } = useRootEngine(nodes, engine, {someContext: true});
+  } = useRootEngine(nodes, engine, { someContext: true });
 
   return (
     <div className="website-wrapper">
