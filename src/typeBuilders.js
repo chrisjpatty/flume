@@ -104,7 +104,7 @@ export const getPortBuilders = ports =>
 export class FlumeConfig {
   constructor(config) {
     if(config){
-      this.nodeTypes = config.nodeType || {};
+      this.nodeTypes = config.nodeTypes || {};
       this.portTypes = config.portTypes || {};
     }else{
       this.nodeTypes = {};
