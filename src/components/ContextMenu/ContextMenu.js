@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./ContextMenu.css";
+import clamp from "lodash/clamp";
 const nanoid = require("nanoid");
 
 const ContextMenu = ({
@@ -74,7 +75,7 @@ const ContextMenu = ({
   const handleKeyDown = e => {
     // Up pressed
     if (e.which === 38) {
-      e.preventDefault()
+      e.preventDefault();
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex > 0) {
@@ -83,7 +84,7 @@ const ContextMenu = ({
     }
     // Down pressed
     if (e.which === 40) {
-      e.preventDefault()
+      e.preventDefault();
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex < filteredOptions.length - 1) {
@@ -116,7 +117,7 @@ const ContextMenu = ({
         optionRect.y + optionRect.height > menuRect.y + menuRect.height ||
         optionRect.y < menuRect.y
       ) {
-        menuOption.scrollIntoView({ block: "nearest"});
+        menuOption.scrollIntoView({ block: "nearest" });
       }
     }
   }, [selectedIndex]);
@@ -155,7 +156,7 @@ const ContextMenu = ({
         className={styles.optionsWrapper}
         role="menu"
         ref={menuOptionsWrapper}
-        style={{ maxHeight: window.innerHeight - y - 70 }}
+        style={{ maxHeight: clamp(window.innerHeight - y - 70, 10, 300) }}
       >
         {filteredOptions.map((option, i) => (
           <ContextOption

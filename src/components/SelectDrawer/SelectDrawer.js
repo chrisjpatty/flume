@@ -1,6 +1,7 @@
 import React from "react";
 import { Portal } from "react-portal";
 import styles from "./SelectDrawer.css";
+import clamp from "lodash/clamp";
 const nanoid = require("nanoid");
 
 const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
@@ -27,7 +28,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
   const handleKeyDown = e => {
     // Up pressed
     if (e.which === 38) {
-      e.preventDefault()
+      e.preventDefault();
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex > 0) {
@@ -36,7 +37,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
     }
     // Down pressed
     if (e.which === 40) {
-      e.preventDefault()
+      e.preventDefault();
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex < options.length - 1) {
@@ -71,7 +72,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
         optionRect.y + optionRect.height > menuRect.y + menuRect.height ||
         optionRect.y < menuRect.y
       ) {
-        menuOption.scrollIntoView({ block: "nearest"});
+        menuOption.scrollIntoView({ block: "nearest" });
       }
     }
   }, [selectedIndex]);
@@ -80,7 +81,11 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
     <Portal>
       <div
         className={styles.wrapper}
-        style={{ left: x, top: y, maxHeight: window.innerHeight - y - 10 }}
+        style={{
+          left: x,
+          top: y,
+          maxHeight: clamp(window.innerHeight - y - 10, 10, 300)
+        }}
         ref={wrapper}
         onKeyDown={handleKeyDown}
         role="menu"
