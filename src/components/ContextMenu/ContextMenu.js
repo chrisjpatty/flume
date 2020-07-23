@@ -13,13 +13,14 @@ const ContextMenu = ({
   emptyText
 }) => {
   const menuWrapper = React.useRef();
+  const menuOptionsWrapper = React.useRef();
   const filterInput = React.useRef();
   const [filter, setFilter] = React.useState("");
   const [menuWidth, setMenuWidth] = React.useState(0);
 
   const handleOptionSelected = option => {
     onOptionSelected(option);
-    onRequestClose()
+    onRequestClose();
   };
 
   const testClickOutside = React.useCallback(
@@ -43,7 +44,7 @@ const ContextMenu = ({
   );
 
   React.useEffect(() => {
-    if(filterInput.current){
+    if (filterInput.current) {
       filterInput.current.focus();
     }
     setMenuWidth(menuWrapper.current.getBoundingClientRect().width);
@@ -65,15 +66,18 @@ const ContextMenu = ({
     <div
       className={styles.menuWrapper}
       onMouseDown={e => e.stopPropagation()}
-      style={{ left: x, top: y, width: filter ? menuWidth : "auto" }}
+      onKeyDown={handleKeyDown}
+      style={{
+        left: x,
+        top: y,
+        width: filter ? menuWidth : "auto"
+      }}
       ref={menuWrapper}
     >
-      {
-        !hideHeader ?
+      {!hideHeader ? (
         <div className={styles.menuHeader}>
           <label className={styles.menuLabel}>{label}</label>
-          {
-            !hideFilter ?
+          {!hideFilter ? (
             <input
               type="text"
               placeholder="Filter options"
@@ -81,11 +85,16 @@ const ContextMenu = ({
               onChange={e => setFilter(e.target.value)}
               className={styles.menuFilter}
               ref={filterInput}
-            /> : null
-          }
-        </div> : null
-      }
-      <div className={styles.optionsWrapper} role="menu">
+            />
+          ) : null}
+        </div>
+      ) : null}
+      <div
+        className={styles.optionsWrapper}
+        role="menu"
+        ref={menuOptionsWrapper}
+        style={{ maxHeight: window.innerHeight - y - 70 }}
+      >
         {filteredOptions.map((option, i) => (
           <ContextOption
             onClick={() => handleOptionSelected(option)}
@@ -95,11 +104,9 @@ const ContextMenu = ({
             {option.description ? <p>{option.description}</p> : null}
           </ContextOption>
         ))}
-        {
-          !options.length ?
+        {!options.length ? (
           <span className={styles.emptyText}>{emptyText}</span>
-          : null
-        }
+        ) : null}
       </div>
     </div>
   );

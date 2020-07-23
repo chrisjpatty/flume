@@ -8,6 +8,8 @@
   font-size: 14px;
   max-width: 300px;
   min-width: 150px;
+  max-height: 500px;
+  overflow-y: auto;
   font-family: Helvetica, sans-serif;
   line-height: 1.15;
 }

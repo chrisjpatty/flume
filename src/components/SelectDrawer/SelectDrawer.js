@@ -32,7 +32,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
     <Portal>
       <div
         className={styles.wrapper}
-        style={{ left: x, top: y }}
+        style={{ left: x, top: y, maxHeight: window.innerHeight - y - 10 }}
         ref={wrapper}
       >
         {
