@@ -3,11 +3,10 @@ import styles from "./Stage.css";
 import { Portal } from "react-portal";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import { NodeTypesContext, NodeDispatchContext } from "../../context";
+import Draggable from '../Draggable/Draggable'
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
 import { STAGE_WRAPPER_ID } from "../../constants";
-
-const DRAG_DELAY = 5;
 
 const Stage = ({
   scale,
@@ -26,7 +25,6 @@ const Stage = ({
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
   const dragData = React.useRef({ x: 0, y: 0 });
-  const dragDelayStartCoordinates = React.useRef({ x: 0, y: 0 });
   const [spaceIsPressed, setSpaceIsPressed] = React.useState(false)
 
   const setStageRect = React.useCallback(() => {
@@ -48,16 +46,29 @@ const Stage = ({
       };
       e.preventDefault();
       if (numNodes > 0) {
+        const delta = e.deltaY;
         dispatchStageState(({ scale }) => ({
           type: "SET_SCALE",
-          scale: clamp(scale - clamp(e.deltaY, -10, 10) * 0.005, 0.1, 7)
+          scale: clamp(scale - clamp(delta, -10, 10) * 0.005, 0.1, 7)
         }));
       }
     },
     [dispatchStageState, numNodes]
   );
 
-  const handleMouseDrag = e => {
+  const handleDragDelayStart = (e) => {
+    wrapper.current.focus()
+  };
+
+  const handleDragStart = e => {
+    e.preventDefault();
+    dragData.current = {
+      x: e.clientX,
+      y: e.clientY
+    };
+  };
+
+  const handleMouseDrag = (coords, e) => {
     const xDistance = dragData.current.x - e.clientX;
     const yDistance = dragData.current.y - e.clientY;
     translateWrapper.current.style.transform = `translate(${-(
@@ -65,7 +76,7 @@ const Stage = ({
     )}px, ${-(translate.y + yDistance)}px)`;
   };
 
-  const handleMouseUp = e => {
+  const handleDragEnd = e => {
     const xDistance = dragData.current.x - e.clientX;
     const yDistance = dragData.current.y - e.clientY;
     dragData.current.x = e.clientX;
@@ -77,18 +88,6 @@ const Stage = ({
         y: tran.y + yDistance
       }
     }));
-    document.removeEventListener("mousemove", handleMouseDrag);
-    document.removeEventListener("mouseup", handleMouseUp);
-  };
-
-  const handleDragStart = e => {
-    e.preventDefault();
-    dragData.current = {
-      x: e.clientX,
-      y: e.clientY
-    };
-    document.addEventListener("mousemove", handleMouseDrag);
-    document.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleContextMenu = e => {
@@ -135,55 +134,6 @@ const Stage = ({
     });
   };
 
-  const checkDragDelay = e => {
-    let x;
-    let y;
-    if ("ontouchstart" in window && e.touches) {
-      x = e.touches[0].clientX;
-      y = e.touches[0].clientY;
-    } else {
-      e.preventDefault();
-      x = e.clientX;
-      y = e.clientY;
-    }
-    let a = Math.abs(dragDelayStartCoordinates.current.x - x);
-    let b = Math.abs(dragDelayStartCoordinates.current.y - y);
-    let distance = Math.round(Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)));
-    let dragDistance = DRAG_DELAY;
-    if (distance >= dragDistance) {
-      handleDragStart(e);
-      endDragDelay();
-    }
-  };
-
-  const endDragDelay = () => {
-    document.removeEventListener("mouseup", endDragDelay);
-    document.removeEventListener("mousemove", checkDragDelay);
-    dragDelayStartCoordinates.current = null;
-  };
-
-  const startDragDelay = e => {
-    wrapper.current.focus()
-    if(spaceToPan ? spaceIsPressed : true){
-      e.stopPropagation();
-      if(numNodes > 0){
-        let x;
-        let y;
-        if ("ontouchstart" in window && e.touches) {
-          x = e.touches[0].clientX;
-          y = e.touches[0].clientY;
-        } else {
-          e.preventDefault();
-          x = e.clientX;
-          y = e.clientY;
-        }
-        dragDelayStartCoordinates.current = { x, y };
-        document.addEventListener("mouseup", endDragDelay);
-        document.addEventListener("mousemove", checkDragDelay);
-      }
-    }
-  };
-
   const handleDocumentKeyUp = e => {
     if(e.which === 32){
       setSpaceIsPressed(false)
@@ -215,17 +165,21 @@ const Stage = ({
   }, [handleWheel]);
 
   return (
-    <div
+    <Draggable
       id={STAGE_WRAPPER_ID}
       className={styles.wrapper}
-      ref={wrapper}
+      innerRef={wrapper}
       onContextMenu={handleContextMenu}
       onMouseEnter={handleMouseEnter}
-      onMouseDown={startDragDelay}
-      onTouchStart={startDragDelay}
+      onDragDelayStart={handleDragDelayStart}
+      onDragStart={handleDragStart}
+      onDrag={handleMouseDrag}
+      onDragEnd={handleDragEnd}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
+      stageState={{scale, translate}}
       style={{cursor: spaceIsPressed && spaceToPan ? 'grab' : ''}}
+      disabled={spaceToPan && !spaceIsPressed}
     >
       {menuOpen ? (
         <Portal>
@@ -252,7 +206,7 @@ const Stage = ({
         </div>
       </div>
       {outerStageChildren}
-    </div>
+    </Draggable>
   );
 };
 export default Stage;

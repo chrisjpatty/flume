@@ -1,10 +1,16 @@
 import React from "react";
 import styles from "./Node.css";
-import { NodeTypesContext, NodeDispatchContext, StageContext } from "../../context";
+import {
+  NodeTypesContext,
+  NodeDispatchContext,
+  StageContext,
+  CacheContext
+} from "../../context";
 import { getPortRect, calculateCurve } from "../../connectionCalculator";
-import { Portal } from 'react-portal'
-import ContextMenu from '../ContextMenu/ContextMenu'
+import { Portal } from "react-portal";
+import ContextMenu from "../ContextMenu/ContextMenu";
 import IoPorts from "../IoPorts/IoPorts";
+import Draggable from "../Draggable/Draggable";
 
 const Node = ({
   id,
@@ -21,15 +27,12 @@ const Node = ({
   onDragEnd,
   onDrag
 }) => {
+  const cache = React.useContext(CacheContext);
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext);
   const { label, deletable, inputs = [], outputs = [] } = nodeTypes[type];
 
-  const startCoordinates = React.useRef(null);
-  const [coordinates, setCoordinates] = React.useState({ x, y });
-  const [isDragging, setIsDragging] = React.useState(false);
-  const offset = React.useRef();
   const nodeWrapper = React.useRef();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
@@ -39,11 +42,17 @@ const Node = ({
   const updateConnectionsByTransput = (transput = {}, isOutput) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
       outputs.forEach(output => {
-        const toRect = getPortRect(id, portName, isOutput ? "output" : "input");
+        const toRect = getPortRect(
+          id,
+          portName,
+          isOutput ? "output" : "input",
+          cache
+        );
         const fromRect = getPortRect(
           output.nodeId,
           output.portName,
-          isOutput ? "input" : "output"
+          isOutput ? "input" : "output",
+          cache
         );
         const portHalf = fromRect.width / 2;
         let combined;
@@ -52,18 +61,47 @@ const Node = ({
         } else {
           combined = output.nodeId + output.portName + id + portName;
         }
-        const cnx = document.querySelector(
-          `[data-connection-id="${combined}"]`
-        );
+        let cnx;
+        const cachedConnection = cache.current.connections[combined];
+        if (cachedConnection) {
+          cnx = cachedConnection;
+        } else {
+          cnx = document.querySelector(`[data-connection-id="${combined}"]`);
+          cache.current.connections[combined] = cnx;
+        }
         const from = {
-          x: byScale(toRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x),
-          y: byScale(toRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y)
-        }
+          x:
+            byScale(
+              toRect.x -
+                stageRect.current.x +
+                portHalf -
+                stageRect.current.width / 2
+            ) + byScale(stageState.translate.x),
+          y:
+            byScale(
+              toRect.y -
+                stageRect.current.y +
+                portHalf -
+                stageRect.current.height / 2
+            ) + byScale(stageState.translate.y)
+        };
         const to = {
-          x: byScale(fromRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x),
-          y: byScale(fromRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y)
-        }
-        cnx.setAttribute("d", calculateCurve(from, to))
+          x:
+            byScale(
+              fromRect.x -
+                stageRect.current.x +
+                portHalf -
+                stageRect.current.width / 2
+            ) + byScale(stageState.translate.x),
+          y:
+            byScale(
+              fromRect.y -
+                stageRect.current.y +
+                portHalf -
+                stageRect.current.height / 2
+            ) + byScale(stageState.translate.y)
+        };
+        cnx.setAttribute("d", calculateCurve(from, to));
       });
     });
   };
@@ -75,96 +113,21 @@ const Node = ({
     }
   };
 
-  const getScaledCoordinates = e => {
-    const x =
-      byScale(e.clientX -
-      stageRect.current.left -
-      offset.current.x
-      - (stageRect.current.width / 2)) +
-      byScale(stageState.translate.x)
-    const y =
-      byScale(e.clientY -
-      stageRect.current.top -
-      offset.current.y
-      - (stageRect.current.height / 2)) +
-      byScale(stageState.translate.y)
-    return {x, y}
-  }
-
-  const updateCoordinates = e => {
-    const { x, y } = getScaledCoordinates(e)
-    nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
-    updateNodeConnections();
-  };
-
-  const stopDrag = e => {
-    const coordinates = getScaledCoordinates(e)
-    setCoordinates(coordinates);
-    setIsDragging(false);
+  const stopDrag = (e, coordinates) => {
     nodesDispatch({
       type: "SET_NODE_COORDINATES",
       ...coordinates,
       nodeId: id
     });
-    window.removeEventListener("mouseup", stopDrag);
-    window.removeEventListener("mousemove", updateCoordinates);
+  };
+
+  const handleDrag = ({ x, y }) => {
+    nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
+    updateNodeConnections();
   };
 
   const startDrag = e => {
-    onDragStart()
-    const nodeRect = nodeWrapper.current.getBoundingClientRect();
-    offset.current = {
-      x: startCoordinates.current.x - nodeRect.left,
-      y: startCoordinates.current.y - nodeRect.top
-    };
-    updateCoordinates(e);
-    setIsDragging(true);
-    window.addEventListener("mouseup", stopDrag);
-    window.addEventListener("mousemove", updateCoordinates);
-  };
-
-  const checkDragDelay = e => {
-    let x;
-    let y;
-    if ("ontouchstart" in window && e.touches) {
-      x = e.touches[0].clientX;
-      y = e.touches[0].clientY;
-    } else {
-      e.preventDefault();
-      x = e.clientX;
-      y = e.clientY;
-    }
-    let a = Math.abs(startCoordinates.current.x - x);
-    let b = Math.abs(startCoordinates.current.y - y);
-    let distance = Math.round(Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)));
-    let dragDistance = delay;
-    if (distance >= dragDistance) {
-      startDrag(e);
-      endDragDelay();
-    }
-  };
-
-  const endDragDelay = () => {
-    document.removeEventListener("mouseup", endDragDelay);
-    document.removeEventListener("mousemove", checkDragDelay);
-    startCoordinates.current = null;
-  };
-
-  const startDragDelay = e => {
-    e.stopPropagation();
-    let x;
-    let y;
-    if ("ontouchstart" in window && e.touches) {
-      x = e.touches[0].clientX;
-      y = e.touches[0].clientY;
-    } else {
-      e.preventDefault();
-      x = e.clientX;
-      y = e.clientY;
-    }
-    startCoordinates.current = { x, y };
-    document.addEventListener("mouseup", endDragDelay);
-    document.addEventListener("mousemove", checkDragDelay);
+    onDragStart();
   };
 
   const handleContextMenu = e => {
@@ -181,31 +144,32 @@ const Node = ({
 
   const handleMenuOption = ({ value }) => {
     switch (value) {
-      case 'deleteNode':
+      case "deleteNode":
         nodesDispatch({
           type: "REMOVE_NODE",
           nodeId: id
-        })
+        });
         break;
       default:
         return;
     }
-  }
+  };
 
   return (
-    <div
+    <Draggable
       className={styles.wrapper}
       style={{
         width,
-        // height,
-        transform: `translate(${coordinates.x}px, ${coordinates.y}px)`
+        transform: `translate(${x}px, ${y}px)`
       }}
-      onMouseDown={startDragDelay}
-      onTouchStart={startDragDelay}
-      ref={nodeWrapper}
+      onDragStart={startDrag}
+      onDrag={handleDrag}
+      onDragEnd={stopDrag}
+      innerRef={nodeWrapper}
       data-node-id={id}
       onContextMenu={handleContextMenu}
-      onDragStart={e=>{e.preventDefault(); e.stopPropagation()}}
+      stageState={stageState}
+      stageRect={stageRect}
     >
       <h2 className={styles.label}>{label}</h2>
       <IoPorts
@@ -222,9 +186,15 @@ const Node = ({
             x={menuCoordinates.x}
             y={menuCoordinates.y}
             options={[
-              ...(deletable !== false ?
-              [{label: "Delete Node", value: "deleteNode", description: "Deletes a node and all of its connections."}]
-              : [])
+              ...(deletable !== false
+                ? [
+                    {
+                      label: "Delete Node",
+                      value: "deleteNode",
+                      description: "Deletes a node and all of its connections."
+                    }
+                  ]
+                : [])
             ]}
             onRequestClose={closeContextMenu}
             onOptionSelected={handleMenuOption}
@@ -234,7 +204,7 @@ const Node = ({
           />
         </Portal>
       ) : null}
-    </div>
+    </Draggable>
   );
 };
 
