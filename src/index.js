@@ -8,7 +8,8 @@ import {
   NodeDispatchContext,
   ConnectionRecalculateContext,
   ContextContext,
-  StageContext
+  StageContext,
+  CacheContext
 } from "./context";
 import { createConnections } from "./connectionCalculator";
 import nodesReducer, {
@@ -16,9 +17,10 @@ import nodesReducer, {
   getInitialNodes
 } from "./nodesReducer";
 import stageReducer from "./stageReducer";
-import { STAGE_WRAPPER_ID } from './constants'
-import usePrevious from './hooks/usePrevious'
+import { STAGE_WRAPPER_ID } from "./constants";
+import usePrevious from "./hooks/usePrevious";
 import clamp from "lodash/clamp";
+import Cache from "./Cache";
 
 import styles from "./styles.css";
 
@@ -36,8 +38,12 @@ export let NodeEditor = (
   },
   ref
 ) => {
-  const [nodes, dispatchNodes] = React.useReducer(
-    connectNodesReducer(nodesReducer, { nodeTypes, portTypes }),
+  const cache = React.useRef(new Cache());
+  const [
+    nodes,
+    dispatchNodes
+  ] = React.useReducer(
+    connectNodesReducer(nodesReducer, { nodeTypes, portTypes, cache }),
     {},
     () => getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes)
   );
@@ -47,7 +53,7 @@ export let NodeEditor = (
     setShouldRecalculateConnections
   ] = React.useState(true);
   const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
-    scale: typeof initialScale === "number" ? clamp(initialScale, .1, 7) : 1,
+    scale: typeof initialScale === "number" ? clamp(initialScale, 0.1, 7) : 1,
     translate: { x: 0, y: 0 }
   });
 
@@ -56,8 +62,10 @@ export let NodeEditor = (
   }, [nodes]);
 
   const recalculateStageRect = () => {
-    stage.current = document.getElementById(STAGE_WRAPPER_ID).getBoundingClientRect()
-  }
+    stage.current = document
+      .getElementById(STAGE_WRAPPER_ID)
+      .getBoundingClientRect();
+  };
 
   React.useLayoutEffect(() => {
     if (shouldRecalculateConnections) {
@@ -79,10 +87,10 @@ export let NodeEditor = (
   const previousNodes = usePrevious(nodes);
 
   React.useEffect(() => {
-    if(previousNodes && onChange && nodes !== previousNodes){
-      onChange(nodes)
+    if (previousNodes && onChange && nodes !== previousNodes) {
+      onChange(nodes);
     }
-  }, [nodes, previousNodes, onChange])
+  }, [nodes, previousNodes, onChange]);
 
   return (
     <PortTypesContext.Provider value={portTypes}>
@@ -91,45 +99,49 @@ export let NodeEditor = (
           <ConnectionRecalculateContext.Provider value={triggerRecalculation}>
             <ContextContext.Provider value={context}>
               <StageContext.Provider value={stageState}>
-                <Stage
-                  scale={stageState.scale}
-                  translate={stageState.translate}
-                  spaceToPan={spaceToPan}
-                  dispatchStageState={dispatchStageState}
-                  stageRef={stage}
-                  numNodes={Object.keys(nodes).length}
-                  outerStageChildren={debug && (
-                    <div className={styles.debugWrapper}>
-                      <button
-                        className={styles.debugButton}
-                        onClick={() => console.log(nodes)}
-                      >
-                        Log Nodes
-                      </button>
-                      <button
-                        className={styles.debugButton}
-                        onClick={() => console.log(JSON.stringify(nodes))}
-                      >
-                        Export Nodes
-                      </button>
-                    </div>
-                  )}
-                >
-                  {Object.values(nodes).map(node => (
-                    <Node
-                      stageRect={stage}
-                      onDragEnd={triggerRecalculation}
-                      onDragStart={recalculateStageRect}
-                      {...node}
-                      key={node.id}
-                    />
-                  ))}
-                  <Connections nodes={nodes} />
-                  <div
-                    className={styles.dragWrapper}
-                    id="__node_editor_drag_connection__"
-                  ></div>
-                </Stage>
+                <CacheContext.Provider value={cache}>
+                  <Stage
+                    scale={stageState.scale}
+                    translate={stageState.translate}
+                    spaceToPan={spaceToPan}
+                    dispatchStageState={dispatchStageState}
+                    stageRef={stage}
+                    numNodes={Object.keys(nodes).length}
+                    outerStageChildren={
+                      debug && (
+                        <div className={styles.debugWrapper}>
+                          <button
+                            className={styles.debugButton}
+                            onClick={() => console.log(nodes)}
+                          >
+                            Log Nodes
+                          </button>
+                          <button
+                            className={styles.debugButton}
+                            onClick={() => console.log(JSON.stringify(nodes))}
+                          >
+                            Export Nodes
+                          </button>
+                        </div>
+                      )
+                    }
+                  >
+                    {Object.values(nodes).map(node => (
+                      <Node
+                        stageRect={stage}
+                        onDragEnd={triggerRecalculation}
+                        onDragStart={recalculateStageRect}
+                        {...node}
+                        key={node.id}
+                      />
+                    ))}
+                    <Connections nodes={nodes} />
+                    <div
+                      className={styles.dragWrapper}
+                      id="__node_editor_drag_connection__"
+                    ></div>
+                  </Stage>
+                </CacheContext.Provider>
               </StageContext.Provider>
             </ContextContext.Provider>
           </ConnectionRecalculateContext.Provider>
@@ -139,7 +151,7 @@ export let NodeEditor = (
   );
 };
 NodeEditor = React.forwardRef(NodeEditor);
-export { FlumeConfig, Controls, Colors } from './typeBuilders'
-export RootEngine from './RootEngine'
+export { FlumeConfig, Controls, Colors } from "./typeBuilders";
+export RootEngine from "./RootEngine";
 export const useRootEngine = (nodes, engine, context) =>
-  Object.keys(nodes).length ? engine.resolveRootNode(nodes, {context}) : {};
+  Object.keys(nodes).length ? engine.resolveRootNode(nodes, { context }) : {};

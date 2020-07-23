@@ -198,7 +198,7 @@ const getDefaultData = ({ nodeType, portTypes }) =>
     return obj;
   }, {});
 
-const nodesReducer = (nodes, action = {}, { nodeTypes, portTypes }) => {
+const nodesReducer = (nodes, action = {}, { nodeTypes, portTypes, cache }) => {
   switch (action.type) {
 
     case "ADD_CONNECTION": {
@@ -212,9 +212,9 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, portTypes }) => {
 
     case "REMOVE_CONNECTION": {
       const { input, output } = action;
-      deleteConnection({
-        id: output.nodeId + output.portName + input.nodeId + input.portName
-      });
+      const id = output.nodeId + output.portName + input.nodeId + input.portName;
+      delete cache.current.connections[id]
+      deleteConnection({ id });
       return removeConnection(nodes, input, output);
     }
 

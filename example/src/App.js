@@ -235,6 +235,7 @@ export default () => {
         onChange={nodes => {
           setNodes(nodes);
         }}
+        spaceToPan 
         defaultNodes={[
           {
             type: "homePage",

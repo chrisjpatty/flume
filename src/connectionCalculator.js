@@ -1,12 +1,26 @@
 import styles from "./components/Connection/Connection.css";
 import { line, curveBasis } from 'd3-shape'
 
-export const getPortRect = (nodeId, portName, transputType = "input") =>
-  document
-    .querySelector(
-      `[data-node-id="${nodeId}"] [data-port-name="${portName}"][data-port-transput-type="${transputType}"]`
-    )
-    .getBoundingClientRect();
+const getPort = (nodeId, portName, transputType = "input") => document
+  .querySelector(
+    `[data-node-id="${nodeId}"] [data-port-name="${portName}"][data-port-transput-type="${transputType}"]`
+  )
+
+export const getPortRect = (nodeId, portName, transputType = "input", cache) => {
+  if(cache){
+    const portCacheName = nodeId + portName + transputType;
+    const cachedPort = cache.current.ports[portCacheName];
+    if(cachedPort){
+      return cachedPort.getBoundingClientRect();
+    }else{
+      const port = getPort(nodeId, portName, transputType)
+      cache.current.ports[portCacheName] = port;
+      return port.getBoundingClientRect();
+    }
+  }else{
+    return getPort(nodeId, portName, transputType).getBoundingClientRect();
+  }
+}
 
 export const getPortRectsByNodes = (nodes, forEachConnection) =>
   Object.values(nodes).reduce((obj, node) => {
