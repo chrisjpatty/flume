@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./ContextMenu.css";
+const nanoid = require("nanoid");
 
 const ContextMenu = ({
   x,
@@ -17,6 +18,8 @@ const ContextMenu = ({
   const filterInput = React.useRef();
   const [filter, setFilter] = React.useState("");
   const [menuWidth, setMenuWidth] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const menuId = React.useRef(nanoid(10));
 
   const handleOptionSelected = option => {
     onOptionSelected(option);
@@ -62,6 +65,44 @@ const ContextMenu = ({
     return options.filter(opt => opt.label.toLowerCase().includes(lowerFilter));
   }, [filter, options]);
 
+  const handleFilterChange = e => {
+    const value = e.target.value;
+    setFilter(value);
+    setSelectedIndex(0);
+  };
+
+  const handleKeyDown = e => {
+    // Up pressed
+    if (e.which === 38) {
+      if (selectedIndex === null) {
+        setSelectedIndex(0);
+      } else if (selectedIndex > 0) {
+        setSelectedIndex(i => i - 1);
+      }
+    }
+    // Down pressed
+    if (e.which === 40) {
+      if (selectedIndex === null) {
+        setSelectedIndex(0);
+      } else if (selectedIndex < filteredOptions.length - 1) {
+        setSelectedIndex(i => i + 1);
+      }
+    }
+    // Enter pressed
+    if (e.which === 13 && selectedIndex !== null) {
+      const option = filteredOptions[selectedIndex];
+      if (option) {
+        handleOptionSelected(option);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    if (hideFilter || hideHeader) {
+      menuWrapper.current.focus();
+    }
+  }, [hideFilter, hideHeader]);
+
   return (
     <div
       className={styles.menuWrapper}
@@ -73,6 +114,9 @@ const ContextMenu = ({
         width: filter ? menuWidth : "auto"
       }}
       ref={menuWrapper}
+      tabIndex={0}
+      role="menu"
+      aria-activedescendant={`${menuId.current}-${selectedIndex}`}
     >
       {!hideHeader ? (
         <div className={styles.menuHeader}>
@@ -82,7 +126,7 @@ const ContextMenu = ({
               type="text"
               placeholder="Filter options"
               value={filter}
-              onChange={e => setFilter(e.target.value)}
+              onChange={handleFilterChange}
               className={styles.menuFilter}
               ref={filterInput}
             />
@@ -97,7 +141,11 @@ const ContextMenu = ({
       >
         {filteredOptions.map((option, i) => (
           <ContextOption
+            menuId={menuId.current}
+            selected={selectedIndex === i}
             onClick={() => handleOptionSelected(option)}
+            onMouseEnter={() => setSelectedIndex(null)}
+            index={i}
             key={option.value + i}
           >
             <label>{option.label}</label>
@@ -112,9 +160,23 @@ const ContextMenu = ({
   );
 };
 
-const ContextOption = ({ children, onClick }) => {
+const ContextOption = ({
+  menuId,
+  index,
+  children,
+  onClick,
+  selected,
+  onMouseEnter
+}) => {
   return (
-    <div className={styles.option} role="menuitem" onClick={onClick}>
+    <div
+      className={styles.option}
+      role="menuitem"
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      data-selected={selected}
+      id={`${menuId}-${index}`}
+    >
       {children}
     </div>
   );
