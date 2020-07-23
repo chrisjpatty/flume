@@ -27,6 +27,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
   const handleKeyDown = e => {
     // Up pressed
     if (e.which === 38) {
+      e.preventDefault()
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex > 0) {
@@ -35,6 +36,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
     }
     // Down pressed
     if (e.which === 40) {
+      e.preventDefault()
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex < options.length - 1) {
@@ -58,6 +60,22 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    const menuOption = document.getElementById(
+      `${menuId.current}-${selectedIndex}`
+    );
+    if (menuOption) {
+      const menuRect = wrapper.current.getBoundingClientRect();
+      const optionRect = menuOption.getBoundingClientRect();
+      if (
+        optionRect.y + optionRect.height > menuRect.y + menuRect.height ||
+        optionRect.y < menuRect.y
+      ) {
+        menuOption.scrollIntoView({ block: "nearest"});
+      }
+    }
+  }, [selectedIndex]);
+
   return (
     <Portal>
       <div
@@ -77,6 +95,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
             data-selected={selectedIndex === i}
             role="menuitem"
             key={option.value + i}
+            id={`${menuId.current}-${i}`}
           >
             <label>{option.label}</label>
             {option.description ? <p>{option.description}</p> : null}

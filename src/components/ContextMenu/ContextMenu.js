@@ -74,6 +74,7 @@ const ContextMenu = ({
   const handleKeyDown = e => {
     // Up pressed
     if (e.which === 38) {
+      e.preventDefault()
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex > 0) {
@@ -82,6 +83,7 @@ const ContextMenu = ({
     }
     // Down pressed
     if (e.which === 40) {
+      e.preventDefault()
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex < filteredOptions.length - 1) {
@@ -102,6 +104,22 @@ const ContextMenu = ({
       menuWrapper.current.focus();
     }
   }, [hideFilter, hideHeader]);
+
+  React.useEffect(() => {
+    const menuOption = document.getElementById(
+      `${menuId.current}-${selectedIndex}`
+    );
+    if (menuOption) {
+      const menuRect = menuOptionsWrapper.current.getBoundingClientRect();
+      const optionRect = menuOption.getBoundingClientRect();
+      if (
+        optionRect.y + optionRect.height > menuRect.y + menuRect.height ||
+        optionRect.y < menuRect.y
+      ) {
+        menuOption.scrollIntoView({ block: "nearest"});
+      }
+    }
+  }, [selectedIndex]);
 
   return (
     <div
