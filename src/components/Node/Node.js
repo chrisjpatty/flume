@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Node.css";
-import { NodeTypesContext, NodeDispatchContext, StageContext } from "../../context";
+import { NodeTypesContext, NodeDispatchContext, StageContext, CacheContext } from "../../context";
 import { getPortRect, calculateCurve } from "../../connectionCalculator";
 import { Portal } from 'react-portal'
 import ContextMenu from '../ContextMenu/ContextMenu'
@@ -22,6 +22,7 @@ const Node = ({
   onDragEnd,
   onDrag
 }) => {
+  const cache = React.useContext(CacheContext)
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext);
@@ -49,9 +50,14 @@ const Node = ({
         } else {
           combined = output.nodeId + output.portName + id + portName;
         }
-        const cnx = document.querySelector(
-          `[data-connection-id="${combined}"]`
-        );
+        let cnx;
+        const cachedConnection = cache.current.connections[combined];
+        if(cachedConnection){
+          cnx = cachedConnection
+        }else{
+          cnx = document.querySelector(`[data-connection-id="${combined}"]`)
+          cache.current.connections[combined] = cnx;
+        }
         const from = {
           x: byScale(toRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x),
           y: byScale(toRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y)
