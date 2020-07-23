@@ -5,6 +5,7 @@ import { getPortRect, calculateCurve } from "../../connectionCalculator";
 import { Portal } from 'react-portal'
 import ContextMenu from '../ContextMenu/ContextMenu'
 import IoPorts from "../IoPorts/IoPorts";
+import Draggable from '../Draggable/Draggable'
 
 const Node = ({
   id,
@@ -26,10 +27,6 @@ const Node = ({
   const stageState = React.useContext(StageContext);
   const { label, deletable, inputs = [], outputs = [] } = nodeTypes[type];
 
-  const startCoordinates = React.useRef(null);
-  const [coordinates, setCoordinates] = React.useState({ x, y });
-  const [isDragging, setIsDragging] = React.useState(false);
-  const offset = React.useRef();
   const nodeWrapper = React.useRef();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
@@ -75,96 +72,21 @@ const Node = ({
     }
   };
 
-  const getScaledCoordinates = e => {
-    const x =
-      byScale(e.clientX -
-      stageRect.current.left -
-      offset.current.x
-      - (stageRect.current.width / 2)) +
-      byScale(stageState.translate.x)
-    const y =
-      byScale(e.clientY -
-      stageRect.current.top -
-      offset.current.y
-      - (stageRect.current.height / 2)) +
-      byScale(stageState.translate.y)
-    return {x, y}
-  }
-
-  const updateCoordinates = e => {
-    const { x, y } = getScaledCoordinates(e)
-    nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
-    updateNodeConnections();
-  };
-
-  const stopDrag = e => {
-    const coordinates = getScaledCoordinates(e)
-    setCoordinates(coordinates);
-    setIsDragging(false);
+  const stopDrag = (e, coordinates) => {
     nodesDispatch({
       type: "SET_NODE_COORDINATES",
       ...coordinates,
       nodeId: id
     });
-    window.removeEventListener("mouseup", stopDrag);
-    window.removeEventListener("mousemove", updateCoordinates);
   };
+
+  const handleDrag = ({x, y}) => {
+    nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
+    updateNodeConnections()
+  }
 
   const startDrag = e => {
     onDragStart()
-    const nodeRect = nodeWrapper.current.getBoundingClientRect();
-    offset.current = {
-      x: startCoordinates.current.x - nodeRect.left,
-      y: startCoordinates.current.y - nodeRect.top
-    };
-    updateCoordinates(e);
-    setIsDragging(true);
-    window.addEventListener("mouseup", stopDrag);
-    window.addEventListener("mousemove", updateCoordinates);
-  };
-
-  const checkDragDelay = e => {
-    let x;
-    let y;
-    if ("ontouchstart" in window && e.touches) {
-      x = e.touches[0].clientX;
-      y = e.touches[0].clientY;
-    } else {
-      e.preventDefault();
-      x = e.clientX;
-      y = e.clientY;
-    }
-    let a = Math.abs(startCoordinates.current.x - x);
-    let b = Math.abs(startCoordinates.current.y - y);
-    let distance = Math.round(Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2)));
-    let dragDistance = delay;
-    if (distance >= dragDistance) {
-      startDrag(e);
-      endDragDelay();
-    }
-  };
-
-  const endDragDelay = () => {
-    document.removeEventListener("mouseup", endDragDelay);
-    document.removeEventListener("mousemove", checkDragDelay);
-    startCoordinates.current = null;
-  };
-
-  const startDragDelay = e => {
-    e.stopPropagation();
-    let x;
-    let y;
-    if ("ontouchstart" in window && e.touches) {
-      x = e.touches[0].clientX;
-      y = e.touches[0].clientY;
-    } else {
-      e.preventDefault();
-      x = e.clientX;
-      y = e.clientY;
-    }
-    startCoordinates.current = { x, y };
-    document.addEventListener("mouseup", endDragDelay);
-    document.addEventListener("mousemove", checkDragDelay);
   };
 
   const handleContextMenu = e => {
@@ -193,19 +115,20 @@ const Node = ({
   }
 
   return (
-    <div
+    <Draggable
       className={styles.wrapper}
       style={{
         width,
-        // height,
-        transform: `translate(${coordinates.x}px, ${coordinates.y}px)`
+        transform: `translate(${x}px, ${y}px)`
       }}
-      onMouseDown={startDragDelay}
-      onTouchStart={startDragDelay}
-      ref={nodeWrapper}
+      onDragStart={startDrag}
+      onDrag={handleDrag}
+      onDragEnd={stopDrag}
+      innerRef={nodeWrapper}
       data-node-id={id}
       onContextMenu={handleContextMenu}
-      onDragStart={e=>{e.preventDefault(); e.stopPropagation()}}
+      stageState={stageState}
+      stageRect={stageRect}
     >
       <h2 className={styles.label}>{label}</h2>
       <IoPorts
@@ -234,7 +157,7 @@ const Node = ({
           />
         </Portal>
       ) : null}
-    </div>
+    </Draggable>
   );
 };
 
