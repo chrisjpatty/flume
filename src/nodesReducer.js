@@ -1,5 +1,4 @@
 import { deleteConnection, deleteConnectionsByNodeId } from "./connectionCalculator";
-// import cloneDeep from 'lodash/cloneDeep'
 const nanoid = require("nanoid");
 
 const addConnection = (nodes, input, output, portTypes) => {

@@ -10,6 +10,7 @@
   min-width: 150px;
   font-family: Helvetica, sans-serif;
   line-height: 1.15;
+  outline: none;
 }
 @supports (backdrop-filter: blur(6px)){
   .menuWrapper{
@@ -72,6 +73,9 @@
     font-size: 12px;
     color: rgb(182, 186, 194);
     user-select: none;
+  }
+  &[data-selected=true]{
+    background: rgba(255,255,255,.05);
   }
 }
 .emptyText{
