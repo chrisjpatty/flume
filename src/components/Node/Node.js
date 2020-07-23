@@ -1,11 +1,16 @@
 import React from "react";
 import styles from "./Node.css";
-import { NodeTypesContext, NodeDispatchContext, StageContext, CacheContext } from "../../context";
+import {
+  NodeTypesContext,
+  NodeDispatchContext,
+  StageContext,
+  CacheContext
+} from "../../context";
 import { getPortRect, calculateCurve } from "../../connectionCalculator";
-import { Portal } from 'react-portal'
-import ContextMenu from '../ContextMenu/ContextMenu'
+import { Portal } from "react-portal";
+import ContextMenu from "../ContextMenu/ContextMenu";
 import IoPorts from "../IoPorts/IoPorts";
-import Draggable from '../Draggable/Draggable'
+import Draggable from "../Draggable/Draggable";
 
 const Node = ({
   id,
@@ -22,7 +27,7 @@ const Node = ({
   onDragEnd,
   onDrag
 }) => {
-  const cache = React.useContext(CacheContext)
+  const cache = React.useContext(CacheContext);
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext);
@@ -37,11 +42,17 @@ const Node = ({
   const updateConnectionsByTransput = (transput = {}, isOutput) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
       outputs.forEach(output => {
-        const toRect = getPortRect(id, portName, isOutput ? "output" : "input");
+        const toRect = getPortRect(
+          id,
+          portName,
+          isOutput ? "output" : "input",
+          cache
+        );
         const fromRect = getPortRect(
           output.nodeId,
           output.portName,
-          isOutput ? "input" : "output"
+          isOutput ? "input" : "output",
+          cache
         );
         const portHalf = fromRect.width / 2;
         let combined;
@@ -52,21 +63,45 @@ const Node = ({
         }
         let cnx;
         const cachedConnection = cache.current.connections[combined];
-        if(cachedConnection){
-          cnx = cachedConnection
-        }else{
-          cnx = document.querySelector(`[data-connection-id="${combined}"]`)
+        if (cachedConnection) {
+          cnx = cachedConnection;
+        } else {
+          cnx = document.querySelector(`[data-connection-id="${combined}"]`);
           cache.current.connections[combined] = cnx;
         }
         const from = {
-          x: byScale(toRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x),
-          y: byScale(toRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y)
-        }
+          x:
+            byScale(
+              toRect.x -
+                stageRect.current.x +
+                portHalf -
+                stageRect.current.width / 2
+            ) + byScale(stageState.translate.x),
+          y:
+            byScale(
+              toRect.y -
+                stageRect.current.y +
+                portHalf -
+                stageRect.current.height / 2
+            ) + byScale(stageState.translate.y)
+        };
         const to = {
-          x: byScale(fromRect.x - stageRect.current.x + portHalf - (stageRect.current.width / 2)) + byScale(stageState.translate.x),
-          y: byScale(fromRect.y - stageRect.current.y + portHalf - (stageRect.current.height / 2)) + byScale(stageState.translate.y)
-        }
-        cnx.setAttribute("d", calculateCurve(from, to))
+          x:
+            byScale(
+              fromRect.x -
+                stageRect.current.x +
+                portHalf -
+                stageRect.current.width / 2
+            ) + byScale(stageState.translate.x),
+          y:
+            byScale(
+              fromRect.y -
+                stageRect.current.y +
+                portHalf -
+                stageRect.current.height / 2
+            ) + byScale(stageState.translate.y)
+        };
+        cnx.setAttribute("d", calculateCurve(from, to));
       });
     });
   };
@@ -86,13 +121,13 @@ const Node = ({
     });
   };
 
-  const handleDrag = ({x, y}) => {
+  const handleDrag = ({ x, y }) => {
     nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
-    updateNodeConnections()
-  }
+    updateNodeConnections();
+  };
 
   const startDrag = e => {
-    onDragStart()
+    onDragStart();
   };
 
   const handleContextMenu = e => {
@@ -109,16 +144,16 @@ const Node = ({
 
   const handleMenuOption = ({ value }) => {
     switch (value) {
-      case 'deleteNode':
+      case "deleteNode":
         nodesDispatch({
           type: "REMOVE_NODE",
           nodeId: id
-        })
+        });
         break;
       default:
         return;
     }
-  }
+  };
 
   return (
     <Draggable
@@ -151,9 +186,15 @@ const Node = ({
             x={menuCoordinates.x}
             y={menuCoordinates.y}
             options={[
-              ...(deletable !== false ?
-              [{label: "Delete Node", value: "deleteNode", description: "Deletes a node and all of its connections."}]
-              : [])
+              ...(deletable !== false
+                ? [
+                    {
+                      label: "Delete Node",
+                      value: "deleteNode",
+                      description: "Deletes a node and all of its connections."
+                    }
+                  ]
+                : [])
             ]}
             onRequestClose={closeContextMenu}
             onOptionSelected={handleMenuOption}
