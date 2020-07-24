@@ -12,6 +12,7 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
   const closeDrawer = () => {
     onRequestClose();
     document.removeEventListener("click", testClickOutside);
+    document.removeEventListener("contextmenu", testClickOutside);
   };
 
   const testClickOutside = e => {
@@ -55,9 +56,11 @@ const SelectDrawer = ({ x, y, options, onSelected, onRequestClose }) => {
 
   React.useEffect(() => {
     document.addEventListener("click", testClickOutside);
+    document.addEventListener("contextmenu", testClickOutside);
     wrapper.current.focus();
     return () => {
       document.removeEventListener("click", testClickOutside);
+      document.removeEventListener("contextmenu", testClickOutside);
     };
   }, []);
 

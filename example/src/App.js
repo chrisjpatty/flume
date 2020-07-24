@@ -226,16 +226,17 @@ const engine = new RootEngine(
 
 export default () => {
   const [nodes, setNodes] = React.useState({});
+  const [comments, setComments] = React.useState({});
   return (
     <div className="wrapper" style={{ lineHeight: 1.8 }}>
       <NodeEditor
         portTypes={flumeConfig.portTypes}
         nodeTypes={flumeConfig.nodeTypes}
         nodes={nodes}
-        onChange={nodes => {
-          setNodes(nodes);
-        }}
-        spaceToPan 
+        comments={comments}
+        onChange={setNodes}
+        onCommentsChange={setComments}
+        spaceToPan
         defaultNodes={[
           {
             type: "homePage",

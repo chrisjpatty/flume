@@ -1,0 +1,81 @@
+.wrapper {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  padding: 5px;
+  background: rgba(147, 154, 158, 0.7);
+  border-radius: 5px;
+  border-bottom-right-radius: 2px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  min-width: 80px;
+  font-size: 13px;
+  display: flex;
+  &[data-color="red"]{
+    background: rgba(213, 84, 103, 0.65)
+  }
+  &[data-color="purple"]{
+    background: rgba(153, 83, 196, 0.65)
+  }
+  &[data-color="blue"]{
+    background: rgba(76, 142, 203, 0.65)
+  }
+  &[data-color="green"]{
+    background: rgba(70, 200, 130, 0.65)
+  }
+  &[data-color="yellow"]{
+    background: rgba(200, 167, 63, 0.65)
+  }
+  &[data-color="orange"]{
+    background: rgba(215, 123, 64, 0.65)
+  }
+  &[data-color="pink"]{
+    background: rgba(255, 102, 208, 0.65)
+  }
+}
+.text{
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  white-space: pre-wrap;
+  cursor: default;
+}
+.resizeThumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 4px 0px 4px 0px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  overflow: hidden;
+  cursor: nwse-resize;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 250%;
+    height: 0px;
+    border-top: 1px solid rgba(0, 0, 0, 0.7);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+    transform-origin: center right;
+    transform: rotate(-45deg) scale(0.5);
+  }
+  &::after {
+    transform: rotate(-45deg) translateY(3px) scale(0.5);
+  }
+}
+.textarea {
+  resize: none;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  border-radius: 3px;
+  background: rgba(255,255,255,.1);
+  border: none;
+  outline: none;
+  margin: -2px;
+  font-size: 13px;
+  &::placeholder{
+    color: rgba(0,0,0,.5);
+  }
+}

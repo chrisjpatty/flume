@@ -3,7 +3,7 @@ import styles from "./Stage.css";
 import { Portal } from "react-portal";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import { NodeTypesContext, NodeDispatchContext } from "../../context";
-import Draggable from '../Draggable/Draggable'
+import Draggable from "../Draggable/Draggable";
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
 import { STAGE_WRAPPER_ID } from "../../constants";
@@ -16,16 +16,18 @@ const Stage = ({
   outerStageChildren,
   numNodes,
   stageRef,
-  spaceToPan
+  spaceToPan,
+  dispatchComments,
+  disableComments
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
-  const nodesDispatch = React.useContext(NodeDispatchContext);
+  const dispatchNodes = React.useContext(NodeDispatchContext);
   const wrapper = React.useRef();
   const translateWrapper = React.useRef();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
   const dragData = React.useRef({ x: 0, y: 0 });
-  const [spaceIsPressed, setSpaceIsPressed] = React.useState(false)
+  const [spaceIsPressed, setSpaceIsPressed] = React.useState(false);
 
   const setStageRect = React.useCallback(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
@@ -41,9 +43,9 @@ const Stage = ({
 
   const handleWheel = React.useCallback(
     e => {
-      if(e.target.nodeName === "TEXTAREA"){
-        if(e.target.clientHeight < e.target.scrollHeight) return;
-      };
+      if (e.target.nodeName === "TEXTAREA" || e.target.dataset.comment) {
+        if (e.target.clientHeight < e.target.scrollHeight) return;
+      }
       e.preventDefault();
       if (numNodes > 0) {
         const delta = e.deltaY;
@@ -56,8 +58,8 @@ const Stage = ({
     [dispatchStageState, numNodes]
   );
 
-  const handleDragDelayStart = (e) => {
-    wrapper.current.focus()
+  const handleDragDelayStart = e => {
+    wrapper.current.focus();
   };
 
   const handleDragStart = e => {
@@ -101,9 +103,65 @@ const Stage = ({
     setMenuOpen(false);
   };
 
+  const byScale = value => (1 / scale) * value;
+
+  const addNode = ({ node, internalType }) => {
+    const wrapperRect = wrapper.current.getBoundingClientRect();
+    const x =
+      byScale(menuCoordinates.x - wrapperRect.x - wrapperRect.width / 2) +
+      byScale(translate.x);
+    const y =
+      byScale(menuCoordinates.y - wrapperRect.y - wrapperRect.height / 2) +
+      byScale(translate.y);
+    if (internalType === "comment") {
+      dispatchComments({
+        type: "ADD_COMMENT",
+        x,
+        y
+      });
+    } else {
+      dispatchNodes({
+        type: "ADD_NODE",
+        x,
+        y,
+        nodeType: node.type
+      });
+    }
+  };
+
+  const handleDocumentKeyUp = e => {
+    if (e.which === 32) {
+      setSpaceIsPressed(false);
+      document.removeEventListener("keyup", handleDocumentKeyUp);
+    }
+  };
+
+  const handleKeyDown = e => {
+    if (e.which === 32 && document.activeElement === wrapper.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      setSpaceIsPressed(true);
+      document.addEventListener("keyup", handleDocumentKeyUp);
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (!wrapper.current.contains(document.activeElement)) {
+      wrapper.current.focus();
+    }
+  };
+
+  React.useEffect(() => {
+    let stageWrapper = wrapper.current;
+    stageWrapper.addEventListener("wheel", handleWheel);
+    return () => {
+      stageWrapper.removeEventListener("wheel", handleWheel);
+    };
+  }, [handleWheel]);
+
   const menuOptions = React.useMemo(
-    () =>
-      orderBy(
+    () => {
+      const options = orderBy(
         Object.values(nodeTypes)
           .filter(node => node.addable !== false)
           .map(node => ({
@@ -114,55 +172,14 @@ const Stage = ({
             node
           })),
         ["sortIndex", "label"]
-      ),
-    [nodeTypes]
+      )
+      if(!disableComments){
+        options.push({ value: "comment", label: "Comment", internalType: "comment" })
+      }
+      return options
+    },
+    [nodeTypes, disableComments]
   );
-
-  const byScale = value => (1 / scale) * value;
-
-  const addNode = ({ node }) => {
-    const wrapperRect = wrapper.current.getBoundingClientRect();
-    nodesDispatch({
-      type: "ADD_NODE",
-      x:
-        byScale(menuCoordinates.x - wrapperRect.x - wrapperRect.width / 2) +
-        byScale(translate.x),
-      y:
-        byScale(menuCoordinates.y - wrapperRect.y - wrapperRect.height / 2) +
-        byScale(translate.y),
-      nodeType: node.type
-    });
-  };
-
-  const handleDocumentKeyUp = e => {
-    if(e.which === 32){
-      setSpaceIsPressed(false)
-      document.removeEventListener('keyup', handleDocumentKeyUp)
-    }
-  }
-
-  const handleKeyDown = e => {
-    if(e.which === 32 && document.activeElement === wrapper.current){
-      e.preventDefault()
-      e.stopPropagation()
-      setSpaceIsPressed(true)
-      document.addEventListener('keyup', handleDocumentKeyUp)
-    }
-  }
-
-  const handleMouseEnter = () => {
-    if(!wrapper.current.contains(document.activeElement)){
-      wrapper.current.focus()
-    }
-  }
-
-  React.useEffect(() => {
-    let stageWrapper = wrapper.current;
-    stageWrapper.addEventListener("wheel", handleWheel);
-    return () => {
-      stageWrapper.removeEventListener("wheel", handleWheel);
-    };
-  }, [handleWheel]);
 
   return (
     <Draggable
@@ -177,8 +194,8 @@ const Stage = ({
       onDragEnd={handleDragEnd}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
-      stageState={{scale, translate}}
-      style={{cursor: spaceIsPressed && spaceToPan ? 'grab' : ''}}
+      stageState={{ scale, translate }}
+      style={{ cursor: spaceIsPressed && spaceToPan ? "grab" : "" }}
       disabled={spaceToPan && !spaceIsPressed}
     >
       {menuOpen ? (

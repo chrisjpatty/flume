@@ -1,6 +1,7 @@
 import React from "react";
 import Stage from "./components/Stage/Stage";
 import Node from "./components/Node/Node";
+import Comment from "./components/Comment/Comment";
 import Connections from "./components/Connections/Connections";
 import {
   NodeTypesContext,
@@ -16,6 +17,7 @@ import nodesReducer, {
   connectNodesReducer,
   getInitialNodes
 } from "./nodesReducer";
+import commentsReducer from "./commentsReducer";
 import stageReducer from "./stageReducer";
 import { STAGE_WRAPPER_ID } from "./constants";
 import usePrevious from "./hooks/usePrevious";
@@ -26,19 +28,24 @@ import styles from "./styles.css";
 
 export let NodeEditor = (
   {
+    comments: initialComments,
     nodes: initialNodes,
     nodeTypes = {},
     portTypes = {},
     defaultNodes = [],
     context = {},
     onChange,
+    onCommentsChange,
     initialScale,
     spaceToPan = false,
+    hideComments = false,
+    disableComments = false,
     debug
   },
   ref
 ) => {
   const cache = React.useRef(new Cache());
+  const stage = React.useRef();
   const [
     nodes,
     dispatchNodes
@@ -47,7 +54,10 @@ export let NodeEditor = (
     {},
     () => getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes)
   );
-  const stage = React.useRef();
+  const [comments, dispatchComments] = React.useReducer(
+    commentsReducer,
+    initialComments
+  );
   const [
     shouldRecalculateConnections,
     setShouldRecalculateConnections
@@ -81,6 +91,9 @@ export let NodeEditor = (
   React.useImperativeHandle(ref, () => ({
     getNodes: () => {
       return nodes;
+    },
+    getComments: () => {
+      return comments;
     }
   }));
 
@@ -91,6 +104,14 @@ export let NodeEditor = (
       onChange(nodes);
     }
   }, [nodes, previousNodes, onChange]);
+
+  const previousComments = usePrevious(comments);
+
+  React.useEffect(() => {
+    if (previousComments && onCommentsChange && comments !== previousComments) {
+      onCommentsChange(comments);
+    }
+  }, [comments, previousComments, onCommentsChange]);
 
   return (
     <PortTypesContext.Provider value={portTypes}>
@@ -105,6 +126,8 @@ export let NodeEditor = (
                     translate={stageState.translate}
                     spaceToPan={spaceToPan}
                     dispatchStageState={dispatchStageState}
+                    dispatchComments={dispatchComments}
+                    disableComments={disableComments || hideComments}
                     stageRef={stage}
                     numNodes={Object.keys(nodes).length}
                     outerStageChildren={
@@ -122,16 +145,30 @@ export let NodeEditor = (
                           >
                             Export Nodes
                           </button>
+                          <button
+                            className={styles.debugButton}
+                            onClick={() => console.log(comments)}
+                          >
+                            Log Comments
+                          </button>
                         </div>
                       )
                     }
                   >
+                    {!hideComments && Object.values(comments).map(comment => (
+                      <Comment
+                        {...comment}
+                        stageRect={stage}
+                        dispatch={dispatchComments}
+                        key={comment.id}
+                      />
+                    ))}
                     {Object.values(nodes).map(node => (
                       <Node
+                        {...node}
                         stageRect={stage}
                         onDragEnd={triggerRecalculation}
                         onDragStart={recalculateStageRect}
-                        {...node}
                         key={node.id}
                       />
                     ))}

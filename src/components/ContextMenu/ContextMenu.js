@@ -32,6 +32,7 @@ const ContextMenu = ({
       if (!menuWrapper.current.contains(e.target)) {
         onRequestClose();
         document.removeEventListener("click", testClickOutside);
+        document.removeEventListener("contextmenu", testClickOutside);
       }
     },
     [menuWrapper, onRequestClose]
@@ -54,8 +55,10 @@ const ContextMenu = ({
     setMenuWidth(menuWrapper.current.getBoundingClientRect().width);
     document.addEventListener("keydown", testEscape);
     document.addEventListener("click", testClickOutside);
+    document.addEventListener("contextmenu", testClickOutside);
     return () => {
       document.removeEventListener("click", testClickOutside);
+      document.removeEventListener("contextmenu", testClickOutside);
       document.removeEventListener("keydown", testEscape);
     };
   }, [testClickOutside, testEscape]);
@@ -147,6 +150,7 @@ const ContextMenu = ({
               value={filter}
               onChange={handleFilterChange}
               className={styles.menuFilter}
+              autoFocus
               ref={filterInput}
             />
           ) : null}
