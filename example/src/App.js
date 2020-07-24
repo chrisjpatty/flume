@@ -53,7 +53,7 @@ flumeConfig
     type: "color",
     name: "color",
     label: "Color",
-    color: Colors.blue,
+    color: Colors.pink,
     controls: [
       Controls.select({
         name: "color",
@@ -67,6 +67,7 @@ flumeConfig
     type: "animals",
     name: "animals",
     label: "Animals",
+    color: Colors.purple,
     controls: [
       Controls.multiselect({
         name: "values",
@@ -86,6 +87,7 @@ flumeConfig
     type: "noOptions",
     name: "noOptions",
     label: "No Options",
+    color: Colors.yellow,
     controls: [
       Controls.select({
         label: "This has no options",
@@ -179,9 +181,13 @@ flumeConfig
     inputs: ports => [
       ports.text({ label: "Homepage Title", name: "homepageTitle" }),
       ports.text({ label: "Homepage Subtitle", name: "homepageSubtitle" }),
+      ports.number({ label: "Width", name: "width" }),
+      ports.number({ label: "Height", name: "height" }),
       ports.boolean({ label: "Show Dashboard", name: "showDashboard" }),
       ports.boolean({ label: "Show Contact Form", name: "showContactForm" }),
-      ports.boolean({ label: "Show Login Button", name: "showLoginButton" })
+      ports.boolean({ label: "Show Login Button", name: "showLoginButton" }),
+      ports.color(),
+      ports.animals(),
     ]
   })
   .addNodeType({
