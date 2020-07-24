@@ -160,6 +160,7 @@ export let NodeEditor = (
                         {...comment}
                         stageRect={stage}
                         dispatch={dispatchComments}
+                        onDragStart={recalculateStageRect}
                         key={comment.id}
                       />
                     ))}

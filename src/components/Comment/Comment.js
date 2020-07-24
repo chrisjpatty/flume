@@ -17,6 +17,7 @@ export default ({
   color,
   text,
   stageRect,
+  onDragStart,
   isNew
 }) => {
   const stageState = React.useContext(StageContext);
@@ -40,6 +41,10 @@ export default ({
   };
 
   const closeContextMenu = () => setMenuOpen(false);
+
+  const startDrag = e => {
+    onDragStart();
+  };
 
   const handleDrag = ({ x, y }) => {
     wrapper.current.style.transform = `translate(${x}px,${y}px)`;
@@ -137,6 +142,7 @@ export default ({
       }}
       stageState={stageState}
       stageRect={stageRect}
+      onDragStart={startDrag}
       onDrag={handleDrag}
       onDragEnd={handleDragEnd}
       onContextMenu={handleContextMenu}
