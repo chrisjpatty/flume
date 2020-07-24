@@ -41,6 +41,8 @@ export let NodeEditor = (
     spaceToPan = false,
     hideComments = false,
     disableComments = false,
+    disableZoom = false,
+    disablePan = false,
     debug
   },
   ref
@@ -127,6 +129,8 @@ export let NodeEditor = (
                       scale={stageState.scale}
                       translate={stageState.translate}
                       spaceToPan={spaceToPan}
+                      disablePan={disablePan}
+                      disableZoom={disableZoom}
                       dispatchStageState={dispatchStageState}
                       dispatchComments={dispatchComments}
                       disableComments={disableComments || hideComments}

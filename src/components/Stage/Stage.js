@@ -18,7 +18,9 @@ const Stage = ({
   stageRef,
   spaceToPan,
   dispatchComments,
-  disableComments
+  disableComments,
+  disablePan,
+  disableZoom
 }) => {
   const nodeTypes = React.useContext(NodeTypesContext);
   const dispatchNodes = React.useContext(NodeDispatchContext);
@@ -152,12 +154,14 @@ const Stage = ({
   };
 
   React.useEffect(() => {
-    let stageWrapper = wrapper.current;
-    stageWrapper.addEventListener("wheel", handleWheel);
-    return () => {
-      stageWrapper.removeEventListener("wheel", handleWheel);
-    };
-  }, [handleWheel]);
+    if(!disableZoom){
+      let stageWrapper = wrapper.current;
+      stageWrapper.addEventListener("wheel", handleWheel);
+      return () => {
+        stageWrapper.removeEventListener("wheel", handleWheel);
+      };
+    }
+  }, [handleWheel, disableZoom]);
 
   const menuOptions = React.useMemo(
     () => {
@@ -196,7 +200,7 @@ const Stage = ({
       tabIndex={-1}
       stageState={{ scale, translate }}
       style={{ cursor: spaceIsPressed && spaceToPan ? "grab" : "" }}
-      disabled={spaceToPan && !spaceIsPressed}
+      disabled={disablePan || (spaceToPan && !spaceIsPressed)}
     >
       {menuOpen ? (
         <Portal>

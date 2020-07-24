@@ -236,7 +236,7 @@ export default () => {
         comments={comments}
         onChange={setNodes}
         onCommentsChange={setComments}
-        spaceToPan
+        disableZoom
         defaultNodes={[
           {
             type: "homePage",
