@@ -82,13 +82,14 @@ export const Controls = {
 };
 
 export const Colors = {
+  yellow: "yellow",
+  orange: "orange",
   red: "red",
-  blue: "blue",
-  purple: "purple",
-  green: "green",
   pink: "pink",
-  grey: "grey",
-  yellow: "yellow"
+  purple: "purple",
+  blue: "blue",
+  green: "green",
+  grey: "grey"
 };
 
 export const getPortBuilders = ports =>

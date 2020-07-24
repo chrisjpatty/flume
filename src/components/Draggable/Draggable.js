@@ -40,15 +40,15 @@ export default ({
   };
 
   const updateCoordinates = e => {
-    const coordinates = getScaledCoordinates(e)
-    if(onDrag){
-      onDrag(coordinates, e)
+    const coordinates = getScaledCoordinates(e);
+    if (onDrag) {
+      onDrag(coordinates, e);
     }
   };
 
   const stopDrag = e => {
     const coordinates = getScaledCoordinates(e);
-    if(onDragEnd){
+    if (onDragEnd) {
       onDragEnd(e, coordinates);
     }
     window.removeEventListener("mouseup", stopDrag);
@@ -56,7 +56,9 @@ export default ({
   };
 
   const startDrag = e => {
-    onDragStart(e);
+    if (onDragStart) {
+      onDragStart(e);
+    }
     const nodeRect = wrapper.current.getBoundingClientRect();
     offset.current = {
       x: startCoordinates.current.x - nodeRect.left,
@@ -94,8 +96,8 @@ export default ({
   };
 
   const startDragDelay = e => {
-    if(onDragDelayStart){
-      onDragDelayStart(e)
+    if (onDragDelayStart) {
+      onDragDelayStart(e);
     }
     e.stopPropagation();
     let x;
@@ -116,19 +118,19 @@ export default ({
   return (
     <div
       onMouseDown={e => {
-        if(!disabled){
-          startDragDelay(e)
+        if (!disabled) {
+          startDragDelay(e);
         }
-        if(onMouseDown){
-          onMouseDown(e)
+        if (onMouseDown) {
+          onMouseDown(e);
         }
       }}
       onTouchStart={e => {
-        if(!disabled){
-          startDragDelay(e)
+        if (!disabled) {
+          startDragDelay(e);
         }
-        if(onTouchStart){
-          onTouchStart(e)
+        if (onTouchStart) {
+          onTouchStart(e);
         }
       }}
       onDragStart={e => {
@@ -137,7 +139,7 @@ export default ({
       }}
       ref={ref => {
         wrapper.current = ref;
-        if(innerRef){
+        if (innerRef) {
           innerRef.current = ref;
         }
       }}
