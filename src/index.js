@@ -8,9 +8,10 @@ import {
   PortTypesContext,
   NodeDispatchContext,
   ConnectionRecalculateContext,
+  RecalculateStageRectContext,
   ContextContext,
   StageContext,
-  CacheContext
+  CacheContext,
 } from "./context";
 import { createConnections } from "./connectionCalculator";
 import nodesReducer, {
@@ -121,64 +122,66 @@ export let NodeEditor = (
             <ContextContext.Provider value={context}>
               <StageContext.Provider value={stageState}>
                 <CacheContext.Provider value={cache}>
-                  <Stage
-                    scale={stageState.scale}
-                    translate={stageState.translate}
-                    spaceToPan={spaceToPan}
-                    dispatchStageState={dispatchStageState}
-                    dispatchComments={dispatchComments}
-                    disableComments={disableComments || hideComments}
-                    stageRef={stage}
-                    numNodes={Object.keys(nodes).length}
-                    outerStageChildren={
-                      debug && (
-                        <div className={styles.debugWrapper}>
-                          <button
-                            className={styles.debugButton}
-                            onClick={() => console.log(nodes)}
-                          >
-                            Log Nodes
-                          </button>
-                          <button
-                            className={styles.debugButton}
-                            onClick={() => console.log(JSON.stringify(nodes))}
-                          >
-                            Export Nodes
-                          </button>
-                          <button
-                            className={styles.debugButton}
-                            onClick={() => console.log(comments)}
-                          >
-                            Log Comments
-                          </button>
-                        </div>
-                      )
-                    }
-                  >
-                    {!hideComments && Object.values(comments).map(comment => (
-                      <Comment
-                        {...comment}
-                        stageRect={stage}
-                        dispatch={dispatchComments}
-                        onDragStart={recalculateStageRect}
-                        key={comment.id}
-                      />
-                    ))}
-                    {Object.values(nodes).map(node => (
-                      <Node
-                        {...node}
-                        stageRect={stage}
-                        onDragEnd={triggerRecalculation}
-                        onDragStart={recalculateStageRect}
-                        key={node.id}
-                      />
-                    ))}
-                    <Connections nodes={nodes} />
-                    <div
-                      className={styles.dragWrapper}
-                      id="__node_editor_drag_connection__"
-                    ></div>
-                  </Stage>
+                  <RecalculateStageRectContext.Provider value={recalculateStageRect}>
+                    <Stage
+                      scale={stageState.scale}
+                      translate={stageState.translate}
+                      spaceToPan={spaceToPan}
+                      dispatchStageState={dispatchStageState}
+                      dispatchComments={dispatchComments}
+                      disableComments={disableComments || hideComments}
+                      stageRef={stage}
+                      numNodes={Object.keys(nodes).length}
+                      outerStageChildren={
+                        debug && (
+                          <div className={styles.debugWrapper}>
+                            <button
+                              className={styles.debugButton}
+                              onClick={() => console.log(nodes)}
+                            >
+                              Log Nodes
+                            </button>
+                            <button
+                              className={styles.debugButton}
+                              onClick={() => console.log(JSON.stringify(nodes))}
+                            >
+                              Export Nodes
+                            </button>
+                            <button
+                              className={styles.debugButton}
+                              onClick={() => console.log(comments)}
+                            >
+                              Log Comments
+                            </button>
+                          </div>
+                        )
+                      }
+                    >
+                      {!hideComments && Object.values(comments).map(comment => (
+                        <Comment
+                          {...comment}
+                          stageRect={stage}
+                          dispatch={dispatchComments}
+                          onDragStart={recalculateStageRect}
+                          key={comment.id}
+                        />
+                      ))}
+                      {Object.values(nodes).map(node => (
+                        <Node
+                          {...node}
+                          stageRect={stage}
+                          onDragEnd={triggerRecalculation}
+                          onDragStart={recalculateStageRect}
+                          key={node.id}
+                        />
+                      ))}
+                      <Connections nodes={nodes} />
+                      <div
+                        className={styles.dragWrapper}
+                        id="__node_editor_drag_connection__"
+                      ></div>
+                    </Stage>
+                  </RecalculateStageRectContext.Provider>
                 </CacheContext.Provider>
               </StageContext.Provider>
             </ContextContext.Provider>

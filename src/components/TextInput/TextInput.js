@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./TextInput.css";
+import { RecalculateStageRectContext } from '../../context'
 
 const TextInput = ({
   placeholder,
@@ -10,6 +11,7 @@ const TextInput = ({
   type
 }) => {
   const numberInput = React.useRef()
+  const recalculateStageRect = React.useContext(RecalculateStageRectContext)
 
   const handleDragEnd = () => {
     document.removeEventListener("mousemove", handleMouseMove);
@@ -23,6 +25,7 @@ const TextInput = ({
 
   const handlePossibleResize = e => {
     e.stopPropagation();
+    recalculateStageRect();
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleDragEnd);
   };
