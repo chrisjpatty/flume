@@ -18,6 +18,7 @@ const Node = ({
   height,
   x,
   y,
+  color,
   delay = 6,
   stageRect,
   connections,
@@ -167,6 +168,7 @@ const Node = ({
       onDragEnd={stopDrag}
       innerRef={nodeWrapper}
       data-node-id={id}
+      data-color={color}
       onContextMenu={handleContextMenu}
       stageState={stageState}
       stageRect={stageRect}

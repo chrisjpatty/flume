@@ -10,6 +10,34 @@
   flex-direction: column;
   z-index: 1;
   cursor: default;
+  &[data-color="red"] .label{
+    background: rgb(157, 54, 72);
+    border-bottom-color: rgb(124, 37, 52);
+  }
+  &[data-color="purple"] .label{
+    background: rgb(104, 64, 161);
+    border-bottom-color: rgb(65, 35, 107);
+  }
+  &[data-color="blue"] .label{
+    background: rgb(62, 111, 162);
+    border-bottom-color: rgb(31, 70, 110);
+  }
+  &[data-color="green"] .label{
+    background: rgb(52, 144, 97);
+    border-bottom-color: rgb(29, 74, 68);
+  }
+  &[data-color="yellow"] .label{
+    background: rgb(181, 155, 64);
+    border-bottom-color: rgb(86, 71, 19);
+  }
+  &[data-color="orange"] .label{
+    background: rgb(184, 91, 46);
+    border-bottom-color: rgb(120, 55, 23);
+  }
+  &[data-color="pink"] .label{
+    background: rgb(173, 94, 140);
+    border-bottom-color: rgb(111, 50, 86);
+  }
 }
 .label{
   font-size: 13px;

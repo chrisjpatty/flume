@@ -147,7 +147,8 @@ export class FlumeConfig {
       label: define(config.label, ""),
       description: define(config.description, ""),
       addable: define(config.addable, true),
-      deletable: define(config.deletable, true)
+      deletable: define(config.deletable, true),
+      color: define(config.color, Colors.grey)
     };
     if (config.initialWidth) {
       node.initialWidth = config.initialWidth;

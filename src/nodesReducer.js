@@ -1,4 +1,5 @@
 import { deleteConnection, deleteConnectionsByNodeId } from "./connectionCalculator";
+import { Colors } from './typeBuilders'
 const nanoid = require("nanoid");
 
 const addConnection = (nodes, input, output, portTypes) => {
@@ -227,6 +228,7 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, portTypes, cache }) => {
         y,
         type: nodeType,
         width: nodeTypes[nodeType].initialWidth || 200,
+        color: nodeTypes[nodeType].color || Colors.grey,
         connections: {
           inputs: {},
           outputs: {}
@@ -267,6 +269,17 @@ const nodesReducer = (nodes, action = {}, { nodeTypes, portTypes, cache }) => {
         [nodeId]: {
           ...nodes[nodeId],
           inputData: newData
+        }
+      };
+    }
+
+    case "SET_NODE_COLOR": {
+      const { nodeId, color } = action;
+      return {
+        ...nodes,
+        [nodeId]: {
+          ...nodes[nodeId],
+          color: color
         }
       };
     }

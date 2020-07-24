@@ -46,7 +46,7 @@ flumeConfig
     type: "boolean",
     name: "boolean",
     label: "True/False",
-    color: Colors.grey,
+    color: Colors.blue,
     controls: [Controls.checkbox({ name: "boolean", label: "True/False" })]
   })
   .addPortType({
@@ -236,7 +236,6 @@ export default () => {
         comments={comments}
         onChange={setNodes}
         onCommentsChange={setComments}
-        disableZoom
         defaultNodes={[
           {
             type: "homePage",
