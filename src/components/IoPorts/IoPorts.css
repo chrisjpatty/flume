@@ -60,6 +60,11 @@
     }
   }
 }
+.controls{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 .portLabel{
   font-size: 13px;
   font-weight: 400;

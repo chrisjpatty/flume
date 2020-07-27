@@ -14,6 +14,7 @@ const Control = ({
   label,
   inputLabel,
   data,
+  allData,
   render,
   step,
   options = [],
@@ -87,7 +88,7 @@ const Control = ({
           portName,
           inputLabel,
           defaultValue
-        });
+        }, allData);
       default:
         return <div>Control</div>;
     }

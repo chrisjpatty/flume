@@ -85,7 +85,7 @@
   margin: -2px;
   margin-top: -1px;
   padding-top: 0px;
-  font-size: 16px;
+  font-size: 14px;
   &::placeholder{
     color: rgba(0,0,0,.5);
   }

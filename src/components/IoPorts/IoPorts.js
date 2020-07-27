@@ -109,25 +109,32 @@ const Input = ({
           triggerRecalculation={triggerRecalculation}
         />
       ) : null}
-      {!noControls && !isConnected
-        ? controls.map(control => (
-            <Control
-              {...control}
-              nodeId={nodeId}
-              portName={name}
-              triggerRecalculation={triggerRecalculation}
-              updateNodeConnections={updateNodeConnections}
-              inputLabel={label}
-              data={data[control.name]}
-              key={control.name}
-              inputData={inputData}
-              isMonoControl={controls.length === 1}
-            />
-          ))
-        : null}
       {(!controls.length || noControls || isConnected) && (
         <label className={styles.portLabel}>{label || defaultLabel}</label>
       )}
+      {!noControls && !isConnected
+        ? (
+          <div className={styles.controls}>
+            {
+              controls.map(control => (
+                  <Control
+                    {...control}
+                    nodeId={nodeId}
+                    portName={name}
+                    triggerRecalculation={triggerRecalculation}
+                    updateNodeConnections={updateNodeConnections}
+                    inputLabel={label}
+                    data={data[control.name]}
+                    allData={data}
+                    key={control.name}
+                    inputData={inputData}
+                    isMonoControl={controls.length === 1}
+                  />
+                ))
+            }
+          </div>
+        )
+        : null}
     </div>
   );
 };

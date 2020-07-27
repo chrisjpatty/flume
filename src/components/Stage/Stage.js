@@ -178,7 +178,7 @@ const Stage = ({
         ["sortIndex", "label"]
       )
       if(!disableComments){
-        options.push({ value: "comment", label: "Comment", internalType: "comment" })
+        options.push({ value: "comment", label: "Comment", description: "A comment for documenting nodes", internalType: "comment" })
       }
       return options
     },
