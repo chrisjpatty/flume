@@ -1,15 +1,17 @@
 import React from "react";
-import { Portal } from 'react-portal'
-import styles from "./Select.css";
+import selectStyles from "../Select/Select.css";
+import { Portal } from "react-portal";
 import ContextMenu from "../ContextMenu/ContextMenu";
+import styles from "./Select.css";
 
 const MAX_LABEL_LENGTH = 50;
 
 const Select = ({
-  options,
+  options = [],
   placeholder = "[Select an option]",
   onChange,
-  data
+  data,
+  allowMultiple
 }) => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [drawerCoordinates, setDrawerCoordinates] = React.useState({
@@ -34,8 +36,19 @@ const Select = ({
   };
 
   const handleOptionSelected = option => {
-    onChange(option.value);
+    if(allowMultiple){
+      onChange([...data, option.value]);
+    }else{
+      onChange(option.value)
+    }
   };
+
+  const handleOptionDeleted = optionIndex => {
+    onChange([...data.slice(0, optionIndex), ...data.slice(optionIndex + 1)]);
+  };
+
+  const getFilteredOptions = () =>
+    options.filter(opt => !data.includes(opt.value));
 
   const selectedOption = React.useMemo(() => {
     const option = options.find(o => o.value === data);
@@ -52,24 +65,43 @@ const Select = ({
 
   return (
     <React.Fragment>
-      {data ? (
+      {allowMultiple ? (
+        data.length ? (
+          <div className={styles.chipsWrapper}>
+            {data.map((val, i) => {
+              const optLabel =
+                (options.find(opt => opt.value === val) || {}).label || "";
+              return (
+                <OptionChip
+                  onRequestDelete={() => handleOptionDeleted(i)}
+                  key={val}
+                >
+                  {optLabel}
+                </OptionChip>
+              );
+            })}
+          </div>
+        ) : null
+      ) : data ? (
         <SelectedOption
           wrapperRef={wrapper}
           option={selectedOption}
           onClick={openDrawer}
         />
-      ) : (
-        <div className={styles.wrapper} ref={wrapper} onClick={openDrawer}>
+      ) : null}
+      {
+        (allowMultiple || !data) &&
+        <div className={selectStyles.wrapper} ref={wrapper} onClick={openDrawer}>
           {placeholder}
         </div>
-      )}
+      }
       {drawerOpen && (
         <Portal>
           <ContextMenu
             x={drawerCoordinates.x}
             y={drawerCoordinates.y}
             emptyText="There are no options"
-            options={options}
+            options={getFilteredOptions()}
             onOptionSelected={handleOptionSelected}
             onRequestClose={closeDrawer}
           />
@@ -89,5 +121,20 @@ const SelectedOption = ({
   <div className={styles.selectedWrapper} onClick={onClick} ref={wrapperRef}>
     <label>{label}</label>
     {description ? <p>{description}</p> : null}
+  </div>
+);
+
+const OptionChip = ({ children, onRequestDelete }) => (
+  <div className={styles.chipWrapper}>
+    {children}
+    <button
+      className={styles.deleteButton}
+      onMouseDown={e => {
+        e.stopPropagation();
+      }}
+      onClick={onRequestDelete}
+    >
+      ✕
+    </button>
   </div>
 );

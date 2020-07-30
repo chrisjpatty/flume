@@ -1,9 +1,8 @@
 import React from "react";
 import styles from "./Control.css";
-import Select from "../Select/Select";
 import Checkbox from "../Checkbox/Checkbox";
 import TextInput from "../TextInput/TextInput";
-import Multiselect from "../Multiselect/Multiselect";
+import Select from "../Select/Select";
 import { NodeDispatchContext, ContextContext } from "../../context";
 
 const Control = ({
@@ -72,7 +71,8 @@ const Control = ({
         return <Checkbox {...commonProps} label={calculatedLabel} />;
       case "multiselect":
         return (
-          <Multiselect
+          <Select
+            allowMultiple
             {...commonProps}
             options={
               getOptions ? getOptions(inputData, executionContext) : options

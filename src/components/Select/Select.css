@@ -23,7 +23,45 @@
     background: linear-gradient(to top, #63676a, #777b7e);
   }
 }
-
+.chipWrapper{
+  font-size: 14px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: linear-gradient(to top, #5b5f62, #6f7477);
+  border: 1px solid #3c3e40;
+  margin: 2px;
+  position: relative;
+}
+.chipWrapper:hover .deleteButton{
+  opacity: 1;
+}
+.chipsWrapper{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+}
+.deleteButton{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 100%;
+  width: 22px;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to top, #5b5f62, #6f7477);
+  border-radius: 3px;
+  border: none;
+  font-weight: bold;
+  opacity: 0;
+}
+.deleteButton:focus{
+  opacity: 1;
+}
+.deleteButton:hover{
+  background: linear-gradient(to top, #64696c, #797f82);
+}
 .selectedWrapper{
   display: flex;
   flex-direction: column;
