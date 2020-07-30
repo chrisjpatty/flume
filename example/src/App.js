@@ -158,7 +158,6 @@ flumeConfig
       Controls.custom({
         name: "animal",
         render: (_, $, $$, $$$, $$$$, inputData) => {
-          console.log(inputData);
           const url = inputData.animalURL;
           return (
             <div
@@ -168,14 +167,13 @@ flumeConfig
                 alignItems: "center"
               }}
             >
-              {
-                url &&
+              {url && (
                 <img
                   style={{ width: "100%" }}
                   src={`https://source.unsplash.com/${url}/200x200`}
                   alt=""
                 />
-              }
+              )}
             </div>
           );
         }
@@ -191,16 +189,49 @@ flumeConfig
       Controls.select({
         name: "color",
         label: "Hex Color",
-        options: colors.map(color => ({value: color, label: color}))
+        options: colors.map(color => ({ value: color, label: color }))
       }),
       Controls.custom({
         name: "colorRender",
         render: (_, $, $$, $$$, $$$$, inputData) => {
           return (
-            <div style={{background: inputData.color, borderRadius: 4, width: '100%', height: 60}}>
-
-            </div>
-          )
+            <div
+              style={{
+                background: inputData.color,
+                borderRadius: 4,
+                width: "100%",
+                height: 60
+              }}
+            />
+          );
+        }
+      })
+    ]
+  })
+  .addPortType({
+    type: "multiColor",
+    name: "multiColor",
+    label: "Multicolor",
+    multiColor: Colors.grey,
+    controls: [
+      Controls.multiselect({
+        name: "multiColor",
+        label: "Hex Color",
+        options: colors.map(color => ({ value: color, label: color }))
+      }),
+      Controls.custom({
+        name: "colorRender",
+        render: (_, $, $$, $$$, $$$$, inputData) => {
+          return (
+            <div
+              style={{
+                background: `linear-gradient(to right, ${inputData.multiColor.join(", ")})`,
+                borderRadius: 4,
+                width: "100%",
+                height: 60
+              }}
+            />
+          );
         }
       })
     ]
@@ -484,48 +515,39 @@ flumeConfig
     label: "Color",
     description: "Outputs a color",
     initialWidth: 160,
-    inputs: ports => [
-      ports.color()
-    ],
-    outputs: ports => [
-      ports.color()
-    ]
+    inputs: ports => [ports.color()],
+    outputs: ports => [ports.color()]
+  })
+  .addNodeType({
+    type: "multiColor",
+    label: "Multicolor",
+    description: "Outputs multiple colors",
+    initialWidth: 160,
+    inputs: ports => [ports.multiColor()],
+    outputs: ports => [ports.multiColor()]
   })
   .addNodeType({
     type: "blendColors",
     label: "Blend Colors",
     description: "Blends two colors together",
     initialWidth: 160,
-    inputs: ports => [
-      ports.color(),
-      ports.color({ name: "color2"}),
-    ],
-    outputs: ports => [
-      ports.color()
-    ]
+    inputs: ports => [ports.color(), ports.color({ name: "color2" })],
+    outputs: ports => [ports.color()]
   })
   .addNodeType({
     type: "recolorAnimal",
     label: "Recolor Animal",
     description: "Recolors an animal",
     initialWidth: 160,
-    inputs: ports => [
-      ports.color(),
-      ports.animal()
-    ]
+    inputs: ports => [ports.color(), ports.animal()]
   })
   .addNodeType({
     type: "recolorCar",
     label: "Recolor Car",
     description: "Recolors a car",
     initialWidth: 160,
-    inputs: ports => [
-      ports.car(),
-      ports.color()
-    ],
-    outputs: ports => [
-      ports.car()
-    ]
+    inputs: ports => [ports.car(), ports.color()],
+    outputs: ports => [ports.car()]
   })
   .addNodeType({
     type: "websiteAttributes",
@@ -533,15 +555,15 @@ flumeConfig
     description: "Accepts the attributes of the website",
     initialWidth: 160,
     inputs: ports => [
-      ports.text({name: "title", label: "Title"}),
-      ports.text({name: "description", label: "Description"}),
-      ports.boolean({name: "showLogin", label: "Show Login"}),
-      ports.boolean({name: "showDashboard", label: "Show Dashboard"}),
-      ports.boolean({name: "showBody", label: "Show Home Body"}),
-      ports.number({name: "bodyWidth", label: "Body Width"}),
-      ports.number({name: "bodyHeight", label: "Body Height"}),
+      ports.text({ name: "title", label: "Title" }),
+      ports.text({ name: "description", label: "Description" }),
+      ports.boolean({ name: "showLogin", label: "Show Login" }),
+      ports.boolean({ name: "showDashboard", label: "Show Dashboard" }),
+      ports.boolean({ name: "showBody", label: "Show Home Body" }),
+      ports.number({ name: "bodyWidth", label: "Body Width" }),
+      ports.number({ name: "bodyHeight", label: "Body Height" })
     ]
-  })
+  });
 
 const engine = new RootEngine(
   flumeConfig,

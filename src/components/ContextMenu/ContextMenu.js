@@ -140,10 +140,10 @@ const ContextMenu = ({
       role="menu"
       aria-activedescendant={`${menuId.current}-${selectedIndex}`}
     >
-      {!hideHeader ? (
+      {!hideHeader && (label ? true : !!options.length) ? (
         <div className={styles.menuHeader}>
           <label className={styles.menuLabel}>{label}</label>
-          {!hideFilter ? (
+          {!hideFilter && options.length ? (
             <input
               type="text"
               placeholder="Filter options"

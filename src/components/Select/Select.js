@@ -1,6 +1,7 @@
 import React from "react";
+import { Portal } from 'react-portal'
 import styles from "./Select.css";
-import SelectDrawer from "../SelectDrawer/SelectDrawer";
+import ContextMenu from "../ContextMenu/ContextMenu";
 
 const MAX_LABEL_LENGTH = 50;
 
@@ -63,13 +64,16 @@ const Select = ({
         </div>
       )}
       {drawerOpen && (
-        <SelectDrawer
-          x={drawerCoordinates.x}
-          y={drawerCoordinates.y}
-          options={options}
-          onSelected={handleOptionSelected}
-          onRequestClose={closeDrawer}
-        />
+        <Portal>
+          <ContextMenu
+            x={drawerCoordinates.x}
+            y={drawerCoordinates.y}
+            emptyText="There are no options"
+            options={options}
+            onOptionSelected={handleOptionSelected}
+            onRequestClose={closeDrawer}
+          />
+        </Portal>
       )}
     </React.Fragment>
   );

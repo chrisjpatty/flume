@@ -1,6 +1,7 @@
 import React from "react";
 import selectStyles from "../Select/Select.css";
-import SelectDrawer from "../SelectDrawer/SelectDrawer";
+import { Portal } from 'react-portal'
+import ContextMenu from "../ContextMenu/ContextMenu";
 import styles from "./Multiselect.css";
 
 const Multiselect = ({
@@ -67,13 +68,16 @@ const Multiselect = ({
         {placeholder}
       </div>
       {drawerOpen && (
-        <SelectDrawer
-          x={drawerCoordinates.x}
-          y={drawerCoordinates.y}
-          options={getFilteredOptions()}
-          onSelected={handleOptionSelected}
-          onRequestClose={closeDrawer}
-        />
+        <Portal>
+          <ContextMenu
+            x={drawerCoordinates.x}
+            y={drawerCoordinates.y}
+            emptyText="There are no options"
+            options={getFilteredOptions()}
+            onOptionSelected={handleOptionSelected}
+            onRequestClose={closeDrawer}
+          />
+        </Portal>
       )}
     </React.Fragment>
   );

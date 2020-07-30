@@ -41,7 +41,7 @@
   background: none;
   height: 24px;
   flex: 1 1 auto;
-  width: auto;
+  width: 100%;
   outline: none;
   color: #fff;
   &::placeholder{
