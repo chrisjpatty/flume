@@ -3,6 +3,8 @@ title: The Root Node
 id: root-node
 ---
 
+import { SimpleEditor3 } from '../components/GettingStartedExample'
+
 The root node is a special node that serves as the final output for our graph. If you've been following along from the previous examples, we're configuring a node editor to control the properties of a page on our website. The node that accepts these final properties is our root node.
 
 ## Adding a root node
@@ -18,6 +20,7 @@ config
   .addRootNodeType({
     type: "homepage",
     label: "Homepage",
+    initialWidth: 170,
     inputs: ports => [
       ports.string({
         name: "title",
@@ -39,11 +42,11 @@ config
   })
 ```
 
-You may notice a few things about the above example. First, instead of `addNodeType` we're using the `addRootNodeType` function, but the properties you pass to this function are the same. Under the hood, this node type is marked as the "root" node, and by default it can't be added or deleted in the node editor manually.
+You may notice a few things about the above example. First, instead of `addNodeType` we're using the `addRootNodeType` function, but the properties you pass to this function are the same. Under the hood, this node type is marked as the "root" node, and by default it can't be manually added or deleted in the node editor.
 
 ## Default nodes
 
-Let's return to the node editor. After adding the root node, you should have what appears to be the same editor as before. If you right-click to add a node, the homepage node doesn't appear. Because this node is the root node, there should be exactly one of this node in the editor at all times. We don't want users to be able to add or delete this node, so we'll provide it to the editor as a default node.
+Let's return to the node editor. You should have what appears to be the same editor as before. If you right-click to add a node, the homepage node doesn't appear. Because this node is the root node, there should be exactly one of this node in the editor at all times. We don't want users to be able to add or delete this node, so we'll provide it to the editor as a default node.
 
 In the file where we're rendering the node editor, we'll add a new prop called `defaultNodes`.
 
@@ -61,8 +64,8 @@ const App = () => {
         defaultNodes={[
           {
             type: "homepage",
-            x: 300,
-            y: -100
+            x: 190,
+            y: -150
           }
         ]}
       />
@@ -72,3 +75,11 @@ const App = () => {
 ```
 
 `defaultNodes` is an array of objects with a `type`, and an `x` and `y` position, relative to the center of the editor. If everything has gone according to plan, you should have an editor that looks like this:
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <SimpleEditor3 />
+</div>
+
+<br/>
+
+Try adding your other nodes and connecting them together. Our node editor is finally starting to take shape, but we need to create some more useful nodes if we really want to create something powerful. Let's head back to our `config` file and add a few more nodes.

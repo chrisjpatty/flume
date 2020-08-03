@@ -100,6 +100,29 @@ simpleConfig2
       ports.number()
     ]
   })
+  .addRootNodeType({
+    type: "homepage",
+    label: "Homepage",
+    initialWidth: 170,
+    inputs: ports => [
+      ports.string({
+        name: "title",
+        label: "Title"
+      }),
+      ports.string({
+        name: "description",
+        label: "Description"
+      }),
+      ports.boolean({
+        name: "showSignup",
+        label: "Show Signup"
+      }),
+      ports.number({
+        name: "copyrightYear",
+        label: "Copyright Year"
+      })
+    ]
+  })
 
 export const SimpleEditor = () => {
 
@@ -142,6 +165,25 @@ export const SimpleEditor2 = () => {
           x: 100,
           y: 50
         }
+      ]}
+    />
+  )
+}
+
+export const SimpleEditor3 = () => {
+
+  return (
+    <NodeEditor
+      comments={{}}
+      portTypes={simpleConfig2.portTypes}
+      nodeTypes={simpleConfig2.nodeTypes}
+      disableZoom
+      defaultNodes={[
+        {
+          type: "homepage",
+          x: 190,
+          y: -150
+        },
       ]}
     />
   )

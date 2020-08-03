@@ -114,63 +114,65 @@ export const getStageRef = connectionsId =>
 
 export const createConnections = (nodes, {scale, stageId, connectionsId}) => {
   const stageRef = getStageRef(connectionsId);
-  const stage = stageRef.getBoundingClientRect();
-  const stageHalfWidth = stage.width / 2;
-  const stageHalfHeight = stage.height / 2;
+  if(stageRef){
+    const stage = stageRef.getBoundingClientRect();
+    const stageHalfWidth = stage.width / 2;
+    const stageHalfHeight = stage.height / 2;
 
-  const byScale = value => (1 / scale) * value;
+    const byScale = value => (1 / scale) * value;
 
-  Object.values(nodes).forEach(node => {
-    if (node.connections && node.connections.inputs) {
-      Object.entries(node.connections.inputs).forEach(
-        ([inputName, outputs], k) => {
-          outputs.forEach(output => {
-            const fromPort = getPortRect(
-              output.nodeId,
-              output.portName,
-              "output"
-            );
-            const toPort = getPortRect(node.id, inputName, "input");
-            const portHalf = fromPort ? fromPort.width / 2 : 0;
-            if (fromPort && toPort) {
-              const id = output.nodeId + output.portName + node.id + inputName;
-              const existingLine = document.querySelector(
-                `[data-connection-id="${id}"]`
+    Object.values(nodes).forEach(node => {
+      if (node.connections && node.connections.inputs) {
+        Object.entries(node.connections.inputs).forEach(
+          ([inputName, outputs], k) => {
+            outputs.forEach(output => {
+              const fromPort = getPortRect(
+                output.nodeId,
+                output.portName,
+                "output"
               );
-              if (existingLine) {
-                updateConnection({
-                  line: existingLine,
-                  from: {
-                    x: byScale(fromPort.x - stage.x + portHalf - stageHalfWidth),
-                    y: byScale(fromPort.y - stage.y + portHalf - stageHalfHeight)
-                  },
-                  to: {
-                    x: byScale(toPort.x - stage.x + portHalf - stageHalfWidth),
-                    y: byScale(toPort.y - stage.y + portHalf - stageHalfHeight)
-                  }
-                });
-              } else {
-                createSVG({
-                  id,
-                  outputNodeId: output.nodeId,
-                  outputPortName: output.portName,
-                  inputNodeId: node.id,
-                  inputPortName: inputName,
-                  from: {
-                    x: byScale(fromPort.x - stage.x + portHalf - stageHalfWidth),
-                    y: byScale(fromPort.y - stage.y + portHalf - stageHalfHeight)
-                  },
-                  to: {
-                    x: byScale(toPort.x - stage.x + portHalf - stageHalfWidth),
-                    y: byScale(toPort.y - stage.y + portHalf - stageHalfHeight)
-                  },
-                  stage: stageRef
-                });
+              const toPort = getPortRect(node.id, inputName, "input");
+              const portHalf = fromPort ? fromPort.width / 2 : 0;
+              if (fromPort && toPort) {
+                const id = output.nodeId + output.portName + node.id + inputName;
+                const existingLine = document.querySelector(
+                  `[data-connection-id="${id}"]`
+                );
+                if (existingLine) {
+                  updateConnection({
+                    line: existingLine,
+                    from: {
+                      x: byScale(fromPort.x - stage.x + portHalf - stageHalfWidth),
+                      y: byScale(fromPort.y - stage.y + portHalf - stageHalfHeight)
+                    },
+                    to: {
+                      x: byScale(toPort.x - stage.x + portHalf - stageHalfWidth),
+                      y: byScale(toPort.y - stage.y + portHalf - stageHalfHeight)
+                    }
+                  });
+                } else {
+                  createSVG({
+                    id,
+                    outputNodeId: output.nodeId,
+                    outputPortName: output.portName,
+                    inputNodeId: node.id,
+                    inputPortName: inputName,
+                    from: {
+                      x: byScale(fromPort.x - stage.x + portHalf - stageHalfWidth),
+                      y: byScale(fromPort.y - stage.y + portHalf - stageHalfHeight)
+                    },
+                    to: {
+                      x: byScale(toPort.x - stage.x + portHalf - stageHalfWidth),
+                      y: byScale(toPort.y - stage.y + portHalf - stageHalfHeight)
+                    },
+                    stage: stageRef
+                  });
+                }
               }
-            }
-          });
-        }
-      );
-    }
-  });
+            });
+          }
+        );
+      }
+    });
+  }
 };
