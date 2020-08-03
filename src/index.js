@@ -46,6 +46,7 @@ export let NodeEditor = (
   },
   ref
 ) => {
+  const editorId = React.useRef(nanoid(5))
   const cache = React.useRef(new Cache());
   const stage = React.useRef();
   const [
@@ -67,9 +68,9 @@ export let NodeEditor = (
   const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
     scale: typeof initialScale === "number" ? clamp(initialScale, 0.1, 7) : 1,
     translate: { x: 0, y: 0 },
-    stageId: `__node_editor_stage__${nanoid(5)}`,
-    dragConnectionId: `__node_editor_drag_connection__${nanoid(5)}`,
-    connectionsId: `__node_editor_connections__${nanoid(5)}`,
+    stageId: `__node_editor_stage__${editorId.current}`,
+    dragConnectionId: `__node_editor_drag_connection__${editorId.current}`,
+    connectionsId: `__node_editor_connections__${editorId.current}`,
   });
 
   const recalculateConnections = React.useCallback(() => {
