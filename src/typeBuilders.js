@@ -118,6 +118,14 @@ export class FlumeConfig {
       this.portTypes = {};
     }
   }
+  addRootNodeType(config) {
+    this.addNodeType({
+      ...config,
+      root: true,
+      addable: false,
+      deletable: false
+    })
+  }
   addNodeType(config) {
     if (typeof config !== "object" && config !== null) {
       throw new Error(

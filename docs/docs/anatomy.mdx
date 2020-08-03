@@ -19,6 +19,10 @@ When writing a program using a language like Javascript, the program is made up 
 
 As any developer knows, this process of transforming inputs into outputs can get quite complicated. Luckily, graph data structures are a convenient way to represent these complex relationships between inputs and outputs. In the context of Flume, this graph is stored as a JSON object. The benefits of storing the logical instructions for your app as a JSON graph may not be immediately clear, so let's explain them with an example.
 
+:::note
+While Flume can be used to create and edit many styles of graphs, one of the most useful types of graphs is a "root-style" graph. With root style graphs, one node acts as the "root" node, and all other nodes stem from it. In a sense, root-style graphs look more like a tree than a web, except that all the "leaves" of the tree may be interconnected, as long as they feed back into the root node. Flume ships with a `RootEngine` for efficiently resolving graphs built in this style.
+:::
+
 ### Example: Moneyroll
 
 Let's say you're creating an e-commerce solution called _Moneyroll_. Moneyroll is an app that helps businesses create an online store for people to buy their products. Your first few customers have pretty simple requirements for calculating the prices of their products, like a hat store where each hat has a fixed price. Calculating the price of someones order is as easy as totalling up the fixed prices for each item, but as your business starts to grow, you start getting customers who need more complex logic for calculating product prices.

@@ -4,7 +4,7 @@ id: basic-config
 ---
 import { SimpleEditor, SimpleEditor2 } from '../components/GettingStartedExample'
 
-For our node editor to be useful, we need to define some nodes. For this example we're going to pretend that we're building a node editor to control the properties of a page on our website. Flume can be used for a lot more interesting use-cases than this, but this will suffice for now.
+For our node editor to be useful, we need to define some nodes. For this example we're going to pretend that we're building a node editor to control the properties of a page on our website. Flume can be used for a lot more interesting use-cases than this, but this example will suffice for now.
 
 ## Create a config file
 
@@ -269,3 +269,5 @@ If you come back to your node editor and right click anywhere, you should have 2
 <div style={{width: '100%', height: 600, color: "#000"}}>
   <SimpleEditor2 />
 </div>
+
+While this is all fine and well, it's still not very useful yet. What we need next is a "root" node to connect our other nodes to. This will serve as the output node for our graph.

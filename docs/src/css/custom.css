@@ -9,7 +9,7 @@
 @import url("https://use.typekit.net/nge5ixu.css");
 
 :root {
-  --ifm-color-primary: #2F6AEC;
+  --ifm-color-primary: #00a27b;
   --ifm-color-primary-dark: rgb(33, 175, 144);
   --ifm-color-primary-darker: rgb(31, 165, 136);
   --ifm-color-primary-darkest: rgb(26, 136, 112);
@@ -37,4 +37,7 @@
 
 .navbar__logo{
   height: 50%;
+}
+.docusaurus-highlight-code-line{
+  background-color: rgb(29, 32, 37);
 }

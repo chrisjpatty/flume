@@ -196,6 +196,7 @@ const ExampleBlock = ({ initialScreenSize }) => {
             nodeTypes={config.nodeTypes}
             portTypes={config.portTypes}
             initialScale={getInitialScale(initialScreenSize)}
+            disableZoom
             nodes={nodes}
           />
         </div>

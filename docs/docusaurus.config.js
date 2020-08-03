@@ -7,6 +7,9 @@ module.exports = {
   organizationName: 'chrisjpatty', // Usually your GitHub org/user name.
   projectName: 'flume', // Usually your repo name.
   themeConfig: {
+    prism: {
+      theme: require('prism-react-renderer/themes/oceanicNext'),
+    },
     navbar: {
       title: '',
       logo: {
