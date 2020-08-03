@@ -3,4 +3,32 @@ title: Anatomy of a Graph
 id: anatomy
 ---
 
-## Overview
+## Graph Theory
+
+Don't panic, you don't need to know much about graph theory to use Flume, but having a basic understanding of what a graph data structure is can make it a little easier.
+
+In short a graph is a data structure used to model complex relationships between pieces of data. Each piece of data is referred to as a "node", and its relationships with other nodes is called an "edge". Lets use a network of friends on a social media site like Facebook or Twitter as an example:
+
+![A graph showing a network of friends](/img/friends-graph.svg)
+
+In this example, each person is a "node" in the graph, and each black line, indicating that the two connected users are friends, is an "edge". Penelope, Jeffrey, and Carmen, are all friends with each other, but Mark is only friends with Penelope. You can imagine if we were to add every user on a site like Facebook, that our graph would look like a very complicated web. Graphs are an ideal data structure for representing these kinds of complex relationships.
+
+## Logic Graphs
+
+When writing a program using a language like Javascript, the program is made up of a series of logical statements like `if/then`, `for each`, `switch`, etc. The goal of most programs is to take in some data inputs from a database, the user, etc, and then use these logical statements to transform those inputs into an output, like a user-interface on a website, or a new set of data.
+
+As any developer knows, this process of transforming inputs into outputs can get quite complicated. Luckily, graph data structures are a convenient way to represent these complex relationships between inputs and outputs. In the context of Flume, this graph is stored as a JSON object. The benefits of storing the logical instructions for your app as a JSON graph may not be immediately clear, so let's explain them with an example.
+
+### Example: Moneyroll
+
+Let's say you're creating an e-commerce solution called _Moneyroll_. Moneyroll is an app that helps businesses create an online store for people to buy their products. Your first few customers have pretty simple requirements for calculating the prices of their products, like a hat store where each hat has a fixed price. Calculating the price of someones order is as easy as totalling up the fixed prices for each item, but as your business starts to grow, you start getting customers who need more complex logic for calculating product prices.
+
+For example, lets say you get a new customer, _Sundown Plants_, who sells houseplants. In this case, the price for each plant depends on the time of year, and if you buy plants that come from the same warehouse you get a discount. As a developer for Moneyroll you now have a problem. Most of your customers don't have these requirements, so you don't want to write a bunch of code specifically for Sundown Plants, and bloat the size of your code for everyone. You also don't want to be responsible for updating the logic every time Sundown Plants needs to adjust it.
+
+This is where Flume comes in. Flume provides a visual editor that lets Sundown Plants model the logic for calculating their pricing. As the developer you just create the nodes that output the time of the year, and which items are in the cart, and your customer can take care of the rest. If this process is too complicated for a particular customer, you use Flume as your own internal tool rather than hardcoding logic for different customers. Your code doesn't need to change, and you don't need to deploy a new build every time the logic needs of a customer changes. The JSON graphs representing each customers logic can be stored in a database, and pulled on demand when your app loads, ensuring that each customer is only running the logic necessary for their business.
+
+## Summary
+
+In summary, Flume is a tool for creating intuitive, visual programming languages for you and your users to use. It provides a standard UI for creating and editing JSON graphs, and an engine for parsing your logic graphs at runtime. Flume makes it easy to take advantage of the power of graph data structures using a simple visual editor.
+
+There's a lot more to graph theory than we've discussed here. If you're interesting in learning more the [Wikipedia article](https://en.wikipedia.org/wiki/Graph_theory) on the subject is a good place to start.

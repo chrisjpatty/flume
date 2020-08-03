@@ -192,6 +192,7 @@ const ExampleBlock = ({ initialScreenSize }) => {
         </div>
         <div className={styles.flumeWrapper}>
           <NodeEditor
+            comments={{}}
             nodeTypes={config.nodeTypes}
             portTypes={config.portTypes}
             initialScale={getInitialScale(initialScreenSize)}

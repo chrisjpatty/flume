@@ -28,7 +28,7 @@
   margin-left: auto;
 }
 .logo {
-  width: 150px;
+  width: 180px;
 }
 .navLinks {
   margin-left: 40px;
@@ -52,10 +52,14 @@
   align-items: center;
   flex-direction: column;
   width: 55%;
+  padding-bottom: 50px;
 }
 .heroTextInnerWrapper {
   display: flex;
   flex-direction: column;
+}
+.wordmark{
+  max-width: 50px;
 }
 .heroTextBlock h1 {
   display: flex;
@@ -313,6 +317,12 @@
 }
 
 @media screen and (max-width: 960px) {
+  .logo {
+    width: 150px;
+  }
+  .navLinks {
+    margin-left: 20px;
+  }
   .desktop {
     display: none;
   }
@@ -352,6 +362,7 @@
   .heroTextBlock {
     width: 100%;
     min-height: 75vh;
+    padding-bottom: 0px;
   }
   .heroTextBlock .heroSubtitle {
     font-size: 30px;

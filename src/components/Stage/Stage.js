@@ -6,11 +6,11 @@ import { NodeTypesContext, NodeDispatchContext } from "../../context";
 import Draggable from "../Draggable/Draggable";
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
-import { STAGE_WRAPPER_ID } from "../../constants";
 
 const Stage = ({
   scale,
   translate,
+  stageId,
   dispatchStageState,
   children,
   outerStageChildren,
@@ -187,7 +187,7 @@ const Stage = ({
 
   return (
     <Draggable
-      id={STAGE_WRAPPER_ID}
+      id={stageId}
       className={styles.wrapper}
       innerRef={wrapper}
       onContextMenu={handleContextMenu}

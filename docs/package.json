@@ -12,7 +12,7 @@
     "@docusaurus/core": "^2.0.0-alpha.58",
     "@docusaurus/preset-classic": "^2.0.0-alpha.58",
     "clsx": "^1.1.1",
-    "flume": "^0.1.25",
+    "flume": "^0.2.7",
     "lodash": "^4.17.19",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

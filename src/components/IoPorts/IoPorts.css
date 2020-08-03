@@ -48,7 +48,8 @@
 .transput{
   display: flex;
   align-items: center;
-  margin-top: 4px;
+  margin-top: 6px;
+  margin-bottom: 6px;
   &:first-child{
     margin-top: 0px;
   }
@@ -58,6 +59,10 @@
     &:first-child{
       margin-top: 0px;
     }
+  }
+  &[data-controlless="false"]{
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 }
 .controls{

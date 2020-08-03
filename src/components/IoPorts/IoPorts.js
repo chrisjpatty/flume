@@ -93,7 +93,7 @@ const Input = ({
   return (
     <div
       className={styles.transput}
-      data-controlless={isConnected || noControls}
+      data-controlless={isConnected || noControls || !controls.length}
       onDragStart={e => {
         e.preventDefault();
         e.stopPropagation();
@@ -195,7 +195,7 @@ const Port = ({
 
   const handleDrag = e => {
     const stage = document
-      .getElementById("__node_editor_stage__")
+      .getElementById(stageState.stageId)
       .getBoundingClientRect();
 
     if (isInput) {
@@ -295,7 +295,7 @@ const Port = ({
     e.stopPropagation();
     const startPort = port.current.getBoundingClientRect();
     const stage = document
-      .getElementById("__node_editor_stage__")
+      .getElementById(stageState.stageId)
       .getBoundingClientRect();
 
     if (isInput) {
@@ -364,7 +364,7 @@ const Port = ({
       />
       {isDragging && !isInput ? (
         <Portal
-          node={document.getElementById("__node_editor_drag_connection__")}
+          node={document.getElementById(stageState.dragConnectionId)}
         >
           <Connection
             from={dragStartCoordinates}

@@ -94,13 +94,6 @@ export const createSVG = ({
   svg.setAttribute("class", styles.svg);
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
   const curve = calculateCurve(from, to)
-    // .x(function(d) { return x(d.date); })
-    // .y(function(d) { return y(d.value); })
-    // .curve(curveCatmullRom.alpha(0.5));
-  // line.setAttribute("x1", from.x);
-  // line.setAttribute("y1", from.y);
-  // line.setAttribute("x2", to.x);
-  // line.setAttribute("y2", to.y);
   path.setAttribute("d", curve)
   path.setAttribute("stroke", "rgb(185, 186, 189)");
   path.setAttribute("stroke-width", "3");
@@ -116,11 +109,11 @@ export const createSVG = ({
   return svg;
 };
 
-export const getStageRef = () =>
-  document.getElementById("__node_editor_connections__");
+export const getStageRef = connectionsId =>
+  document.getElementById(connectionsId);
 
-export const createConnections = (nodes, {scale}) => {
-  const stageRef = getStageRef();
+export const createConnections = (nodes, {scale, stageId, connectionsId}) => {
+  const stageRef = getStageRef(connectionsId);
   const stage = stageRef.getBoundingClientRect();
   const stageHalfWidth = stage.width / 2;
   const stageHalfHeight = stage.height / 2;

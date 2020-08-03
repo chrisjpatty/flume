@@ -1,0 +1,271 @@
+---
+title: Basic Configuration
+id: basic-config
+---
+import { SimpleEditor, SimpleEditor2 } from '../components/GettingStartedExample'
+
+For our node editor to be useful, we need to define some nodes. For this example we're going to pretend that we're building a node editor to control the properties of a page on our website. Flume can be used for a lot more interesting use-cases than this, but this will suffice for now.
+
+## Create a config file
+
+Start by creating a new blank Javascript file in your project called `config.js`. Then, import `FlumeConfig` from `flume` like so:
+
+```js
+import { FlumeConfig } from 'flume'
+```
+
+Next, create a new instance of `FlumeConfig` like this.
+
+```js
+import { FlumeConfig } from 'flume'
+
+const config = new FlumeConfig()
+
+export default config;
+```
+
+And that's it! Now we're ready to start defining our ports and nodes.
+
+## Create your first port
+
+The `FlumeConfig` class exposes some helpful methods for configuring ports and nodes. We're going to start by creating a port for text strings:
+
+```js
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+  .addPortType({
+    type: "string",
+    name: "string",
+    label: "Text",
+    color: Colors.green,
+    controls: [
+      Controls.text({
+        name: "string",
+        label: "Text"
+      })
+    ]
+  })
+```
+
+Let's break down what's going on here. First we decide on a type for this port. Because this port is going to output and accept strings, we'll just call it `string`. We also need to give it a name that we can use to identify it later. For simplicity, we'll also name it `string`.
+
+Now "string" may be a confusing word for non-programmers so we'll give it a `label` of "Text". This is the label that will be shown to users when the port renders. Next we'll pick a color for the port. By default, ports are a neutral gray color, but to make it easier to recognize this port, we'll color it green by importing `Colors` from flume, and setting `color` to `Colors.green`.
+
+Last, we need to define the controls available when this port is an input. In most cases, ports only have one control, but you may have any number of them. In this case, we want users to be able to type in text, so we'll import `Controls` from `flume`, and then call `Controls.text()`. We'll give the text input a name, which again, for simplicity, we'll just name it `string`, and we'll give it a user-readable label of `Text`.
+
+So far we've only defined a text port, but not a text node. In order to use our port we need to create a node for it. Let's do that now:
+
+## Create your first node
+
+We want our users to be able to use our text port, so let's create a node for it. Using the `FlumeConfig` class again, lets add our first node:
+
+```js
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+  .addPortType({
+    type: "string",
+    name: "string",
+    label: "Text",
+    color: Colors.green,
+    controls: [
+      Controls.text({
+        name: "string",
+        label: "Text"
+      })
+    ]
+  })
+  .addNodeType({
+    type: "string",
+    label: "Text",
+    description: "Outputs a string of text",
+    inputs: ports => [
+      ports.string()
+    ],
+    outputs: ports => [
+      ports.string()
+    ]
+  })
+```
+
+Let's break this down. Like when we defined our port, we start by deciding on a type for our node. Because this node will only be responsible for inputting and outputting text strings, we'll call the type `string`. And as before, we also pick a user-friendly label, which we'll call `Text`. We can also provide an optional description, which can help users understand how to use a node.
+
+Next, we can define the inputs and outputs for this node. Because we've already defined the ports for this node, `FlumeConfig` will provide them for us in our inputs function. The inputs and outputs functions must return an array of previously-defined ports, so we'll return an array with a call to `ports.string()`.
+
+## Rendering the editor
+
+Now that we have our first node, let's return to where we've rendered our node editor and import our config.
+
+```jsx
+import React from 'react'
+import { NodeEditor } from 'flume'
+import config from './config'
+
+const App = () => {
+  return (
+    <div style={{width: 800, height: 600}}>
+      <NodeEditor
+        portTypes={config.portTypes}
+        nodeTypes={config.nodeTypes}
+      />
+    </div>
+  )
+}
+```
+
+As you can see we've provided our `portTypes` and `nodeTypes` to props of the same name. Right click anywhere on the node editor and click on the `Text` option. If everything is hooked up correctly, you should now have a node editor that looks like this:
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <SimpleEditor />
+</div>
+
+Try creating a few `Text` nodes and connecting them together. This still isn't very useful, but let's head back to `config.js` and create a few more ports and nodes.
+
+## Adding more ports & nodes
+
+Let's add two more ports, one for booleans, and one for numbers. We'll start with the boolean port & node.
+
+```js {17-28,40-51}
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+  .addPortType({
+    type: "string",
+    name: "string",
+    label: "Text",
+    color: Colors.green,
+    controls: [
+      Controls.text({
+        name: "string",
+        label: "Text"
+      })
+    ]
+  })
+  .addPortType({
+    type: "boolean",
+    name: "boolean",
+    label: "True/False",
+    color: Colors.blue,
+    controls: [
+      Controls.checkbox({
+        name: "boolean",
+        label: "True/False"
+      })
+    ]
+  })
+  .addNodeType({
+    type: "string",
+    label: "Text",
+    description: "Outputs a string of text",
+    inputs: ports => [
+      ports.string()
+    ],
+    outputs: ports => [
+      ports.string()
+    ]
+  })
+  .addNodeType({
+    type: "boolean",
+    label: "True/False",
+    description: "Outputs a true/false value",
+    initialWidth: 140,
+    inputs: ports => [
+      ports.boolean()
+    ],
+    outputs: ports => [
+      ports.boolean()
+    ]
+  })
+```
+
+As you can see, the process for adding this port is very similar. Instead of the text control we'll use the checkbox, and we'll set the color to blue. Then when we create the node we'll use the boolean port for the input and output. By default, nodes are 200px wide, but our boolean node can be a little more compact, so we'll give it an initialWidth of `140`.
+
+Next let's add the number port and node:
+
+```js {29-40,64-75}
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+  .addPortType({
+    type: "string",
+    name: "string",
+    label: "Text",
+    color: Colors.green,
+    controls: [
+      Controls.text({
+        name: "string",
+        label: "Text"
+      })
+    ]
+  })
+  .addPortType({
+    type: "boolean",
+    name: "boolean",
+    label: "True/False",
+    color: Colors.blue,
+    controls: [
+      Controls.checkbox({
+        name: "boolean",
+        label: "True/False"
+      })
+    ]
+  })
+  .addPortType({
+    type: "number",
+    name: "number",
+    label: "Number",
+    color: Colors.red,
+    controls: [
+      Controls.number({
+        name: "number",
+        label: "Number"
+      })
+    ]
+  })
+  .addNodeType({
+    type: "string",
+    label: "Text",
+    description: "Outputs a string of text",
+    inputs: ports => [
+      ports.string()
+    ],
+    outputs: ports => [
+      ports.string()
+    ]
+  })
+  .addNodeType({
+    type: "boolean",
+    label: "True/False",
+    description: "Outputs a true/false value",
+    initialWidth: 140,
+    inputs: ports => [
+      ports.boolean()
+    ],
+    outputs: ports => [
+      ports.boolean()
+    ]
+  })
+  .addNodeType({
+    type: "number",
+    label: "Number",
+    description: "Outputs a numeric value",
+    initialWidth: 160,
+    inputs: ports => [
+      ports.number()
+    ],
+    outputs: ports => [
+      ports.number()
+    ]
+  })
+```
+
+If you come back to your node editor and right click anywhere, you should have 2 new nodes available. If everything is hooked up correctly, your node editor should look like this:
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <SimpleEditor2 />
+</div>

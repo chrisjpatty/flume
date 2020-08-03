@@ -26,14 +26,16 @@ import React from 'react'
 import { NodeEditor } from "flume";
 
 const App = () => {
-  const [nodes, setNodes] = React.useState({})
-
   return (
-    <NodeEditor
-      nodes={nodes}
-    />
+    <div style={{width: 800, height: 600}}>
+      <NodeEditor />
+    </div>
   )
 }
 ```
 
-As you may guess, this alone will render only a blank editor grid with no nodes.
+As you may guess, this alone will render only a blank editor grid with no nodes. This obviously isn't very useful, so lets get started [configuring our first node editor](/docs/basic-config).
+
+:::note
+We've also wrapped our node editor in a div with a width and height. The node editor is designed to take up all the available space of its container. If you place it in a container with a variable width, it will respond to any changes in the width.
+:::

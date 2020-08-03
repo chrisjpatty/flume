@@ -1,10 +1,10 @@
 import React from 'react'
 import styles from './Connections.css'
 
-const Connections = ({ nodes }) => {
+const Connections = ({ nodes, connectionsId }) => {
 
   return (
-    <div className={styles.svgWrapper} id="__node_editor_connections__"/>
+    <div className={styles.svgWrapper} id={connectionsId}/>
   )
 }
 

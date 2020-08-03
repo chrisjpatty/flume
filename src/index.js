@@ -20,12 +20,11 @@ import nodesReducer, {
 } from "./nodesReducer";
 import commentsReducer from "./commentsReducer";
 import stageReducer from "./stageReducer";
-import { STAGE_WRAPPER_ID } from "./constants";
 import usePrevious from "./hooks/usePrevious";
 import clamp from "lodash/clamp";
 import Cache from "./Cache";
-
 import styles from "./styles.css";
+const nanoid = require('nanoid')
 
 export let NodeEditor = (
   {
@@ -59,7 +58,7 @@ export let NodeEditor = (
   );
   const [comments, dispatchComments] = React.useReducer(
     commentsReducer,
-    initialComments
+    initialComments || {}
   );
   const [
     shouldRecalculateConnections,
@@ -67,7 +66,10 @@ export let NodeEditor = (
   ] = React.useState(true);
   const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
     scale: typeof initialScale === "number" ? clamp(initialScale, 0.1, 7) : 1,
-    translate: { x: 0, y: 0 }
+    translate: { x: 0, y: 0 },
+    stageId: `__node_editor_stage__${nanoid(5)}`,
+    dragConnectionId: `__node_editor_drag_connection__${nanoid(5)}`,
+    connectionsId: `__node_editor_connections__${nanoid(5)}`,
   });
 
   const recalculateConnections = React.useCallback(() => {
@@ -76,7 +78,7 @@ export let NodeEditor = (
 
   const recalculateStageRect = () => {
     stage.current = document
-      .getElementById(STAGE_WRAPPER_ID)
+      .getElementById(stageState.stageId)
       .getBoundingClientRect();
   };
 
@@ -126,6 +128,7 @@ export let NodeEditor = (
                 <CacheContext.Provider value={cache}>
                   <RecalculateStageRectContext.Provider value={recalculateStageRect}>
                     <Stage
+                      stageId={stageState.stageId}
                       scale={stageState.scale}
                       translate={stageState.translate}
                       spaceToPan={spaceToPan}
@@ -179,10 +182,10 @@ export let NodeEditor = (
                           key={node.id}
                         />
                       ))}
-                      <Connections nodes={nodes} />
+                      <Connections nodes={nodes} connectionsId={stageState.connectionsId} />
                       <div
                         className={styles.dragWrapper}
-                        id="__node_editor_drag_connection__"
+                        id={stageState.dragConnectionId}
                       ></div>
                     </Stage>
                   </RecalculateStageRectContext.Provider>

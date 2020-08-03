@@ -1,0 +1,33 @@
+---
+title: The Node Editor
+id: node-editor
+---
+import AnatomyExample from '../components/AnatomyExample'
+
+Lets take a look at a live Flume node editor and break down its components:
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <AnatomyExample />
+</div>
+
+## Nodes
+
+Each block in the example above is a node. Each node can be thought of as a single function which can optionally receive arguments (inputs), and return results (outputs).
+
+Starting on the top left, we have a `Text` node, which has a single purpose. It ouputs a string of text. On the bottom left we have a `User` node, which looks up the current user, and outputs some of their attributes. The node on the right is our `root` node, and is only responsible for representing the attributes of a homepage.
+
+:::note
+Keep in mind, this is an arbitrary example. Flume makes no assumptions about what nodes or ports you might want in your editor. There's no built-in `Text` node or `User` node, etc. When developing with Flume, you are responsible for defining all of the available nodes in your editor.
+:::
+
+## Ports
+
+The colored dots on the left and right of each node are called "ports". Ports determine how each node is allowed to interact with other nodes. You can see in this example that the rules for how to connect nodes are clear. Green ports output and receive strings of text, blue ports output and receive booleans, and red ports output and receive numbers. Go ahead and play with the example above by dragging between inputs and outputs. You can't create connections between ports that aren't of the same type. To learn more about [type safety, click here](/docs/type-safety).
+
+:::note
+Once again, this is an arbitrary example. These ports are only configured this way for this example. In your own implementation you can have ports of any color outputting data of any kind.
+:::
+
+## Controls
+
+When not connected, each input may display any number of "controls" for accepting user input. Flume provides built-in controls like text inputs, dropdown boxes, number controls, and even multi-select controls, however, you are free to define any custom control you like. 
