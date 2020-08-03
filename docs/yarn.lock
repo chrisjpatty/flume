@@ -4069,10 +4069,10 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.3.tgz#c1283ac9f27b368abc1e36d1ff7b04501a30356b"
   integrity sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg==
 
-flume@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/flume/-/flume-0.3.0.tgz#92147efe44fb4455e639ac5af6ccdc1d7129e549"
-  integrity sha512-n/nBegMtQYoEN6hCv2NzmcYbfMv0hRdGGY30IBMvPncosRZ8+fgvG1RtJrCItWhAfswMsyZVPsYe/EzY88Mhfg==
+flume@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/flume/-/flume-0.3.1.tgz#738cda7f96f37d2128dda55b17d057ed22ac1b62"
+  integrity sha512-k7evA1LZMBoMS5YuYegMIgzL5VPO/Bfuq52r/+wNPK1+T3IHXRAJ7Aqlol5ZAjfr6KzdihsAYUGCcZBLHuYDFA==
   dependencies:
     d3-shape "^1.3.7"
     lodash "^4.17.15"
