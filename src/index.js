@@ -1,4 +1,5 @@
 import React from "react";
+import { useId } from "@reach/auto-id";
 import Stage from "./components/Stage/Stage";
 import Node from "./components/Node/Node";
 import Comment from "./components/Comment/Comment";
@@ -12,6 +13,7 @@ import {
   ContextContext,
   StageContext,
   CacheContext,
+  EditorIdContext
 } from "./context";
 import { createConnections } from "./connectionCalculator";
 import nodesReducer, {
@@ -23,8 +25,8 @@ import stageReducer from "./stageReducer";
 import usePrevious from "./hooks/usePrevious";
 import clamp from "lodash/clamp";
 import Cache from "./Cache";
+import { STAGE_ID, DRAG_CONNECTION_ID } from './constants'
 import styles from "./styles.css";
-const nanoid = require('nanoid')
 
 export let NodeEditor = (
   {
@@ -46,7 +48,7 @@ export let NodeEditor = (
   },
   ref
 ) => {
-  const editorId = React.useRef(nanoid(5))
+  const editorId = useId()
   const cache = React.useRef(new Cache());
   const stage = React.useRef();
   const [
@@ -67,19 +69,16 @@ export let NodeEditor = (
   ] = React.useState(true);
   const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
     scale: typeof initialScale === "number" ? clamp(initialScale, 0.1, 7) : 1,
-    translate: { x: 0, y: 0 },
-    stageId: `__node_editor_stage__${editorId.current}`,
-    dragConnectionId: `__node_editor_drag_connection__${editorId.current}`,
-    connectionsId: `__node_editor_connections__${editorId.current}`,
+    translate: { x: 0, y: 0 }
   });
 
   const recalculateConnections = React.useCallback(() => {
-    createConnections(nodes, stageState);
-  }, [nodes]);
+    createConnections(nodes, stageState, editorId);
+  }, [nodes, editorId]);
 
   const recalculateStageRect = () => {
     stage.current = document
-      .getElementById(stageState.stageId)
+      .getElementById(`${STAGE_ID}${editorId}`)
       .getBoundingClientRect();
   };
 
@@ -127,69 +126,71 @@ export let NodeEditor = (
             <ContextContext.Provider value={context}>
               <StageContext.Provider value={stageState}>
                 <CacheContext.Provider value={cache}>
-                  <RecalculateStageRectContext.Provider value={recalculateStageRect}>
-                    <Stage
-                      stageId={stageState.stageId}
-                      scale={stageState.scale}
-                      translate={stageState.translate}
-                      spaceToPan={spaceToPan}
-                      disablePan={disablePan}
-                      disableZoom={disableZoom}
-                      dispatchStageState={dispatchStageState}
-                      dispatchComments={dispatchComments}
-                      disableComments={disableComments || hideComments}
-                      stageRef={stage}
-                      numNodes={Object.keys(nodes).length}
-                      outerStageChildren={
-                        debug && (
-                          <div className={styles.debugWrapper}>
-                            <button
-                              className={styles.debugButton}
-                              onClick={() => console.log(nodes)}
-                            >
-                              Log Nodes
-                            </button>
-                            <button
-                              className={styles.debugButton}
-                              onClick={() => console.log(JSON.stringify(nodes))}
-                            >
-                              Export Nodes
-                            </button>
-                            <button
-                              className={styles.debugButton}
-                              onClick={() => console.log(comments)}
-                            >
-                              Log Comments
-                            </button>
-                          </div>
-                        )
-                      }
-                    >
-                      {!hideComments && Object.values(comments).map(comment => (
-                        <Comment
-                          {...comment}
-                          stageRect={stage}
-                          dispatch={dispatchComments}
-                          onDragStart={recalculateStageRect}
-                          key={comment.id}
-                        />
-                      ))}
-                      {Object.values(nodes).map(node => (
-                        <Node
-                          {...node}
-                          stageRect={stage}
-                          onDragEnd={triggerRecalculation}
-                          onDragStart={recalculateStageRect}
-                          key={node.id}
-                        />
-                      ))}
-                      <Connections nodes={nodes} connectionsId={stageState.connectionsId} />
-                      <div
-                        className={styles.dragWrapper}
-                        id={stageState.dragConnectionId}
-                      ></div>
-                    </Stage>
-                  </RecalculateStageRectContext.Provider>
+                  <EditorIdContext.Provider value={editorId}>
+                    <RecalculateStageRectContext.Provider value={recalculateStageRect}>
+                      <Stage
+                        editorId={editorId}
+                        scale={stageState.scale}
+                        translate={stageState.translate}
+                        spaceToPan={spaceToPan}
+                        disablePan={disablePan}
+                        disableZoom={disableZoom}
+                        dispatchStageState={dispatchStageState}
+                        dispatchComments={dispatchComments}
+                        disableComments={disableComments || hideComments}
+                        stageRef={stage}
+                        numNodes={Object.keys(nodes).length}
+                        outerStageChildren={
+                          debug && (
+                            <div className={styles.debugWrapper}>
+                              <button
+                                className={styles.debugButton}
+                                onClick={() => console.log(nodes)}
+                              >
+                                Log Nodes
+                              </button>
+                              <button
+                                className={styles.debugButton}
+                                onClick={() => console.log(JSON.stringify(nodes))}
+                              >
+                                Export Nodes
+                              </button>
+                              <button
+                                className={styles.debugButton}
+                                onClick={() => console.log(comments)}
+                              >
+                                Log Comments
+                              </button>
+                            </div>
+                          )
+                        }
+                      >
+                        {!hideComments && Object.values(comments).map(comment => (
+                          <Comment
+                            {...comment}
+                            stageRect={stage}
+                            dispatch={dispatchComments}
+                            onDragStart={recalculateStageRect}
+                            key={comment.id}
+                          />
+                        ))}
+                        {Object.values(nodes).map(node => (
+                          <Node
+                            {...node}
+                            stageRect={stage}
+                            onDragEnd={triggerRecalculation}
+                            onDragStart={recalculateStageRect}
+                            key={node.id}
+                          />
+                        ))}
+                        <Connections nodes={nodes} editorId={editorId} />
+                        <div
+                          className={styles.dragWrapper}
+                          id={`${DRAG_CONNECTION_ID}${editorId}`}
+                        ></div>
+                      </Stage>
+                    </RecalculateStageRectContext.Provider>
+                  </EditorIdContext.Provider>
                 </CacheContext.Provider>
               </StageContext.Provider>
             </ContextContext.Provider>

@@ -4,13 +4,15 @@ import { Portal } from "react-portal";
 import {
   NodeDispatchContext,
   ConnectionRecalculateContext,
-  StageContext
+  StageContext,
+  EditorIdContext
 } from "../../context";
 import Control from "../Control/Control";
 import Connection from "../Connection/Connection";
 import { PortTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
 import { calculateCurve, getPortRect } from "../../connectionCalculator";
+import { STAGE_ID, DRAG_CONNECTION_ID } from '../../constants'
 
 const IoPorts = ({
   nodeId,
@@ -180,6 +182,8 @@ const Port = ({
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext);
+  const editorId = React.useContext(EditorIdContext);
+  const stageId = `${STAGE_ID}${editorId}`
   const inputTypes = React.useContext(PortTypesContext);
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStartCoordinates, setDragStartCoordinates] = React.useState({
@@ -195,7 +199,7 @@ const Port = ({
 
   const handleDrag = e => {
     const stage = document
-      .getElementById(stageState.stageId)
+      .getElementById(stageId)
       .getBoundingClientRect();
 
     if (isInput) {
@@ -295,7 +299,7 @@ const Port = ({
     e.stopPropagation();
     const startPort = port.current.getBoundingClientRect();
     const stage = document
-      .getElementById(stageState.stageId)
+      .getElementById(stageId)
       .getBoundingClientRect();
 
     if (isInput) {
@@ -364,7 +368,7 @@ const Port = ({
       />
       {isDragging && !isInput ? (
         <Portal
-          node={document.getElementById(stageState.dragConnectionId)}
+          node={document.getElementById(`${DRAG_CONNECTION_ID}${editorId}`)}
         >
           <Connection
             from={dragStartCoordinates}

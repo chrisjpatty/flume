@@ -1,4 +1,5 @@
 import styles from "./components/Connection/Connection.css";
+import { CONNECTIONS_ID } from './constants'
 import { line, curveBasis } from 'd3-shape'
 
 const getPort = (nodeId, portName, transputType = "input") => document
@@ -109,11 +110,11 @@ export const createSVG = ({
   return svg;
 };
 
-export const getStageRef = connectionsId =>
-  document.getElementById(connectionsId);
+export const getStageRef = editorId =>
+  document.getElementById(`${CONNECTIONS_ID}${editorId}`);
 
-export const createConnections = (nodes, {scale, stageId, connectionsId}) => {
-  const stageRef = getStageRef(connectionsId);
+export const createConnections = (nodes, {scale, stageId}, editorId) => {
+  const stageRef = getStageRef(editorId);
   if(stageRef){
     const stage = stageRef.getBoundingClientRect();
     const stageHalfWidth = stage.width / 2;
