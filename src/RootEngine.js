@@ -23,7 +23,7 @@ class RootEngine {
     return nodeType.inputs.reduce((obj, input) => {
       const inputConnections = node.connections.inputs[input.name] || [];
       if (inputConnections.length > 0) {
-        obj[input.name] = this.getValueOfConnection(inputConnections[0], nodes);
+        obj[input.name] = this.getValueOfConnection(inputConnections[0], nodes, context);
       } else {
         obj[input.name] = this.resolveInputControls(
           input.type,

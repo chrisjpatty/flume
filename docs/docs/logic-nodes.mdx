@@ -3,6 +3,8 @@ title: Logic Nodes
 id: logic-nodes
 ---
 
+import { SimpleEditor4, SimpleEditor5 } from '../components/GettingStartedExample'
+
 So far we've created some basic nodes. We've created text, number, and boolean nodes, and a root node for the final output. While this is fine and well, let's take a minute and think about some nodes we could create that could make our editor more powerful. Here's a few ideas:
 
 - A user node, that outputs attributes of the current user
@@ -35,7 +37,8 @@ config
   .addNodeType({
     type: "user",
     label: "User",
-    initialWidth: 140,
+    description: "Outputs attributes of the current user",
+    initialWidth: 130,
     outputs: ports => [
       ports.string({
         name: "firstName",
@@ -58,3 +61,51 @@ config
 ```
 
 Nothing new to see here, we've just added a node type called `user`, with 4 outputs and no inputs. In a later section we'll walk through how to actually hook up the data for this node, but for now let's save and return to our node editor. You should now have a new node available like this:
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <SimpleEditor4 />
+</div>
+
+<br/>
+
+Let's head back to `config.js` and add our "Join Text" node.
+
+```js
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+/*  ...  */
+  .addNodeType({
+    type: "joinText",
+    label: "Join Text",
+    description: "Combines two strings of text into one string",
+    initialWidth: 160,
+    inputs: ports => [
+      ports.string({
+        name: "string1",
+        label: "First text"
+      }),
+      ports.string({
+        name: "string2",
+        label: "Second text"
+      })
+    ],
+    outputs: ports => [
+      ports.string({
+        name: "joinedText",
+        label: "Joined Text"
+      }),
+    ]
+  })
+```
+
+As you can see, this node will take in two strings as inputs, and outputs a single combined string. You should now have a new node available in your editor like this:
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <SimpleEditor5 />
+</div>
+
+## Summary
+
+So far we've created a useful node editor, but we don't have a way to get our logic graph in and out of the editor. In the next section we'll look at how to save the nodes in our editor so we can use them later. 

@@ -1,7 +1,14 @@
-import React from 'react'
-import { FlumeConfig, Colors, Controls, NodeEditor } from 'flume'
+import React from "react";
+import {
+  FlumeConfig,
+  Colors,
+  Controls,
+  NodeEditor,
+  RootEngine,
+  useRootEngine
+} from "flume";
 
-const simpleConfig = new FlumeConfig()
+const simpleConfig = new FlumeConfig();
 simpleConfig
   .addPortType({
     type: "string",
@@ -19,15 +26,11 @@ simpleConfig
     type: "string",
     label: "Text",
     description: "Outputs a string of text",
-    inputs: ports => [
-      ports.string()
-    ],
-    outputs: ports => [
-      ports.string()
-    ]
-  })
+    inputs: ports => [ports.string()],
+    outputs: ports => [ports.string()]
+  });
 
-const simpleConfig2 = new FlumeConfig()
+const simpleConfig2 = new FlumeConfig();
 simpleConfig2
   .addPortType({
     type: "string",
@@ -69,36 +72,109 @@ simpleConfig2
     type: "string",
     label: "Text",
     description: "Outputs a string of text",
-    inputs: ports => [
-      ports.string()
-    ],
-    outputs: ports => [
-      ports.string()
-    ]
+    inputs: ports => [ports.string()],
+    outputs: ports => [ports.string()]
   })
   .addNodeType({
     type: "boolean",
     label: "True/False",
     description: "Outputs a true/false value",
     initialWidth: 140,
-    inputs: ports => [
-      ports.boolean()
-    ],
-    outputs: ports => [
-      ports.boolean()
-    ]
+    inputs: ports => [ports.boolean()],
+    outputs: ports => [ports.boolean()]
   })
   .addNodeType({
     type: "number",
     label: "Number",
     description: "Outputs a numeric value",
     initialWidth: 160,
+    inputs: ports => [ports.number()],
+    outputs: ports => [ports.number()]
+  })
+  .addRootNodeType({
+    type: "homepage",
+    label: "Homepage",
+    initialWidth: 170,
     inputs: ports => [
-      ports.number()
-    ],
-    outputs: ports => [
-      ports.number()
+      ports.string({
+        name: "title",
+        label: "Title"
+      }),
+      ports.string({
+        name: "description",
+        label: "Description"
+      }),
+      ports.boolean({
+        name: "showSignup",
+        label: "Show Signup"
+      }),
+      ports.number({
+        name: "copyrightYear",
+        label: "Copyright Year"
+      })
     ]
+  });
+
+const simpleConfig3 = new FlumeConfig();
+simpleConfig3
+  .addPortType({
+    type: "string",
+    name: "string",
+    label: "Text",
+    color: Colors.green,
+    controls: [
+      Controls.text({
+        name: "string",
+        label: "Text"
+      })
+    ]
+  })
+  .addPortType({
+    type: "boolean",
+    name: "boolean",
+    label: "True/False",
+    color: Colors.blue,
+    controls: [
+      Controls.checkbox({
+        name: "boolean",
+        label: "True/False"
+      })
+    ]
+  })
+  .addPortType({
+    type: "number",
+    name: "number",
+    label: "Number",
+    color: Colors.red,
+    controls: [
+      Controls.number({
+        name: "number",
+        label: "Number"
+      })
+    ]
+  })
+  .addNodeType({
+    type: "string",
+    label: "Text",
+    description: "Outputs a string of text",
+    inputs: ports => [ports.string()],
+    outputs: ports => [ports.string()]
+  })
+  .addNodeType({
+    type: "boolean",
+    label: "True/False",
+    description: "Outputs a true/false value",
+    initialWidth: 140,
+    inputs: ports => [ports.boolean()],
+    outputs: ports => [ports.boolean()]
+  })
+  .addNodeType({
+    type: "number",
+    label: "Number",
+    description: "Outputs a numeric value",
+    initialWidth: 160,
+    inputs: ports => [ports.number()],
+    outputs: ports => [ports.number()]
   })
   .addRootNodeType({
     type: "homepage",
@@ -123,12 +199,198 @@ simpleConfig2
       })
     ]
   })
+  .addNodeType({
+    type: "user",
+    label: "User",
+    initialWidth: 130,
+    description: "Outputs attributes of the current user",
+    outputs: ports => [
+      ports.string({
+        name: "firstName",
+        label: "First Name"
+      }),
+      ports.string({
+        name: "lastName",
+        label: "Last Name"
+      }),
+      ports.boolean({
+        name: "isLoggedIn",
+        label: "Is Logged-In"
+      }),
+      ports.boolean({
+        name: "isAdmin",
+        label: "Is Admin"
+      })
+    ]
+  });
+
+const simpleConfig4 = new FlumeConfig();
+simpleConfig4
+  .addPortType({
+    type: "string",
+    name: "string",
+    label: "Text",
+    color: Colors.green,
+    controls: [
+      Controls.text({
+        name: "string",
+        label: "Text"
+      })
+    ]
+  })
+  .addPortType({
+    type: "boolean",
+    name: "boolean",
+    label: "True/False",
+    color: Colors.blue,
+    controls: [
+      Controls.checkbox({
+        name: "boolean",
+        label: "True/False"
+      })
+    ]
+  })
+  .addPortType({
+    type: "number",
+    name: "number",
+    label: "Number",
+    color: Colors.red,
+    controls: [
+      Controls.number({
+        name: "number",
+        label: "Number"
+      })
+    ]
+  })
+  .addNodeType({
+    type: "string",
+    label: "Text",
+    description: "Outputs a string of text",
+    inputs: ports => [ports.string()],
+    outputs: ports => [ports.string()]
+  })
+  .addNodeType({
+    type: "boolean",
+    label: "True/False",
+    description: "Outputs a true/false value",
+    initialWidth: 140,
+    inputs: ports => [ports.boolean()],
+    outputs: ports => [ports.boolean()]
+  })
+  .addNodeType({
+    type: "number",
+    label: "Number",
+    description: "Outputs a numeric value",
+    initialWidth: 160,
+    inputs: ports => [ports.number()],
+    outputs: ports => [ports.number()]
+  })
+  .addRootNodeType({
+    type: "homepage",
+    label: "Homepage",
+    initialWidth: 170,
+    inputs: ports => [
+      ports.string({
+        name: "title",
+        label: "Title"
+      }),
+      ports.string({
+        name: "description",
+        label: "Description"
+      }),
+      ports.boolean({
+        name: "showSignup",
+        label: "Show Signup"
+      }),
+      ports.number({
+        name: "copyrightYear",
+        label: "Copyright Year"
+      })
+    ]
+  })
+  .addNodeType({
+    type: "user",
+    label: "User",
+    initialWidth: 130,
+    description: "Outputs attributes of the current user",
+    outputs: ports => [
+      ports.string({
+        name: "firstName",
+        label: "First Name"
+      }),
+      ports.string({
+        name: "lastName",
+        label: "Last Name"
+      }),
+      ports.boolean({
+        name: "isLoggedIn",
+        label: "Is Logged-In"
+      }),
+      ports.boolean({
+        name: "isAdmin",
+        label: "Is Admin"
+      })
+    ]
+  })
+  .addNodeType({
+    type: "joinText",
+    label: "Join Text",
+    description: "Combines two strings of text into one string",
+    initialWidth: 160,
+    inputs: ports => [
+      ports.string({
+        name: "string1",
+        label: "First text"
+      }),
+      ports.string({
+        name: "string2",
+        label: "Second text"
+      })
+    ],
+    outputs: ports => [
+      ports.string({
+        name: "joinedText",
+        label: "Joined Text"
+      })
+    ]
+  });
+
+const resolvePorts = (portType, data) => {
+  switch (portType) {
+    case "string":
+      return data.string;
+    case "boolean":
+      return data.boolean;
+    case "number":
+      return data.number;
+    default:
+      return data;
+  }
+};
+
+const resolveNodes = (node, inputValues, nodeType, context) => {
+  console.log(context);
+  switch (node.type) {
+    case "string":
+      return { string: inputValues.string };
+    case "boolean":
+      return { boolean: inputValues.boolean };
+    case "number":
+      return { number: inputValues.number };
+    case "user":
+      return context.user;
+    case "joinText":
+      return { joinedText: inputValues.string1 + inputValues.string2 };
+    default:
+      return inputValues;
+  }
+};
+
+const engine = new RootEngine(simpleConfig4, resolvePorts, resolveNodes);
 
 export const SimpleEditor = () => {
-
   return (
     <NodeEditor
-      comments={{}}
       portTypes={simpleConfig.portTypes}
       nodeTypes={simpleConfig.nodeTypes}
       defaultNodes={[
@@ -139,14 +401,12 @@ export const SimpleEditor = () => {
         }
       ]}
     />
-  )
-}
+  );
+};
 
 export const SimpleEditor2 = () => {
-
   return (
     <NodeEditor
-      comments={{}}
       portTypes={simpleConfig2.portTypes}
       nodeTypes={simpleConfig2.nodeTypes}
       defaultNodes={[
@@ -167,14 +427,12 @@ export const SimpleEditor2 = () => {
         }
       ]}
     />
-  )
-}
+  );
+};
 
 export const SimpleEditor3 = () => {
-
   return (
     <NodeEditor
-      comments={{}}
       portTypes={simpleConfig2.portTypes}
       nodeTypes={simpleConfig2.nodeTypes}
       disableZoom
@@ -183,8 +441,121 @@ export const SimpleEditor3 = () => {
           type: "homepage",
           x: 190,
           y: -150
-        },
+        }
       ]}
     />
-  )
-}
+  );
+};
+
+export const SimpleEditor4 = () => {
+  return (
+    <NodeEditor
+      portTypes={simpleConfig3.portTypes}
+      nodeTypes={simpleConfig3.nodeTypes}
+      disableZoom
+      defaultNodes={[
+        {
+          type: "homepage",
+          x: 190,
+          y: -150
+        },
+        {
+          type: "user",
+          x: -300,
+          y: -80
+        }
+      ]}
+    />
+  );
+};
+
+export const SimpleEditor5 = () => {
+  return (
+    <NodeEditor
+      portTypes={simpleConfig4.portTypes}
+      nodeTypes={simpleConfig4.nodeTypes}
+      disableZoom
+      defaultNodes={[
+        {
+          type: "homepage",
+          x: 190,
+          y: -150
+        },
+        {
+          type: "joinText",
+          x: -300,
+          y: -120
+        }
+      ]}
+    />
+  );
+};
+
+export const HomepageExample = () => {
+  const [nodes, setNodes] = React.useState({});
+  const { title, description, showSignup, copyrightYear } = useRootEngine(
+    nodes,
+    engine,
+    {
+      user: {
+        firstName: "Bustopher",
+        lastName: "Jones",
+        isLoggedIn: true,
+        isAdmin: false
+      }
+    }
+  );
+
+  return (
+    <div style={{ width: "100%", display: "flex", minHeight: 500 }}>
+      <div
+        style={{
+          flex: "1 1 auto",
+          color: "#000",
+          overflow: "hidden",
+          borderRadius: 8
+        }}
+      >
+        <NodeEditor
+          nodes={nodes}
+          onChange={setNodes}
+          debug
+          initialScale={.9}
+          portTypes={simpleConfig4.portTypes}
+          nodeTypes={simpleConfig4.nodeTypes}
+          defaultNodes={[
+            {
+              type: "homepage",
+              x: 120,
+              y: -150
+            }
+          ]}
+        />
+      </div>
+      <div
+        style={{
+          minWidth: 200,
+          width: "30%",
+          borderRadius: 8,
+          background: "rgb(127, 250, 184)",
+          marginLeft: 10,
+          display: 'flex',
+          flexDirection: 'column',
+          color: '#000',
+          padding: 10
+        }}
+      >
+        <h1 style={{fontSize: 24, margin: 0, textAlign: 'center'}}>{title}</h1>
+        <p style={{textAlign: 'center'}}>{description}</p>
+        {showSignup && (
+          <form className="signup">
+            <p style={{margin: 0}}>Fill out the form to signup!</p>
+            <input type="email" />
+            <button>Signup!</button>
+          </form>
+        )}
+        <footer style={{marginTop: 'auto'}}>© flume {copyrightYear}</footer>
+      </div>
+    </div>
+  );
+};

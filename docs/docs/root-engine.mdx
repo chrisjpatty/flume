@@ -2,3 +2,92 @@
 title: The Root Engine
 id: root-engine
 ---
+
+Now that we've created a simple node editor with some useful nodes, we need a way to actually run our logic. While you are free to parse your logic graphs any way you see fit, Flume ships with a pre-built engine for running "root-style" logic graphs. The root engine is responsible for taking in a root-style graph generated with the Flume node editor, and returning the resolved properties of the root node. Let's take a look at how we can get the root engine up and running.
+
+## Setting up the engine
+
+To get started, let's create a new file called `engine.js` where we'll import `RootEngine` from `flume`, and our config file from `config.js`
+
+```js
+import { RootEngine } from 'flume'
+import config from './config'
+
+const engine = new RootEngine(config)
+
+export default engine
+```
+
+Like before, we create a new instance of the RootEngine and set it to a variable that we'll export below. We also imported our config file and provided it to the root engine as the first parameter. In order for the engine to work though, we need to provide it with 2 helper functions: `resolvePorts`, and `resolveNodes`.
+
+## Resolving ports
+
+The first thing we need to do is tell the root engine how to handle the controls for each of our ports. To keep things organized, let's create a new function above our root engine.
+
+```js
+import { RootEngine } from 'flume'
+import config from './config'
+
+const resolvePorts = (portType, data) => {
+  switch (portType) {
+    case 'string':
+      return data.string
+    case 'boolean':
+      return data.boolean
+    case 'number':
+      return data.number
+    default:
+      return data
+  }
+}
+
+const engine = new RootEngine(config, resolvePorts)
+```
+
+Let's break this down. `resolvePorts` is a function that takes in the type of the port currently being processed, and all of the data from its controls. Then we open a switch statement with the port type, and return the port data for each port type. Because we only have 3 port types, we only have 3 entries in our switch statement. In our case, each of our ports only has one control, and we gave each control the same name as the port, so we can fill this function our pretty easily. In advanced use-cases ports may have any number of controls so this function will need to resolve each control, but this work for now.
+
+:::note
+This might seem a little unintuitive or redundant at first, but keep in mind that Flume doesn't make many assumptions about how you build or run your logic, so these functions are how you define that behavior.
+:::
+
+## Resolving nodes
+
+The last function we need is `resolveNodes`. This function tells each node how it should transform its inputs into its outputs. Let's create this function above the engine.
+
+```js
+import { RootEngine } from 'flume'
+import config from './config'
+
+/* ... */
+
+const resolveNodes = (node, inputValues, nodeType, context) => {
+  switch (node.type) {
+    case 'string':
+      return { string: inputValues.string }
+    case 'boolean':
+      return { boolean: inputValues.boolean }
+    case 'number':
+      return { number: inputValues.number }
+    case 'user':
+      return context.user
+    case 'joinText':
+      return { joinedText: inputValues.string1 + inputValues.string2 }
+    default:
+      return inputValues
+  }
+}
+
+const engine = new RootEngine(config, resolvePorts, resolveNodes)
+```
+
+This function looks similar to `resolvePorts` but has some key differences. `resolveNodes` takes in the current node, the resolved input values, the nodeType (which we're not using in this example), and an object called `context`. We create a switch statement using the node type, and return an object representing all of the outputs of that node. You may also notice that we didn't create a function for the `homepage` node. Because we marked this node as the "root" node, the root engine will take care of resolving and returning the values of its inputs for us.
+
+Remember, each node can conceptually be thought of as a single function that transforms inputs into outputs. Are you starting to see how easy it can be to expose some powerful programming functions in a visual way?
+
+:::note
+We'll explain the context object in more detail in the next section, but in short, the context object is how you can pass live data into your engine at runtime. In this case we're using it to get the current user.
+:::
+
+## Summary
+
+In this section we setup a new `RootEngine`, and gave it instructions for resolving our ports and nodes. In the next section we'll show how to hook up the root engine to React.

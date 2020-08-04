@@ -1,0 +1,67 @@
+---
+title: Saving Nodes
+---
+
+The node editor internally manages its own state, but we can get our nodes in and out in two different ways.
+
+## `onChange`
+
+The easiest way to get your nodes out of the node editor is to hook it up to the `onChange` handler. This is similar to how you might use a text input in React.
+
+```jsx
+import React from 'react'
+import { NodeEditor } from 'flume'
+import config from './config'
+
+const App = () => {
+  const [nodes, setNodes] = React.useState({})
+  return (
+    <div style={{width: 800, height: 600}}>
+      <NodeEditor
+        portTypes={config.portTypes}
+        nodeTypes={config.nodeTypes}
+        nodes={nodes}
+        onChange={setNodes}
+      />
+    </div>
+  )
+}
+```
+
+The `onChange` handler will be called any time any of the nodes change? This includes any time their position or control values change.
+
+## `getNodes`
+
+Because the `onChange` handler may be called quite often, there are times you may want to only get out the nodes when the user is done editing. For these times the node editor provides an imperative handler for extracting the nodes.
+
+```jsx
+import React from 'react'
+import { NodeEditor } from 'flume'
+import config from './config'
+
+const App = () => {
+  const nodeEditor = React.useRef()
+
+  const saveNodes = () => {
+    const nodes = nodeEditor.current.getNodes()
+    // Do whatever you want with the nodes
+  }
+
+  return (
+    <div>
+      <button onClick={saveNodes}>Save Logic</button>
+      <div style={{width: 800, height: 600}}>
+        <NodeEditor
+          ref={nodeEditor}
+          portTypes={config.portTypes}
+          nodeTypes={config.nodeTypes}
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+## Summary
+
+Now we know how to get our nodes in and out of the node editor, but we still need a way to actually run our logic. In the next section we'll demonstrate how to setup the "Root Engine" to run our logic. 

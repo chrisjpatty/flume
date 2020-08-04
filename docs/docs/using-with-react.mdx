@@ -1,0 +1,99 @@
+---
+title: Using With React
+---
+import { HomepageExample } from '../components/GettingStartedExample'
+
+While React is required to render the Flume node editor, you are free to run your logic graphs with or without React. For this example we'll show you how to easily hook up your React components to the root engine we just created. Let's start by creating an example component.
+
+## Setting up an example component
+
+Let's create a file called called `homepage.js`. Remember for this example we've created a node editor for editing the attributes of a homepage.
+
+:::note
+Again, this is a bit of a contrived example, but it demonstrates all of the main features of Flume without much setup. In reality, creating logic graphs with Flume can be applied to a wide range of applications.
+:::
+
+```jsx
+import React from 'react'
+
+const fakeUser = {
+  firstName: "Bustopher",
+  lastName: "Jones",
+  isLoggedIn: true,
+  isAdmin: false
+}
+
+const Homepage = ({ nodes }) => {
+  const [user, setUser] = React.useState(fakeUser)
+
+  return (
+    <div className="homepage">
+      <h1 className="title"></h1>
+      <p className="description"></p>
+      <form className="signup">
+        <input type="email" />
+        <button>Signup!</button>
+      </form>
+      <footer>© flume </footer>
+    </div>
+  )
+}
+
+export default Homepage
+```
+
+So far our homepage isn't much to look at. We've created a basic page structure, and put a fake user in the component's state. Now let's hook this component up to our logic graph.
+
+## `useRootEngine`
+
+Flume provides a simple hook for using the root engine with React. Let's import `useRootEngine` from `flume`, and our engine from `engine.js`.
+
+```jsx
+import React from 'react'
+import { useRootEngine } from 'flume'
+import engine from './engine'
+
+const fakeUser = {
+  firstName: "Bustopher",
+  lastName: "Jones",
+  isLoggedIn: true,
+  isAdmin: false
+}
+
+const Homepage = ({ nodes }) => {
+  const [user, setUser] = React.useState(fakeUser)
+  const {
+    title,
+    description,
+    showSignup,
+    copyrightYear
+  } = useRootEngine(nodes, engine, {user})
+
+  return (
+    <div className="homepage">
+      <h1 className="title">{title}</h1>
+      <p className="description">{description}</p>
+      {
+        showSignup &&
+        <form className="signup">
+          <input type="email" />
+          <button>Signup!</button>
+        </form>
+      }
+      <footer>© flume {copyrightYear}</footer>
+    </div>
+  )
+}
+
+export default Homepage
+```
+
+Boom! That's all we need to hook up our engine to the homepage component. Every time this component re-renders, the `useRootEngine` hook will run the logic defined in the node editor, and return the attributes we defined on the root node.
+
+:::note
+Remember our context object from the previous section? The third parameter of `useRootEngine` is that context object, and it's how you can pass data that your nodes need into the root engine. In this case we're just passing it our user. Because our component will re-render any time the user changes, our root engine will always have the latest user object.
+:::
+
+Play with the example below to see it live. If you need more space to add nodes, you can use your scroll wheel on a mouse, or pinch gestures on a trackpad, to zoom in and out.
+
+<HomepageExample />
