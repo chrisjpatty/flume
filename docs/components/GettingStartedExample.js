@@ -353,6 +353,14 @@ simpleConfig4
         label: "Joined Text"
       })
     ]
+  })
+  .addNodeType({
+    type: "reverseBoolean",
+    label: "Reverse True/False",
+    description: "Reverses a true/false value",
+    initialWidth: 140,
+    inputs: ports => [ports.boolean()],
+    outputs: ports => [ports.boolean()]
   });
 
 const resolvePorts = (portType, data) => {
@@ -369,7 +377,6 @@ const resolvePorts = (portType, data) => {
 };
 
 const resolveNodes = (node, inputValues, nodeType, context) => {
-  console.log(context);
   switch (node.type) {
     case "string":
       return { string: inputValues.string };
@@ -381,6 +388,8 @@ const resolveNodes = (node, inputValues, nodeType, context) => {
       return context.user;
     case "joinText":
       return { joinedText: inputValues.string1 + inputValues.string2 };
+    case "reverseBoolean":
+      return { boolean: !inputValues.boolean };
     default:
       return inputValues;
   }
@@ -491,20 +500,116 @@ export const SimpleEditor5 = () => {
   );
 };
 
+export const SimpleEditor6 = () => {
+  return (
+    <NodeEditor
+      portTypes={simpleConfig4.portTypes}
+      nodeTypes={simpleConfig4.nodeTypes}
+      disableZoom
+      defaultNodes={[
+        {
+          type: "homepage",
+          x: 190,
+          y: -150
+        },
+        {
+          type: "reverseBoolean",
+          x: -240,
+          y: -70
+        }
+      ]}
+    />
+  );
+};
+
+const fakeUser = {
+  firstName: "Bustopher",
+  lastName: "Jones",
+  isLoggedIn: true,
+  isAdmin: false
+};
+
+const nullUser = {
+  firstName: "",
+  lastName: "",
+  isLoggedIn: false,
+  isAdmin: false
+};
+
 export const HomepageExample = () => {
-  const [nodes, setNodes] = React.useState({});
+  const [user, setUser] = React.useState(fakeUser);
+  const [nodes, setNodes] = React.useState({
+    ROk0lkW8E0: {
+      id: "ROk0lkW8E0",
+      x: 120,
+      y: -150,
+      type: "homepage",
+      width: 170,
+      connections: {
+        inputs: {
+          title: [{ nodeId: "6lOQCgJlQQ", portName: "joinedText" }],
+          showSignup: [{ nodeId: "2B9OGjkXAQ", portName: "boolean" }]
+        },
+        outputs: {}
+      },
+      inputData: {
+        title: { string: "" },
+        description: { string: "Thanks for visiting my website!" },
+        showSignup: { boolean: false },
+        copyrightYear: { number: 2020 }
+      },
+      root: true
+    },
+    "IdAyF5-Jyr": {
+      id: "IdAyF5-Jyr",
+      x: -286.1979166666667,
+      y: -91.11111111111111,
+      type: "user",
+      width: 130,
+      connections: {
+        inputs: {},
+        outputs: {
+          firstName: [{ nodeId: "6lOQCgJlQQ", portName: "string2" }],
+          isLoggedIn: [{ nodeId: "2B9OGjkXAQ", portName: "boolean" }]
+        }
+      },
+      inputData: {}
+    },
+    "6lOQCgJlQQ": {
+      id: "6lOQCgJlQQ",
+      x: -96.19791666666667,
+      y: -182.22222222222223,
+      type: "joinText",
+      width: 160,
+      connections: {
+        inputs: { string2: [{ nodeId: "IdAyF5-Jyr", portName: "firstName" }] },
+        outputs: { joinedText: [{ nodeId: "ROk0lkW8E0", portName: "title" }] }
+      },
+      inputData: { string1: { string: "Welcome " }, string2: { string: "" } }
+    },
+    "2B9OGjkXAQ": {
+      id: "2B9OGjkXAQ",
+      x: -86.19791666666667,
+      y: 23.333333333333336,
+      type: "reverseBoolean",
+      width: 140,
+      connections: {
+        inputs: { boolean: [{ nodeId: "IdAyF5-Jyr", portName: "isLoggedIn" }] },
+        outputs: { boolean: [{ nodeId: "ROk0lkW8E0", portName: "showSignup" }] }
+      },
+      inputData: { boolean: { boolean: false } }
+    }
+  });
   const { title, description, showSignup, copyrightYear } = useRootEngine(
     nodes,
     engine,
     {
-      user: {
-        firstName: "Bustopher",
-        lastName: "Jones",
-        isLoggedIn: true,
-        isAdmin: false
-      }
+      user
     }
   );
+
+  const login = () => setUser(fakeUser);
+  const logout = () => setUser(nullUser);
 
   return (
     <div style={{ width: "100%", display: "flex", minHeight: 500 }}>
@@ -519,8 +624,7 @@ export const HomepageExample = () => {
         <NodeEditor
           nodes={nodes}
           onChange={setNodes}
-          debug
-          initialScale={.9}
+          initialScale={0.9}
           portTypes={simpleConfig4.portTypes}
           nodeTypes={simpleConfig4.nodeTypes}
           defaultNodes={[
@@ -539,22 +643,29 @@ export const HomepageExample = () => {
           borderRadius: 8,
           background: "rgb(127, 250, 184)",
           marginLeft: 10,
-          display: 'flex',
-          flexDirection: 'column',
-          color: '#000',
+          display: "flex",
+          flexDirection: "column",
+          color: "#000",
           padding: 10
         }}
       >
-        <h1 style={{fontSize: 24, margin: 0, textAlign: 'center'}}>{title}</h1>
-        <p style={{textAlign: 'center'}}>{description}</p>
+        <h1 style={{ fontSize: 20, margin: 0, marginBottom: 10, textAlign: "center" }}>
+          {title}
+        </h1>
+        <p style={{ textAlign: "center", lineHeight: 1 }}>{description}</p>
+        {user.isLoggedIn ? (
+          <button onClick={logout}>Logout</button>
+        ) : (
+          <button onClick={login}>Login</button>
+        )}
         {showSignup && (
-          <form className="signup">
-            <p style={{margin: 0}}>Fill out the form to signup!</p>
+          <form style={{marginTop: 10}}>
+            <p style={{ margin: 0 }}>Fill out the form to signup!</p>
             <input type="email" />
             <button>Signup!</button>
           </form>
         )}
-        <footer style={{marginTop: 'auto'}}>© flume {copyrightYear}</footer>
+        <footer style={{ marginTop: "auto" }}>© flume {copyrightYear}</footer>
       </div>
     </div>
   );

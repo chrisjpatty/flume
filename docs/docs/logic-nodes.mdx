@@ -3,7 +3,7 @@ title: Logic Nodes
 id: logic-nodes
 ---
 
-import { SimpleEditor4, SimpleEditor5 } from '../components/GettingStartedExample'
+import { SimpleEditor4, SimpleEditor5, SimpleEditor6 } from '../components/GettingStartedExample'
 
 So far we've created some basic nodes. We've created text, number, and boolean nodes, and a root node for the final output. While this is fine and well, let's take a minute and think about some nodes we could create that could make our editor more powerful. Here's a few ideas:
 
@@ -26,7 +26,7 @@ Let's get back to our example app.
 
 ## Adding logic nodes
 
-Let's pick a few ideas from the list above. We'll first create a node that represents the current user, and then a node that concatenates strings. We already have all the ports we need, so let's add a new user node in `config.js`:
+Let's pick a few ideas from the list above. We'll first create a node that represents the current user, a node that concatenates strings, and a node that reverses a boolean. We already have all the ports we need, so let's add a new user node in `config.js`:
 
 ```js
 import { FlumeConfig, Colors, Controls } from 'flume'
@@ -106,6 +106,34 @@ As you can see, this node will take in two strings as inputs, and outputs a sing
   <SimpleEditor5 />
 </div>
 
+Now let's add our last node that reverses a boolean.
+
+```js
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+/*  ...  */
+  .addNodeType({
+    type: "reverseBoolean",
+    label: "Reverse True/False",
+    description: "Reverses a true/false value",
+    initialWidth: 140,
+    inputs: ports => [
+      ports.boolean(),
+    ],
+    outputs: ports => [
+      ports.boolean(),
+    ]
+  })
+```
+
+This node just takes in a boolean, and outputs its inverse. Heading back to the node editor this new node should be available:
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <SimpleEditor6 />
+</div>
+
 ## Summary
 
-So far we've created a useful node editor, but we don't have a way to get our logic graph in and out of the editor. In the next section we'll look at how to save the nodes in our editor so we can use them later. 
+So far we've created a useful node editor, but we don't have a way to get our logic graph in and out of the editor. In the next section we'll look at how to save the nodes in our editor so we can use them later.

@@ -23,13 +23,29 @@ const fakeUser = {
   isAdmin: false
 }
 
+const nullUser = {
+  firstName: "",
+  lastName: "",
+  isLoggedIn: false,
+  isAdmin: false
+}
+
 const Homepage = ({ nodes }) => {
   const [user, setUser] = React.useState(fakeUser)
+
+  const login = () => setUser(fakeUser)
+  const logout = () => setUser(nullUser)
 
   return (
     <div className="homepage">
       <h1 className="title"></h1>
       <p className="description"></p>
+      {
+        user.isLoggedIn ?
+        <button onClick={logout}>Logout</button>
+        :
+        <button onClick={login}>Login</button>
+      }
       <form className="signup">
         <input type="email" />
         <button>Signup!</button>
@@ -69,10 +85,19 @@ const Homepage = ({ nodes }) => {
     copyrightYear
   } = useRootEngine(nodes, engine, {user})
 
+  const login = () => setUser(fakeUser)
+  const logout = () => setUser(nullUser)
+
   return (
     <div className="homepage">
       <h1 className="title">{title}</h1>
       <p className="description">{description}</p>
+      {
+        user.isLoggedIn ?
+        <button onClick={logout}>Logout</button>
+        :
+        <button onClick={login}>Login</button>
+      }
       {
         showSignup &&
         <form className="signup">
@@ -91,9 +116,13 @@ export default Homepage
 Boom! That's all we need to hook up our engine to the homepage component. Every time this component re-renders, the `useRootEngine` hook will run the logic defined in the node editor, and return the attributes we defined on the root node.
 
 :::note
-Remember our context object from the previous section? The third parameter of `useRootEngine` is that context object, and it's how you can pass data that your nodes need into the root engine. In this case we're just passing it our user. Because our component will re-render any time the user changes, our root engine will always have the latest user object.
+Remember our context object from the previous section? The third parameter of `useRootEngine` is that context object, and it's how you can pass data into the root engine. In this case we're just passing it our user. Because our component will re-render any time the user changes, our root engine will always have the latest user object.
 :::
 
-Play with the example below to see it live. If you need more space to add nodes, you can use your scroll wheel on a mouse, or pinch gestures on a trackpad, to zoom in and out.
+Play with the example below to see it live. If you need more space to add nodes, you can use your scroll wheel on a mouse, or pinch gestures on a trackpad, to zoom in and out. To pan around, just click and drag anywhere inside the editor.
 
 <HomepageExample />
+
+## Summary
+
+Are you starting to catch the vision? What we've done is abstracted all of the "business logic" for our app into a logic graph. Now we can visually program this homepage, and make changes any time we want without needing to update any of our code. Can you think of some other useful nodes you could build?

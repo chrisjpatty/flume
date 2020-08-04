@@ -72,6 +72,8 @@ const resolveNodes = (node, inputValues, nodeType, context) => {
       return context.user
     case 'joinText':
       return { joinedText: inputValues.string1 + inputValues.string2 }
+    case "reverseBoolean":
+      return { boolean: !inputValues.boolean }
     default:
       return inputValues
   }
