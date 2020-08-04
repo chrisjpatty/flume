@@ -125,6 +125,7 @@ export class FlumeConfig {
       addable: false,
       deletable: false
     })
+    return this;
   }
   addNodeType(config) {
     if (typeof config !== "object" && config !== null) {
