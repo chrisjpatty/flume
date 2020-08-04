@@ -24,4 +24,37 @@ Let's get back to our example app.
 
 ## Adding logic nodes
 
-Let's pick a few ideas from the list above.
+Let's pick a few ideas from the list above. We'll first create a node that represents the current user, and then a node that concatenates strings. We already have all the ports we need, so let's add a new user node in `config.js`:
+
+```js
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+/*  ...  */
+  .addNodeType({
+    type: "user",
+    label: "User",
+    initialWidth: 140,
+    outputs: ports => [
+      ports.string({
+        name: "firstName",
+        label: "First Name"
+      }),
+      ports.string({
+        name: "lastName",
+        label: "Last Name"
+      }),
+      ports.boolean({
+        name: "isLoggedIn",
+        label: "Is Logged-In"
+      }),
+      ports.boolean({
+        name: "isAdmin",
+        label: "Is Admin"
+      })
+    ]
+  })
+```
+
+Nothing new to see here, we've just added a node type called `user`, with 4 outputs and no inputs. In a later section we'll walk through how to actually hook up the data for this node, but for now let's save and return to our node editor. You should now have a new node available like this:
