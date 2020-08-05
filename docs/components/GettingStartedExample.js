@@ -536,70 +536,72 @@ const nullUser = {
   isAdmin: false
 };
 
+const initialNodes = {
+  ROk0lkW8E0: {
+    id: "ROk0lkW8E0",
+    x: 120,
+    y: -150,
+    type: "homepage",
+    width: 170,
+    connections: {
+      inputs: {
+        title: [{ nodeId: "6lOQCgJlQQ", portName: "joinedText" }],
+        showSignup: [{ nodeId: "2B9OGjkXAQ", portName: "boolean" }]
+      },
+      outputs: {}
+    },
+    inputData: {
+      title: { string: "" },
+      description: { string: "Thanks for visiting my website!" },
+      showSignup: { boolean: false },
+      copyrightYear: { number: 2020 }
+    },
+    root: true
+  },
+  "IdAyF5-Jyr": {
+    id: "IdAyF5-Jyr",
+    x: -286.1979166666667,
+    y: -91.11111111111111,
+    type: "user",
+    width: 130,
+    connections: {
+      inputs: {},
+      outputs: {
+        firstName: [{ nodeId: "6lOQCgJlQQ", portName: "string2" }],
+        isLoggedIn: [{ nodeId: "2B9OGjkXAQ", portName: "boolean" }]
+      }
+    },
+    inputData: {}
+  },
+  "6lOQCgJlQQ": {
+    id: "6lOQCgJlQQ",
+    x: -96.19791666666667,
+    y: -182.22222222222223,
+    type: "joinText",
+    width: 160,
+    connections: {
+      inputs: { string2: [{ nodeId: "IdAyF5-Jyr", portName: "firstName" }] },
+      outputs: { joinedText: [{ nodeId: "ROk0lkW8E0", portName: "title" }] }
+    },
+    inputData: { string1: { string: "Welcome " }, string2: { string: "" } }
+  },
+  "2B9OGjkXAQ": {
+    id: "2B9OGjkXAQ",
+    x: -86.19791666666667,
+    y: 23.333333333333336,
+    type: "reverseBoolean",
+    width: 140,
+    connections: {
+      inputs: { boolean: [{ nodeId: "IdAyF5-Jyr", portName: "isLoggedIn" }] },
+      outputs: { boolean: [{ nodeId: "ROk0lkW8E0", portName: "showSignup" }] }
+    },
+    inputData: { boolean: { boolean: false } }
+  }
+}
+
 export const HomepageExample = () => {
   const [user, setUser] = React.useState(fakeUser);
-  const [nodes, setNodes] = React.useState({
-    ROk0lkW8E0: {
-      id: "ROk0lkW8E0",
-      x: 120,
-      y: -150,
-      type: "homepage",
-      width: 170,
-      connections: {
-        inputs: {
-          title: [{ nodeId: "6lOQCgJlQQ", portName: "joinedText" }],
-          showSignup: [{ nodeId: "2B9OGjkXAQ", portName: "boolean" }]
-        },
-        outputs: {}
-      },
-      inputData: {
-        title: { string: "" },
-        description: { string: "Thanks for visiting my website!" },
-        showSignup: { boolean: false },
-        copyrightYear: { number: 2020 }
-      },
-      root: true
-    },
-    "IdAyF5-Jyr": {
-      id: "IdAyF5-Jyr",
-      x: -286.1979166666667,
-      y: -91.11111111111111,
-      type: "user",
-      width: 130,
-      connections: {
-        inputs: {},
-        outputs: {
-          firstName: [{ nodeId: "6lOQCgJlQQ", portName: "string2" }],
-          isLoggedIn: [{ nodeId: "2B9OGjkXAQ", portName: "boolean" }]
-        }
-      },
-      inputData: {}
-    },
-    "6lOQCgJlQQ": {
-      id: "6lOQCgJlQQ",
-      x: -96.19791666666667,
-      y: -182.22222222222223,
-      type: "joinText",
-      width: 160,
-      connections: {
-        inputs: { string2: [{ nodeId: "IdAyF5-Jyr", portName: "firstName" }] },
-        outputs: { joinedText: [{ nodeId: "ROk0lkW8E0", portName: "title" }] }
-      },
-      inputData: { string1: { string: "Welcome " }, string2: { string: "" } }
-    },
-    "2B9OGjkXAQ": {
-      id: "2B9OGjkXAQ",
-      x: -86.19791666666667,
-      y: 23.333333333333336,
-      type: "reverseBoolean",
-      width: 140,
-      connections: {
-        inputs: { boolean: [{ nodeId: "IdAyF5-Jyr", portName: "isLoggedIn" }] },
-        outputs: { boolean: [{ nodeId: "ROk0lkW8E0", portName: "showSignup" }] }
-      },
-      inputData: { boolean: { boolean: false } }
-    }
-  });
+  const [nodes, setNodes] = React.useState(initialNodes);
   const { title, description, showSignup, copyrightYear } = useRootEngine(
     nodes,
     engine,
@@ -670,3 +672,25 @@ export const HomepageExample = () => {
     </div>
   );
 };
+
+const initialNodes2 = {"ROk0lkW8E0":{"id":"ROk0lkW8E0","x":196.64930555555557,"y":-107.77777777777779,"type":"homepage","width":170,"connections":{"inputs":{"title":[{"nodeId":"6lOQCgJlQQ","portName":"joinedText"}],"showSignup":[{"nodeId":"2B9OGjkXAQ","portName":"boolean"}]},"outputs":{}},"inputData":{"title":{"string":""},"description":{"string":"Thanks for visiting my website!"},"showSignup":{"boolean":false},"copyrightYear":{"number":2020}},"root":true},"IdAyF5-Jyr":{"id":"IdAyF5-Jyr","x":-350.66840277777777,"y":-78.88888888888889,"type":"user","width":130,"connections":{"inputs":{},"outputs":{"firstName":[{"nodeId":"6lOQCgJlQQ","portName":"string2"}],"isLoggedIn":[{"nodeId":"2B9OGjkXAQ","portName":"boolean"}]}},"inputData":{}},"6lOQCgJlQQ":{"id":"6lOQCgJlQQ","x":-96.24131944444444,"y":-190,"type":"joinText","width":160,"connections":{"inputs":{"string2":[{"nodeId":"IdAyF5-Jyr","portName":"firstName"}]},"outputs":{"joinedText":[{"nodeId":"ROk0lkW8E0","portName":"title"}]}},"inputData":{"string1":{"string":"Welcome "},"string2":{"string":""}}},"2B9OGjkXAQ":{"id":"2B9OGjkXAQ","x":-88.44618055555556,"y":88.88888888888889,"type":"reverseBoolean","width":140,"connections":{"inputs":{"boolean":[{"nodeId":"IdAyF5-Jyr","portName":"isLoggedIn"}]},"outputs":{"boolean":[{"nodeId":"ROk0lkW8E0","portName":"showSignup"}]}},"inputData":{"boolean":{"boolean":false}}}}
+
+export const CommentsEditor = () => {
+
+  return (
+    <NodeEditor
+      initialScale={0.9}
+      portTypes={simpleConfig4.portTypes}
+      nodeTypes={simpleConfig4.nodeTypes}
+      nodes={initialNodes2}
+      comments={{"lQxzhUQGnr":{"id":"lQxzhUQGnr","text":"Add the user's first name to the title","x":-102.08333333333334,"y":-245.55555555555557,"width":173.62847222222223,"height":41.439208984375,"color":"blue"},"bLkYimKb6F":{"id":"bLkYimKb6F","text":"If the user is NOT logged in, show the signup.","x":-104.296875,"y":31.111111111111114,"width":180.10240342881946,"height":43.444417317708336,"color":"green"}}}
+      defaultNodes={[
+        {
+          type: "homepage",
+          x: 240,
+          y: -150
+        }
+      ]}
+    />
+  )
+}

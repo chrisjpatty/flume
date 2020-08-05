@@ -96,7 +96,7 @@ const Control = ({
 
   return (
     <div className={styles.wrapper}>
-      {calculatedLabel && type !== "checkbox" && type !== "checkbox" && (
+      {calculatedLabel && type !== "checkbox" && type !== "custom" && (
         <label className={styles.controlLabel}>{calculatedLabel}</label>
       )}
       {getControlByType(type)}

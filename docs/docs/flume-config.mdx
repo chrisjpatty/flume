@@ -1,0 +1,209 @@
+---
+title: FlumeConfig
+---
+
+The `FlumeConfig` class is a helper class for configuring the `nodeTypes` and `portTypes` that the `NodeEditor` and `RootEngine` need. It uses a chainable API for adding types.
+
+## Importing
+
+```js
+import { FlumeConfig } from 'flume'
+```
+
+## Creating a new config
+
+```js
+const config = new FlumeConfig()
+```
+
+### Editing an existing config
+
+In some cases you may have JSON representing an existing config that you'd like to edit. In these cases, FlumeConfig will accept an existing config as the first parameter of the constructor like this:
+
+```js
+const config = new FlumeConfig(existingConfig)
+```
+
+## `addPortType` : method(portType)
+
+This method allows you to add a new port type to your config.
+
+### Example
+
+```js
+config
+  .addPortType({
+    type: "string",
+    name: "string",
+    label: "Text",
+    color: Colors.green,
+    controls: [
+      Controls.text({
+        name: "string",
+        label: "Text"
+      })
+    ]
+  })
+```
+
+### `type` : string
+
+Required. The type key for the new port. It's recommended to use camel-case for type keys as you will later call this type as a function when building node types. This type must be unique between port types in the same config.
+
+### `name`: string
+
+Required. The default name for the new port. This is the name that will be used to identify this port on each node. For simplicity, it's a good practice to have the name be the same as the type, but this is not required. When adding a port to a node type, this name may be overridden.
+
+### `label` : string
+
+Required. A human-readable label for this port. This label will be shown on nodes when it is used as an output, when another node is connected to this port, or when this port has no controls. When adding a port to a node type, this label may be overridden.
+
+### `color` : color
+
+Optional. By default, all ports are a neutral gray color. To change this color, use the `Colors` object imported from `flume` to select an available color. For a list of available colors see [Colors]()
+
+### `accepts` : array<port.type\>
+
+Optional. By default, each port will only accept connections from ports of the same type. In some cases you may have ports of different types which are logically compatible with each other. For these case you may pass an array of port types that this port may be connected to.
+
+For example, let's say I have a port type of "string", and a port type of "color". In this case both of these ports return a Javascript string. If I would like the string port to also accept connections from color ports I would pass an array to the `accepts` key like this:
+
+```js
+.addPortType({
+  type: "color",
+  name: "color",
+  label: "Color",
+  accepts: ["string", "color"],
+  controls: [...]
+})
+```
+
+### `hidePort` : boolean
+
+Optional. By default each input displays a port that other nodes can connect to. In some cases you may have an input that shouldn't accept any connections. Passing `true` to this key will hide this port but not hide the port label or controls.
+
+### `controls` : array<Control\>
+
+Optional. An array of controls that will be displayed to the user when this port is used as an input, and is not connected. For a list of available controls see [Controls]()
+
+:::note
+While this key is optional, it is rare that you will need to create a port without any controls.
+:::
+
+## `addNodeType` : method(nodeType)
+
+This method allows you to add a new node type to your config.
+
+### Example
+
+```js
+config
+  .addNodeType({
+    type: "string",
+    label: "Text",
+    description: "Outputs a string of text",
+    initialWidth: 160,
+    inputs: ports => [
+      ports.string()
+    ],
+    outputs: ports => [
+      ports.string()
+    ]
+  })
+```
+
+### `type` : string
+
+Required. The type key for the new node. This type must be unique between node types in the same config.
+
+### `label` : label
+
+Required. A human-readable label for this node. This label will be displayed above each node of this type, and in the context menu for adding nodes.
+
+### `description` : string
+
+Optional. A brief description for this node. This description will be shown below the label in the context menu for adding nodes.
+
+### `initialWidth` : int | float
+
+Optional. Defaults to `200`. The initial width of the node in the editor.
+
+### `sortIndex` : int | float
+
+Optional. By default, the available nodes in the "Add Node" context menu are sorted alphabetically by their label. This property lets you manually sort your nodes. If this property is present, nodes will be sorted in order by their index before being sorted alphabetically.
+
+### `addable` : boolean
+
+Optional. Denotes if users are allowed to add this node to the node editor. If this property is set to false, you may still add instances of this node using the `defaultNodes` key. Defaults to `true`.
+
+### `deletable` : boolean
+
+Optional. Denotes if users are allowed to delete this node in the node editor. Defaults to `true`.
+
+### `root` : boolean
+
+Optional. Normally you should add root nodes using the `addRootNodeType` method, however, you may mark any node as a root node by passing `root: true`.
+
+### `inputs` : function
+
+Optional. A function which must return an array of inputs for this node. These inputs must be made up of port types which have previously been added to the config. The function you provide to this key will be injected with an object containing all of the available ports as the first parameter. Properties of each port may be overridden inline, which is useful for changing things like labels and names. The name of each input **must** be unique, even if they are differnt types.
+
+#### Example
+
+Let's say you have already added 2 port types, a boolean port type, and a number port type. We're adding a new node type for calculating the total price of a cart on an e-commerce website. We would create the inputs like this:
+
+```js
+config
+  /*...*/
+  .addNodeType({
+    type: "calculateTotal",
+    label: "Calculate Total",
+    description: "Calculates the total price of the checkout",
+    inputs: ports => [
+      ports.number({ name: "subtotal", label: "Subtotal"}),
+      ports.number({ name: "taxRate", label: "Tax Rate"}),
+      ports.boolean({ name: "isTaxExempt", label: "Is Tax-Exempt"})
+    ],
+    outputs: ports => [
+      ports.number({ name: "total", label: "Total"})
+    ]
+  })
+```
+
+In this example we've added 3 inputs for the subtotal, the tax rate, and whether or not the tax should be applied. Because we've already defined the number and boolean ports, the inputs function will provide those port types for us to use. We call each port type as a function and optionally give it a name and a label. In this case, this is required to make sure that each port has a unique name, and to add a user-friendly label to each port.
+
+#### `noControls` : boolean
+
+In some cases you may want an input to hide its controls without being connected. Passing true to this key will hide the controls for this instance of the port. Defaults to `false`.
+
+### `outputs` : function
+
+Optional. A function which must return an array of outputs for this node. These outputs must be made up of port types which have previously been added to the config. The function you provide to this key will be injected with an object containing all of the available ports as the first parameter. Properties of each port may be overridden inline, which is useful for changing things like labels and names. The name of each input **must** be unique, even if they are differnt types.
+
+#### Example
+
+Let's say you have already added 2 port types, a string port type, and a number port type. We're adding a new node type for inputting and outputting text and the character and word counts:
+
+```js
+config
+  /*...*/
+  .addNodeType({
+    type: "string",
+    label: "Text",
+    description: "Outputs a string of text",
+    inputs: ports => [
+      ports.string()
+    ],
+    outputs: ports => [
+      ports.string(),
+      ports.number({ name: "charCount", label: "Character Count"}),
+      ports.number({ name: "wordCount", label: "Word Count"}),
+    ]
+  })
+```
+
+In this example we've created 3 outputs, one with the text of the input, one with the character count, and one with the word count. Because we've already defined the string and number ports, the outputs function will provide these port types for us to use. We call each port type as a function and optionally give it a name and a label. In this case, this is required to make sure that each port has a unique name, and to add a user-friendly label to each port.
+
+## `addRootNodeType` : method(nodeType)
+
+The `addRootNodeType` method takes all the same parameters as the `addNodeType` method. This method adds a node type to the config and automatically marks it as a root node. It also prevents this node type from being added or deleted by users. For node types added through this method to be useable in the node editor, they must be added as a default node, or provided to the `nodes` key of the node editor.

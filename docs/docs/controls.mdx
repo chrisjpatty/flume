@@ -1,0 +1,352 @@
+---
+title: Controls
+---
+
+import {
+  TextControlGraph,
+  NumberGraph,
+  BooleanGraph,
+  SelectGraph,
+  MultiselectGraph,
+  RandomPhotoGraph
+} from "../components/ControlExamples";
+
+Flume exports a set of utility functions for adding controls to port types. There are five built-in controls; text, number, checkbox, select, and multiselect. However, if you need a specific control, Flume allows you to render any custom React code as a control.
+
+## Importing
+
+```js
+import { Controls } from 'flume'
+```
+
+## Common Props
+
+Following are properties shared by all controls.
+
+### `name` : string
+
+Required. The name of the control. This name must be unique between all controls of the same port.
+
+### `label` : string
+
+Required. A human-readable label for the control.
+
+### `setValue` : function
+
+Optional. In some cases you may want extra control over how control values are set. Every time a control's value changes, this function will be called with the new input data, and the old input data. You can transform the control values of the inputs for the current node any way you wish, and then return a new set of input data.
+
+#### Example
+
+Let's say we have a node that outputs text, but we want the text to always be uppercase. To make this possible we could setup our port type like this when we add it to the config:
+
+```js
+config
+  /* ... */
+  .addPortType({
+    type: "uppercaseText",
+    name: "uppercaseText",
+    label: "Uppercase Text",
+    controls: [
+      Controls.text({
+        label: "Uppercase Text",
+        setValue: (newData, oldData) => ({
+          ...newData,
+          uppercaseText: {
+            ...newData[uppercaseText],
+            uppercaseText: newData.uppercaseText.uppercaseText.toUpperCase()
+          }
+        })
+      })
+    ]
+  });
+```
+
+:::note
+This is an advanced feature. In the majority of cases this function should not be needed.
+:::
+
+## Text
+
+The text control renders a vertically resizeable HTML textarea.
+
+### Example
+
+```js
+.addPortType({
+  type: "string",
+  name: "string",
+  label: "Text",
+  color: Colors.green,
+  controls: [
+    Controls.text({
+      name: "string",
+      label: "Text"
+    })
+  ]
+})
+```
+
+<TextControlGraph />
+
+### `placeholder` : string
+
+Optional. An optional placeholder for the text input when empty.
+
+### `defaultValue` : string
+
+Optional. The initial value of the text input. Defaults to an empty string.
+
+## Number
+
+The number control renders an HTML number input.
+
+### Example
+
+```js
+.addPortType({
+  type: "number",
+  name: "number",
+  label: "Number",
+  color: Colors.red,
+  controls: [
+    Controls.number({
+      name: "number",
+      label: "Number"
+    })
+  ]
+})
+```
+
+<NumberGraph />
+
+### `step` : int | float
+
+Optional. Represents by how much the number input will increment or decrement using the built-in arrow controls. Defaults to `1`.
+
+### `defaultValue` : int | float
+
+Optional. The initial value of the number input. Defaults to `0`.
+
+## Checkbox
+
+The checkbox control renders an HTML checkbox.
+
+### Example
+
+```js
+.addPortType({
+  type: "boolean",
+  name: "boolean",
+  label: "True/False",
+  color: Colors.blue,
+  controls: [
+    Controls.checkbox({
+      name: "boolean",
+      label: "True/False"
+    })
+  ]
+})
+```
+
+<BooleanGraph />
+
+### `defaultValue` : boolean
+
+Optional. The initial value of the checkbox. Defaults to false.
+
+## Select
+
+The select control renders a dropdown control for selecting from a set of options.
+
+### Example
+
+```js
+.addPortType({
+  type: "animal",
+  name: "animal",
+  label: "Animal",
+  color: Colors.orange,
+  controls: [
+    Controls.select({
+      name: "animal",
+      label: "Animal",
+      options: [
+        {value: "cow", label: "Cow"},
+        {value: "horse", label: "Horse"},
+        {value: "pig", label: "Pig"},
+        {value: "elephant", label: "Elephant"},
+        {value: "snake", label: "Snake"},
+      ]
+    })
+  ]
+})
+```
+
+### `options` : array<option\>
+
+Required. An array of objects representing the available options.
+
+#### Option: `value` : string
+
+Required. The value of the option. When this option is selected, this will be the value stored as the value for this control.
+
+#### Option: `label` : string
+
+Required. A human-readable label for the option.
+
+#### Option: `description` : string
+
+Optional. A brief description for the option. This description will be displayed in the dropdown menu when the user is selecting an option.
+
+### `defaultValue` : string
+
+Optional. The initial value for the select. Defaults to an empty string.
+
+<SelectGraph />
+
+## Multiselect
+
+The multiselect control renders a dropdown control for selecting multiples from a set of options. The selected option values are stored in an array.
+
+### Example
+
+```js
+.addPortType({
+  type: "colors",
+  name: "colors",
+  label: "Colors",
+  color: Colors.purple,
+  controls: [
+    Controls.multiselect({
+      name: "colors",
+      label: "Colors",
+      options: [
+        {value: "red", label: "Red"},
+        {value: "blue", label: "Blue"},
+        {value: "yellow", label: "Yellow"},
+        {value: "green", label: "Green"},
+        {value: "orange", label: "Orange"},
+        {value: "purple", label: "Purple"},
+      ]
+    })
+  ]
+```
+
+### `options` : array<option\>
+
+Required. An array of objects representing the available options.
+
+#### Option: `value` : string
+
+Required. The value of the option. When this option is selected, this will be the value stored as the value for this control.
+
+#### Option: `label` : string
+
+Required. A human-readable label for the option.
+
+#### Option: `description` : string
+
+Optional. A brief description for the option. This description will be displayed in the dropdown menu when the user is selecting an option.
+
+### `defaultValue` : array
+
+Optional. The initial value for the select. Defaults to an empty array.
+
+<MultiselectGraph />
+
+## Custom
+
+While the built-in controls cover the majority of use-cases, you may occasionally want to render a custom control. This is a powerful option for providing custom user interfaces for your nodes.
+
+### Example
+
+```js
+.addPortType({
+  type: "randomPhoto",
+  name: "randomPhoto",
+  label: "Random Photo",
+  color: Colors.pink,
+  controls: [
+    Controls.custom({
+      name: "randomPhoto",
+      label: "Random Photo",
+      defaultValue: "D6TqIa-tWRY", // Random Unsplash photo id
+      render: (data, onChange) => (
+        <RandomPhotoComponent
+          url={data}
+          onChange={onChange}
+        />
+      )
+    })
+  ]
+})
+```
+
+<RandomPhotoGraph />
+
+In this example, we've created a new port with a custom control. In our custom control we'ved added a render function which returns a React component with our custom UI. To save the value of our control, we're provided an onChange function we can call whenever the value of our custom control changes.
+
+### `render` : function
+
+Required. The render key accepts a function that returns a React component. This component will be rendered in place of the control for this port. The render function takes in several parameters described below in order.
+
+```jsx
+(
+  data,
+  onChange,
+  context,
+  redraw,
+  portProps,
+  inputData
+) => (
+  <ReactComponent />
+)
+```
+
+#### render : `data` : any
+
+The current value for the control. On the intial render this will be equal to the default value of the control.
+
+#### render : `onChange` : function
+
+An updater function to set the new value of the control anytime it changes.
+
+#### render : `context` : object
+
+The optional context object provided to the node editor.
+
+#### render : `redraw` : function
+
+For built-in controls, the node editor stage is redrawn whenever a control changes in such a way that the dimensions of its parent node changes. By default, the node editor is also redrawn any time the `onChange` function provided in this `render` function is called. On some occasions you may build a control which changes the dimensions of the node without calling the `onChange` function. For these times you are responsible for notifying the node editor that the stage needs to be redrawn by calling the `redraw` function.
+
+:::note
+For performance reasons it's recommended that you limit how often this function is called.
+:::
+
+#### render : `portProps` : object
+
+The `portProps` provides a handful of properties that can be useful in especially advanced use-cases. The properties of this object are described below:
+
+##### portProps : `label` : string
+
+The label of the control.
+
+##### portProps : `inputLabel` : string
+
+The label of this control's parent port.
+
+##### portProps : `name` : string
+
+The name of the control.
+
+##### portProps : `portName` : string
+
+The name of this control's parent port.
+
+##### portProps : `defaultValue` : any
+
+The default value of this control.
+
+#### render : `inputData` : object
+
+An object representing all of the data for the inputs of the current node. This can be useful for rendering controls which rely on the current values of controls in other inputs.

@@ -563,7 +563,17 @@ flumeConfig
       ports.number({ name: "bodyWidth", label: "Body Width" }),
       ports.number({ name: "bodyHeight", label: "Body Height" })
     ]
-  });
+  })
+  .addNodeType({
+    type: "employee",
+    label: "Employee",
+    inputs: ports => [
+      ports.employeeType()
+    ],
+    outputs: ports => [
+      ports.employeeType()
+    ]
+  })
 
 const engine = new RootEngine(
   flumeConfig,

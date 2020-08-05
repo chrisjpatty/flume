@@ -8,7 +8,13 @@ module.exports = {
       "logic-nodes",
       "saving-nodes",
       "root-engine",
-      "using-with-react"
+      "using-with-react",
+      "comments"
+    ],
+    "API": [
+      "NodeEditor",
+      "flume-config",
+      "controls"
     ]
   }
 };

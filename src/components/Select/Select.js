@@ -47,8 +47,11 @@ const Select = ({
     onChange([...data.slice(0, optionIndex), ...data.slice(optionIndex + 1)]);
   };
 
-  const getFilteredOptions = () =>
-    options.filter(opt => !data.includes(opt.value));
+  const getFilteredOptions = () => (
+    allowMultiple ?
+    options.filter(opt => !data.includes(opt.value))
+    : options
+  )
 
   const selectedOption = React.useMemo(() => {
     const option = options.find(o => o.value === data);

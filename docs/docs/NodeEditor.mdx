@@ -1,0 +1,83 @@
+---
+title: "NodeEditor"
+---
+
+`NodeEditor` is a React component for rendering the node editor. It requires `portTypes` and `nodeTypes`, and can be rendered with or without existing nodes.
+
+## Importing
+
+```js
+import { NodeEditor } from 'flume'
+```
+
+## Props
+
+### `portTypes` : object
+
+Required. `portTypes` are generated using the `FlumeConfig` class.
+
+### `nodeTypes` : object
+
+Required. `nodeTypes` are generated using the `FlumeConfig` class.
+
+### `nodes` : object
+
+Optional. An object of nodes previously generated through the node editor.
+
+### `comments` : object
+
+Optional. An object of comments previously generated through the node editor.
+
+### `defaultNodes` : array<object\>
+
+Optional. For many logic graphs, it's helpful to have the editor start with a set of default nodes. To define these nodes, pass an array of objects with the type of the node, and an x and y position relative to the center of the editor.
+
+| Key  | Type         | Default | Required | Description                                                                                                                   |
+|------|--------------|---------|----------|-------------------------------------------------------------------------------------------------------------------------------|
+| type | string       | ""      | Required | The type key of the node you want to add as a default. This type must have been previously defined in the `nodeTypes` object. |
+| x    | int \| float | 0       | Optional | The **horizontal** starting position of the node, relative to the center of the node editor.                                       |
+| y    | int \| float | 0       | Optional | The **vertical** starting position of the node, relative to the center of the node editor.                                         |
+
+### `onChange` : function
+
+Optional. This function will be called any time any of the nodes in the node editor change. This includes their position, connections, and the values of their controls.
+
+:::note
+For performance reasons, this function will **not** be called while the user is dragging a node. As soon as the user releases a dragged node, this function will be called with the updated position.
+:::
+
+### `onCommentsChange` : function
+
+Optional. This function will be called any time any of the comments in the node editor change. This includes their position, size, color, and text.
+
+:::note
+For performance reasons, this function will **not** be called while the user is dragging or resizing a comment. As soon as the user releases a dragged comment, this function will be called with the updated comment.
+:::
+
+### `context` : object
+
+Optional. Context is used to pass data to the node editor if your nodes require live data. For example, you may have a node with a dropdown control for selecting a color, but the available colors depend on the state of your app. To allow this kind of calculation, the context object is provided to your node at runtime to aid in these kinds of calculations.
+
+### `initialScale` : int | float
+
+Optional. The initial level of zoom for the node editor. This must be a number between `0.1` and `7`. If a number is provided outside of this range it will be clamped to the nearest valid number. Defaults to `1`.
+
+### `disableZoom` : boolean
+
+Optional. Prevents the user from zooming in and out of the node editor. This can be helpful if your node editor is on a scrollable page, and you don't want to capture scroll events as the user's mouse passes the editor. Defaults to `false`.
+
+### `disablePan` : boolean
+
+Optional. Prevents the user from panning inside of the node editor. Defaults to `false`.
+
+### `spaceToPan` : boolean
+
+Optional. If `true`, the spacebar must be depressed in order to pan the node editor. The cursor will also be updated to show a draggable indicator when the spacbar is depressed.
+
+### `hideComments` : boolean
+
+Optional. If the current node editor contains comment blocks, they will not be rendered. This can be helpful for providing a UI for toggling comments on and off if desired. Defaults to `false`.
+
+### `disableComments` : boolean
+
+Optional. Prevents the user from adding additional comments. Defaults to `false`.

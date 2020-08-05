@@ -1,0 +1,73 @@
+---
+title: Comments
+---
+import { CommentsEditor } from '../components/GettingStartedExample'
+
+When programming, it's helpful to use comments to document your code. The same goes for visual programming using the Flume node editor. By default, the node editor allows you to add comment blocks that you can drag around, resize, and recolor. Let's use the final node editor from the previous section as an example.
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <CommentsEditor />
+</div>
+
+<br/>
+
+## Saving comments
+
+Comments have no effect on the function of your logic graphs, so they aren't stored with the nodes. Like with nodes, there are two ways to get coments in and out of the node editor.
+
+### `onCommentsChange`
+
+First, you can pass an `onCommentsChange` handler to the node editor. This works the same as the normal `onChange` handler, but will only be called any time any of the comments change.
+
+```jsx
+import React from 'react'
+import { NodeEditor } from 'flume'
+import config from './config'
+
+const App = () => {
+  const [comments, setComments] = React.useState({})
+
+  return (
+    <div style={{width: 800, height: 600}}>
+      <NodeEditor
+        comments={comments}
+        onCommentsChange={setComments}
+        portTypes={config.portTypes}
+        nodeTypes={config.nodeTypes}
+      />
+    </div>
+  )
+}
+```
+
+### `getComments`
+
+As with the `onChange` handler, the `onCommentsChange` handler may be called quite often. There may be cases where you may not need to save the comments until the user is done editing. For these cases, the node editor exposes an imperative `getComments` function.
+
+```jsx
+import React from 'react'
+import { NodeEditor } from 'flume'
+import config from './config'
+
+const App = () => {
+  const nodeEditor = React.useRef()
+
+  const saveComments = () => {
+    const comments = nodeEditor.current.getComments()
+    // Do whatever you want with the comments
+  }
+
+  return (
+    <div>
+      <button onClick={saveComments}>Save</button>
+      <div style={{width: 800, height: 600}}>
+        <NodeEditor
+          ref={nodeEditor}
+          portTypes={config.portTypes}
+          nodeTypes={config.nodeTypes}
+        />
+      </div>
+    </div>
+  )
+}
+```
