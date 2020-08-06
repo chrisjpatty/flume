@@ -1,0 +1,29 @@
+---
+title: Using Without React
+---
+
+While React is required to render the Flume node editor, once your graphs have been created, you are free to execute them with or without React. If you haven't yet, read the guide on setting up the [RootEngine](/docs/root-engine), as the instructions are the same whether you are using React or not.
+
+## Example
+
+Once your engine has been created, resolving your logic is as simple as a single function call:
+
+```js
+import engine from './engine'
+import nodes from './nodes'
+
+const context = {
+  user: {
+    firstName: "Bustopher",
+    lastName: "Jones",
+    isLoggedIn: true,
+    isAdmin: false
+  }
+}
+
+const resolvedValues = engine.resolveRootNode(nodes, { context })
+```
+
+And that's it! In the above example we've imported our previously-constructed engine and our nodes previously created using the node editor. Then we simply call `resolveRootNode` on the engine, passing in those nodes. We also have nodes which rely on the current user, so we pass that data into the engine using the context object provided to the second parameter.
+
+In a real application these nodes could be stored and fetched from anywhere. For example, let's say you are using Flume to model the logic for an online form. The logic in your graph determines the validity of each form input in the browser, but you also want to check if the fields are valid once the data for the form is submitted to your server. An easy way to accomplish this would be to save your logic graphs in your database, and when the user submits a form just look-up the associated logic graph and re-run the same logic using the above approach. Like magic, you've shared your business logic between your server and frontend! No need to rewrite any of your logic for validating the form, just model it once, and run it everywhere!

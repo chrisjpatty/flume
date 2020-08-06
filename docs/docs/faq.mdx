@@ -1,0 +1,53 @@
+---
+title: FAQ
+---
+
+## What should I use Flume for?
+
+Flume is a useful tool for a wide range of applications, but it especially shines in apps that have diverse business logic needs. When deciding if Flume can help you solve problems in your development, ask yourself if any of these situations apply to you:
+
+- My app serves users with very different business logic needs.
+- I am frequently creating "feature flags" to turn parts of my code on and off for different users.
+- I am frequently mixing business logic in with my application logic.
+- My code is hard to maintain because my business logic is very complicated.
+- My users could benefit from being able to safely edit logic with a visual editor.
+- I am frequently deploying new versions of my code just to update business logic.
+- There are people at my organization who could contribute to building logic for our apps if it didn't require writing code.
+- I am finding it difficult to share and maintain business logic between my frontend and my backend.
+
+If you answered yes to any of these questions, Flume could be a great choice to aleviate some of the above problems. Checkout the [getting started guide](/docs/quick-start) to learn more.
+
+## What if Flume is too advanced for my users?
+No problem! Flume isn't the right choice for every app. Some apps have straight-forward logic requirements, and you can provide a more simple user interface to meet your users' needs. There are also cases where Flume may be a good choice to use as an internal tool, rather than a user-facing one. This is especially true at medium to large-sized organizations where there are many non-programmers who could contribute to editing business logic for your software if they could do it without having to write code.
+
+## Do I have to use React to use Flume?
+
+The short answer is no, and the slightly longer answer is yes sort of. Currently React is required if you want to render and use the node editor, but React is **NOT** required to execute logic graphs created with the node editor. In fact, Flume is specifically designed to be able to be used in server environments as well as browsers. What this means in practice is, if you want to use Flume in an app that isn't using React, you have a few of options. You can use React for just a portion of your app to render the node editor, or you can use Flume as an internal tool. In either case you can still resolve your logic graphs in your main app *without* React.
+
+## Can Flume only be used in a browser?
+
+No! The engine for resolving logic can be used in any Javascript environment. In fact, part of the power of Flume is the ability to easily share your business logic between your frontend and backend. That being said, the node editor itself does requires a browser-like environment in order to run.
+
+## Can I run my logic on a non-node server?
+
+Yes! Logic graphs generated through the Flume node editor are stored as plain JSON, which means you can use them in any server with support for JSON. Currently Flume only ships with an official Javascript logic engine, but it could certainly be ported to a variety of languages. If you are interested in porting the logic engine to your favorite language, let's chat! Feel free to open an issue or PR on the Flume Github repo so we can look at getting it added as an official port.
+
+## Why should I use this node editor over the others out there?
+
+Whoa there buster, no one's twistin' your arm. In seriousness, there are several great node editors for Javascript out there, and Flume is inspired by some of the best features of many of them. However, where many of these libraries focus primarily on providing a node editor for anything and everything, Flume is focused on providing a node editor primarily for modeling application/business logic, **and** providing an engine for *running* that logic. It's also specifically designed to be as user-friendly as possible for end-users, not just developers.
+
+## Can I use async data in my nodes?
+
+Yes and no. Currently the root engine is designed to be a fully synchronous process. That means if you want to use any asyncronous data in your nodes you should detect the need for, and fetch, that data ahead of time and provide it to the context of the root engine. I recognize this might be a constraint in some applications, and work is already being done to explore creating a version of the root engine that supports asynchronous execution. With the upcoming concurrent mode for React, this type of engine may be especially useful. If this sounds like a fun challenge that you'd like to help with, feel free to [hit me up on Twitter](twitter.com/chrisjpatty) and we'll chat!
+
+## Is the node editor accessible?
+
+Accessiblity is a critical component of any application, and the Flume maintainers are committed to achieving full WCAG compliance. However, because this kind of rich user-interface has no native equivalent, there are tradeoffs for various accessibility approaches, and work is on-going to ensure that the node editor matures quickly to be fully accessible. If you would like to help with this effort please reach out on the Github repo or open a PR.
+
+## I have some ideas to make Flume better, how can I contribute?
+
+Fantastic! Right now, development on Flume is primarily driven by me, [Chris Patty](twitter.com/chrisjpatty). I would love to work with anyone who is interested in contributing! Hit me up on [Twitter](twitter.com/chrisjpatty), or feel free to open issues or pull requests to the [flume repo on Github](github.com/chrisjpatty/flume). All contributions are welcome!
+
+## Is the Flume logo just two Pac-men kissing?
+
+You are not the first person to think this. Also, love is love.

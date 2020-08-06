@@ -281,8 +281,63 @@
   font-size: 24px;
   line-height: 1.2;
 }
+.runLogicWrapper{
+  width: 100%;
+  background: var(--background-dark);
+  padding-bottom: 25vh;
+}
+.flexColumn{
+  display: flex;
+  flex-direction: column;
+}
+.centerFlex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 .callToActionWrapper{
   width: 100%;
+  margin-top: -20px;
+  background: var(--background-light);
+  padding-bottom: 10vh;
+}
+.ctaWordmark{
+  width: 200px;
+}
+.ctaInnerWrapper{
+  padding: 3vh 0px;
+}
+.ctaInnerWrapper p{
+  font-size: 30px;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+.callToActionWrapper .pageCurve{
+  margin-top: calc(-100% + 20px);
+}
+.wordmarkLeft{
+  fill: var(--blue-color);
+  animation: rotate-fill 900ms linear infinite;
+}
+.wordmarkRight{
+  fill: var(--green-color);
+  animation: rotate-fill 900ms linear infinite;
+  animation-delay: -450ms;
+}
+@keyframes rotate-fill {
+  0%{
+    fill: var(--blue-color);
+  }
+  33.3333%{
+    fill: var(--green-color);
+  }
+  66.6666%{
+    fill: var(--red-color);
+  }
+  100%{
+    fill: var(--blue-color);
+  }
 }
 
 @media screen and (max-width: 1300px) {

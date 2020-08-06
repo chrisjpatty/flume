@@ -694,3 +694,23 @@ export const CommentsEditor = () => {
     />
   )
 }
+
+export const RootNodeEditor = () => {
+
+  return (
+    <NodeEditor
+      initialScale={0.9}
+      portTypes={simpleConfig4.portTypes}
+      nodeTypes={simpleConfig4.nodeTypes}
+      nodes={initialNodes2}
+      disableZoom
+      defaultNodes={[
+        {
+          type: "homepage",
+          x: 240,
+          y: -150
+        }
+      ]}
+    />
+  )
+}

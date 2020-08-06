@@ -1,6 +1,6 @@
 module.exports = {
   someSidebar: {
-    Concepts: ["overview", "type-safety", "anatomy", "node-editor"],
+    Concepts: ["overview", "anatomy", "node-editor", "type-safety", "running-logic", "faq"],
     "Getting Started": [
       "quick-start",
       "basic-config",
@@ -9,12 +9,10 @@ module.exports = {
       "saving-nodes",
       "root-engine",
       "using-with-react",
-      "comments"
+      "using-without-react",
+      "comments",
+      "theming"
     ],
-    "API": [
-      "NodeEditor",
-      "flume-config",
-      "controls"
-    ]
+    API: ["NodeEditor", "flume-config", "controls", "colors"]
   }
 };

@@ -1,0 +1,31 @@
+---
+title: Running Logic
+---
+
+import { RootNodeEditor } from '../components/GettingStartedExample'
+
+Modeling your business logic using a visual editor is useful, but only if you can actually use your logic at runtime. Many tools for modeling logic are purely for documentation or planning purposes. Flume let's you and your users model **and** run your logic in any Javascript environment.
+
+## The root node
+
+While Flume can be used to model many types of graph data structures, the main focus is on modeling what we'll refer to as "root-style" graphs. Root-style graphs have a single root node from which all other nodes stem. You might be thinking, "Isn't that actually a tree then?", and you would be correct (trees are a type of graph), however in this instance any of the "leaf" nodes of the tree may be inter-connected so they may have any sibling-sibling relationships and not just parent-child relationships. If that sounds like a lot of jargon don't worry, you or users don't need to understand the dirty details to take advantage of Flume.
+
+## How logic graphs are resolved
+
+Let's take the following logic graph for example:
+
+<div style={{ width: "100%", height: 500, color: '#000' }}>
+  <RootNodeEditor />
+</div>
+
+<br/>
+
+In this case the "root" node is the "Homepage" node. This node represents the final output of the graph. When we run this graph using the [root engine](/docs/root-engine), the engine enters the graph at the root node, loops through each input, and then walks backwards to get the final value of the port.
+
+So for example, it first enters the title input, and sees that it's connected to the "Join Text" node. It walks backwards and loops through the inputs of the "Join Text" node seeing that the first input is not connected and has a literal value. It then sees that that second input is connected to the "User" node and again walks backwards to this node. At this point it's reached the final node as this node has no inputs (or if it had inputs, it has no connected inputs). At this point the engine starts firing the node functions provided to the root engine. It first fires the function for the "User" node, then pipes the outputs back to the "Join Text" node. At this point the "Join Text" node has collected all of the inputs it needs and it also fires its node function and pipes its output to the "Homepage" node. The value of the "title" port has now been collected and it moves on to the next port.
+
+Once this process has finished, the root engine will return an object representing all of the collected values.
+
+:::note
+If this sounds like a lot of processing work don't worry, even for very complex graphs this process is _very_ fast. Many common libraries you're probably already using do a lot more processing than this in way more time. When performance bottlenecks arise in logic graphs it is usually because their are bottleneckes in the node functions you've written that need to be optimized.
+:::

@@ -1,7 +1,7 @@
 module.exports = {
   title: 'Flume',
-  tagline: 'React-powered node editor',
-  url: 'https://flumejs.netlify.app',
+  tagline: 'Extract business logic from your apps with a user-friendly node editor powered by React.',
+  url: 'https://flume.dev',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
   organizationName: 'chrisjpatty', // Usually your GitHub org/user name.
@@ -13,7 +13,7 @@ module.exports = {
     navbar: {
       title: '',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Flume',
         src: 'img/logo.svg',
         srcDark: 'img/logo-dark.svg'
       },
@@ -42,35 +42,47 @@ module.exports = {
               label: 'Overview',
               to: 'docs/overview',
             },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'FAQ',
+              to: 'docs/faq',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              label: 'Quick Start',
+              to: 'docs/quick-start',
             },
           ],
         },
+        // {
+        //   title: 'Community',
+        //   items: [
+        //     {
+        //       label: 'Stack Overflow',
+        //       href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+        //     },
+        //     {
+        //       label: 'Discord',
+        //       href: 'https://discordapp.com/invite/docusaurus',
+        //     },
+        //     {
+        //       label: 'Twitter',
+        //       href: 'https://twitter.com/docusaurus',
+        //     },
+        //   ],
+        // },
         {
           title: 'More',
           items: [
-            {
-              label: 'Blog',
-              to: 'blog',
-            },
+            // {
+            //   label: 'Blog',
+            //   to: 'blog',
+            // },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/chrisjpatty/flume',
+            },
+            {
+              label: 'Twitter',
+              href: 'https://twitter.com/chrisjpatty',
             },
           ],
         },

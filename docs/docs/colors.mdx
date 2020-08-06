@@ -1,0 +1,31 @@
+---
+title: Colors
+---
+
+import Colors from '../components/Colors'
+
+Flume exports a set of colors to make it easy to change the color of your ports. An upcoming release will provide the ability to define your own colors, but until then, the built-in colors have been hand-picked to be visually distinct and coordinate perfectly with each other.
+
+<Colors />
+
+## Importing
+
+```js
+import { Colors } from 'flume'
+```
+
+## Example
+
+Port colors are chosen when adding port types to your flume config. Let's say you want to create a blue port representing an employee, you could do so like this:
+
+```js
+.addPortType({
+  type: "employee",
+  name: "employee",
+  label: "Employee",
+  color: Colors.blue,
+  controls: [
+    /* ... */
+  ]
+})
+```

@@ -7,12 +7,13 @@ import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
 import ArrowRightIcon from "@site/static/img/arrow-right.svg";
 import ArrowRightRedIcon from "@site/static/img/arrow-right-red.svg";
+import ArrowRightBlueIcon from "@site/static/img/arrow-right-blue.svg";
 import PageCurve from "@site/static/img/page-curve.svg";
 import PageCurveDark from "@site/static/img/page-curve-dark.svg";
 import { NodeEditor } from "flume";
 import config, { nodes } from "../exampleFlumeConfig";
 import Helmet from "react-helmet";
-import TypeSafeAnimation from '../components/TypeSafe'
+import TypeSafeAnimation from "../components/TypeSafe";
 
 const TITLE = "Flume";
 const DESCRIPTION =
@@ -43,11 +44,13 @@ const RedSpan = ({ children }) => (
 function Home() {
   // const context = useDocusaurusContext();
   // const {siteConfig = {}} = context;
-  const [initialScreenSize, setInitialScreenSize] = React.useState(getScreenSize());
+  const [initialScreenSize, setInitialScreenSize] = React.useState(
+    getScreenSize()
+  );
 
   React.useEffect(() => {
-    setInitialScreenSize(getScreenSize())
-  }, [])
+    setInitialScreenSize(getScreenSize());
+  }, []);
 
   return (
     <div className={styles.homePageWrapper}>
@@ -82,6 +85,7 @@ function Home() {
       <ExampleBlock initialScreenSize={initialScreenSize.current} />
       <TypeSafetyBlock />
       <FeatureBlocks />
+      <RunLogicBlock />
       <CallToActionBlock />
     </div>
   );
@@ -234,9 +238,7 @@ const TypeSafetyBlock = () => {
           </div>
         </div>
         <div className={styles.typeSafeImageWrapper}>
-          <TypeSafeAnimation
-            className={styles.typeSafeImage}
-          />
+          <TypeSafeAnimation className={styles.typeSafeImage} />
         </div>
       </div>
     </div>
@@ -330,10 +332,69 @@ const FeatureBlocks = () => {
   );
 };
 
+const RunLogicBlock = () => (
+  <div className={styles.runLogicWrapper}>
+    <PageCurveDark className={styles.pageCurve} />
+    <div className={styles.exampleInnerWrapper}>
+      <div className={styles.exampleTextBlock}>
+        <h2 className={styles.exampleTitleBlock}>
+          <span>
+            <BlueSpan>Model</BlueSpan> <span>once</span>{". "}
+          </span>
+          <span>
+            Run <BlueSpan>everywhere!</BlueSpan>
+          </span>
+        </h2>
+        <p>
+          Flume provides a blazing fast engine for running your logic in a
+          browser, on your server, or in any Javascript environment. Not using a node server? Your
+          logic graphs can also be used in any environment that supports JSON.
+          <br />
+          <BlueSpan>
+            <Link to="/docs/running-logic" className={styles.inlineCtaLink}>
+              Learn More <ArrowRightBlueIcon />
+            </Link>
+          </BlueSpan>
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
+const Wordmark = props => {
+  return (
+    <svg viewBox="0 0 118.84 46.5" {...props}>
+      <g id="prefix__Layer_2" data-name="Layer 2">
+        <g id="prefix__Layer_1-2" data-name="Layer 1">
+          <path
+            className={styles.wordmarkRight}
+            d="M110.39 5.32a23.24 23.24 0 00-22.51-4l-28.46 10 34 11.94-34 12 28.46 10a23.24 23.24 0 0022.51-4 23.26 23.26 0 000-35.94z"
+          />
+          <path
+            className={styles.wordmarkLeft}
+            d="M59.42 11.31L31 1.31a23.23 23.23 0 00-22.5 4 23.24 23.24 0 000 35.86 23.23 23.23 0 0022.5 4l28.47-10-34-12z"
+          />
+        </g>
+      </g>
+    </svg>
+  );
+};
+
 const CallToActionBlock = () => {
   return (
     <div className={styles.callToActionWrapper}>
-      <PageCurveDark className={styles.pageCurve} />
+      <PageCurve className={styles.pageCurve} />
+      <div className={styles.ctaInnerWrapper}>
+        <div className={styles.centerFlex}>
+          <Wordmark className={styles.ctaWordmark} />
+          <p>Ready to give it a try?</p>
+          <div>
+            <Link className={styles.pillButton} to="/docs/quick-start">
+              Get Started <ArrowRightIcon />
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
