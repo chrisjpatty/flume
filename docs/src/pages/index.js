@@ -14,6 +14,7 @@ import { NodeEditor } from "flume";
 import config, { nodes } from "../exampleFlumeConfig";
 import Helmet from "react-helmet";
 import TypeSafeAnimation from "../components/TypeSafe";
+import { Portal } from "react-portal";
 
 const TITLE = "Flume";
 const DESCRIPTION =
@@ -82,6 +83,7 @@ function Home() {
       </Helmet>
       <HomeNavigation />
       <HeroBlock />
+      <VideoBlock />
       <ExampleBlock initialScreenSize={initialScreenSize.current} />
       <TypeSafetyBlock />
       <FeatureBlocks />
@@ -148,7 +150,11 @@ const HeroBlock = () => {
         </div>
       </div>
       <div className={styles.heroImageBlock}>
-        <img src="img/hero-nodes.svg" alt="Flume nodes connected together" />
+        <img
+          src="img/hero-nodes.svg"
+          className={styles.heroNodes}
+          alt="Flume nodes connected together"
+        />
       </div>
     </div>
   );
@@ -165,6 +171,52 @@ const getInitialScale = size => {
     default:
       return 1;
   }
+};
+
+const VideoBlock = () => {
+  const [videoOpen, setVideoOpen] = React.useState(false);
+  const video = React.useRef();
+
+  return (
+    <div className={`${styles.videoCtaWrapper} ${styles.desktop}`}>
+      <PageCurveDark className={styles.videoCurve} />
+      <div className={styles.videoCtaInnerWrapper}>
+        <video autoPlay muted loop className={styles.videoPreview} ref={video}>
+          <source src="img/flume-short-web.mp4" type="video/mp4" />
+        </video>
+        <div className={styles.videoButtonWrapper}>
+          <button
+            className={styles.playVideoButton}
+            onClick={() => {
+              setVideoOpen(true)
+              video.current.pause()
+            }}
+          >
+            <img src="img/play-icon.svg" alt="play" />
+            <span>Watch the trailer</span>
+          </button>
+        </div>
+      </div>
+      {videoOpen && (
+        <Portal>
+          <div className={styles.videoWrapper}>
+            <div className={styles.embedContainer}>
+              <iframe
+                title="Introducing Flume"
+                src="https://www.youtube.com/embed/00BrWZnbnLQ?autoplay=1&modestbranding=1"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div className={styles.videoShade} onClick={() => {
+              video.current.play()
+              setVideoOpen(false)
+            }} />
+          </div>
+        </Portal>
+      )}
+    </div>
+  );
 };
 
 const ExampleBlock = ({ initialScreenSize }) => {
@@ -339,7 +391,8 @@ const RunLogicBlock = () => (
       <div className={styles.exampleTextBlock}>
         <h2 className={styles.exampleTitleBlock}>
           <span>
-            <BlueSpan>Model</BlueSpan> <span>once</span>{". "}
+            <BlueSpan>Model</BlueSpan> <span>once</span>
+            {". "}
           </span>
           <span>
             Run <BlueSpan>everywhere!</BlueSpan>
@@ -347,8 +400,9 @@ const RunLogicBlock = () => (
         </h2>
         <p>
           Flume provides a blazing fast engine for running your logic in a
-          browser, on your server, or in any Javascript environment. Not using a node server? Your
-          logic graphs can also be used in any environment that supports JSON.
+          browser, on your server, or in any Javascript environment. Not using a
+          node server? Your logic graphs can also be used in any environment
+          that supports JSON.
           <br />
           <BlueSpan>
             <Link to="/docs/running-logic" className={styles.inlineCtaLink}>

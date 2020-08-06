@@ -58,7 +58,7 @@
   display: flex;
   flex-direction: column;
 }
-.wordmark{
+.wordmark {
   max-width: 50px;
 }
 .heroTextBlock h1 {
@@ -74,9 +74,9 @@
   color: #606060;
   font-size: 45px;
   margin-top: 15px;
-  line-height: .6;
+  line-height: 0.6;
 }
-.heroTextBlock .heroSubSubtitle{
+.heroTextBlock .heroSubSubtitle {
   font-size: 28px;
   line-height: 1.2;
   margin-top: 0px;
@@ -90,31 +90,31 @@
 .redText {
   color: var(--red-color);
 }
-.redText a:hover{
+.redText a:hover {
   color: var(--red-light-color);
 }
-.redStroke path{
+.redStroke path {
   stroke: var(--red-color);
 }
 .whiteText {
   color: #fff;
 }
-.inlineCtaLink{
+.inlineCtaLink {
   color: inherit;
   height: 1em;
   display: inline-block;
   margin-top: 15px;
 }
-.inlineCtaLink:hover{
+.inlineCtaLink:hover {
   color: inherit;
   text-decoration: none;
 }
-.inlineCtaLink:hover svg{
+.inlineCtaLink:hover svg {
   transform: translateX(5px);
 }
-.inlineCtaLink svg{
-  width: .9em;
-  margin-left: .3em;
+.inlineCtaLink svg {
+  width: 0.9em;
+  margin-left: 0.3em;
   transition: transform 150ms;
 }
 .heroImageBlock {
@@ -122,11 +122,123 @@
   flex: 1 1 auto;
   display: flex;
 }
-.heroImageBlock img {
+.heroImageBlock img.heroNodes {
   height: calc(100% - 300px);
   position: absolute;
   right: 0px;
   top: 150px;
+}
+.videoCtaWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  margin-top: -100px;
+  margin-bottom: -150px;
+}
+.videoCtaInnerWrapper {
+  background: #cedef9;
+  width: 100%;
+}
+.videoPreview {
+  width: 100%;
+  opacity: 0.9;
+}
+.videoCurve {
+  transform: rotate(180deg);
+  position: absolute;
+  left: 0px;
+  top: -1px;
+  width: 100%;
+  margin: 0px;
+  z-index: 9;
+}
+.videoButtonWrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  display: flex;
+  align-items: center;
+  padding-left: 60px;
+}
+.playVideoButton {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  line-height: 0;
+  border-radius: 100px;
+  padding: 5px;
+  padding-right: 15px;
+  font-size: 40px;
+  font-family: "Paralucent", sans-serif;
+  font-weight: 400;
+  margin-top: -60px;
+  color: #fff;
+  z-index: 10;
+  opacity: 0.8;
+  text-shadow: 0px 2px 1px rgba(0, 0, 0, 0.8);
+}
+.playVideoButton:hover {
+  opacity: 1;
+}
+.playVideoButton img {
+  width: 80px;
+  height: 80px;
+  margin-right: 30px;
+}
+.videoWrapper {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  padding: 50px;
+}
+.videoShade {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 5;
+}
+.videoInnerWrapper {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9;
+}
+.embedContainer {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  width: 100%;
+  z-index: 99;
+  border-radius: 8px;
+}
+.embedContainer iframe,
+.embedContainer object,
+.embedContainer embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 .license {
   margin-left: 25px;
@@ -176,6 +288,10 @@
   margin-top: 50px;
   background: var(--background-light);
   padding-bottom: 30vh;
+  position: relative;
+}
+.exampleBlock .pageCurve {
+  transform: rotateY(180deg);
 }
 .exampleInnerWrapper {
   padding: 0px 8vw;
@@ -215,6 +331,7 @@
   width: 100%;
   padding-bottom: 20vh;
   background-color: var(--background-dark);
+  z-index: 9;
 }
 .typeSafeInnerWrapper {
   display: flex;
@@ -249,105 +366,108 @@
   width: 100%;
   background: var(--background-light);
   padding-bottom: 20vh;
+  z-index: 10;
 }
 .featuresBlockInnerWrapper {
   padding: 0px 8vw;
   padding-top: 8vh;
   padding-bottom: 10vh;
 }
-.featureTile{
+.featureTile {
   display: flex;
   margin-bottom: 40px;
 }
-.featureTile:last-child{
+.featureTile:last-child {
   margin-bottom: 0px;
 }
-.featureImageWrapper{
+.featureImageWrapper {
   width: 130px;
   flex-shrink: 0;
 }
-.featureImageWrapper img{
+.featureImageWrapper img {
   width: 100%;
 }
-.featureTextColumn{
+.featureTextColumn {
   display: flex;
   flex-direction: column;
   padding-left: 30px;
 }
-.featureTitle{
+.featureTitle {
   font-size: 40px;
 }
-.featureDescription{
+.featureDescription {
   font-size: 24px;
   line-height: 1.2;
 }
-.runLogicWrapper{
+.runLogicWrapper {
   width: 100%;
   background: var(--background-dark);
   padding-bottom: 25vh;
+  z-index: 11;
 }
-.flexColumn{
+.flexColumn {
   display: flex;
   flex-direction: column;
 }
-.centerFlex{
+.centerFlex {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-.callToActionWrapper{
+.callToActionWrapper {
   width: 100%;
   margin-top: -20px;
   background: var(--background-light);
   padding-bottom: 10vh;
+  z-index: 13;
 }
-.ctaWordmark{
+.ctaWordmark {
   width: 200px;
 }
-.ctaInnerWrapper{
+.ctaInnerWrapper {
   padding: 3vh 0px;
 }
-.ctaInnerWrapper p{
+.ctaInnerWrapper p {
   font-size: 30px;
   margin-top: 40px;
   margin-bottom: 30px;
 }
-.callToActionWrapper .pageCurve{
+.callToActionWrapper .pageCurve {
   margin-top: calc(-100% + 20px);
 }
-.wordmarkLeft{
+.wordmarkLeft {
   fill: var(--blue-color);
   animation: rotate-fill 900ms linear infinite;
 }
-.wordmarkRight{
+.wordmarkRight {
   fill: var(--green-color);
   animation: rotate-fill 900ms linear infinite;
   animation-delay: -450ms;
 }
 @keyframes rotate-fill {
-  0%{
+  0% {
     fill: var(--blue-color);
   }
-  33.3333%{
+  33.3333% {
     fill: var(--green-color);
   }
-  66.6666%{
+  66.6666% {
     fill: var(--red-color);
   }
-  100%{
+  100% {
     fill: var(--blue-color);
   }
 }
 
 @media screen and (max-width: 1300px) {
-  .heroImageBlock img {
+  .heroImageBlock img.heroNodes {
     max-width: 600px;
   }
 }
 
 @media screen and (max-width: 1200px) {
-  .heroImageBlock img {
+  .heroImageBlock img.heroNodes {
     max-width: 500px;
     top: 100px;
   }
@@ -363,10 +483,10 @@
   .heroBlock {
     min-height: calc(100vh - 250px);
   }
-  .exampleTitleBlock{
+  .exampleTitleBlock {
     font-size: 60px;
   }
-  .exampleTextBlock p{
+  .exampleTextBlock p {
     font-size: 28px;
   }
 }
@@ -396,7 +516,7 @@
     padding-top: 80px;
     padding-bottom: 100px;
   }
-  .heroImageBlock img {
+  .heroImageBlock img.heroNodes {
     position: relative;
     width: 124%;
     height: 100%;
@@ -448,7 +568,7 @@
     height: 35vh;
     border-radius: 25px;
   }
-  .typeSafeWrapper{
+  .typeSafeWrapper {
     padding-bottom: 6vh;
   }
   .typeSafeInnerWrapper {
@@ -466,7 +586,7 @@
     margin-top: -8vh;
     margin-bottom: 3vw;
   }
-  .typeSafeImage{
+  .typeSafeImage {
     margin-top: 0px;
   }
   .mobileColumnCenter {
@@ -478,35 +598,34 @@
     margin-left: 0px;
     margin-top: 10px;
   }
-  .featuresBlock{
+  .featuresBlock {
     padding-bottom: 5vh;
   }
 }
 @media screen and (max-width: 800px) {
-  .featureImageWrapper{
+  .featureImageWrapper {
     width: 110px;
   }
 }
 @media screen and (max-width: 600px) {
-  .mobileSmallInline{
+  .mobileSmallInline {
     display: none;
   }
-  .featureTile{
+  .featureTile {
     flex-direction: column;
     align-items: center;
   }
-  .featureTextColumn{
+  .featureTextColumn {
     padding-left: 0px;
   }
-  .featureTitle{
+  .featureTitle {
     text-align: center;
     font-size: 34px;
   }
-  .featureDescription{
+  .featureDescription {
     font-size: 22px;
     line-height: 1.4;
   }
-  .flumeWrapper{
-
+  .flumeWrapper {
   }
 }
