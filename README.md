@@ -4,8 +4,6 @@
 
 # Flume
 
-> A React-powered node editor and runtime engine
-
 ## Guides & Examples
 
 [flume.dev](https://flume.dev)
