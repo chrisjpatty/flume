@@ -1,14 +1,16 @@
 ![](https://raw.githubusercontent.com/chrisjpatty/flume/master/logo.png?token=ADRZXI4TFKM3FXBEBQHQURK6QIJ6Q)
 
-# Flume
-
-> A node editor for describing custom logic.
-
 [![NPM](https://img.shields.io/npm/v/flume.svg)](https://www.npmjs.com/package/flume) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Minzip Size](https://badgen.net/bundlephobia/minzip/flume)](https://bundlephobia.com/result?p=flume)
 
-## Install
+# Flume
 
-> Flume is currently in alpha testing, use with caution.
+> A React-powered node editor and runtime engine
+
+## Guides & Examples
+
+[flume.dev](https://flume.dev)
+
+## Install
 
 ```bash
 npm install --save flume
@@ -84,6 +86,8 @@ const App = () => {
   )
 }
 ```
+
+For more complete documentation visit: [flume.dev](https://flume.dev)
 
 ## License
 
