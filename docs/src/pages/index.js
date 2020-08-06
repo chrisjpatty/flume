@@ -58,21 +58,13 @@ function Home() {
       <Helmet>
         <title>{TITLE + " | " + DESCRIPTION}</title>
         <meta property="og:title" content={TITLE} data-react-helmet="true" />
-        <meta
-          name="description"
-          content={DESCRIPTION}
-          data-react-helmet="true"
-        />
-        <meta
-          property="og:description"
-          content={DESCRIPTION}
-          data-react-helmet="true"
-        />
-        <meta
-          property="og:url"
-          content="https://flumejs.netlify.app/"
-          data-react-helmet="true"
-        />
+        <meta name="description" content={DESCRIPTION} />
+        <meta property="og:description" content={DESCRIPTION} />
+        <meta property="og:url" content="https://flume.dev" />
+        <meta property="og:url" content="https://flume.dev" />
+        <meta property="og:image" content="https://flume.dev/img/fb-img.png" />
+        <meta name="twitter:image" content="https://flume.dev/img/fb-img.png" />
+        <meta name="twitter:card" content="summary_large_image" />
         <style>
           {`
             body{
@@ -188,8 +180,8 @@ const VideoBlock = () => {
           <button
             className={styles.playVideoButton}
             onClick={() => {
-              setVideoOpen(true)
-              video.current.pause()
+              setVideoOpen(true);
+              video.current.pause();
             }}
           >
             <img src="img/play-icon.svg" alt="play" />
@@ -208,10 +200,13 @@ const VideoBlock = () => {
                 allowFullScreen
               ></iframe>
             </div>
-            <div className={styles.videoShade} onClick={() => {
-              video.current.play()
-              setVideoOpen(false)
-            }} />
+            <div
+              className={styles.videoShade}
+              onClick={() => {
+                video.current.play();
+                setVideoOpen(false);
+              }}
+            />
           </div>
         </Portal>
       )}
