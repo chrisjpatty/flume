@@ -18,7 +18,7 @@ npm install --save flume
 
 ## Usage
 
-## Defining your nodes
+### Defining your nodes
 
 Import `FlumeConfig` and use it to define the nodes and ports that will make up your node editor.
 
@@ -65,7 +65,7 @@ flumeConfig
   })
 ```
 
-## Rendering the node editor
+### Rendering the node editor
 
 To render the node editor, import `NodeEditor` and pass it your nodeTypes and portTypes from the configuration you created.
 
