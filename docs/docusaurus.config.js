@@ -15,9 +15,9 @@ module.exports = {
     //   indexName: 'YOUR_INDEX_NAME',
     //   searchParameters: {}, // Optional (if provided by Algolia)
     // },
+    image: 'img/fb-img.png',
     navbar: {
       title: '',
-      image: 'img/fb-img.png',
       logo: {
         alt: 'Flume',
         src: 'img/logo.svg',
