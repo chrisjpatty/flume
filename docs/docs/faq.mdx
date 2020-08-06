@@ -15,7 +15,7 @@ Flume is a useful tool for a wide range of applications, but it especially shine
 - There are people at my organization who could contribute to building logic for our apps if it didn't require writing code.
 - I am finding it difficult to share and maintain business logic between my frontend and my backend.
 
-If you answered yes to any of these questions, Flume could be a great choice to aleviate some of the above problems. Checkout the [getting started guide](/docs/quick-start) to learn more.
+If you answered yes to any of these questions, Flume could be a great choice to aleviate some of the above problems. Check out the [getting started guide](/docs/quick-start) to learn more.
 
 ## What if Flume is too advanced for my users?
 No problem! Flume isn't the right choice for every app. Some apps have straight-forward logic requirements, and you can provide a more simple user interface to meet your users' needs. There are also cases where Flume may be a good choice to use as an internal tool, rather than a user-facing one. This is especially true at medium to large-sized organizations where there are many non-programmers who could contribute to editing business logic for your software if they could do it without having to write code.
@@ -26,23 +26,31 @@ The short answer is no, and the slightly longer answer is yes sort of. Currently
 
 ## Can Flume only be used in a browser?
 
-No! The engine for resolving logic can be used in any Javascript environment. In fact, part of the power of Flume is the ability to easily share your business logic between your frontend and backend. That being said, the node editor itself does requires a browser-like environment in order to run.
+No! The engine for executing logic can be used in any Javascript environment. In fact, part of the power of Flume is the ability to easily share your business logic between your frontend and backend. That being said, the node editor itself does requires a browser-like environment in order to be rendered.
 
 ## Can I run my logic on a non-node server?
 
 Yes! Logic graphs generated through the Flume node editor are stored as plain JSON, which means you can use them in any server with support for JSON. Currently Flume only ships with an official Javascript logic engine, but it could certainly be ported to a variety of languages. If you are interested in porting the logic engine to your favorite language, let's chat! Feel free to open an issue or PR on the Flume Github repo so we can look at getting it added as an official port.
 
+## The docs mention type safety, do I have to use Typescript to use Flume?
+
+Hard no. Typescript is a "typed" version of Javascript that makes it harder to write code that can crash unexpectedly. In some sense you can think of Flume as Typescript for visual logic editing. It accomplishes the same task, making it difficult (if not impossible), for users to create logic that will cause type errors. That being said, you are more than welcome to use Flume with Typescript. If you are a Typescript developer and would like to help create type definitions for Flume, please reach out through the [Github repo!](github.com/chrisjpatty/flume)
+
 ## Why should I use this node editor over the others out there?
 
-Whoa there buster, no one's twistin' your arm. In seriousness, there are several great node editors for Javascript out there, and Flume is inspired by some of the best features of many of them. However, where many of these libraries focus primarily on providing a node editor for anything and everything, Flume is focused on providing a node editor primarily for modeling application/business logic, **and** providing an engine for *running* that logic. It's also specifically designed to be as user-friendly as possible for end-users, not just developers.
+Whoa there buster, no one's twistin' your arm. In seriousness though, there are several great node editors for Javascript out there, and Flume is inspired by some of the best features of many of them. However, where many of these libraries focus primarily on providing a node editor for anything and everything, Flume is focused on providing a node editor primarily for modeling application/business logic, **and** providing an engine for *running* that logic. It's also specifically designed to be as user-friendly as possible for end-users, not just developers.
 
 ## Can I use async data in my nodes?
 
-Yes and no. Currently the root engine is designed to be a fully synchronous process. That means if you want to use any asyncronous data in your nodes you should detect the need for, and fetch, that data ahead of time and provide it to the context of the root engine. I recognize this might be a constraint in some applications, and work is already being done to explore creating a version of the root engine that supports asynchronous execution. With the upcoming concurrent mode for React, this type of engine may be especially useful. If this sounds like a fun challenge that you'd like to help with, feel free to [hit me up on Twitter](twitter.com/chrisjpatty) and we'll chat!
+Yes and no. Currently the root engine is designed to be a fully synchronous process. That means if you want to use any asyncronous data in your nodes you should detect the need for, and fetch, that data ahead of time and provide it to the context of the root engine. I recognize this might be a constraint in some applications, especially server environments, and work is already being done to explore creating a version of the root engine that supports asynchronous execution. With the upcoming concurrent mode for React, this type of engine may be especially useful. If this sounds like a fun challenge that you'd like to help with, feel free to [hit me up on Twitter](twitter.com/chrisjpatty) and we'll chat!
 
 ## Is the node editor accessible?
 
 Accessiblity is a critical component of any application, and the Flume maintainers are committed to achieving full WCAG compliance. However, because this kind of rich user-interface has no native equivalent, there are tradeoffs for various accessibility approaches, and work is on-going to ensure that the node editor matures quickly to be fully accessible. If you would like to help with this effort please reach out on the Github repo or open a PR.
+
+## Is Flume production-ready?
+
+Flume was originally created to support some of my work at my full-time job, where it's currently being integrated into production products. That being said, as with any open-source library, time and effort is needed to fully mature the library. At the time of writing, Flume can be considered to be stable, but may have undiscovered bugs. If you are using Flume and think something isn't working the way you expect, **please** file an issue on the [Github repo](github.com/chrisjpatty/flume) so it can be addressed ASAP. If you want to contribute by helping write unit tests that would also be **greatly** appreciated.
 
 ## I have some ideas to make Flume better, how can I contribute?
 
