@@ -51,6 +51,10 @@ config
 
 Let's break down what's going on here. First we decide on a type for this port. Because this port is going to output and accept strings, we'll just call it `string`. We also need to give it a name that we can use to identify it later. For simplicity, we'll also name it `string`.
 
+:::note
+Keep in mind, there's nothing magic about using the word `string` as the type name. This name is entirely arbitrary. We could give this port any unique type name and it would behave exactly the same.
+:::
+
 Now "string" may be a confusing word for non-programmers so we'll give it a `label` of "Text". This is the label that will be shown to users when the port renders. Next we'll pick a color for the port. By default, ports are a neutral gray color, but to make it easier to recognize this port, we'll color it green by importing `Colors` from flume, and setting `color` to `Colors.green`.
 
 Last, we need to define the controls available when this port is an input. In most cases, ports only have one control, but you may have any number of them. In this case, we want users to be able to type in text, so we'll import `Controls` from `flume`, and then call `Controls.text()`. We'll give the text input a name, which again, for simplicity, we'll just name it `string`, and we'll give it a user-readable label of `Text`.
@@ -116,7 +120,7 @@ const App = () => {
 }
 ```
 
-As you can see we've provided our `portTypes` and `nodeTypes` to props of the same name. Right click anywhere on the node editor and click on the `Text` option. If everything is hooked up correctly, you should now have a node editor that looks like this:
+As you can see, we've provided our `portTypes` and `nodeTypes` to props of the same name. Right click anywhere on the node editor and click on the `Text` option. If everything is hooked up correctly, you should now have a node editor that looks like this:
 
 <div style={{width: '100%', height: 600, color: "#000"}}>
   <SimpleEditor />

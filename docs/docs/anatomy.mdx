@@ -7,11 +7,15 @@ id: anatomy
 
 Don't panic, you don't need to know much about graph theory to use Flume, but having a basic understanding of what a graph data structure is can make it a little easier.
 
-In short a graph is a data structure used to model complex relationships between pieces of data. Each piece of data is referred to as a "node", and its relationships with other nodes is called an "edge". Lets use a network of friends on a social media site like Facebook or Twitter as an example:
+In short, a graph is a data structure used to model complex relationships between pieces of data. Each piece of data is referred to as a "node", and its relationships with other nodes is called an "edge". Lets use a network of friends on a social media site like Facebook or Twitter as an example:
 
 ![A graph showing a network of friends](/img/friends-graph.svg)
 
 In this example, each person is a "node" in the graph, and each black line, indicating that the two connected users are friends, is an "edge". Penelope, Jeffrey, and Carmen, are all friends with each other, but Mark is only friends with Penelope. You can imagine if we were to add every user on a site like Facebook, that our graph would look like a very complicated web. Graphs are an ideal data structure for representing these kinds of complex relationships.
+
+:::note
+For simplicity, "edges" in Flume logic graphs are referred to as "connections".
+:::
 
 ## Logic Graphs
 
@@ -29,10 +33,10 @@ Let's say you're creating an e-commerce solution called _Moneyroll_. Moneyroll i
 
 For example, lets say you get a new customer, _Sundown Plants_, who sells houseplants. In this case, the price for each plant depends on the time of year, and if you buy plants that come from the same warehouse you get a discount. As a developer for Moneyroll you now have a problem. Most of your customers don't have these requirements, so you don't want to write a bunch of code specifically for Sundown Plants, and bloat the size of your code for everyone. You also don't want to be responsible for updating the logic every time Sundown Plants needs to adjust it.
 
-This is where Flume comes in. Flume provides a visual editor that lets Sundown Plants model the logic for calculating their pricing. As the developer you just create the nodes that output the time of the year, and which items are in the cart, and your customer can take care of the rest. If this process is too complicated for a particular customer, you use Flume as your own internal tool rather than hardcoding logic for different customers. Your code doesn't need to change, and you don't need to deploy a new build every time the logic needs of a customer changes. The JSON graphs representing each customers logic can be stored in a database, and pulled on demand when your app loads, ensuring that each customer is only running the logic necessary for their business.
+This is where Flume comes in. Flume provides a visual editor that lets Sundown Plants model the logic for calculating their pricing. As the developer you just create the nodes that output the time of the year, and which items are in the cart, and your customer can take care of the rest. If this process is too complicated for a particular customer, you can use Flume as your own internal tool. Your code doesn't need to change, and you don't need to deploy a new build every time the logic needs of a customer change. The JSON graphs representing each customers' logic can be stored in a database and pulled on demand when your app loads, ensuring that each customer is only running the logic necessary for their business.
 
 ## Summary
 
 In summary, Flume is a tool for creating intuitive, visual programming languages for you and your users to use. It provides a standard UI for creating and editing JSON graphs, and an engine for parsing your logic graphs at runtime. Flume makes it easy to take advantage of the power of graph data structures using a simple visual editor.
 
-There's a lot more to graph theory than we've discussed here. If you're interesting in learning more the [Wikipedia article](https://en.wikipedia.org/wiki/Graph_theory) on the subject is a good place to start.
+There's a lot more to graph theory than we've discussed here. If you're interested in learning more, the [Wikipedia article](https://en.wikipedia.org/wiki/Graph_theory) on the subject is a good place to start.

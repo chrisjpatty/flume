@@ -44,7 +44,7 @@ const resolvePorts = (portType, data) => {
 const engine = new RootEngine(config, resolvePorts)
 ```
 
-Let's break this down. `resolvePorts` is a function that takes in the type of the port currently being processed, and all of the data from its controls. Then we open a switch statement with the port type, and return the port data for each port type. Because we only have 3 port types, we only have 3 entries in our switch statement. In our case, each of our ports only has one control, and we gave each control the same name as the port, so we can fill this function our pretty easily. In advanced use-cases ports may have any number of controls so this function will need to resolve each control, but this work for now.
+Let's break this down. `resolvePorts` is a function that takes in the type of the port currently being processed, and all of the data from its controls. Then we open a switch statement with the port type, and return the port data for each port type. Because we only have 3 port types, we only have 3 entries in our switch statement. In our case, each of our ports only has one control, and we gave each control the same name as the port, so we can fill this function our pretty easily. In advanced use-cases, ports may have any number of controls, so this function will need to resolve each control, but this work for now.
 
 :::note
 This might seem a little unintuitive or redundant at first, but keep in mind that Flume doesn't make many assumptions about how you build or run your logic, so these functions are how you define that behavior.
