@@ -55,6 +55,7 @@ export default () => (
           textAlign: "center",
           margin: 8
         }}
+        key={color.color}
       >
         <div
           style={{

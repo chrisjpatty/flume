@@ -13,6 +13,6 @@ module.exports = {
       "comments",
       "theming"
     ],
-    API: ["NodeEditor", "flume-config", "controls", "colors"]
+    API: ["NodeEditor", "flume-config", "RootEngine", "controls", "colors"]
   }
 };

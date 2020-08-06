@@ -1,0 +1,129 @@
+---
+title: RootEngine
+---
+
+`RootEngine` is a class for creating a new engine for executing your logic graphs. For more information see [Running Logic](/docs/running-logic).
+
+## Importing
+
+```js
+import { RootEngine } from 'flume'
+```
+
+## Creating a new root engine
+
+```js
+const engine = new RootEngine(config, resolvePorts, resolveNodes)
+```
+
+## `resolvePorts` : function
+
+`resolvePorts` is the second parameter of the `RootEngine` constructor. This function is responsible for returning the resolved control values of a port every time it's called.
+
+### Example
+
+Typically this function is a switch statement that might look something like this:
+
+```js
+const resolvePorts = (portType, data, context) => {
+  switch (portType) {
+    case 'string':
+      return data.string
+    case 'boolean':
+      return data.boolean
+    case 'number':
+      return data.number
+    default:
+      return data
+  }
+}
+```
+
+### Returns : any
+
+This function must return the control values for the port currently being processed. In **most** cases, ports have only one control, so this function simply returns the value of that control out of the data object. If the port being processed has more than one control, this function *typically* returns an object with each key being the name of each control, and the value being its value.
+
+### `portType` : string
+
+This is the first parameter injected into the resolvePorts function. It refers to the string type of the port currently being resolved.
+
+### `data` : object
+
+An object representing all of the control values of the current port.
+
+### `context` : object
+
+An object representing the current execution context of the root engine. This context object is used to pass live data into the root engine at runtime.
+
+## `resolveNodes` : function
+
+`resolveNodes` is the third parameter of the `RootEngine` constructor. This function is responsible for transforming any given inputs to the current node, into an object representing all the outputs of the node.
+
+### Example
+
+Typically this function is a switch statement that might look something like this:
+
+```js
+const resolveNodes = (node, inputValues, nodeType, context) => {
+  switch (node.type) {
+    case 'string':
+      return { string: inputValues.string }
+    case 'boolean':
+      return { boolean: inputValues.boolean }
+    case 'number':
+      return { number: inputValues.number }
+    case 'user':
+      return context.user
+    case 'joinText':
+      return { joinedText: inputValues.string1 + inputValues.string2 }
+    case "reverseBoolean":
+      return { boolean: !inputValues.boolean }
+    default:
+      return inputValues
+  }
+}
+```
+
+### Returns : object
+
+This function must return an object representing every output available on the current port. Regardless of whether or not they are currently connected to a port on another node. Each key of this object should correspond to the name of each output port.
+
+### `node` : Node
+
+An object representing the current state of the node being processed.
+
+### `inputValues` : object
+
+An object representing the resolved control values returned by the the `resolvePorts` function.
+
+### `nodeType` : NodeType
+
+The type definition of the node being processed.
+
+### `context` : object
+
+An object representing the current execution context of the root engine. This context object is used to pass live data into the root engine at runtime.
+
+## `resolveRootNode` : method
+
+A function which accepts a set of nodes created through the node editor, and an optional `options` object; and returns an object representing all of the resolved values of the inputs for the root node.
+
+:::note
+This method must be called with nodes having exactly one root node. If multiple root nodes are found, the first root node found will be used. In most cases this is not a desired behavior. If you need to support multiple root nodes you should manually keep track of their node ids, and resolve them seperately by passing their ids to the `rootNodeId` key of the options object, as described below.
+:::
+
+### `options` : object
+
+A configuration object representing settings for the requested resolution of the root node.
+
+#### `context` : object
+
+Optional. An object which will be passed to both the `resolvePorts` and `resolveNodes` functions. This context object is used to pass live data into the root engine at runtime.
+
+#### `onlyResolveConnected` : boolean
+
+Optional. If this property is set to `true`, the object returned by the `resolveRootNode` function will only contain port values for inputs which are connected to other nodes. Defaults to `false`.
+
+#### `rootNodeId` : string
+
+Optional. In some cases you may wish to override which node is considered the root node. Passing the id to this property, of a node in the set of nodes passed into the `resolveRootNode` function, will cause the corresponding node to be used as the root node.
