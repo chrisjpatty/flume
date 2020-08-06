@@ -4,6 +4,7 @@
   "description": "A node editor for React",
   "author": "chrisjpatty",
   "license": "MIT",
+  "homepage": "https://flume.dev",
   "repository": "chrisjpatty/flume",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
