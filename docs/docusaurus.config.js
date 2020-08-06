@@ -10,6 +10,11 @@ module.exports = {
     prism: {
       theme: require('prism-react-renderer/themes/oceanicNext'),
     },
+    algolia: {
+      apiKey: 'YOUR_API_KEY',
+      indexName: 'YOUR_INDEX_NAME',
+      searchParameters: {}, // Optional (if provided by Algolia)
+    },
     navbar: {
       title: '',
       logo: {

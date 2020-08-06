@@ -15,6 +15,14 @@ One could argue that node editors have become a standard for visual logic editin
 
 ## Logic Extraction
 
-As a side benefit, putting complex business logic into the hands of users, frees developers from the complexity of maintaining complex logic in code. This reduces the surface area for bugs and makes defining business logic accessible for non-programmers in your organization.
+There are many existing tools for modeling logic in a graph-like structure, however, most of these tools are for documentation or planning purposes. Flume provides a node editor for modeling logic, but also a robust toolset for executing that logic at runtime. This works by allowing developers to extract their business logic out of their code and into JSON "graphs", which represent a set of logical instructions. These logic graphs are much more portable than hardcoded logic, and enables the same set of logical to be executed in entirely different environments.
 
-Additionally, because business logic can be stored in JSON structures in your database, business logic can be swapped out in your application remotely without requiring a new build of your application's code.
+Flume makes this logic extraction possible not just for developers, but in many cases, end-users. Many applications suffer from "feature-flag" bloat, where developers are frequently handwriting different logical paths for different customers, and then turning them on and off per customer. Flume can help alleviate this common problem by empowering users to edit their own business logic.
+
+As a side benefit, putting complex business logic into the hands of users, frees developers from the complexity of maintaining complex logic in code. This reduces the surface area for bugs and can also make defining business logic more accessible for non-programmers in your organization.
+
+Additionally, because business logic can now be stored as JSON structures in your database, logic can be swapped out in your application remotely without requiring a new builds of your application's code.
+
+## Summary
+
+Flume aims to be a lightweight toolset for solving these common problems. Continue on to the [next section](/docs/anatomy) to learn more about how your business logic can be stored and executed as JSON graphs.
