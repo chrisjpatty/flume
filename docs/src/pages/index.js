@@ -204,8 +204,8 @@ const VideoBlock = () => {
               <iframe
                 title="Introducing Flume"
                 src="https://www.youtube.com/embed/00BrWZnbnLQ?autoplay=1&modestbranding=1"
-                frameborder="0"
-                allowfullscreen
+                frameBorder="0"
+                allowFullScreen
               ></iframe>
             </div>
             <div className={styles.videoShade} onClick={() => {
