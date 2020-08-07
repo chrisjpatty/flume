@@ -127,3 +127,7 @@ Optional. If this property is set to `true`, the object returned by the `resolve
 #### `rootNodeId` : string
 
 Optional. In some cases you may wish to override which node is considered the root node. Passing the id to this property, of a node in the set of nodes passed into the `resolveRootNode` function, will cause the corresponding node to be used as the root node.
+
+#### `maxLoops` : int
+
+Optional. By default, the root engine will only allow up to `1000` recursive loops through nodes before it will bail out of processing the current root node input and log an error. This prevents the call stack from being overwhelmed by a circular node setup. Passing an integer to this property will change the number of max loops before this occurs. Passing a `-1` will disable this check and allow infinite loops. 

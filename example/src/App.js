@@ -225,7 +225,9 @@ flumeConfig
           return (
             <div
               style={{
-                background: `linear-gradient(to right, ${inputData.multiColor.join(", ")})`,
+                background: `linear-gradient(to right, ${inputData.multiColor.join(
+                  ", "
+                )})`,
                 borderRadius: 4,
                 width: "100%",
                 height: 60
@@ -549,7 +551,7 @@ flumeConfig
     inputs: ports => [ports.car(), ports.color()],
     outputs: ports => [ports.car()]
   })
-  .addNodeType({
+  .addRootNodeType({
     type: "websiteAttributes",
     label: "Website Attributes",
     description: "Accepts the attributes of the website",
@@ -567,13 +569,9 @@ flumeConfig
   .addNodeType({
     type: "employee",
     label: "Employee",
-    inputs: ports => [
-      ports.employeeType()
-    ],
-    outputs: ports => [
-      ports.employeeType()
-    ]
-  })
+    inputs: ports => [ports.employeeType()],
+    outputs: ports => [ports.employeeType()]
+  });
 
 const engine = new RootEngine(
   flumeConfig,
@@ -615,34 +613,39 @@ export default () => {
         comments={comments}
         onChange={setNodes}
         onCommentsChange={setComments}
-        // disableZoom
-        // defaultNodes={[
-        //   {
-        //     type: "homePage",
-        //     x: 400,
-        //     y: -200
-        //   }
-        // ]}
-        // debug
+        disableZoom
+        defaultNodes={[
+          {
+            type: "websiteAttributes",
+            x: 400,
+            y: -200
+          }
+        ]}
+        debug
       />
-      <div style={{ marginTop: 30 }}>{/* <Website nodes={nodes} /> */}</div>
+      <div style={{ marginTop: 30 }}>
+        <Website nodes={nodes} />
+      </div>
     </div>
   );
 };
 
+const useInfiniteEngine = (nodes, engine, context, options = {}) =>
+  Object.keys(nodes).length ? engine.resolveRootNode(nodes, { context, ...options }) : {};
+
 const Website = ({ nodes }) => {
   const {
-    homepageTitle,
-    homepageSubtitle,
+    title,
+    description,
     showDashboard,
     showContactForm,
     showLoginButton
-  } = useRootEngine(nodes, engine, { someContext: true });
+  } = useInfiniteEngine(nodes, engine, { someContext: true }, { maxLoops: 10 });
 
   return (
     <div className="website-wrapper">
-      <h1>{homepageTitle}</h1>
-      <p>{homepageSubtitle}</p>
+      <h1>{title}</h1>
+      <p>{description}</p>
       {showDashboard && <div>Dashboard</div>}
       {showContactForm && <div>Contact Form</div>}
       {showLoginButton && <button>Login</button>}
