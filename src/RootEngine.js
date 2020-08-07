@@ -85,7 +85,6 @@ class RootEngine {
       ? nodes[options.rootNodeId]
       : this.getRootNode(nodes);
     if (rootNode) {
-      this.resetLoops(options.maxLoops);
       const controlValues = this.config.nodeTypes[rootNode.type].inputs.reduce(
         (obj, input) => {
           obj[input.name] = this.resolveInputControls(
@@ -100,6 +99,7 @@ class RootEngine {
       const inputValues = this.reduceRootInputs(
         rootNode.connections.inputs,
         (inputName, connection) => {
+          this.resetLoops(options.maxLoops);
           let value;
           try {
             value = this.getValueOfConnection(
