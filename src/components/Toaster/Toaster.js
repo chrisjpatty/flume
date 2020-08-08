@@ -53,6 +53,7 @@ export default ({ toasts = [], dispatchToasts }) => {
 
 const Toast = ({
   id,
+  title,
   message,
   duration,
   type,
@@ -103,7 +104,10 @@ const Toast = ({
       onMouseEnter={stopTimer}
       onMouseLeave={resumeTimer}
     >
-      {message}
+      {
+        title ? <span className={styles.title}>{title}</span> : null
+      }
+      <p>{message}</p>
       {!paused && (
         <div
           className={styles.timer}

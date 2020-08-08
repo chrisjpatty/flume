@@ -29,6 +29,8 @@
   animation: fade-in 150ms;
   user-select: none;
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
   &[data-type="danger"]{
     background: rgb(255, 116, 137);
     border-color: rgb(254, 99, 136);
@@ -53,6 +55,14 @@
     animation: fade-out 150ms;
     animation-fill-mode: forwards;
   }
+}
+.toast p{
+  margin: 0px;
+}
+.title{
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 .timer{
   position: absolute;

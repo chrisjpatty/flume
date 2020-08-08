@@ -1,4 +1,3 @@
-import { Colors } from "./typeBuilders";
 const nanoid = require("nanoid");
 
 export default (toasts = [], action) => {
@@ -7,6 +6,7 @@ export default (toasts = [], action) => {
       return [
         {
           id: nanoid(5),
+          title: action.title,
           message: action.message,
           type: action.toastType || 'info',
           duration: action.duration || 10000,

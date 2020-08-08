@@ -621,7 +621,7 @@ export default () => {
             y: -200
           }
         ]}
-        debug
+        // debug
       />
       <div style={{ marginTop: 30 }}>
         <Website nodes={nodes} />

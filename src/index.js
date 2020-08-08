@@ -53,12 +53,13 @@ export let NodeEditor = (
   const editorId = useId();
   const cache = React.useRef(new Cache());
   const stage = React.useRef();
+  const [sideEffectToasts, setSideEffectToasts] = React.useState()
   const [toasts, dispatchToasts] = React.useReducer(toastsReducer, []);
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(
       nodesReducer,
       { nodeTypes, portTypes, cache },
-      toastsReducer
+      setSideEffectToasts
     ),
     {},
     () => getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes)
@@ -121,6 +122,13 @@ export let NodeEditor = (
       onCommentsChange(comments);
     }
   }, [comments, previousComments, onCommentsChange]);
+
+  React.useEffect(() => {
+    if(sideEffectToasts){
+      dispatchToasts(sideEffectToasts)
+      setSideEffectToasts(null)
+    }
+  }, [sideEffectToasts])
 
   return (
     <PortTypesContext.Provider value={portTypes}>

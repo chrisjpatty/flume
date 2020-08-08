@@ -250,10 +250,11 @@ const Port = ({
         const {
           portName: connectToPortName,
           nodeId: connectToNodeId,
-          portType: connectToPortType
+          portType: connectToPortType,
+          portTransputType: connectToTransputType
         } = e.target.dataset;
         const isNotSameNode = outputNodeId !== connectToNodeId;
-        if (isNotSameNode) {
+        if (isNotSameNode && connectToTransputType !== "output") {
           const inputWillAcceptConnection = inputTypes[
             connectToPortType
           ].acceptTypes.includes(type);
@@ -271,10 +272,11 @@ const Port = ({
         const {
           portName: inputPortName,
           nodeId: inputNodeId,
-          portType: inputNodeType
+          portType: inputNodeType,
+          portTransputType: inputTransputType
         } = e.target.dataset;
         const isNotSameNode = inputNodeId !== nodeId;
-        if (isNotSameNode) {
+        if (isNotSameNode && inputTransputType !== "output") {
           const inputWillAcceptConnection = inputTypes[
             inputNodeType
           ].acceptTypes.includes(type);
