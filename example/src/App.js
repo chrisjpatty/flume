@@ -613,7 +613,7 @@ export default () => {
         comments={comments}
         onChange={setNodes}
         onCommentsChange={setComments}
-        disableZoom
+        // disableZoom
         defaultNodes={[
           {
             type: "websiteAttributes",
