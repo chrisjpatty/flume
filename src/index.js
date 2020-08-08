@@ -46,6 +46,7 @@ export let NodeEditor = (
     disableComments = false,
     disableZoom = false,
     disablePan = false,
+    circularBehavior,
     debug
   },
   ref
@@ -58,7 +59,7 @@ export let NodeEditor = (
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(
       nodesReducer,
-      { nodeTypes, portTypes, cache },
+      { nodeTypes, portTypes, cache, circularBehavior },
       setSideEffectToasts
     ),
     {},

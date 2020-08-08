@@ -103,6 +103,7 @@ const Toast = ({
       onAnimationEnd={handleAnimationEnd}
       onMouseEnter={stopTimer}
       onMouseLeave={resumeTimer}
+      role="alert"
     >
       {
         title ? <span className={styles.title}>{title}</span> : null

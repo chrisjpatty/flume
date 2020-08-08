@@ -31,6 +31,7 @@
   font-size: 14px;
   display: flex;
   flex-direction: column;
+  will-change: transform;
   &[data-type="danger"]{
     background: rgb(255, 116, 137);
     border-color: rgb(254, 99, 136);

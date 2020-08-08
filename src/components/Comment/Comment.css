@@ -12,6 +12,7 @@
   display: flex;
   text-shadow: 0px 1px rgba(255,255,255,.1);
   border: 1px solid rgba(168, 176, 181, 0.7);
+  user-select: none;
   &[data-color="red"]{
     background: rgba(213, 84, 103, 0.65);
     border-color: rgba(227, 85, 119, 0.65);
