@@ -13,7 +13,7 @@
 }
 .toast{
   position: absolute;
-  left: calc(50% - 160px);
+  left: calc(50% - 200px);
   top: 0px;
   pointer-events: all;
   width: 400px;

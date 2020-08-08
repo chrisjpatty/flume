@@ -613,7 +613,6 @@ export default () => {
         comments={comments}
         onChange={setNodes}
         onCommentsChange={setComments}
-        circularBehavior="allow"
         // disableZoom
         defaultNodes={[
           {
