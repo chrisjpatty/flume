@@ -6,7 +6,7 @@ title: "NodeEditor"
 
 ## Zooming & Panning
 
-By default, the node editor can be zoom in and out using the scroll wheel, and panned by dragging anywhere on the background. In this release these are the only methods of zooming and panning, but an upcoming release will likely add an optional UI for using these features.
+By default, the node editor can be zoomed in and out using the scroll wheel, and panned by dragging anywhere on the background. In this release these are the only methods of zooming and panning, but an upcoming release will likely add an optional UI for using these features.
 
 ## Importing
 
@@ -85,3 +85,11 @@ Optional. If the current node editor contains comment blocks, they will not be r
 ### `disableComments` : boolean
 
 Optional. Prevents the user from adding additional comments. Defaults to `false`.
+
+### `circularBehavior` : string
+
+Optional. Can be one of 3 possible values:
+
+- `prevent`: Default. When a user attempts to connect nodes in a way that would create a circular graph, the connection is rejected and a warning is displayed.
+- `warn`: Creating circular connections is allowed, but a warning is displayed.
+- `allow`: Creating circular connections is allowed without a warning.
