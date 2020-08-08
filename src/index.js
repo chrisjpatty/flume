@@ -3,6 +3,7 @@ import { useId } from "@reach/auto-id";
 import Stage from "./components/Stage/Stage";
 import Node from "./components/Node/Node";
 import Comment from "./components/Comment/Comment";
+import Toaster from "./components/Toaster/Toaster";
 import Connections from "./components/Connections/Connections";
 import {
   NodeTypesContext,
@@ -21,11 +22,12 @@ import nodesReducer, {
   getInitialNodes
 } from "./nodesReducer";
 import commentsReducer from "./commentsReducer";
+import toastsReducer from "./toastsReducer";
 import stageReducer from "./stageReducer";
 import usePrevious from "./hooks/usePrevious";
 import clamp from "lodash/clamp";
 import Cache from "./Cache";
-import { STAGE_ID, DRAG_CONNECTION_ID } from './constants'
+import { STAGE_ID, DRAG_CONNECTION_ID } from "./constants";
 import styles from "./styles.css";
 
 export let NodeEditor = (
@@ -48,14 +50,16 @@ export let NodeEditor = (
   },
   ref
 ) => {
-  const editorId = useId()
+  const editorId = useId();
   const cache = React.useRef(new Cache());
   const stage = React.useRef();
-  const [
-    nodes,
-    dispatchNodes
-  ] = React.useReducer(
-    connectNodesReducer(nodesReducer, { nodeTypes, portTypes, cache }),
+  const [toasts, dispatchToasts] = React.useReducer(toastsReducer, []);
+  const [nodes, dispatchNodes] = React.useReducer(
+    connectNodesReducer(
+      nodesReducer,
+      { nodeTypes, portTypes, cache },
+      toastsReducer
+    ),
     {},
     () => getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes)
   );
@@ -127,7 +131,9 @@ export let NodeEditor = (
               <StageContext.Provider value={stageState}>
                 <CacheContext.Provider value={cache}>
                   <EditorIdContext.Provider value={editorId}>
-                    <RecalculateStageRectContext.Provider value={recalculateStageRect}>
+                    <RecalculateStageRectContext.Provider
+                      value={recalculateStageRect}
+                    >
                       <Stage
                         editorId={editorId}
                         scale={stageState.scale}
@@ -141,39 +147,48 @@ export let NodeEditor = (
                         stageRef={stage}
                         numNodes={Object.keys(nodes).length}
                         outerStageChildren={
-                          debug && (
-                            <div className={styles.debugWrapper}>
-                              <button
-                                className={styles.debugButton}
-                                onClick={() => console.log(nodes)}
-                              >
-                                Log Nodes
-                              </button>
-                              <button
-                                className={styles.debugButton}
-                                onClick={() => console.log(JSON.stringify(nodes))}
-                              >
-                                Export Nodes
-                              </button>
-                              <button
-                                className={styles.debugButton}
-                                onClick={() => console.log(comments)}
-                              >
-                                Log Comments
-                              </button>
-                            </div>
-                          )
+                          <React.Fragment>
+                            {debug && (
+                              <div className={styles.debugWrapper}>
+                                <button
+                                  className={styles.debugButton}
+                                  onClick={() => console.log(nodes)}
+                                >
+                                  Log Nodes
+                                </button>
+                                <button
+                                  className={styles.debugButton}
+                                  onClick={() =>
+                                    console.log(JSON.stringify(nodes))
+                                  }
+                                >
+                                  Export Nodes
+                                </button>
+                                <button
+                                  className={styles.debugButton}
+                                  onClick={() => console.log(comments)}
+                                >
+                                  Log Comments
+                                </button>
+                              </div>
+                            )}
+                            <Toaster
+                              toasts={toasts}
+                              dispatchToasts={dispatchToasts}
+                            />
+                          </React.Fragment>
                         }
                       >
-                        {!hideComments && Object.values(comments).map(comment => (
-                          <Comment
-                            {...comment}
-                            stageRect={stage}
-                            dispatch={dispatchComments}
-                            onDragStart={recalculateStageRect}
-                            key={comment.id}
-                          />
-                        ))}
+                        {!hideComments &&
+                          Object.values(comments).map(comment => (
+                            <Comment
+                              {...comment}
+                              stageRect={stage}
+                              dispatch={dispatchComments}
+                              onDragStart={recalculateStageRect}
+                              key={comment.id}
+                            />
+                          ))}
                         {Object.values(nodes).map(node => (
                           <Node
                             {...node}
