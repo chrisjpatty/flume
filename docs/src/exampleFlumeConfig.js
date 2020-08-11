@@ -270,7 +270,7 @@ export const nodes = {
     inputData: {
       test: { boolean: false },
       string1: { string: "" },
-      string2: { string: "Sing up below!" }
+      string2: { string: "Sign up below!" }
     }
   },
   "76wBOXsawD": {

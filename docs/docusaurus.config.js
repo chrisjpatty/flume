@@ -10,11 +10,11 @@ module.exports = {
     prism: {
       theme: require('prism-react-renderer/themes/oceanicNext'),
     },
-    // algolia: {
-    //   apiKey: 'YOUR_API_KEY',
-    //   indexName: 'YOUR_INDEX_NAME',
-    //   searchParameters: {}, // Optional (if provided by Algolia)
-    // },
+    algolia: {
+      apiKey: '167e6112aaeb90f5cd59d9e352aed978',
+      indexName: 'flume',
+      // searchParameters: {}, // Optional (if provided by Algolia)
+    },
     image: 'img/fb-img.png',
     navbar: {
       title: '',
