@@ -229,6 +229,6 @@ export let NodeEditor = (
 };
 NodeEditor = React.forwardRef(NodeEditor);
 export { FlumeConfig, Controls, Colors } from "./typeBuilders";
-export { default as RootEngine} from "./RootEngine";
+export RootEngine from "./RootEngine";
 export const useRootEngine = (nodes, engine, context) =>
   Object.keys(nodes).length ? engine.resolveRootNode(nodes, { context }) : {};
