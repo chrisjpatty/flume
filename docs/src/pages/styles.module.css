@@ -462,6 +462,16 @@
   }
 }
 
+@media screen and (max-height: 750px){
+  .heroBlock{
+    min-height: calc(100vh - 30px);
+    padding-bottom: 15vh;
+  }
+  .heroImageBlock img.heroNodes{
+    min-height: 400px;
+  }
+}
+
 @media screen and (max-width: 1300px) {
   .heroImageBlock img.heroNodes {
     max-width: 600px;
@@ -508,6 +518,9 @@
   }
   .mobileInline {
     display: inline;
+  }
+  .heroBlock{
+    padding-bottom: 0px;
   }
   .heroImageBlock {
     position: relative;
