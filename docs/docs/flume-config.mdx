@@ -62,18 +62,18 @@ Required. A human-readable label for this port. This label will be shown on node
 
 Optional. By default, all ports are a neutral gray color. To change this color, use the `Colors` object imported from `flume` to select an available color. For a list of available colors see [Colors]()
 
-### `accepts` : array<port.type\>
+### `acceptTypes` : array<port.type\>
 
 Optional. By default, each port will only accept connections from ports of the same type. In some cases you may have ports of different types which are logically compatible with each other. For these case you may pass an array of port types that this port may be connected to.
 
-For example, let's say I have a port type of "string", and a port type of "color". In this case both of these ports return a Javascript string. If I would like the string port to also accept connections from color ports I would pass an array to the `accepts` key like this:
+For example, let's say I have a port type of "string", and a port type of "color". In this case both of these ports return a Javascript string. If I would like the string port to also accept connections from color ports I would pass an array to the `acceptTypes` key like this:
 
 ```js
 .addPortType({
   type: "color",
   name: "color",
   label: "Color",
-  accepts: ["string", "color"],
+  acceptTypes: ["string", "color"],
   controls: [...]
 })
 ```
