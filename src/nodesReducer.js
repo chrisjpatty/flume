@@ -182,7 +182,7 @@ export const getInitialNodes = (
 
   return {
     ...reconciledNodes,
-    ...defaultNodes.reduce((nodes, dNode) => {
+    ...defaultNodes.reduce((nodes, dNode, i) => {
       const nodeNotAdded = !Object.values(initialNodes).find(
         n => n.type === dNode.type
       );
@@ -191,6 +191,8 @@ export const getInitialNodes = (
           nodes,
           {
             type: "ADD_NODE",
+            id: `default-${i}`,
+            defaultNode: true,
             x: dNode.x || 0,
             y: dNode.y || 0,
             nodeType: dNode.type
@@ -267,8 +269,8 @@ const nodesReducer = (
     }
 
     case "ADD_NODE": {
-      const { x, y, nodeType } = action;
-      const newNodeId = nanoid(10);
+      const { x, y, nodeType, id, defaultNode } = action;
+      const newNodeId = id || nanoid(10);
       const newNode = {
         id: newNodeId,
         x,
@@ -284,6 +286,9 @@ const nodesReducer = (
           portTypes
         })
       };
+      if (defaultNode) {
+        newNode.defaultNode = true;
+      }
       if (nodeTypes[nodeType].root) {
         newNode.root = true;
       }
@@ -296,6 +301,19 @@ const nodesReducer = (
     case "REMOVE_NODE": {
       const { nodeId } = action;
       return removeNode(nodes, nodeId);
+    }
+
+    case "HYDRATE_DEFAULT_NODES": {
+      const newNodes = { ...nodes };
+      for (const key in newNodes) {
+        if (newNodes[key].defaultNode) {
+          const newNodeId = nanoid(10);
+          const { id, defaultNode, ...node } = newNodes[key];
+          newNodes[newNodeId] = {...node, id: newNodeId };
+          delete newNodes[key];
+        }
+      }
+      return newNodes;
     }
 
     case "SET_PORT_DATA": {

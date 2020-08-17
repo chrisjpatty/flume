@@ -69,6 +69,9 @@ export let NodeEditor = (
     commentsReducer,
     initialComments || {}
   );
+  React.useEffect(() => {
+    dispatchNodes({ type: "HYDRATE_DEFAULT_NODES" });
+  }, []);
   const [
     shouldRecalculateConnections,
     setShouldRecalculateConnections
