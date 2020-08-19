@@ -180,6 +180,14 @@ export class FlumeConfig {
       node.inputs = config.inputs;
     }
 
+    if (typeof config.dynamicInputs === 'function') {
+      node.dynamicInputs = data => config.dynamicInputs(data, getPortBuilders(this.portTypes))
+    } else if (config.dynamicInputs === undefined) {
+      node.dynamicInputs = () => []
+    } else {
+      throw new Error('Optional key, "dynamicInputs" must be a function.')
+    }
+
     if (typeof config.outputs === "function") {
       const outputs = config.outputs(getPortBuilders(this.portTypes));
       if (!Array.isArray(outputs)) {

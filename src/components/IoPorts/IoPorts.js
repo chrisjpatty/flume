@@ -16,6 +16,7 @@ import { STAGE_ID, DRAG_CONNECTION_ID } from '../../constants'
 
 const IoPorts = ({
   nodeId,
+  getDynamicInputs,
   inputs = [],
   outputs = [],
   connections,
@@ -24,6 +25,27 @@ const IoPorts = ({
 }) => {
   const inputTypes = React.useContext(PortTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
+  const nodesDispatch = React.useContext(NodeDispatchContext);
+
+  const dynamicInputs = React.useMemo(() => {
+    return getDynamicInputs(inputData)
+  }, [getDynamicInputs, inputData])
+  const prevDynamicInputs = usePrevious(dynamicInputs)
+
+  React.useEffect(() => {
+    if (!prevDynamicInputs) return
+    for (const input of prevDynamicInputs) {
+      const current = dynamicInputs.find(({ name }) => input.name === name)
+      if (!current) {
+        nodesDispatch({
+          type: 'REMOVE_CONNECTION',
+          input: { nodeId, portName: input.name }
+        })
+      }
+    }
+  }, [nodesDispatch, nodeId, dynamicInputs, prevDynamicInputs])
+
+  inputs = [...inputs, ...dynamicInputs]
 
   return (
     <div className={styles.wrapper}>

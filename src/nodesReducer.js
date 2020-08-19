@@ -45,6 +45,11 @@ const addConnection = (nodes, input, output, portTypes) => {
   return newNodes;
 };
 
+const findOutput = (nodes, input) => {
+  console.log({ nodes, input })
+  return null
+}
+
 const removeConnection = (nodes, input, output) => {
   const inputNode = nodes[input.nodeId];
   const {
@@ -260,7 +265,9 @@ const nodesReducer = (
     }
 
     case "REMOVE_CONNECTION": {
-      const { input, output } = action;
+      let { input, output } = action;
+      if (!output) output = findOutput(nodes, input)
+      if (!output) return nodes
       const id =
         output.nodeId + output.portName + input.nodeId + input.portName;
       delete cache.current.connections[id];
