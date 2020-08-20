@@ -181,11 +181,11 @@ export class FlumeConfig {
     }
 
     if (typeof config.dynamicInputs === 'function') {
-      node.dynamicInputs = data => config.dynamicInputs(data, getPortBuilders(this.portTypes))
+      node.dynamicInputs = data => config.dynamicInputs(data, getPortBuilders(this.portTypes));
     } else if (config.dynamicInputs === undefined) {
-      node.dynamicInputs = () => []
+      node.dynamicInputs = () => [];
     } else {
-      throw new Error('Optional key, "dynamicInputs" must be a function.')
+      throw new Error('Optional key, "dynamicInputs" must be a function.');
     }
 
     if (typeof config.outputs === "function") {

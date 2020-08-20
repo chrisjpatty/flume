@@ -28,24 +28,24 @@ const IoPorts = ({
   const nodesDispatch = React.useContext(NodeDispatchContext);
 
   const dynamicInputs = React.useMemo(() => {
-    return getDynamicInputs(inputData)
-  }, [getDynamicInputs, inputData])
-  const prevDynamicInputs = usePrevious(dynamicInputs)
+    return getDynamicInputs(inputData);
+  }, [getDynamicInputs, inputData]);
+  const prevDynamicInputs = usePrevious(dynamicInputs);
 
   React.useEffect(() => {
-    if (!prevDynamicInputs) return
+    if (!prevDynamicInputs) return;
     for (const input of prevDynamicInputs) {
-      const current = dynamicInputs.find(({ name }) => input.name === name)
+      const current = dynamicInputs.find(({ name }) => input.name === name);
       if (!current) {
         nodesDispatch({
-          type: 'REMOVE_CONNECTION',
+          type: 'DESTROY_INPUT',
           input: { nodeId, portName: input.name }
-        })
+        });
       }
     }
-  }, [nodesDispatch, nodeId, dynamicInputs, prevDynamicInputs])
+  }, [nodesDispatch, nodeId, dynamicInputs, prevDynamicInputs]);
 
-  inputs = [...inputs, ...dynamicInputs]
+  inputs = [...inputs, ...dynamicInputs];
 
   return (
     <div className={styles.wrapper}>
