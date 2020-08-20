@@ -269,7 +269,7 @@ const nodesReducer = (
     }
 
     case "DESTROY_INPUT": {
-      const { input } = action.input;
+      const { input } = action;
       const portId = input.nodeId + input.portName + 'input';
       delete cache.current.ports[portId];
       const connections = nodes[input.nodeId].connections.inputs[input.portName];
