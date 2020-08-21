@@ -5,6 +5,7 @@ import {
   NodeDispatchContext,
   ConnectionRecalculateContext,
   StageContext,
+  ContextContext,
   EditorIdContext
 } from "../../context";
 import Control from "../Control/Control";
@@ -16,7 +17,6 @@ import { STAGE_ID, DRAG_CONNECTION_ID } from '../../constants'
 
 const IoPorts = ({
   nodeId,
-  getDynamicInputs,
   inputs = [],
   outputs = [],
   connections,
@@ -26,16 +26,17 @@ const IoPorts = ({
   const inputTypes = React.useContext(PortTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
+  const executionContext = React.useContext(ContextContext);
 
-  const dynamicInputs = React.useMemo(() => {
-    return getDynamicInputs(inputData);
-  }, [getDynamicInputs, inputData]);
-  const prevDynamicInputs = usePrevious(dynamicInputs);
+  const resolvedInputs = React.useMemo(() => {
+    return Array.isArray(inputs) ? inputs : inputs(inputData, executionContext);
+  }, [inputs, inputData, executionContext]);
+  const prevResolvedInputs = usePrevious(resolvedInputs);
 
   React.useEffect(() => {
-    if (!prevDynamicInputs) return;
-    for (const input of prevDynamicInputs) {
-      const current = dynamicInputs.find(({ name }) => input.name === name);
+    if (!prevResolvedInputs || Array.isArray(inputs)) return;
+    for (const input of prevResolvedInputs) {
+      const current = resolvedInputs.find(({ name }) => input.name === name);
       if (!current) {
         nodesDispatch({
           type: 'DESTROY_INPUT',
@@ -43,15 +44,13 @@ const IoPorts = ({
         });
       }
     }
-  }, [nodesDispatch, nodeId, dynamicInputs, prevDynamicInputs]);
-
-  inputs = [...inputs, ...dynamicInputs];
+  }, [nodesDispatch, nodeId, resolvedInputs, prevResolvedInputs, inputs]);
 
   return (
     <div className={styles.wrapper}>
-      {inputs.length ? (
+      {resolvedInputs.length ? (
         <div className={styles.inputs}>
-          {inputs.map((input, i) => (
+          {resolvedInputs.map((input, i) => (
             <Input
               {...input}
               data={inputData[input.name] || {}}

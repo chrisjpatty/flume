@@ -166,9 +166,9 @@ export class FlumeConfig {
     }
     if (typeof config.inputs === "function") {
       const inputs = config.inputs(getPortBuilders(this.portTypes));
-      if (!Array.isArray(inputs)) {
+      if (!Array.isArray(inputs) && typeof config.inputs !== 'function') {
         throw new Error(
-          `When providing a function to the "inputs" key, you must return an array.`
+          `When providing a function to the "inputs" key, you must return either an array or a function.`
         );
       }
       node.inputs = inputs;
@@ -178,14 +178,6 @@ export class FlumeConfig {
       throw new Error(`Optional key, "inputs" must be an array.`);
     } else {
       node.inputs = config.inputs;
-    }
-
-    if (typeof config.dynamicInputs === 'function') {
-      node.dynamicInputs = data => config.dynamicInputs(data, getPortBuilders(this.portTypes));
-    } else if (config.dynamicInputs === undefined) {
-      node.dynamicInputs = () => [];
-    } else {
-      throw new Error('Optional key, "dynamicInputs" must be a function.');
     }
 
     if (typeof config.outputs === "function") {

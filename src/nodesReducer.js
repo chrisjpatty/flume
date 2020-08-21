@@ -111,7 +111,7 @@ const removeNode = (startNodes, nodeId) => {
   return nodes;
 };
 
-const reconcileNodes = (initialNodes, nodeTypes, portTypes) => {
+const reconcileNodes = (initialNodes, nodeTypes, portTypes, context) => {
   let nodes = { ...initialNodes };
 
   // Delete extraneous nodes
@@ -133,7 +133,7 @@ const reconcileNodes = (initialNodes, nodeTypes, portTypes) => {
   // Reconcile input data for each node
   let reconciledNodes = Object.values(nodes).reduce((nodesObj, node) => {
     const nodeType = nodeTypes[node.type];
-    const defaultInputData = getDefaultData({ nodeType, portTypes });
+    const defaultInputData = getDefaultData({ nodeType, portTypes, context });
     const currentInputData = Object.entries(node.inputData).reduce(
       (dataObj, [key, data]) => {
         if (defaultInputData[key] !== undefined) {
@@ -176,9 +176,10 @@ export const getInitialNodes = (
   initialNodes = {},
   defaultNodes = [],
   nodeTypes,
-  portTypes
+  portTypes,
+  context
 ) => {
-  const reconciledNodes = reconcileNodes(initialNodes, nodeTypes, portTypes);
+  const reconciledNodes = reconcileNodes(initialNodes, nodeTypes, portTypes, context);
 
   return {
     ...reconciledNodes,
@@ -205,8 +206,9 @@ export const getInitialNodes = (
   };
 };
 
-const getDefaultData = ({ nodeType, portTypes }) =>
-  nodeType.inputs.reduce((obj, input) => {
+const getDefaultData = ({ nodeType, portTypes, context }) => {
+  const inputs = Array.isArray(nodeType.inputs) ? nodeType.inputs : nodeType.inputs({}, context);
+  return inputs.reduce((obj, input) => {
     const inputType = portTypes[input.type];
     obj[input.name || inputType.name] = (
       input.controls ||
@@ -218,11 +220,12 @@ const getDefaultData = ({ nodeType, portTypes }) =>
     }, {});
     return obj;
   }, {});
+};
 
 const nodesReducer = (
   nodes,
   action = {},
-  { nodeTypes, portTypes, cache, circularBehavior },
+  { nodeTypes, portTypes, cache, circularBehavior, context },
   dispatchToasts
 ) => {
   switch (action.type) {
@@ -297,7 +300,8 @@ const nodesReducer = (
         },
         inputData: getDefaultData({
           nodeType: nodeTypes[nodeType],
-          portTypes
+          portTypes,
+          context
         })
       };
       if (defaultNode) {

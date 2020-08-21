@@ -31,7 +31,7 @@ const Node = ({
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext);
-  const { label, deletable, inputs = [], outputs = [], dynamicInputs } = nodeTypes[type];
+  const { label, deletable, inputs = [], outputs = [] } = nodeTypes[type];
 
   const nodeWrapper = React.useRef();
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -174,7 +174,6 @@ const Node = ({
       <h2 className={styles.label}>{label}</h2>
       <IoPorts
         nodeId={id}
-        getDynamicInputs={dynamicInputs}
         inputs={inputs}
         outputs={outputs}
         connections={connections}
