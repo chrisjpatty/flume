@@ -15,14 +15,14 @@ import usePrevious from "../../hooks/usePrevious";
 import { calculateCurve, getPortRect } from "../../connectionCalculator";
 import { STAGE_ID, DRAG_CONNECTION_ID } from '../../constants'
 
-function useTransputs (transputsFn, transputType, nodeId, inputData) {
+function useTransputs (transputsFn, transputType, nodeId, inputData, connections) {
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const executionContext = React.useContext(ContextContext);
 
   const transputs = React.useMemo(() => {
     if (Array.isArray(transputsFn)) return transputsFn;
-    return transputsFn(inputData, executionContext);
-  }, [transputsFn, inputData, executionContext]);
+    return transputsFn(inputData, connections, executionContext);
+  }, [transputsFn, inputData, connections, executionContext]);
   const prevTransputs = usePrevious(transputs);
 
   React.useEffect(() => {
@@ -52,8 +52,8 @@ const IoPorts = ({
 }) => {
   const inputTypes = React.useContext(PortTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
-  const resolvedInputs = useTransputs(inputs, 'input', nodeId, inputData);
-  const resolvedOutputs = useTransputs(outputs, 'output', nodeId, inputData);
+  const resolvedInputs = useTransputs(inputs, 'input', nodeId, inputData, connections);
+  const resolvedOutputs = useTransputs(outputs, 'output', nodeId, inputData, connections);
   
   return (
     <div className={styles.wrapper}>
