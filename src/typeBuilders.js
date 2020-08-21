@@ -182,9 +182,9 @@ export class FlumeConfig {
 
     if (typeof config.outputs === "function") {
       const outputs = config.outputs(getPortBuilders(this.portTypes));
-      if (!Array.isArray(outputs)) {
+      if (!Array.isArray(outputs) && typeof config.outputs !== 'function') {
         throw new Error(
-          `When providing a function to the "inputs" key, you must return an array.`
+          `When providing a function to the "outputs" key, you must return either an array or a function.`
         );
       }
       node.outputs = outputs;

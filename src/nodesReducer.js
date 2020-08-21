@@ -271,18 +271,22 @@ const nodesReducer = (
       return removeConnection(nodes, input, output);
     }
 
-    case "DESTROY_INPUT": {
-      const { input } = action;
-      const portId = input.nodeId + input.portName + 'input';
+    case "DESTROY_TRANSPUT": {
+      const { transput, transputType } = action;
+      const portId = transput.nodeId + transput.portName + transputType;
       delete cache.current.ports[portId];
-      const connections = nodes[input.nodeId].connections.inputs[input.portName];
-      const output = connections ? connections[0] : null;
-      if (!output) return nodes;
-      const id =
-        output.nodeId + output.portName + input.nodeId + input.portName;
-      delete cache.current.connections[id];
-      deleteConnection({ id });
-      return removeConnection(nodes, input, output);
+
+      const cnxType = transputType === 'input' ? 'inputs' : 'outputs';
+      const connections = nodes[transput.nodeId].connections[cnxType][transput.portName];
+      if (!connections || !connections.length) return nodes;
+
+      return connections.reduce((nodes, cnx) => {
+        const [input, output] = transputType === 'input' ? [transput, cnx] : [cnx, transput];
+        const id = output.nodeId + output.portName + input.nodeId + input.portName;
+        delete cache.current.connections[id];
+        deleteConnection({ id });
+        return removeConnection(nodes, input, output);
+      }, nodes);
     }
 
     case "ADD_NODE": {
