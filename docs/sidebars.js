@@ -10,6 +10,7 @@ module.exports = {
       "root-engine",
       "using-with-react",
       "using-without-react",
+      "dynamic-nodes",
       "comments",
       "theming"
     ],

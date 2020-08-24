@@ -60,7 +60,7 @@ Required. A human-readable label for this port. This label will be shown on node
 
 ### `color` : color
 
-Optional. By default, all ports are a neutral gray color. To change this color, use the `Colors` object imported from `flume` to select an available color. For a list of available colors see [Colors]()
+Optional. By default, all ports are a neutral gray color. To change this color, use the `Colors` object imported from `flume` to select an available color. For a list of available colors see [Colors](colors)
 
 ### `acceptTypes` : array<port.type\>
 
@@ -84,7 +84,7 @@ Optional. By default each input displays a port that other nodes can connect to.
 
 ### `controls` : array<Control\>
 
-Optional. An array of controls that will be displayed to the user when this port is used as an input, and is not connected. For a list of available controls see [Controls]()
+Optional. An array of controls that will be displayed to the user when this port is used as an input, and is not connected. For a list of available controls see [Controls](controls)
 
 :::note
 While this key is optional, it is rare that you will need to create a port without any controls.
@@ -146,7 +146,7 @@ Optional. Normally you should add root nodes using the `addRootNodeType` method,
 
 ### `inputs` : function
 
-Optional. A function which must return an array of inputs for this node. These inputs must be made up of port types which have previously been added to the config. The function you provide to this key will be injected with an object containing all of the available ports as the first parameter. Properties of each port may be overridden inline, which is useful for changing things like labels and names. The name of each input **must** be unique, even if they are differnt types.
+Optional. A function which must return either an array of inputs or another function that itself returns an array of inputs for this node. These inputs must be made up of port types which have previously been added to the config. The function you provide to this key will be injected with an object containing all of the available ports as the first parameter. Properties of each port may be overridden inline, which is useful for changing things like labels and names. The name of each input **must** be unique, even if they are different types.
 
 #### Example
 
@@ -176,9 +176,13 @@ In this example we've added 3 inputs for the subtotal, the tax rate, and whether
 
 In some cases you may want an input to hide its controls without being connected. Passing true to this key will hide the controls for this instance of the port. Defaults to `false`.
 
+#### Advanced Inputs Usage
+
+Flume supports defining inputs dynamically at runtime. To do so you need to define your inputs with a signature like this: `inputs: ports => (inputData, connections, context) => []`. Your function will be invoked any time one of its arguments changes and its return value will be used as the new set of inputs. The first two arguments (`inputData` and `connections`) refer to the information that is filled out using Controls on your node and the list of connections entering/leaving your node respectively. The last argument, `context`, is the same context you pass into the NodeEditor or RootEngine. For more details check out the [Dynamic Nodes guide](dynamic-nodes).
+
 ### `outputs` : function
 
-Optional. A function which must return an array of outputs for this node. These outputs must be made up of port types which have previously been added to the config. The function you provide to this key will be injected with an object containing all of the available ports as the first parameter. Properties of each port may be overridden inline, which is useful for changing things like labels and names. The name of each input **must** be unique, even if they are differnt types.
+Optional. A function which must return either an array of outputs or another function that itself returns an array of outputs for this node. These outputs must be made up of port types which have previously been added to the config. The function you provide to this key will be injected with an object containing all of the available ports as the first parameter. Properties of each port may be overridden inline, which is useful for changing things like labels and names. The name of each output **must** be unique, even if they are different types.
 
 #### Example
 
@@ -203,6 +207,10 @@ config
 ```
 
 In this example we've created 3 outputs, one with the text of the input, one with the character count, and one with the word count. Because we've already defined the string and number ports, the outputs function will provide these port types for us to use. We call each port type as a function and optionally give it a name and a label. In this case, this is required to make sure that each port has a unique name, and to add a user-friendly label to each port.
+
+#### Advanced Inputs Usage
+
+Flume supports defining outputs dynamically at runtime. To do so you need to define your outputs with a signature like this: `outputs: ports => (inputData, connections, context) => []`. Your function will be invoked any time one of its arguments changes and its return value will be used as the new set of outputs. The first two arguments (`inputData` and `connections`) refer to the information that is filled out using Controls on your node and the list of connections entering/leaving your node respectively. The last argument, `context`, is the same context you pass into the NodeEditor or RootEngine. For more details check out the [Dynamic Nodes guide](dynamic-nodes).
 
 ## `addRootNodeType` : method(nodeType)
 
