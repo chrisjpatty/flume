@@ -14,8 +14,8 @@
     "clsx": "^1.1.1",
     "flume": "link:..",
     "lodash": "^4.17.19",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom",
     "react-portal": "^4.2.1",
     "react-spring": "^8.0.27"
   },
