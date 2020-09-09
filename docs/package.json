@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "docusaurus start",
-    "build": "docusaurus build",
+    "build": "cd .. && yarn && yarn build && cd docs && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy"
   },
@@ -12,10 +12,10 @@
     "@docusaurus/core": "^2.0.0-alpha.58",
     "@docusaurus/preset-classic": "^2.0.0-alpha.58",
     "clsx": "^1.1.1",
-    "flume": "^0.5.1",
+    "flume": "link:..",
     "lodash": "^4.17.19",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom",
     "react-portal": "^4.2.1",
     "react-spring": "^8.0.27"
   },
