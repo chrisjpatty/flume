@@ -81,6 +81,7 @@ function Home() {
       <FeatureBlocks />
       <RunLogicBlock />
       <CallToActionBlock />
+      <Footer />
     </div>
   );
 }
@@ -447,3 +448,19 @@ const CallToActionBlock = () => {
     </div>
   );
 };
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+const Footer = () => {
+  return (
+    <footer className={styles.footer} id="footer">
+      <span>© Christopher Patty {CURRENT_YEAR}</span>
+      <span className={clsx(styles.alignRight, styles.netlifyRecommend)}>
+        <span className={styles.hostedBy}>Proudly hosted by</span>
+        <a className={styles.netlifyWrapper} href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
+          <img src="/img/netlify.svg" alt="Netlify" className={styles.netlifyLogo} />
+        </a>
+      </span>
+    </footer>
+  )
+}
