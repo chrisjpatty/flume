@@ -59,7 +59,7 @@ class RootEngine {
       } else {
         obj[input.name] = this.resolveInputControls(
           input.type,
-          node.inputData[input.name],
+          node.inputData[input.name] || {},
           context
         );
       }
@@ -97,7 +97,7 @@ class RootEngine {
         (obj, input) => {
           obj[input.name] = this.resolveInputControls(
             input.type,
-            rootNode.inputData[input.name],
+            rootNode.inputData[input.name] || {},
             options.context
           );
           return obj;
