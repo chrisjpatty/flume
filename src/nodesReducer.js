@@ -126,7 +126,7 @@ const reconcileNodes = (initialNodes, nodeTypes, portTypes, context) => {
         type: "REMOVE_NODE",
         nodeId
       },
-      { nodeTypes, portTypes }
+      { nodeTypes, portTypes, context }
     );
   });
 
@@ -198,7 +198,7 @@ export const getInitialNodes = (
             y: dNode.y || 0,
             nodeType: dNode.type
           },
-          { nodeTypes, portTypes }
+          { nodeTypes, portTypes, context }
         );
       }
       return nodes;
