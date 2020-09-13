@@ -133,7 +133,7 @@ const reconcileNodes = (initialNodes, nodeTypes, portTypes, context) => {
   // Reconcile input data for each node
   let reconciledNodes = Object.values(nodes).reduce((nodesObj, node) => {
     const nodeType = nodeTypes[node.type];
-    const defaultInputData = getDefaultData({ nodeType, portTypes, context });
+    const defaultInputData = getDefaultData({ node, nodeType, portTypes, context });
     const currentInputData = Object.entries(node.inputData).reduce(
       (dataObj, [key, data]) => {
         if (defaultInputData[key] !== undefined) {
@@ -206,8 +206,10 @@ export const getInitialNodes = (
   };
 };
 
-const getDefaultData = ({ nodeType, portTypes, context }) => {
-  const inputs = Array.isArray(nodeType.inputs) ? nodeType.inputs : nodeType.inputs({}, context);
+const getDefaultData = ({ node, nodeType, portTypes, context }) => {
+  const inputs = Array.isArray(nodeType.inputs)
+    ? nodeType.inputs
+    : nodeType.inputs(node.inputData, node.connections, context);
   return inputs.reduce((obj, input) => {
     const inputType = portTypes[input.type];
     obj[input.name || inputType.name] = (
@@ -302,12 +304,14 @@ const nodesReducer = (
           inputs: {},
           outputs: {}
         },
-        inputData: getDefaultData({
-          nodeType: nodeTypes[nodeType],
-          portTypes,
-          context
-        })
+        inputData: {}
       };
+      newNode.inputData = getDefaultData({
+        node: newNode,
+        nodeType: nodeTypes[nodeType],
+        portTypes,
+        context
+      });
       if (defaultNode) {
         newNode.defaultNode = true;
       }

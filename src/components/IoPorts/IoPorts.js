@@ -33,7 +33,7 @@ function useTransputs (transputsFn, transputType, nodeId, inputData, connections
         nodesDispatch({
           type: 'DESTROY_TRANSPUT',
           transputType,
-          transput: { nodeId, portName: transput.name }
+          transput: { nodeId, portName: '' + transput.name }
         });
       }
     }
