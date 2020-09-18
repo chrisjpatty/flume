@@ -29,12 +29,13 @@ config
     inputs: ports => data => {
       const template = (data && data.template && data.template.string) || "";
       const re = /\{(.*?)\}/g;
-      const ids = [...template.matchAll(re)].map(([,id]) => id);
-      const dynamicInputs = [...new Set(ids).values()]
-        .map(id => ports.string({ name: id, label: id }));
+      let res, ids = []
+      while ((res = re.exec(template)) !== null) {
+        if (!ids.includes(res[1])) ids.push(res[1]);
+      }
       return [
         ports.string({ name: "template", label: "Template", hidePort: true }),
-        ...dynamicInputs
+        ...ids.map(id => ports.string({ name: id, label: id }))
       ];
     },
     outputs: ports => [ports.string({ label: "Message" })]
