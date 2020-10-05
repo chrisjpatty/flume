@@ -12,7 +12,7 @@ export default ({
   onTouchStart,
   disabled,
   delay = 6,
-  innerRef,
+  customRef,
   ...rest
 }) => {
   const startCoordinates = React.useRef(null);
@@ -139,8 +139,8 @@ export default ({
       }}
       ref={ref => {
         wrapper.current = ref;
-        if (innerRef) {
-          innerRef.current = ref;
+        if (customRef) {
+          customRef.current = ref;
         }
       }}
       {...rest}

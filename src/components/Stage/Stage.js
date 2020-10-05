@@ -6,7 +6,7 @@ import { NodeTypesContext, NodeDispatchContext } from "../../context";
 import Draggable from "../Draggable/Draggable";
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
-import { STAGE_ID } from '../../constants'
+import { STAGE_ID } from "../../constants";
 
 const Stage = ({
   scale,
@@ -34,7 +34,7 @@ const Stage = ({
 
   const setStageRect = React.useCallback(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
-  }, []);
+  }, [stageRef]);
 
   React.useEffect(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
@@ -155,7 +155,7 @@ const Stage = ({
   };
 
   React.useEffect(() => {
-    if(!disableZoom){
+    if (!disableZoom) {
       let stageWrapper = wrapper.current;
       stageWrapper.addEventListener("wheel", handleWheel);
       return () => {
@@ -164,33 +164,35 @@ const Stage = ({
     }
   }, [handleWheel, disableZoom]);
 
-  const menuOptions = React.useMemo(
-    () => {
-      const options = orderBy(
-        Object.values(nodeTypes)
-          .filter(node => node.addable !== false)
-          .map(node => ({
-            value: node.type,
-            label: node.label,
-            description: node.description,
-            sortIndex: node.sortIndex,
-            node
-          })),
-        ["sortIndex", "label"]
-      )
-      if(!disableComments){
-        options.push({ value: "comment", label: "Comment", description: "A comment for documenting nodes", internalType: "comment" })
-      }
-      return options
-    },
-    [nodeTypes, disableComments]
-  );
+  const menuOptions = React.useMemo(() => {
+    const options = orderBy(
+      Object.values(nodeTypes)
+        .filter(node => node.addable !== false)
+        .map(node => ({
+          value: node.type,
+          label: node.label,
+          description: node.description,
+          sortIndex: node.sortIndex,
+          node
+        })),
+      ["sortIndex", "label"]
+    );
+    if (!disableComments) {
+      options.push({
+        value: "comment",
+        label: "Comment",
+        description: "A comment for documenting nodes",
+        internalType: "comment"
+      });
+    }
+    return options;
+  }, [nodeTypes, disableComments]);
 
   return (
     <Draggable
       id={`${STAGE_ID}${editorId}`}
       className={styles.wrapper}
-      innerRef={wrapper}
+      customRef={wrapper}
       onContextMenu={handleContextMenu}
       onMouseEnter={handleMouseEnter}
       onDragDelayStart={handleDragDelayStart}

@@ -1,11 +1,109 @@
 import React from "react";
-import styles from "./Comment.css";
 import Draggable from "../Draggable/Draggable";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import ColorPicker from "../ColorPicker/ColorPicker";
 import { StageContext } from "../../context";
 import { Portal } from "react-portal";
 import clamp from "lodash/clamp";
+import styled from "@emotion/styled";
+
+const StyledDraggable = styled(Draggable)`
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  padding: 5px;
+  background: rgba(147, 154, 158, 0.7);
+  border-radius: 5px;
+  border-bottom-right-radius: 2px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  min-width: 80px;
+  font-size: 14px;
+  display: flex;
+  text-shadow: 0px 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(168, 176, 181, 0.7);
+  user-select: none;
+  &[data-color="red"] {
+    background: rgba(213, 84, 103, 0.65);
+    border-color: rgba(227, 85, 119, 0.65);
+  }
+  &[data-color="purple"] {
+    background: rgba(153, 83, 196, 0.65);
+    border-color: rgba(156, 85, 227, 0.65);
+  }
+  &[data-color="blue"] {
+    background: rgba(76, 142, 203, 0.65);
+    border-color: rgba(85, 159, 227, 0.65);
+  }
+  &[data-color="green"] {
+    background: rgba(70, 200, 130, 0.65);
+    border-color: rgba(85, 227, 150, 0.65);
+  }
+  &[data-color="yellow"] {
+    background: rgba(200, 167, 63, 0.65);
+    border-color: rgba(227, 213, 85, 0.65);
+  }
+  &[data-color="orange"] {
+    background: rgba(215, 123, 64, 0.65);
+    border-color: rgba(227, 149, 85, 0.65);
+  }
+  &[data-color="pink"] {
+    background: rgba(255, 102, 208, 0.65);
+    border-color: rgba(242, 131, 228, 0.65);
+  }
+`;
+
+const ResizeThumb = styled(Draggable)`
+  width: 10px;
+  height: 10px;
+  border-radius: 4px 0px 4px 0px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  overflow: hidden;
+  cursor: nwse-resize;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 250%;
+    height: 0px;
+    border-top: 1px solid rgba(0, 0, 0, 0.7);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+    transform-origin: center right;
+    transform: rotate(-45deg) scale(0.5);
+  }
+  &::after {
+    transform: rotate(-45deg) translateY(3px) scale(0.5);
+  }
+`;
+
+const Text = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  white-space: pre-wrap;
+  cursor: default;
+`;
+
+const Textarea = styled.textarea`
+  resize: none;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  outline: none;
+  margin: -2px;
+  margin-top: -1px;
+  padding-top: 0px;
+  font-size: 14px;
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+  }
+`;
 
 export default ({
   dispatch,
@@ -131,9 +229,8 @@ export default ({
   }, [isNew, dispatch, id]);
 
   return (
-    <Draggable
-      innerRef={wrapper}
-      className={styles.wrapper}
+    <StyledDraggable
+      customRef={wrapper}
       style={{
         transform: `translate(${x}px,${y}px)`,
         width,
@@ -151,8 +248,7 @@ export default ({
       data-color={color}
     >
       {isEditing ? (
-        <textarea
-          className={styles.textarea}
+        <Textarea
           onChange={handleTextChange}
           onMouseDown={e => e.stopPropagation()}
           onBlur={endTextEdit}
@@ -162,12 +258,9 @@ export default ({
           ref={textarea}
         />
       ) : (
-        <div data-comment={true} className={styles.text}>
-          {text}
-        </div>
+        <Text data-comment={true}>{text}</Text>
       )}
-      <Draggable
-        className={styles.resizeThumb}
+      <ResizeThumb
         stageState={stageState}
         stageRect={stageRect}
         onDrag={handleResize}
@@ -212,6 +305,6 @@ export default ({
           />
         </Portal>
       ) : null}
-    </Draggable>
+    </StyledDraggable>
   );
 };
