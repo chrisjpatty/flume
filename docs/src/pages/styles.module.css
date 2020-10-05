@@ -447,6 +447,33 @@
   animation: rotate-fill 900ms linear infinite;
   animation-delay: -450ms;
 }
+.footer{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--background-extra-light);
+  padding: 30px;
+}
+.netlifyWrapper{
+  padding: 10px 15px;;
+  border-radius: 9px;
+  background: rgba(0,0,0,.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.netlifyLogo{
+  width: 80px;
+  margin: 0px;
+}
+.netlifyRecommend{
+  display: flex;
+  align-items: center;
+}
+.hostedBy{
+  margin-right: 10px;
+  text-align: center;
+}
 @keyframes rotate-fill {
   0% {
     fill: var(--blue-color);
@@ -642,5 +669,21 @@
     line-height: 1.4;
   }
   .flumeWrapper {
+  }
+  .netlifyRecommend{
+    flex-direction: column;
+  }
+  .netlifyRecommend .hostedBy{
+    margin-right: 0px;
+    margin-bottom: 10px;
+  }
+}
+@media screen and (max-width: 400px){
+  .footer{
+    flex-direction: column-reverse;
+  }
+  .netlifyRecommend{
+    margin-left: 0px;
+    margin-bottom: 20px;
   }
 }
