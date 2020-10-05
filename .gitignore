@@ -22,6 +22,8 @@ yarn-debug.log*
 yarn-error.log*
 example/.docz/.cache
 
+package-lock.json
+
 # Local Netlify folder
 .netlify
 .docz
