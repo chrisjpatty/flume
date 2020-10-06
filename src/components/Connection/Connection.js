@@ -1,7 +1,8 @@
 import React from "react";
-import {calculateCurve} from '../../connectionCalculator'
+import { calculateCurve } from "../../connectionCalculator";
 import styles from "./Connection.css";
 
+//This component cannot easily be refactored, because the classes are also used in src/connectionCalculator.js . I have decided against code duplication.
 const Connection = ({
   from,
   to,
@@ -12,7 +13,7 @@ const Connection = ({
   inputNodeId,
   inputPortName
 }) => {
-  const curve = calculateCurve(from, to)
+  const curve = calculateCurve(from, to);
   return (
     <svg className={styles.svg}>
       <path
