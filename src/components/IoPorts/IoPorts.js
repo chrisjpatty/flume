@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./IoPorts.css";
 import { Portal } from "react-portal";
 import {
   NodeDispatchContext,
@@ -12,7 +11,61 @@ import Connection from "../Connection/Connection";
 import { PortTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
 import { calculateCurve, getPortRect } from "../../connectionCalculator";
-import { STAGE_ID, DRAG_CONNECTION_ID } from '../../constants'
+import { STAGE_ID, DRAG_CONNECTION_ID } from "../../constants";
+import styled from "@emotion/styled";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  width: 100%;
+  padding: 5px;
+`;
+
+const Inputs = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 10px;
+  &:last-child {
+    margin-bottom: 0px;
+  }
+  .transput {
+    &:first-child {
+      .portLabel,
+      .port {
+        margin-top: 5px;
+      }
+    }
+    &:last-child {
+      .portLabel,
+      .port {
+        margin-bottom: 5px;
+      }
+    }
+  }
+`;
+
+const Outputs = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 100%;
+  .transput {
+    &:last-child {
+      .portLabel,
+      .port {
+        margin-bottom: 5px;
+      }
+    }
+  }
+  &:first-child {
+    margin-top: 5px;
+  }
+`;
 
 const IoPorts = ({
   nodeId,
@@ -26,9 +79,9 @@ const IoPorts = ({
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
 
   return (
-    <div className={styles.wrapper}>
+    <Wrapper>
       {inputs.length ? (
-        <div className={styles.inputs}>
+        <Inputs>
           {inputs.map((input, i) => (
             <Input
               {...input}
@@ -42,10 +95,10 @@ const IoPorts = ({
               key={i}
             />
           ))}
-        </div>
+        </Inputs>
       ) : null}
       {!!outputs.length && (
-        <div className={styles.outputs}>
+        <Outputs>
           {outputs.map((output, i) => (
             <Output
               {...output}
@@ -57,13 +110,45 @@ const IoPorts = ({
               key={i}
             />
           ))}
-        </div>
+        </Outputs>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
 export default IoPorts;
+
+const Transput = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  &:first-child {
+    margin-top: 0px;
+  }
+  &[data-controlless="true"] {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    &:first-child {
+      margin-top: 0px;
+    }
+  }
+  &[data-controlless="false"] {
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+`;
+
+const Controls = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const PortLabel = styled.label`
+  font-size: 13px;
+  font-weight: 400;
+`;
 
 const Input = ({
   type,
@@ -93,8 +178,7 @@ const Input = ({
   }, [isConnected, prevConnected, triggerRecalculation]);
 
   return (
-    <div
-      className={styles.transput}
+    <Transput
       data-controlless={isConnected || noControls || !controls.length}
       onDragStart={e => {
         e.preventDefault();
@@ -112,32 +196,28 @@ const Input = ({
         />
       ) : null}
       {(!controls.length || noControls || isConnected) && (
-        <label className={styles.portLabel}>{label || defaultLabel}</label>
+        <PortLabel>{label || defaultLabel}</PortLabel>
       )}
-      {!noControls && !isConnected
-        ? (
-          <div className={styles.controls}>
-            {
-              controls.map(control => (
-                  <Control
-                    {...control}
-                    nodeId={nodeId}
-                    portName={name}
-                    triggerRecalculation={triggerRecalculation}
-                    updateNodeConnections={updateNodeConnections}
-                    inputLabel={label}
-                    data={data[control.name]}
-                    allData={data}
-                    key={control.name}
-                    inputData={inputData}
-                    isMonoControl={controls.length === 1}
-                  />
-                ))
-            }
-          </div>
-        )
-        : null}
-    </div>
+      {!noControls && !isConnected ? (
+        <Controls>
+          {controls.map(control => (
+            <Control
+              {...control}
+              nodeId={nodeId}
+              portName={name}
+              triggerRecalculation={triggerRecalculation}
+              updateNodeConnections={updateNodeConnections}
+              inputLabel={label}
+              data={data[control.name]}
+              allData={data}
+              key={control.name}
+              inputData={inputData}
+              isMonoControl={controls.length === 1}
+            />
+          ))}
+        </Controls>
+      ) : null}
+    </Transput>
   );
 };
 
@@ -152,15 +232,14 @@ const Output = ({
   const { label: defaultLabel, color } = inputTypes[type] || {};
 
   return (
-    <div
-      className={styles.transput}
+    <Transput
       data-controlless={true}
       onDragStart={e => {
         e.preventDefault();
         e.stopPropagation();
       }}
     >
-      <label className={styles.portLabel}>{label || defaultLabel}</label>
+      <PortLabel>{label || defaultLabel}</PortLabel>
       <Port
         type={type}
         name={name}
@@ -168,9 +247,45 @@ const Output = ({
         nodeId={nodeId}
         triggerRecalculation={triggerRecalculation}
       />
-    </div>
+    </Transput>
   );
 };
+
+const StyledPort = styled.div`
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(to bottom, #acb1b4, #919699);
+  border-radius: 100%;
+  margin-right: 5px;
+  margin-left: -11px;
+  flex: 0 0 auto;
+  box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.6);
+  &:last-child {
+    margin-right: -11px;
+    margin-left: 5px;
+  }
+  &[data-port-color="red"] {
+    background: linear-gradient(to bottom, #fa4a6f, #c22e4d);
+  }
+  &[data-port-color="purple"] {
+    background: linear-gradient(to bottom, #9e55fb, #6024b6);
+  }
+  &[data-port-color="blue"] {
+    background: linear-gradient(to bottom, #4284f7, #2867d4);
+  }
+  &[data-port-color="green"] {
+    background: linear-gradient(to bottom, #31dd9f, #11ad7a);
+  }
+  &[data-port-color="yellow"] {
+    background: linear-gradient(to bottom, #d6bf47, #9d8923);
+  }
+  &[data-port-color="orange"] {
+    background: linear-gradient(to bottom, #fa7841, #c94b23);
+  }
+  &[data-port-color="pink"] {
+    background: linear-gradient(to bottom, #fe8aeb, #e046c3);
+  }
+`;
 
 const Port = ({
   color = "grey",
@@ -183,7 +298,7 @@ const Port = ({
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext);
   const editorId = React.useContext(EditorIdContext);
-  const stageId = `${STAGE_ID}${editorId}`
+  const stageId = `${STAGE_ID}${editorId}`;
   const inputTypes = React.useContext(PortTypesContext);
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStartCoordinates, setDragStartCoordinates] = React.useState({
@@ -198,9 +313,7 @@ const Port = ({
   const byScale = value => (1 / stageState.scale) * value;
 
   const handleDrag = e => {
-    const stage = document
-      .getElementById(stageId)
-      .getBoundingClientRect();
+    const stage = document.getElementById(stageId).getBoundingClientRect();
 
     if (isInput) {
       const to = {
@@ -300,9 +413,7 @@ const Port = ({
     e.preventDefault();
     e.stopPropagation();
     const startPort = port.current.getBoundingClientRect();
-    const stage = document
-      .getElementById(stageId)
-      .getBoundingClientRect();
+    const stage = document.getElementById(stageId).getBoundingClientRect();
 
     if (isInput) {
       lineInToPort.current = document.querySelector(
@@ -353,10 +464,9 @@ const Port = ({
 
   return (
     <React.Fragment>
-      <div
+      <StyledPort
         style={{ zIndex: 999 }}
         onMouseDown={handleDragStart}
-        className={styles.port}
         data-port-color={color}
         data-port-name={name}
         data-port-type={type}

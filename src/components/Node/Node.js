@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./Node.css";
 import {
   NodeTypesContext,
   NodeDispatchContext,
@@ -11,6 +10,32 @@ import { Portal } from "react-portal";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import IoPorts from "../IoPorts/IoPorts";
 import Draggable from "../Draggable/Draggable";
+import styled from "@emotion/styled";
+
+const Wrapper = styled(Draggable)`
+  background: rgba(91, 96, 99, 0.9);
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  cursor: default;
+`;
+
+const Label = styled.h2`
+  font-size: 13px;
+  text-transform: uppercase;
+  padding: 5px;
+  background: #464b4e;
+  border-radius: 5px 5px 0px 0px;
+  margin: 0px;
+  margin-bottom: 3px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+`;
 
 const Node = ({
   id,
@@ -156,8 +181,7 @@ const Node = ({
   };
 
   return (
-    <Draggable
-      className={styles.wrapper}
+    <Wrapper
       style={{
         width,
         transform: `translate(${x}px, ${y}px)`
@@ -171,7 +195,7 @@ const Node = ({
       stageState={stageState}
       stageRect={stageRect}
     >
-      <h2 className={styles.label}>{label}</h2>
+      <Label>{label}</Label>
       <IoPorts
         nodeId={id}
         inputs={inputs}
@@ -204,7 +228,7 @@ const Node = ({
           />
         </Portal>
       ) : null}
-    </Draggable>
+    </Wrapper>
   );
 };
 

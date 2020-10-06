@@ -28,7 +28,22 @@ import usePrevious from "./hooks/usePrevious";
 import clamp from "lodash/clamp";
 import Cache from "./Cache";
 import { STAGE_ID, DRAG_CONNECTION_ID } from "./constants";
-import styles from "./styles.css";
+import styled from "@emotion/styled";
+
+const DragWrapper = styled.div`
+  z-index: 9999;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+`;
+
+const DebugWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  gap: 15px;
+`;
 
 export let NodeEditor = (
   {
@@ -54,7 +69,7 @@ export let NodeEditor = (
   const editorId = useId();
   const cache = React.useRef(new Cache());
   const stage = React.useRef();
-  const [sideEffectToasts, setSideEffectToasts] = React.useState()
+  const [sideEffectToasts, setSideEffectToasts] = React.useState();
   const [toasts, dispatchToasts] = React.useReducer(toastsReducer, []);
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(
@@ -128,11 +143,11 @@ export let NodeEditor = (
   }, [comments, previousComments, onCommentsChange]);
 
   React.useEffect(() => {
-    if(sideEffectToasts){
-      dispatchToasts(sideEffectToasts)
-      setSideEffectToasts(null)
+    if (sideEffectToasts) {
+      dispatchToasts(sideEffectToasts);
+      setSideEffectToasts(null);
     }
-  }, [sideEffectToasts])
+  }, [sideEffectToasts]);
 
   return (
     <PortTypesContext.Provider value={portTypes}>
@@ -161,28 +176,21 @@ export let NodeEditor = (
                         outerStageChildren={
                           <React.Fragment>
                             {debug && (
-                              <div className={styles.debugWrapper}>
-                                <button
-                                  className={styles.debugButton}
-                                  onClick={() => console.log(nodes)}
-                                >
+                              <DebugWrapper>
+                                <button onClick={() => console.log(nodes)}>
                                   Log Nodes
                                 </button>
                                 <button
-                                  className={styles.debugButton}
                                   onClick={() =>
                                     console.log(JSON.stringify(nodes))
                                   }
                                 >
                                   Export Nodes
                                 </button>
-                                <button
-                                  className={styles.debugButton}
-                                  onClick={() => console.log(comments)}
-                                >
+                                <button onClick={() => console.log(comments)}>
                                   Log Comments
                                 </button>
-                              </div>
+                              </DebugWrapper>
                             )}
                             <Toaster
                               toasts={toasts}
@@ -211,10 +219,9 @@ export let NodeEditor = (
                           />
                         ))}
                         <Connections nodes={nodes} editorId={editorId} />
-                        <div
-                          className={styles.dragWrapper}
+                        <DragWrapper
                           id={`${DRAG_CONNECTION_ID}${editorId}`}
-                        ></div>
+                        ></DragWrapper>
                       </Stage>
                     </RecalculateStageRectContext.Provider>
                   </EditorIdContext.Provider>
