@@ -55,7 +55,7 @@ export namespace Colors {
     const grey: string;
 }
 export class FlumeConfig {
-    constructor(config: any);
+    constructor(config?: FlumeConfig);
     nodeTypes: NodeTypes;
     portTypes: PortTypes;
     addRootNodeType(config: NodeType): FlumeConfig;
