@@ -1,9 +1,15 @@
+import {FlumeConfig, Node, NodeType} from "./index";
+
 export default RootEngine;
+
+type ResolveInputControl = (type: string, data: any, context?: any) => any;
+type FireNodeFunction = (node: Node, inputValues: any, nodeType: NodeType, context: any) => any;
+
 declare class RootEngine {
-    constructor(config: any, resolveInputControls: any, fireNodeFunction: any);
-    config: any;
-    fireNodeFunction: any;
-    resolveInputControls: any;
+    constructor(config: FlumeConfig, resolveInputControls: ResolveInputControl, fireNodeFunction: FireNodeFunction);
+    config: FlumeConfig;
+    fireNodeFunction: FireNodeFunction;
+    resolveInputControls: ResolveInputControl;
     loops: number;
     maxLoops: number;
     resetLoops: (maxLoops: any) => void;
