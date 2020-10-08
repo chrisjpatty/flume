@@ -1,4 +1,4 @@
-import {NodeTypes, PortTypes} from "./index";
+import {NodeTypes, PortTypes, NodeType, PortType} from "./index";
 
 export namespace Controls {
     function text(config: any): {
@@ -58,9 +58,9 @@ export class FlumeConfig {
     constructor(config: any);
     nodeTypes: NodeTypes;
     portTypes: PortTypes;
-    addRootNodeType(config: any): FlumeConfig;
-    addNodeType(config: any): FlumeConfig;
+    addRootNodeType(config: NodeType): FlumeConfig;
+    addNodeType(config: NodeType): FlumeConfig;
     removeNodeType(type: any): FlumeConfig;
-    addPortType(config: any): FlumeConfig;
+    addPortType(config: PortType): FlumeConfig;
     removePortType(type: any): FlumeConfig;
 }
