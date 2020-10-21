@@ -29,7 +29,7 @@ const ContextMenu = ({
 
   const testClickOutside = React.useCallback(
     e => {
-      if (!menuWrapper.current.contains(e.target)) {
+      if (menuWrapper.current && !menuWrapper.current.contains(e.target)) {
         onRequestClose();
         document.removeEventListener("click", testClickOutside);
         document.removeEventListener("contextmenu", testClickOutside);
