@@ -5,6 +5,7 @@ import {
   NodeDispatchContext,
   ConnectionRecalculateContext,
   StageContext,
+  ContextContext,
   EditorIdContext
 } from "../../context";
 import Control from "../Control/Control";
@@ -13,6 +14,33 @@ import { PortTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
 import { calculateCurve, getPortRect } from "../../connectionCalculator";
 import { STAGE_ID, DRAG_CONNECTION_ID } from '../../constants'
+
+function useTransputs (transputsFn, transputType, nodeId, inputData, connections) {
+  const nodesDispatch = React.useContext(NodeDispatchContext);
+  const executionContext = React.useContext(ContextContext);
+
+  const transputs = React.useMemo(() => {
+    if (Array.isArray(transputsFn)) return transputsFn;
+    return transputsFn(inputData, connections, executionContext);
+  }, [transputsFn, inputData, connections, executionContext]);
+  const prevTransputs = usePrevious(transputs);
+
+  React.useEffect(() => {
+    if (!prevTransputs || Array.isArray(transputsFn)) return;
+    for (const transput of prevTransputs) {
+      const current = transputs.find(({ name }) => transput.name === name);
+      if (!current) {
+        nodesDispatch({
+          type: 'DESTROY_TRANSPUT',
+          transputType,
+          transput: { nodeId, portName: '' + transput.name }
+        });
+      }
+    }
+  }, [transputsFn, transputs, prevTransputs, nodesDispatch, nodeId, transputType]);
+
+  return transputs;
+}
 
 const IoPorts = ({
   nodeId,
@@ -24,12 +52,14 @@ const IoPorts = ({
 }) => {
   const inputTypes = React.useContext(PortTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
-
+  const resolvedInputs = useTransputs(inputs, 'input', nodeId, inputData, connections);
+  const resolvedOutputs = useTransputs(outputs, 'output', nodeId, inputData, connections);
+  
   return (
     <div className={styles.wrapper}>
-      {inputs.length ? (
+      {resolvedInputs.length ? (
         <div className={styles.inputs}>
-          {inputs.map((input, i) => (
+          {resolvedInputs.map(input => (
             <Input
               {...input}
               data={inputData[input.name] || {}}
@@ -39,14 +69,14 @@ const IoPorts = ({
               inputTypes={inputTypes}
               nodeId={nodeId}
               inputData={inputData}
-              key={i}
+              key={input.name}
             />
           ))}
         </div>
       ) : null}
-      {!!outputs.length && (
+      {!!resolvedOutputs.length && (
         <div className={styles.outputs}>
-          {outputs.map((output, i) => (
+          {resolvedOutputs.map(output => (
             <Output
               {...output}
               triggerRecalculation={triggerRecalculation}
@@ -54,7 +84,7 @@ const IoPorts = ({
               nodeId={nodeId}
               inputData={inputData}
               portOnRight
-              key={i}
+              key={output.name}
             />
           ))}
         </div>

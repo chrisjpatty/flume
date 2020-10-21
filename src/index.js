@@ -30,6 +30,8 @@ import Cache from "./Cache";
 import { STAGE_ID, DRAG_CONNECTION_ID } from "./constants";
 import styles from "./styles.css";
 
+const defaultContext = {};
+
 export let NodeEditor = (
   {
     comments: initialComments,
@@ -37,7 +39,7 @@ export let NodeEditor = (
     nodeTypes = {},
     portTypes = {},
     defaultNodes = [],
-    context = {},
+    context = defaultContext,
     onChange,
     onCommentsChange,
     initialScale,
@@ -59,11 +61,11 @@ export let NodeEditor = (
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(
       nodesReducer,
-      { nodeTypes, portTypes, cache, circularBehavior },
+      { nodeTypes, portTypes, cache, circularBehavior, context },
       setSideEffectToasts
     ),
     {},
-    () => getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes)
+    () => getInitialNodes(initialNodes, defaultNodes, nodeTypes, portTypes, context)
   );
   const [comments, dispatchComments] = React.useReducer(
     commentsReducer,

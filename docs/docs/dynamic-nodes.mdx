@@ -1,0 +1,114 @@
+---
+title: Dynamic Nodes
+id: dynamic-nodes
+---
+
+import { ComposeExample, RequiredExample, WarningExample } from '../components/DynamicNodesExamples'
+
+As you build more complex data graphs you might find that you need a node whose inputs or outputs change based on other pieces of the system. The good news is flume fully supports this! Let's jump right in.
+
+## Dynamically defining inputs
+
+When defining a node type you can add inputs in two different ways. We've already covered the first way. It looks something like this: `inputs: ports => []`. You're given access to all your defined ports and need to return an array of all the inputs you want your node to have.
+
+The other way we can define our inputs is through something like this: `inputs: ports => (inputData, connections, context) => []`. Instead of returning an array of inputs you return a function that will produce those inputs. This function will be invoked whenever your node's inputs change and the inputs you return will be rendered on your node. The 3 parameters passed into your function are `inputData` (the stuff the user inputs using controls on your node), `connections`, (allowing you to see which of your inputs and outputs have active connections), and `context` (which is passed in by you into the NodeEditor itself).
+
+This is easier explained in code so let's jump right in! We're going to create a Compose node that, given a template and variables, will build and output a message:
+
+```js
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+/*  ...  */
+  .addNodeType({
+    type: "compose",
+    label: "Compose",
+    description: "Composes a parameterized string of text",
+    initialWidth: 230,
+    inputs: ports => data => {
+      const template = (data && data.template && data.template.string) || "";
+      const re = /\{(.*?)\}/g;
+      let res, ids = []
+      while ((res = re.exec(template)) !== null) {
+        if (!ids.includes(res[1])) ids.push(res[1]);
+      }
+      return [
+        ports.string({ name: "template", label: "Template", hidePort: true }),
+        ...ids.map(id => ports.string({ name: id, label: id }))
+      ];
+    },
+    outputs: ports => [ports.string({ label: "Message" })]
+  })
+```
+
+Our compose node has a string input called template. We expect it to be a string containing parameters denoted by curly braces like this: `{id}`. We use a Regular Expression to parse all of these parameters out and then return them, alongside our original template, as inputs. Let's see it in action. Try adding some compose nodes and writing your own messages inside them!
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <ComposeExample />
+</div>
+
+<br/>
+
+If you wanted to use the built-in [RootEngine](root-engine) to run this node then you'd add something like this to resolveNodes:
+
+```js
+  case "compose":
+    const { template, ...inputs } = inputValues
+    const re = /\{(.*?)\}/g
+    const message = template.replace(re, (_, key) => inputs[key])
+    return { message }
+```
+
+## Dynamically defining outputs
+
+Now let's do the same thing but for outputs. We're going to re-create our JoinText node from earlier but with one important twist: We'll only expose the output if both inputs are valid.
+
+```js
+import { FlumeConfig, Colors, Controls } from 'flume'
+
+const config = new FlumeConfig()
+config
+/*  ...  */
+  .addNodeType({
+    type: "joinText",
+    label: "Required Join Text",
+    description: "Combines two strings of text into one string",
+    initialWidth: 160,
+    inputs: ports => [
+      ports.string({
+        name: "string1",
+        label: "First text"
+      }),
+      ports.string({
+        name: "string2",
+        label: "Second text"
+      })
+    ],
+    outputs: ports => (data, connections) => {
+      if (!data.string1.string && !connections.inputs.string1) return []
+      if (!data.string2.string && !connections.inputs.string2) return []
+      return [ports.string({ label: "Joined Text" })]
+    }
+  })
+```
+
+This node takes in two strings and joins them. We check each input to make sure that the user has typed something in or connected a node to it. If the input doesn't have a value then we return an empty array to signify that no outputs should be rendered. Try it out!
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <RequiredExample />
+</div>
+
+<br />
+
+Note: Be very careful when restricting what outputs are available like this. It can potentially have a chain reaction effect that can frustrate users. Try out the following example. Delete the text that says "delete me". What happened? Invalidating the first node removed its output, which invalidated the second node, removing it's output, etc.
+
+<div style={{width: '100%', height: 600, color: "#000"}}>
+  <WarningExample />
+</div>
+
+<br />
+
+## Summary
+
+Here we've created some pretty powerful nodes that can adapt to their inputs, connections, and context. Take a minute and think of the different nodes you might build that could benefit from this feature while solving your use cases.
