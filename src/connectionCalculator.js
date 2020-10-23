@@ -16,10 +16,11 @@ export const getPortRect = (nodeId, portName, transputType = "input", cache) => 
     }else{
       const port = getPort(nodeId, portName, transputType)
       cache.current.ports[portCacheName] = port;
-      return port.getBoundingClientRect();
+      return port && port.getBoundingClientRect();
     }
   }else{
-    return getPort(nodeId, portName, transputType).getBoundingClientRect();
+    const port = getPort(nodeId, portName, transputType);
+    return port && port.getBoundingClientRect();
   }
 }
 

@@ -166,9 +166,9 @@ export class FlumeConfig {
     }
     if (typeof config.inputs === "function") {
       const inputs = config.inputs(getPortBuilders(this.portTypes));
-      if (!Array.isArray(inputs)) {
+      if (!Array.isArray(inputs) && typeof config.inputs !== 'function') {
         throw new Error(
-          `When providing a function to the "inputs" key, you must return an array.`
+          `When providing a function to the "inputs" key, you must return either an array or a function.`
         );
       }
       node.inputs = inputs;
@@ -182,9 +182,9 @@ export class FlumeConfig {
 
     if (typeof config.outputs === "function") {
       const outputs = config.outputs(getPortBuilders(this.portTypes));
-      if (!Array.isArray(outputs)) {
+      if (!Array.isArray(outputs) && typeof config.outputs !== 'function') {
         throw new Error(
-          `When providing a function to the "inputs" key, you must return an array.`
+          `When providing a function to the "outputs" key, you must return either an array or a function.`
         );
       }
       node.outputs = outputs;
@@ -265,14 +265,28 @@ export class FlumeConfig {
     this.portTypes[config.type] = port;
     return this;
   }
-  removePortType(type) {
+  removePortType(type, { skipDynamicNodesCheck = false } = {}) {
     if (!this.portTypes[type]) {
       console.error(`Non-existent port type "${type}" cannot be removed.`);
     } else {
+      if (!skipDynamicNodesCheck) {
+        const dynamicNodes = Object.values(this.nodeTypes).filter(
+          node =>
+            typeof node.inputs === 'function' ||
+            typeof node.outputs === 'function'
+        );
+        if (dynamicNodes.length) {
+          console.warn(
+            `We've detected that one or more of your nodes is using dynamic inputs/outputs. This is a potentially dangerous operation as we are unable to detect if this portType is being used in one of those nodes. You can quiet this message by passing { skipDynamicNodesCheck: true } in as the second argument.`
+          );
+        }  
+      }
       const affectedNodes = Object.values(this.nodeTypes).filter(
         node =>
-          node.inputs.find(p => p.type === type) ||
-          node.outputs.find(p => p.type === type)
+          (Array.isArray(node.inputs) &&
+            node.inputs.find(p => p.type === type)) ||
+          (Array.isArray(node.outputs) &&
+            node.outputs.find(p => p.type === type))
       );
       if (affectedNodes.length) {
         throw new Error(
