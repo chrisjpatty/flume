@@ -44,7 +44,11 @@ class RootEngine {
       return obj;
     }, {});
   resolveInputValues = (node, nodeType, nodes, context) => {
-    return nodeType.inputs.reduce((obj, input) => {
+    let inputs = nodeType.inputs
+    if (typeof inputs === 'function') {
+      inputs = inputs(node.inputData, node.connections, context)
+    }
+    return inputs.reduce((obj, input) => {
       const inputConnections = node.connections.inputs[input.name] || [];
       if (inputConnections.length > 0) {
         obj[input.name] = this.getValueOfConnection(
@@ -55,7 +59,7 @@ class RootEngine {
       } else {
         obj[input.name] = this.resolveInputControls(
           input.type,
-          node.inputData[input.name],
+          node.inputData[input.name] || {},
           context
         );
       }
@@ -85,11 +89,15 @@ class RootEngine {
       ? nodes[options.rootNodeId]
       : this.getRootNode(nodes);
     if (rootNode) {
-      const controlValues = this.config.nodeTypes[rootNode.type].inputs.reduce(
+      let inputs = this.config.nodeTypes[rootNode.type].inputs;
+      if (typeof inputs === 'function') {
+        inputs = inputs(rootNode.inputData, rootNode.connections, options.context);
+      }
+      const controlValues = inputs.reduce(
         (obj, input) => {
           obj[input.name] = this.resolveInputControls(
             input.type,
-            rootNode.inputData[input.name],
+            rootNode.inputData[input.name] || {},
             options.context
           );
           return obj;
