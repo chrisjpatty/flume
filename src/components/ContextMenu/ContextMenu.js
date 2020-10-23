@@ -1,7 +1,66 @@
 import React from "react";
-import styles from "./ContextMenu.css";
 import clamp from "lodash/clamp";
+import styled from "@emotion/styled";
 const nanoid = require("nanoid");
+
+const MenuWrapper = styled.div`
+  position: fixed;
+  z-index: 9999;
+  background: rgba(29, 32, 34, 0.95);
+  border-radius: 5px;
+  box-shadow: 0px 6px 7px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  font-size: 14px;
+  max-width: 300px;
+  min-width: 150px;
+  font-family: Helvetica, sans-serif;
+  line-height: 1.15;
+  outline: none;
+
+  @supports (backdrop-filter: blur(6px)) {
+    backdrop-filter: blur(6px);
+    background: rgba(29, 32, 34, 0.8);
+  }
+`;
+
+const MenuHeader = styled.div`
+  padding: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+`;
+
+const MenuLabel = styled.label`
+  margin: 0px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const MenuFilter = styled.input`
+  border: none;
+  background: none;
+  height: 24px;
+  flex: 1 1 auto;
+  width: 100%;
+  outline: none;
+  color: #fff;
+  &::placeholder {
+    font-style: italic;
+  }
+`;
+
+const OptionsWrapper = styled.div`
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+const EmptyText = styled.label`
+  color: #fff;
+  padding: 5px;
+`;
 
 const ContextMenu = ({
   x,
@@ -126,8 +185,7 @@ const ContextMenu = ({
   }, [selectedIndex]);
 
   return (
-    <div
-      className={styles.menuWrapper}
+    <MenuWrapper
       onMouseDown={e => e.stopPropagation()}
       onKeyDown={handleKeyDown}
       style={{
@@ -141,23 +199,21 @@ const ContextMenu = ({
       aria-activedescendant={`${menuId.current}-${selectedIndex}`}
     >
       {!hideHeader && (label ? true : !!options.length) ? (
-        <div className={styles.menuHeader}>
-          <label className={styles.menuLabel}>{label}</label>
+        <MenuHeader>
+          <MenuLabel>{label}</MenuLabel>
           {!hideFilter && options.length ? (
-            <input
+            <MenuFilter
               type="text"
               placeholder="Filter options"
               value={filter}
               onChange={handleFilterChange}
-              className={styles.menuFilter}
               autoFocus
               ref={filterInput}
             />
           ) : null}
-        </div>
+        </MenuHeader>
       ) : null}
-      <div
-        className={styles.optionsWrapper}
+      <OptionsWrapper
         role="menu"
         ref={menuOptionsWrapper}
         style={{ maxHeight: clamp(window.innerHeight - y - 70, 10, 300) }}
@@ -175,13 +231,42 @@ const ContextMenu = ({
             {option.description ? <p>{option.description}</p> : null}
           </ContextOption>
         ))}
-        {!options.length ? (
-          <span className={styles.emptyText}>{emptyText}</span>
-        ) : null}
-      </div>
-    </div>
+        {!options.length ? <EmptyText>{emptyText}</EmptyText> : null}
+      </OptionsWrapper>
+    </MenuWrapper>
   );
 };
+
+const Option = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  &:last-child {
+    border-bottom: none;
+  }
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  label {
+    margin-bottom: 5px;
+    user-select: none;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+  p {
+    margin: 0px;
+    font-style: italic;
+    font-size: 12px;
+    color: rgb(182, 186, 194);
+    user-select: none;
+  }
+  &[data-selected="true"] {
+    background: rgba(255, 255, 255, 0.05);
+  }
+`;
 
 const ContextOption = ({
   menuId,
@@ -192,8 +277,7 @@ const ContextOption = ({
   onMouseEnter
 }) => {
   return (
-    <div
-      className={styles.option}
+    <Option
       role="menuitem"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
@@ -201,7 +285,7 @@ const ContextOption = ({
       id={`${menuId}-${index}`}
     >
       {children}
-    </div>
+    </Option>
   );
 };
 

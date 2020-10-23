@@ -1,9 +1,27 @@
 import React from "react";
-import styles from "./Control.css";
 import Checkbox from "../Checkbox/Checkbox";
 import TextInput from "../TextInput/TextInput";
 import Select from "../Select/Select";
 import { NodeDispatchContext, ContextContext } from "../../context";
+import styled from "@emotion/styled";
+
+const Wrapper = styled.div`
+  width: 100%;
+  padding-right: 3px;
+  padding-top: 3px;
+  padding-bottom: 5px;
+`;
+
+//Aligns with a class, but seems to be unused
+const Label = styled.label`
+  font-size: 14px;
+`;
+
+const ControlLabel = styled.label`
+  font-size: 13px;
+  display: inline-block;
+  margin-left: 2px;
+`;
 
 const Control = ({
   type,
@@ -65,7 +83,12 @@ const Control = ({
         return <TextInput {...commonProps} placeholder={placeholder} />;
       case "number":
         return (
-          <TextInput {...commonProps} step={step} type="number" placeholder={placeholder} />
+          <TextInput
+            {...commonProps}
+            step={step}
+            type="number"
+            placeholder={placeholder}
+          />
         );
       case "checkbox":
         return <Checkbox {...commonProps} label={calculatedLabel} />;
@@ -82,25 +105,32 @@ const Control = ({
           />
         );
       case "custom":
-        return render(data, onChange, executionContext, triggerRecalculation, {
-          label,
-          name,
-          portName,
-          inputLabel,
-          defaultValue
-        }, allData);
+        return render(
+          data,
+          onChange,
+          executionContext,
+          triggerRecalculation,
+          {
+            label,
+            name,
+            portName,
+            inputLabel,
+            defaultValue
+          },
+          allData
+        );
       default:
         return <div>Control</div>;
     }
   };
 
   return (
-    <div className={styles.wrapper}>
+    <Wrapper>
       {calculatedLabel && type !== "checkbox" && type !== "custom" && (
-        <label className={styles.controlLabel}>{calculatedLabel}</label>
+        <ControlLabel>{calculatedLabel}</ControlLabel>
       )}
       {getControlByType(type)}
-    </div>
+    </Wrapper>
   );
 };
 

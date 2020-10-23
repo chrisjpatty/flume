@@ -1,5 +1,19 @@
 import React from "react";
-import styles from "./Toaster.css";
+import styled from "@emotion/styled";
+
+const Toaster = styled.div`
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 15px;
+  box-shadow: 0px 5px 10px -2px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+`;
 
 export default ({ toasts = [], dispatchToasts }) => {
   const setHeight = React.useCallback(
@@ -34,7 +48,7 @@ export default ({ toasts = [], dispatchToasts }) => {
   );
 
   return (
-    <div className={styles.toaster}>
+    <Toaster>
       {toasts.map((toast, i) => {
         return (
           <Toast
@@ -47,9 +61,127 @@ export default ({ toasts = [], dispatchToasts }) => {
           />
         );
       })}
-    </div>
+    </Toaster>
   );
 };
+
+const StyledToast = styled.div`
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  position: absolute;
+  left: calc(50% - 200px);
+  top: 0px;
+  pointer-events: all;
+  width: 400px;
+  padding: 10px;
+  padding-top: 7px;
+  padding-right: 16px;
+  border-radius: 6px;
+  background: rgba(231, 231, 231, 1);
+  border: 1px solid;
+  margin-bottom: 5px;
+  transition: transform 300ms;
+  flex: 0 0 auto;
+  animation: fade-in 150ms;
+  user-select: none;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  &[data-type="danger"] {
+    background: rgb(255, 116, 137);
+    border-color: rgb(254, 99, 136);
+    color: rgb(66, 6, 20);
+  }
+  &[data-type="info"] {
+    background: rgb(76, 193, 250);
+    border-color: rgb(103, 182, 255);
+    color: rgb(5, 36, 64);
+  }
+  &[data-type="success"] {
+    background: rgb(81, 230, 150);
+    border-color: rgb(85, 227, 150);
+    color: rgb(7, 57, 30);
+  }
+  &[data-type="warning"] {
+    background: rgb(245, 208, 93);
+    border-color: rgb(247, 235, 125);
+    color: rgb(83, 75, 8);
+  }
+  &[data-exiting="true"] {
+    animation: fade-out 150ms;
+    animation-fill-mode: forwards;
+  }
+
+  p {
+    margin: 0px;
+  }
+`;
+
+const Title = styled.span`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+const Timer = styled.div`
+  @keyframes timer {
+    from {
+      transform: scaleX(1);
+    }
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: 3px;
+  background: rgba(0, 0, 0, 0.4);
+  transform-origin: left center;
+  animation: timer 1000ms linear;
+  animation-fill-mode: forwards;
+  z-index: 9;
+`;
+
+const ExitButton = styled.button`
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 20px;
+  height: 20px;
+  padding: 0px;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: inherit;
+  opacity: 0.6;
+
+  :hover {
+    opacity: 0.9;
+  }
+`;
 
 const Toast = ({
   id,
@@ -94,9 +226,8 @@ const Toast = ({
   };
 
   return (
-    <div
+    <StyledToast
       ref={wrapper}
-      className={styles.toast}
       data-type={type}
       style={{ transform: `translateY(-${y}px)` }}
       data-exiting={exiting}
@@ -105,21 +236,22 @@ const Toast = ({
       onMouseLeave={resumeTimer}
       role="alert"
     >
-      {
-        title ? <span className={styles.title}>{title}</span> : null
-      }
+      {title ? <Title>{title}</Title> : null}
       <p>{message}</p>
       {!paused && (
-        <div
-          className={styles.timer}
+        <Timer
           style={{ animationDuration: `${duration}ms` }}
           onAnimationEnd={e => e.stopPropagation()}
         />
       )}
-      <button className={styles.exitButton} onClick={() => {
-        stopTimer()
-        onExitRequested(id)
-      }}>✕</button>
-    </div>
+      <ExitButton
+        onClick={() => {
+          stopTimer();
+          onExitRequested(id);
+        }}
+      >
+        ✕
+      </ExitButton>
+    </StyledToast>
   );
 };

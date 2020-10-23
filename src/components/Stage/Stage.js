@@ -1,12 +1,79 @@
 import React from "react";
-import styles from "./Stage.css";
 import { Portal } from "react-portal";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import { NodeTypesContext, NodeDispatchContext } from "../../context";
 import Draggable from "../Draggable/Draggable";
 import orderBy from "lodash/orderBy";
 import clamp from "lodash/clamp";
-import { STAGE_ID } from '../../constants'
+import { STAGE_ID } from "../../constants";
+import styled from "@emotion/styled";
+
+const Wrapper = styled(Draggable)`
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  background-color: rgb(26, 28, 29);
+  background-image: linear-gradient(
+      0deg,
+      transparent 24%,
+      rgba(255, 255, 255, 0.04) 25%,
+      rgba(255, 255, 255, 0.04) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(255, 255, 255, 0.04) 75%,
+      rgba(255, 255, 255, 0.04) 76%,
+      transparent 77%,
+      transparent
+    ),
+    linear-gradient(
+      90deg,
+      transparent 24%,
+      rgba(255, 255, 255, 0.04) 25%,
+      rgba(255, 255, 255, 0.04) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(255, 255, 255, 0.04) 75%,
+      rgba(255, 255, 255, 0.04) 76%,
+      transparent 77%,
+      transparent
+    );
+  color: #000;
+  background-size: 30px 30px;
+  position: relative;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  font-family: Helvetica, sans-serif;
+  text-align: left;
+  line-height: 1;
+  outline: none !important;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: Helvetica, sans-serif;
+  }
+`;
+
+const TransformWrapper = styled.div`
+  transform-origin: center center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0px;
+  height: 0px;
+`;
+
+const ScaleWrapper = styled.div`
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 0px;
+  height: 0px;
+`;
 
 const Stage = ({
   scale,
@@ -34,7 +101,7 @@ const Stage = ({
 
   const setStageRect = React.useCallback(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
-  }, []);
+  }, [stageRef]);
 
   React.useEffect(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
@@ -155,7 +222,7 @@ const Stage = ({
   };
 
   React.useEffect(() => {
-    if(!disableZoom){
+    if (!disableZoom) {
       let stageWrapper = wrapper.current;
       stageWrapper.addEventListener("wheel", handleWheel);
       return () => {
@@ -164,33 +231,34 @@ const Stage = ({
     }
   }, [handleWheel, disableZoom]);
 
-  const menuOptions = React.useMemo(
-    () => {
-      const options = orderBy(
-        Object.values(nodeTypes)
-          .filter(node => node.addable !== false)
-          .map(node => ({
-            value: node.type,
-            label: node.label,
-            description: node.description,
-            sortIndex: node.sortIndex,
-            node
-          })),
-        ["sortIndex", "label"]
-      )
-      if(!disableComments){
-        options.push({ value: "comment", label: "Comment", description: "A comment for documenting nodes", internalType: "comment" })
-      }
-      return options
-    },
-    [nodeTypes, disableComments]
-  );
+  const menuOptions = React.useMemo(() => {
+    const options = orderBy(
+      Object.values(nodeTypes)
+        .filter(node => node.addable !== false)
+        .map(node => ({
+          value: node.type,
+          label: node.label,
+          description: node.description,
+          sortIndex: node.sortIndex,
+          node
+        })),
+      ["sortIndex", "label"]
+    );
+    if (!disableComments) {
+      options.push({
+        value: "comment",
+        label: "Comment",
+        description: "A comment for documenting nodes",
+        internalType: "comment"
+      });
+    }
+    return options;
+  }, [nodeTypes, disableComments]);
 
   return (
-    <Draggable
+    <Wrapper
       id={`${STAGE_ID}${editorId}`}
-      className={styles.wrapper}
-      innerRef={wrapper}
+      customRef={wrapper}
       onContextMenu={handleContextMenu}
       onMouseEnter={handleMouseEnter}
       onDragDelayStart={handleDragDelayStart}
@@ -215,20 +283,16 @@ const Stage = ({
           />
         </Portal>
       ) : null}
-      <div
+      <TransformWrapper
         ref={translateWrapper}
-        className={styles.transformWrapper}
         style={{ transform: `translate(${-translate.x}px, ${-translate.y}px)` }}
       >
-        <div
-          className={styles.scaleWrapper}
-          style={{ transform: `scale(${scale})` }}
-        >
+        <ScaleWrapper style={{ transform: `scale(${scale})` }}>
           {children}
-        </div>
-      </div>
+        </ScaleWrapper>
+      </TransformWrapper>
       {outerStageChildren}
-    </Draggable>
+    </Wrapper>
   );
 };
 export default Stage;
