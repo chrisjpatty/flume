@@ -48,6 +48,7 @@ export let NodeEditor = (
     disableComments = false,
     disableZoom = false,
     disablePan = false,
+    onNodeClick = () => {},
     circularBehavior,
     debug
   },
@@ -209,6 +210,7 @@ export let NodeEditor = (
                             stageRect={stage}
                             onDragEnd={triggerRecalculation}
                             onDragStart={recalculateStageRect}
+                            onNodeClick={onNodeClick}
                             key={node.id}
                           />
                         ))}

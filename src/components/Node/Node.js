@@ -25,7 +25,8 @@ const Node = ({
   inputData,
   onDragStart,
   onDragEnd,
-  onDrag
+  onDrag,
+  onNodeClick,
 }) => {
   const cache = React.useContext(CacheContext);
   const nodeTypes = React.useContext(NodeTypesContext);
@@ -165,6 +166,7 @@ const Node = ({
       onDragStart={startDrag}
       onDrag={handleDrag}
       onDragEnd={stopDrag}
+      onClick={() => onNodeClick({ id, type, x, y, width, height })}
       innerRef={nodeWrapper}
       data-node-id={id}
       onContextMenu={handleContextMenu}
