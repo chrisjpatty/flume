@@ -5991,7 +5991,8 @@ var Node = function Node(_ref) {
       inputData = _ref.inputData,
       onDragStart = _ref.onDragStart,
       onDragEnd = _ref.onDragEnd,
-      onDrag = _ref.onDrag;
+      onDrag = _ref.onDrag,
+      onNodeClick = _ref.onNodeClick;
 
   var cache = React__default.useContext(CacheContext);
   var nodeTypes = React__default.useContext(NodeTypesContext);
@@ -6127,6 +6128,9 @@ var Node = function Node(_ref) {
       onDragStart: startDrag,
       onDrag: handleDrag,
       onDragEnd: stopDrag,
+      onClick: function onClick() {
+        return onNodeClick({ id: id, type: type, x: x, y: y, width: width, height: height });
+      },
       innerRef: nodeWrapper,
       "data-node-id": id,
       onContextMenu: handleContextMenu,
@@ -7617,6 +7621,8 @@ exports.NodeEditor = function NodeEditor(_ref, ref) {
       disableZoom = _ref$disableZoom === undefined ? false : _ref$disableZoom,
       _ref$disablePan = _ref.disablePan,
       disablePan = _ref$disablePan === undefined ? false : _ref$disablePan,
+      _ref$onNodeClick = _ref.onNodeClick,
+      onNodeClick = _ref$onNodeClick === undefined ? function () {} : _ref$onNodeClick,
       circularBehavior = _ref.circularBehavior,
       debug = _ref.debug;
 
@@ -7815,6 +7821,7 @@ exports.NodeEditor = function NodeEditor(_ref, ref) {
                           stageRect: stage,
                           onDragEnd: triggerRecalculation,
                           onDragStart: recalculateStageRect,
+                          onNodeClick: onNodeClick,
                           key: node.id
                         }));
                       }),
