@@ -12,6 +12,7 @@
   cursor: default;
 }
 .label{
+  color: gold;
   font-size: 13px;
   text-transform: uppercase;
   padding: 5px;
