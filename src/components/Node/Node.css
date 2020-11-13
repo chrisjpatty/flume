@@ -11,6 +11,11 @@
   z-index: 1;
   cursor: default;
 }
+
+.wrapper.active {
+  border: 1px solid cyan;
+}
+
 .label{
   color: cyan;
   font-size: 13px;

@@ -1,10 +1,11 @@
 import React from "react";
+import classNames from 'classnames';
 import styles from "./Node.css";
 import {
   NodeTypesContext,
   NodeDispatchContext,
   StageContext,
-  CacheContext
+  CacheContext,
 } from "../../context";
 import { getPortRect, calculateCurve } from "../../connectionCalculator";
 import { Portal } from "react-portal";
@@ -14,6 +15,7 @@ import Draggable from "../Draggable/Draggable";
 
 const Node = ({
   id,
+  isActive,
   width,
   height,
   x,
@@ -38,11 +40,11 @@ const Node = ({
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
 
-  const byScale = value => (1 / stageState.scale) * value;
+  const byScale = (value) => (1 / stageState.scale) * value;
 
   const updateConnectionsByTransput = (transput = {}, isOutput) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
-      outputs.forEach(output => {
+      outputs.forEach((output) => {
         const toRect = getPortRect(
           id,
           portName,
@@ -84,7 +86,7 @@ const Node = ({
                 stageRect.current.y +
                 portHalf -
                 stageRect.current.height / 2
-            ) + byScale(stageState.translate.y)
+            ) + byScale(stageState.translate.y),
         };
         const to = {
           x:
@@ -100,7 +102,7 @@ const Node = ({
                 stageRect.current.y +
                 portHalf -
                 stageRect.current.height / 2
-            ) + byScale(stageState.translate.y)
+            ) + byScale(stageState.translate.y),
         };
         cnx.setAttribute("d", calculateCurve(from, to));
       });
@@ -118,7 +120,7 @@ const Node = ({
     nodesDispatch({
       type: "SET_NODE_COORDINATES",
       ...coordinates,
-      nodeId: id
+      nodeId: id,
     });
   };
 
@@ -127,11 +129,11 @@ const Node = ({
     updateNodeConnections();
   };
 
-  const startDrag = e => {
+  const startDrag = (e) => {
     onDragStart();
   };
 
-  const handleContextMenu = e => {
+  const handleContextMenu = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setMenuCoordinates({ x: e.clientX, y: e.clientY });
@@ -148,7 +150,7 @@ const Node = ({
       case "deleteNode":
         nodesDispatch({
           type: "REMOVE_NODE",
-          nodeId: id
+          nodeId: id,
         });
         break;
       default:
@@ -158,10 +160,11 @@ const Node = ({
 
   return (
     <Draggable
-      className={styles.wrapper}
+      id={id}
+      className={classNames(styles.wrapper, {[styles.active]: isActive})}
       style={{
         width,
-        transform: `translate(${x}px, ${y}px)`
+        transform: `translate(${x}px, ${y}px)`,
       }}
       onDragStart={startDrag}
       onDrag={handleDrag}
@@ -193,10 +196,10 @@ const Node = ({
                     {
                       label: "Delete Node",
                       value: "deleteNode",
-                      description: "Deletes a node and all of its connections."
-                    }
+                      description: "Deletes a node and all of its connections.",
+                    },
                   ]
-                : [])
+                : []),
             ]}
             onRequestClose={closeContextMenu}
             onOptionSelected={handleMenuOption}

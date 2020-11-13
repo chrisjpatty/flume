@@ -4586,8 +4586,57 @@ var Stage = function Stage(_ref) {
   );
 };
 
-var css$2 = ".Node_wrapper__3SmT7{\n  background: rgba(91, 96, 99, 0.9);\n  border-radius: 5px;\n  box-shadow: 0px 4px 8px rgba(0,0,0,.4);\n  position: absolute;\n  left: 0px;\n  top: 0px;\n  user-select: none;\n  display: flex;\n  flex-direction: column;\n  z-index: 1;\n  cursor: default;\n}\n.Node_label__3MmhF{\n  color: cyan;\n  font-size: 13px;\n  text-transform: uppercase;\n  padding: 5px;\n  background: #464b4e;\n  border-radius: 5px 5px 0px 0px;\n  margin: 0px;\n  margin-bottom: 3px;\n  border-bottom: 1px solid rgba(0,0,0,.15);\n}\n";
-var styles$2 = { "wrapper": "Node_wrapper__3SmT7", "label": "Node_label__3MmhF" };
+var classnames = createCommonjsModule(function (module) {
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg) && arg.length) {
+				var inner = classNames.apply(null, arg);
+				if (inner) {
+					classes.push(inner);
+				}
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else {
+		window.classNames = classNames;
+	}
+}());
+});
+
+var css$2 = ".Node_wrapper__3SmT7{\n  background: rgba(91, 96, 99, 0.9);\n  border-radius: 5px;\n  box-shadow: 0px 4px 8px rgba(0,0,0,.4);\n  position: absolute;\n  left: 0px;\n  top: 0px;\n  user-select: none;\n  display: flex;\n  flex-direction: column;\n  z-index: 1;\n  cursor: default;\n}\n\n.Node_wrapper__3SmT7.Node_active__3wVm5 {\n  border: 1px solid cyan;\n}\n\n.Node_label__3MmhF{\n  color: cyan;\n  font-size: 13px;\n  text-transform: uppercase;\n  padding: 5px;\n  background: #464b4e;\n  border-radius: 5px 5px 0px 0px;\n  margin: 0px;\n  margin-bottom: 3px;\n  border-bottom: 1px solid rgba(0,0,0,.15);\n}\n";
+var styles$2 = { "wrapper": "Node_wrapper__3SmT7", "active": "Node_active__3wVm5", "label": "Node_label__3MmhF" };
 styleInject(css$2);
 
 var css$3 = ".Connection_svg__-fKLY{\n  position: absolute;\n  left: 0px;\n  top: 0px;\n  pointer-events: none;\n  z-index: 0;\n  overflow: visible !important;\n}\n";
@@ -5973,6 +6022,7 @@ var Port = function Port(_ref7) {
 
 var Node = function Node(_ref) {
   var id = _ref.id,
+      isActive = _ref.isActive,
       width = _ref.width,
       height = _ref.height,
       x = _ref.x,
@@ -6113,7 +6163,8 @@ var Node = function Node(_ref) {
   return React.createElement(
     Draggable,
     {
-      className: styles$2.wrapper,
+      id: id,
+      className: classnames(styles$2.wrapper, defineProperty({}, styles$2.active, isActive)),
       style: {
         width: width,
         transform: "translate(" + x + "px, " + y + "px)"
@@ -7628,6 +7679,11 @@ var NodeEditor = function NodeEditor(_ref, ref) {
       sideEffectToasts = _React$useState2[0],
       setSideEffectToasts = _React$useState2[1];
 
+  var _React$useState3 = React.useState(null),
+      _React$useState4 = slicedToArray(_React$useState3, 2),
+      activeNodeId = _React$useState4[0],
+      setActiveNodeId = _React$useState4[1];
+
   var _React$useReducer = React.useReducer(toastsReducer, []),
       _React$useReducer2 = slicedToArray(_React$useReducer, 2),
       toasts = _React$useReducer2[0],
@@ -7645,14 +7701,22 @@ var NodeEditor = function NodeEditor(_ref, ref) {
       comments = _React$useReducer6[0],
       dispatchComments = _React$useReducer6[1];
 
+  var onNodeClickHandler = function onNodeClickHandler(props) {
+    var id = props.id;
+
+
+    setActiveNodeId(id);
+    onNodeClick(props);
+  };
+
   React.useEffect(function () {
     dispatchNodes({ type: "HYDRATE_DEFAULT_NODES" });
   }, []);
 
-  var _React$useState3 = React.useState(true),
-      _React$useState4 = slicedToArray(_React$useState3, 2),
-      shouldRecalculateConnections = _React$useState4[0],
-      setShouldRecalculateConnections = _React$useState4[1];
+  var _React$useState5 = React.useState(true),
+      _React$useState6 = slicedToArray(_React$useState5, 2),
+      shouldRecalculateConnections = _React$useState6[0],
+      setShouldRecalculateConnections = _React$useState6[1];
 
   var _React$useReducer7 = React.useReducer(stageReducer, {
     scale: typeof initialScale === "number" ? clamp_1(initialScale, 0.1, 7) : 1,
@@ -7811,10 +7875,11 @@ var NodeEditor = function NodeEditor(_ref, ref) {
                       }),
                       Object.values(nodes).map(function (node) {
                         return React.createElement(Node, _extends({}, node, {
+                          isActive: activeNodeId === node.id,
                           stageRect: stage,
                           onDragEnd: triggerRecalculation,
                           onDragStart: recalculateStageRect,
-                          onNodeClick: onNodeClick,
+                          onNodeClick: onNodeClickHandler,
                           key: node.id
                         }));
                       }),

@@ -57,7 +57,8 @@ export let NodeEditor = (
   const editorId = useId();
   const cache = React.useRef(new Cache());
   const stage = React.useRef();
-  const [sideEffectToasts, setSideEffectToasts] = React.useState()
+  const [sideEffectToasts, setSideEffectToasts] = React.useState();
+  const [activeNodeId, setActiveNodeId] = React.useState(null);
   const [toasts, dispatchToasts] = React.useReducer(toastsReducer, []);
   const [nodes, dispatchNodes] = React.useReducer(
     connectNodesReducer(
@@ -72,6 +73,13 @@ export let NodeEditor = (
     commentsReducer,
     initialComments || {}
   );
+  const onNodeClickHandler = props => {
+    const { id } = props;
+
+    setActiveNodeId(id);
+    onNodeClick(props);
+  }
+
   React.useEffect(() => {
     dispatchNodes({ type: "HYDRATE_DEFAULT_NODES" });
   }, []);
@@ -207,10 +215,11 @@ export let NodeEditor = (
                         {Object.values(nodes).map(node => (
                           <Node
                             {...node}
+                            isActive={activeNodeId === node.id}
                             stageRect={stage}
                             onDragEnd={triggerRecalculation}
                             onDragStart={recalculateStageRect}
-                            onNodeClick={onNodeClick}
+                            onNodeClick={onNodeClickHandler}
                             key={node.id}
                           />
                         ))}
