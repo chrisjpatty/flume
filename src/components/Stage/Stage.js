@@ -34,7 +34,16 @@ const Stage = ({
 
   const setStageRect = React.useCallback(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
-  }, []);
+  }, [stageRef]);
+
+
+  const handleContextMenu = e => {
+    console.log("Test")
+    e.preventDefault();
+    setMenuCoordinates({ x: e.clientX, y: e.clientY });
+    setMenuOpen(true);
+    return false;
+  };
 
   React.useEffect(() => {
     stageRef.current = wrapper.current.getBoundingClientRect();
@@ -93,13 +102,6 @@ const Stage = ({
         y: tran.y + yDistance
       }
     }));
-  };
-
-  const handleContextMenu = e => {
-    e.preventDefault();
-    setMenuCoordinates({ x: e.clientX, y: e.clientY });
-    setMenuOpen(true);
-    return false;
   };
 
   const closeContextMenu = () => {
@@ -185,6 +187,7 @@ const Stage = ({
     },
     [nodeTypes, disableComments]
   );
+  console.log(menuOpen)
 
   return (
     <Draggable

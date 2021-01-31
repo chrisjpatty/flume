@@ -31,8 +31,8 @@ const ContextMenu = ({
     e => {
       if (menuWrapper.current && !menuWrapper.current.contains(e.target)) {
         onRequestClose();
-        document.removeEventListener("click", testClickOutside);
-        document.removeEventListener("contextmenu", testClickOutside);
+        document.removeEventListener("click", testClickOutside, { capture: true });
+        document.removeEventListener("contextmenu", testClickOutside, { capture: true });
       }
     },
     [menuWrapper, onRequestClose]
@@ -42,7 +42,7 @@ const ContextMenu = ({
     e => {
       if (e.keyCode === 27) {
         onRequestClose();
-        document.removeEventListener("keydown", testEscape);
+        document.removeEventListener("keydown", testEscape, { capture: true });
       }
     },
     [onRequestClose]
@@ -53,13 +53,13 @@ const ContextMenu = ({
       filterInput.current.focus();
     }
     setMenuWidth(menuWrapper.current.getBoundingClientRect().width);
-    document.addEventListener("keydown", testEscape);
-    document.addEventListener("click", testClickOutside);
-    document.addEventListener("contextmenu", testClickOutside);
+    document.addEventListener("keydown", testEscape, { capture: true });
+    document.addEventListener("click", testClickOutside, { capture: true });
+    document.addEventListener("contextmenu", testClickOutside, { capture: true });
     return () => {
-      document.removeEventListener("click", testClickOutside);
-      document.removeEventListener("contextmenu", testClickOutside);
-      document.removeEventListener("keydown", testEscape);
+      document.removeEventListener("click", testClickOutside, { capture: true });
+      document.removeEventListener("contextmenu", testClickOutside, { capture: true });
+      document.removeEventListener("keydown", testEscape, { capture: true });
     };
   }, [testClickOutside, testEscape]);
 

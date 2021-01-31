@@ -8,6 +8,7 @@ import {
   RootEngine,
   useRootEngine
 } from "node-editor";
+import { Select, MenuItem } from '@material-ui/core'
 
 const colors = [
   "#2196f3",
@@ -606,6 +607,13 @@ export default () => {
   const [comments, setComments] = React.useState({});
   return (
     <div className="wrapper" style={{ lineHeight: 1.8 }}>
+      <div style={{background: '#fff'}}>
+        <Select value="a">
+          <MenuItem value="a">a</MenuItem>
+          <MenuItem value="b">b</MenuItem>
+          <MenuItem value="c">c</MenuItem>
+        </Select>
+      </div>
       <NodeEditor
         portTypes={flumeConfig.portTypes}
         nodeTypes={flumeConfig.nodeTypes}
