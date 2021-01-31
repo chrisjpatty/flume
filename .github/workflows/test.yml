@@ -11,7 +11,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-
     steps:
     - uses: actions/checkout@v2
     - uses: borales/actions-yarn@v2.0.0
