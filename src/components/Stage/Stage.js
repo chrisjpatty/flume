@@ -202,6 +202,7 @@ const Stage = ({
       stageState={{ scale, translate }}
       style={{ cursor: spaceIsPressed && spaceToPan ? "grab" : "" }}
       disabled={disablePan || (spaceToPan && !spaceIsPressed)}
+      data-flume-stage={true}
     >
       {menuOpen ? (
         <Portal>
