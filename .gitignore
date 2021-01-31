@@ -25,3 +25,5 @@ example/.docz/.cache
 # Local Netlify folder
 .netlify
 .docz
+cypress/screenshots
+cypress/videos

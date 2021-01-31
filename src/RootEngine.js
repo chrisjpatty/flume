@@ -6,7 +6,7 @@ class LoopError extends Error {
   static maxLoopsExceeded = 1;
 }
 
-class RootEngine {
+export class RootEngine {
   constructor(config, resolveInputControls, fireNodeFunction) {
     this.config = config;
     this.fireNodeFunction = fireNodeFunction;
@@ -142,5 +142,3 @@ class RootEngine {
     }
   }
 }
-
-export default RootEngine;
