@@ -12,12 +12,12 @@ export default {
   input: 'src/index.js',
   output: [
     {
-      file: `dist/${pkg.main}`,
+      file: pkg.main,
       format: 'cjs',
       sourcemap: true
     },
     {
-      file: `dist/${pkg.module}`,
+      file: pkg.module,
       format: 'es',
       sourcemap: true
     }
