@@ -1,6 +1,6 @@
 {
   "name": "flume",
-  "version": "0.6.2",
+  "version": "0.6.3-2",
   "description": "A node editor for React",
   "author": "chrisjpatty",
   "license": "MIT",
@@ -18,9 +18,10 @@
     "test:watch": "react-scripts test --env=jsdom",
     "build": "rollup -c",
     "start": "rollup -c -w",
-    "prepare": "yarn run build",
-    "predeploy": "cd example && yarn install && yarn run build",
-    "deploy": "gh-pages -d example/build"
+    "release": "npx np"
+  },
+  "np": {
+    "testScript": "test"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
@@ -55,6 +56,7 @@
     "eslint-plugin-standard": "^3.1.0",
     "gh-pages": "^1.2.0",
     "jest-puppeteer": "^4.4.0",
+    "np": "^7.2.0",
     "postcss-nested": "^4.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
