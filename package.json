@@ -18,12 +18,9 @@
     "test:watch": "react-scripts test --env=jsdom",
     "build": "rollup -c",
     "start": "rollup -c -w",
-    "release": "npx np",
-    "copy-package": "node scripts/copy-package",
-    "postversion": "yarn run copy-package"
+    "release": "npx np"
   },
   "np": {
-    "contents": "dist",
     "testScript": "test"
   },
   "peerDependencies": {
