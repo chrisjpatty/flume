@@ -23,6 +23,10 @@
     "release": "npx np",
     "postversion": "cp -f package.json dist"
   },
+  "np": {
+    "contents": "dist",
+    "testScript": "test"
+  },
   "peerDependencies": {
     "prop-types": "^15.5.4",
     "react": "^16.13.1",
