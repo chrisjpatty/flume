@@ -6,9 +6,9 @@
   "license": "MIT",
   "homepage": "https://flume.dev",
   "repository": "chrisjpatty/flume",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "jsnext:main": "dist/index.es.js",
+  "main": "index.js",
+  "module": "index.es.js",
+  "jsnext:main": "index.es.js",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
