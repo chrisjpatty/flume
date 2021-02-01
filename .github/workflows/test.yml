@@ -16,4 +16,5 @@ jobs:
         node-version: '14'
     - run: yarn install
     - run: yarn build
+    - run: cd example && yarn start & npx wait-on http://localhost:3000
     - run: yarn test
