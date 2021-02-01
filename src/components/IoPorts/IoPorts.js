@@ -313,7 +313,6 @@ const Port = ({
             inputNodeType
           ].acceptTypes.includes(type);
           if (inputWillAcceptConnection) {
-            console.log("Got all the way to connecting")
             nodesDispatch({
               type: "ADD_CONNECTION",
               output: { nodeId, portName: name },

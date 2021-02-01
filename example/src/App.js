@@ -614,6 +614,7 @@ export default () => {
         comments={comments}
         onChange={setNodes}
         onCommentsChange={setComments}
+        connectionMode="decision"
         // disableZoom
         defaultNodes={[
           {
