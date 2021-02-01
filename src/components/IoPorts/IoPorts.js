@@ -6,7 +6,8 @@ import {
   ConnectionRecalculateContext,
   StageContext,
   ContextContext,
-  EditorIdContext
+  EditorIdContext,
+  ConnectionModeContext
 } from "../../context";
 import Control from "../Control/Control";
 import Connection from "../Connection/Connection";
@@ -213,6 +214,7 @@ const Port = ({
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext);
   const editorId = React.useContext(EditorIdContext);
+  const connectionMode = React.useContext(ConnectionModeContext);
   const stageId = `${STAGE_ID}${editorId}`
   const inputTypes = React.useContext(PortTypesContext);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -311,6 +313,7 @@ const Port = ({
             inputNodeType
           ].acceptTypes.includes(type);
           if (inputWillAcceptConnection) {
+            console.log("Got all the way to connecting")
             nodesDispatch({
               type: "ADD_CONNECTION",
               output: { nodeId, portName: name },
