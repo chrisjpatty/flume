@@ -6,9 +6,9 @@
   "license": "MIT",
   "homepage": "https://flume.dev",
   "repository": "chrisjpatty/flume",
-  "main": "index.js",
-  "module": "index.es.js",
-  "jsnext:main": "index.es.js",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
@@ -19,7 +19,8 @@
     "build": "rollup -c",
     "start": "rollup -c -w",
     "release": "npx np",
-    "postversion": "cp -f package.json dist"
+    "copy-package": "node scripts/copy-package",
+    "postversion": "yarn run copy-package"
   },
   "np": {
     "contents": "dist",
