@@ -12,7 +12,6 @@ module.exports = {
       "using-without-react",
       "dynamic-nodes",
       "comments",
-      "custom-ui",
       "theming"
     ],
     API: ["NodeEditor", "flume-config", "RootEngine", "controls", "colors"]
