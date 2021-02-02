@@ -1,7 +1,7 @@
 module.exports = {
   someSidebar: {
     Concepts: ["overview", "anatomy", "node-editor", "type-safety", "running-logic", "faq"],
-    "Getting Started": [
+    "Guides": [
       "quick-start",
       "basic-config",
       "root-node",
@@ -12,6 +12,7 @@ module.exports = {
       "using-without-react",
       "dynamic-nodes",
       "comments",
+      "custom-ui",
       "theming"
     ],
     API: ["NodeEditor", "flume-config", "RootEngine", "controls", "colors"]

@@ -93,3 +93,30 @@ Optional. Can be one of 3 possible values:
 - `prevent`: Default. When a user attempts to connect nodes in a way that would create a circular graph, the connection is rejected and a warning is displayed.
 - `warn`: Creating circular connections is allowed, but a warning is displayed.
 - `allow`: Creating circular connections is allowed without a warning.
+
+### `renderNodeHeader` : function
+Optional. Allows you to override the rendering of the node header. Common use-cases might include overriding the label of a node, or adding custom UI elements like a button to delete the node, or open the node context menu. This prop accepts a function which is expected to return jsx.
+
+#### Function parameters
+
+The `renderNodeHeader` function provides three parameters to help you render a custom header. Together they make up the following function signature:
+
+```jsx
+(Wrapper, nodeType, actions) => jsx
+```
+
+#### Wrapper
+
+Wrapper is a React component in which you can render your custom UI. Usage of the wrapper is not required, but is recommended for accessibility and consistency with the other components of the UI. 
+
+#### nodeType
+
+nodeType represents the current type definition of the node being rendered. For documentation for the properties available on nodeType see [FlumeConfig](/docs/flume-config#addnodetype--methodnodetype).
+
+#### actions
+
+Actions is an object of functions which operate in the context of the current node. Currently the following actions are available:
+
+- openMenu: Opens the context menu for the node.
+- closeMenu: Closes the context menu for the node.
+- deleteNode: Deletes the current node.
