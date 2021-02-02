@@ -15,23 +15,21 @@ import Draggable from "../Draggable/Draggable";
 const Node = ({
   id,
   width,
-  height,
   x,
   y,
-  delay = 6,
   stageRect,
   connections,
   type,
   inputData,
   onDragStart,
-  onDragEnd,
-  onDrag
+  renderNodeHeader
 }) => {
   const cache = React.useContext(CacheContext);
   const nodeTypes = React.useContext(NodeTypesContext);
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const stageState = React.useContext(StageContext);
-  const { label, deletable, inputs = [], outputs = [] } = nodeTypes[type];
+  const currentNodeType = nodeTypes[type];
+  const { label, deletable, inputs = [], outputs = [] } = currentNodeType;
 
   const nodeWrapper = React.useRef();
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -142,13 +140,17 @@ const Node = ({
     setMenuOpen(false);
   };
 
+  const deleteNode = () => {
+    nodesDispatch({
+      type: "REMOVE_NODE",
+      nodeId: id
+    });
+  };
+
   const handleMenuOption = ({ value }) => {
     switch (value) {
       case "deleteNode":
-        nodesDispatch({
-          type: "REMOVE_NODE",
-          nodeId: id
-        });
+        deleteNode();
         break;
       default:
         return;
@@ -171,7 +173,15 @@ const Node = ({
       stageState={stageState}
       stageRect={stageRect}
     >
-      <h2 className={styles.label}>{label}</h2>
+      {renderNodeHeader ? (
+        renderNodeHeader(NodeHeader, currentNodeType, {
+          openMenu: handleContextMenu,
+          closeMenu: closeContextMenu,
+          deleteNode
+        })
+      ) : (
+        <NodeHeader>{label}</NodeHeader>
+      )}
       <IoPorts
         nodeId={id}
         inputs={inputs}
@@ -207,5 +217,11 @@ const Node = ({
     </Draggable>
   );
 };
+
+const NodeHeader = ({ children, className = "", ...props }) => (
+  <h2 {...props} className={styles.label + (className ? ` ${className}` : "")}>
+    {children}
+  </h2>
+);
 
 export default Node;

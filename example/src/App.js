@@ -621,6 +621,30 @@ export default () => {
             y: -200
           }
         ]}
+        renderNodeHeader={(Wrapper, nodeType, actions) => {
+          return (
+            <Wrapper style={{ display: "flex" }}>
+              {nodeType.label}
+              {!nodeType.root ? (
+                <button
+                  style={{
+                    margin: -4,
+                    marginLeft: "auto",
+                    marginRight: 2,
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    fontSize: 14,
+                    color: '#222'
+                  }}
+                  onClick={actions.openMenu}
+                >
+                  ☰
+                </button>
+              ) : null}
+            </Wrapper>
+          );
+        }}
         // debug
       />
       <div style={{ marginTop: 30 }}>

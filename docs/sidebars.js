@@ -1,7 +1,7 @@
 module.exports = {
   someSidebar: {
     Concepts: ["overview", "anatomy", "node-editor", "type-safety", "running-logic", "faq"],
-    "Getting Started": [
+    "Guides": [
       "quick-start",
       "basic-config",
       "root-node",
