@@ -45,19 +45,38 @@ const addConnection = (nodes, input, output, portTypes) => {
   return newNodes;
 };
 
-const removeConnection = (nodes, input, output) => {
+const removeConnection = (nodes, input, output, isInDecisionMode) => {
   const inputNode = nodes[input.nodeId];
-  const {
-    [input.portName]: removedInputPort,
-    ...newInputNodeConnectionsInputs
-  } = inputNode.connections.inputs;
-  const newInputNode = {
-    ...inputNode,
-    connections: {
-      ...inputNode.connections,
-      inputs: newInputNodeConnectionsInputs
+  let newInputNode;
+  if(isInDecisionMode && inputNode.connections.inputs[input.portName].length !== 1){
+    const filteredInputNodes = inputNode.connections.inputs[
+      input.portName
+    ].filter(cnx => {
+      return cnx.nodeId === output.nodeId ? cnx.portName !== output.portName : true;
+    });
+    newInputNode = {
+      ...inputNode,
+      connections: {
+        ...inputNode.connections,
+        inputs: {
+          ...inputNode.connections.inputs,
+          [input.portName]: filteredInputNodes
+        }
+      }
     }
-  };
+  }else{
+    const {
+      [input.portName]: removedInputPort,
+      ...newInputNodeConnectionsInputs
+    } = inputNode.connections.inputs;
+    newInputNode = {
+      ...inputNode,
+      connections: {
+        ...inputNode.connections,
+        inputs: newInputNodeConnectionsInputs
+      }
+    };
+  }
 
   const outputNode = nodes[output.nodeId];
   const filteredOutputNodes = outputNode.connections.outputs[
@@ -227,13 +246,14 @@ const getDefaultData = ({ node, nodeType, portTypes, context }) => {
 const nodesReducer = (
   nodes,
   action = {},
-  { nodeTypes, portTypes, cache, circularBehavior, context },
+  { nodeTypes, portTypes, cache, circularBehavior, connectionMode, context },
   dispatchToasts
 ) => {
   switch (action.type) {
     case "ADD_CONNECTION": {
       const { input, output } = action;
-      const inputIsNotConnected = !nodes[input.nodeId].connections.inputs[
+      const allowMultipleInputs = connectionMode === "decision";
+      const inputIsNotConnected = allowMultipleInputs || !nodes[input.nodeId].connections.inputs[
         input.portName
       ];
       if (inputIsNotConnected) {
@@ -270,7 +290,7 @@ const nodesReducer = (
         output.nodeId + output.portName + input.nodeId + input.portName;
       delete cache.current.connections[id];
       deleteConnection({ id });
-      return removeConnection(nodes, input, output);
+      return removeConnection(nodes, input, output, connectionMode === 'decision');
     }
 
     case "DESTROY_TRANSPUT": {

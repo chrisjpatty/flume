@@ -607,12 +607,14 @@ export default () => {
   return (
     <div className="wrapper" style={{ lineHeight: 1.8 }}>
       <NodeEditor
+        debug
         portTypes={flumeConfig.portTypes}
         nodeTypes={flumeConfig.nodeTypes}
         nodes={nodes}
         comments={comments}
         onChange={setNodes}
         onCommentsChange={setComments}
+        connectionMode="decision"
         // disableZoom
         defaultNodes={[
           {

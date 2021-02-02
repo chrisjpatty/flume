@@ -13,6 +13,15 @@ export class RootEngine {
     this.resolveInputControls = resolveInputControls;
     this.loops = 0;
     this.maxLoops = 1000;
+    this.isNotRootGraph = false;
+  }
+  verifyRootStructure = connections => {
+    if(!this.isNotRootGraph){
+      if(connections.length > 1){
+        console.error("The nodes you provided to the RootEngine do not conform to the expected root graph structure. The engine may behave unpredictably.")
+        this.isNotRootGraph = true;
+      }
+    }
   }
   resetLoops = maxLoops => {
     this.maxLoops = maxLoops !== undefined ? maxLoops : 1000;
@@ -51,6 +60,7 @@ export class RootEngine {
     return inputs.reduce((obj, input) => {
       const inputConnections = node.connections.inputs[input.name] || [];
       if (inputConnections.length > 0) {
+        this.verifyRootStructure(inputConnections)
         obj[input.name] = this.getValueOfConnection(
           inputConnections[0],
           nodes,
@@ -107,6 +117,7 @@ export class RootEngine {
       const inputValues = this.reduceRootInputs(
         rootNode.connections.inputs,
         (inputName, connection) => {
+          this.verifyRootStructure(connection)
           this.resetLoops(options.maxLoops);
           let value;
           try {

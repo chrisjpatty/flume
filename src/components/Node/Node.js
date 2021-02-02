@@ -15,17 +15,13 @@ import Draggable from "../Draggable/Draggable";
 const Node = ({
   id,
   width,
-  height,
   x,
   y,
-  delay = 6,
   stageRect,
   connections,
   type,
   inputData,
-  onDragStart,
-  onDragEnd,
-  onDrag
+  onDragStart
 }) => {
   const cache = React.useContext(CacheContext);
   const nodeTypes = React.useContext(NodeTypesContext);
