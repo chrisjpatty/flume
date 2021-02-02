@@ -36,7 +36,6 @@ const Node = ({
   const byScale = value => (1 / stageState.scale) * value;
 
   const updateConnectionsByTransput = (transput = {}, isOutput) => {
-    console.log(transput)
     Object.entries(transput).forEach(([portName, outputs]) => {
       outputs.forEach(output => {
         const toRect = getPortRect(
