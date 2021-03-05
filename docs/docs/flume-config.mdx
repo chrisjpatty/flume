@@ -90,6 +90,21 @@ Optional. An array of controls that will be displayed to the user when this port
 While this key is optional, it is rare that you will need to create a port without any controls.
 :::
 
+### `renderResult` : function
+
+Optional. Used to render the resolvedValues from a RootEngine next to each output.
+
+```js
+config
+  .addPortType({
+    type: "color",
+    name: "color",
+    label: "Color",
+    controls: [...],
+    renderResult: (color) => <span style={{color}}>{color}</span>
+  })
+```
+
 ## `addNodeType` : method(nodeType)
 
 This method allows you to add a new node type to your config.
