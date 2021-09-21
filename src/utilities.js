@@ -21,3 +21,8 @@ export const checkForCircularNodes = (nodes, startNodeId) => {
   walk(startNodeId)
   return isCircular;
 }
+
+export const getPort = (nodeId, portName, transputType = "input") => document
+              .querySelector(
+                `[data-node-id="${nodeId}"] [data-port-name="${portName}"][data-port-transput-type="${transputType}"]`
+              )
