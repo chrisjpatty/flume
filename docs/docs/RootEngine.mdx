@@ -112,6 +112,10 @@ A function which accepts a set of nodes created through the node editor, and an 
 This method must be called with nodes having exactly one root node. If multiple root nodes are found, the first root node found will be used. In most cases this is not a desired behavior. If you need to support multiple root nodes you should manually keep track of their node ids, and resolve them seperately by passing their ids to the `rootNodeId` key of the options object, as described below.
 :::
 
+## `resolveAllNodes` : method
+
+A function which accepts a set of nodes created through the node editor, and an optional `options` object; and returns an object representing all outputs of all nodes.
+
 ### `options` : object
 
 A configuration object representing settings for the requested resolution of the root node.

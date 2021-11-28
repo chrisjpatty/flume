@@ -243,7 +243,8 @@ export class FlumeConfig {
       name: config.name,
       label: define(config.label, ""),
       color: define(config.color, Colors.grey),
-      hidePort: define(config.hidePort, false)
+      hidePort: define(config.hidePort, false),
+      renderResult: config.renderResult
     };
 
     if (config.acceptTypes === undefined) {

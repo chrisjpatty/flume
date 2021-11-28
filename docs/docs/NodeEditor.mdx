@@ -93,3 +93,7 @@ Optional. Can be one of 3 possible values:
 - `prevent`: Default. When a user attempts to connect nodes in a way that would create a circular graph, the connection is rejected and a warning is displayed.
 - `warn`: Creating circular connections is allowed, but a warning is displayed.
 - `allow`: Creating circular connections is allowed without a warning.
+
+### `resolvedValues` : object
+
+Optional. If you set this to the result of running the `RootEngine.resolveAllNodes` function, then you can display the output values from each node by adding a `renderResult` function to your `addPortType` calls.
