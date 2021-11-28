@@ -48,7 +48,8 @@ const IoPorts = ({
   outputs = [],
   connections,
   inputData,
-  updateNodeConnections
+  updateNodeConnections,
+  resolvedValues
 }) => {
   const inputTypes = React.useContext(PortTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
@@ -84,6 +85,7 @@ const IoPorts = ({
               nodeId={nodeId}
               inputData={inputData}
               portOnRight
+              resolvedValue={resolvedValues && resolvedValues[output.name]}
               key={output.name}
             />
           ))}
@@ -177,9 +179,13 @@ const Output = ({
   nodeId,
   type,
   inputTypes,
-  triggerRecalculation
+  triggerRecalculation,
+  renderResult: localRenderResult,
+  resolvedValue,
 }) => {
-  const { label: defaultLabel, color } = inputTypes[type] || {};
+  const { label: defaultLabel, color, renderResult: defaultRenderResult } = inputTypes[type] || {};
+
+  const renderResult = localRenderResult || defaultRenderResult;
 
   return (
     <div
@@ -190,7 +196,10 @@ const Output = ({
         e.stopPropagation();
       }}
     >
-      <label className={styles.portLabel}>{label || defaultLabel}</label>
+      {!renderResult && (
+        <label className={styles.portLabel}>{label || defaultLabel}</label>
+      )}
+      {renderResult && renderResult(resolvedValue)}
       <Port
         type={type}
         name={name}
