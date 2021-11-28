@@ -6,13 +6,14 @@ class LoopError extends Error {
   static maxLoopsExceeded = 1;
 }
 
-class RootEngine {
+export class RootEngine {
   constructor(config, resolveInputControls, fireNodeFunction) {
     this.config = config;
     this.fireNodeFunction = fireNodeFunction;
     this.resolveInputControls = resolveInputControls;
     this.loops = 0;
     this.maxLoops = 1000;
+    this.resultCache = {};
   }
   resetLoops = maxLoops => {
     this.maxLoops = maxLoops !== undefined ? maxLoops : 1000;
@@ -81,8 +82,9 @@ class RootEngine {
       inputValues,
       outputNodeType,
       context
-    )[connection.portName];
-    return outputResult;
+    );
+    this.resultCache[connection.nodeId] = outputResult;
+    return outputResult[connection.portName];
   };
   resolveRootNode(nodes, options = {}) {
     const rootNode = options.rootNodeId
@@ -141,6 +143,17 @@ class RootEngine {
       return {};
     }
   }
+  resolveAllNodes(nodes, options = {}) {
+    this.resultCache = {};
+    Object.keys(nodes).forEach((key) => {
+      this.getValueOfConnection(
+        {nodeId: key, portName: ''},
+        nodes,
+        options.context || {}
+      )
+    });
+    const resultCache = this.resultCache;
+    this.resultCache = {};
+    return resultCache;
+  }
 }
-
-export default RootEngine;

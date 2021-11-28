@@ -27,3 +27,5 @@ package-lock.json
 # Local Netlify folder
 .netlify
 .docz
+cypress/screenshots
+cypress/videos

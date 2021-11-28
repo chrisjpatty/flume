@@ -50,7 +50,8 @@ const Node = ({
   inputData,
   onDragStart,
   onDragEnd,
-  onDrag
+  onDrag,
+  resolvedValues
 }) => {
   const cache = React.useContext(CacheContext);
   const nodeTypes = React.useContext(NodeTypesContext);
@@ -203,6 +204,7 @@ const Node = ({
         connections={connections}
         updateNodeConnections={updateNodeConnections}
         inputData={inputData}
+        resolvedValues={resolvedValues}
       />
       {menuOpen ? (
         <Portal>

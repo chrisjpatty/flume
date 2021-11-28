@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-const nanoid = require("nanoid");
+import nanoid from "nanoid/non-secure/index";
 
 const Wrapper = styled.div`
   display: flex;

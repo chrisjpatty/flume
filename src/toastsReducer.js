@@ -1,4 +1,4 @@
-const nanoid = require("nanoid");
+import nanoid from "nanoid/non-secure/index";
 
 export default (toasts = [], action) => {
   switch (action.type) {

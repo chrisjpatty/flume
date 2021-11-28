@@ -64,7 +64,8 @@ export let NodeEditor = (
     disableZoom = false,
     disablePan = false,
     circularBehavior,
-    debug
+    debug,
+    resolvedValues = {}
   },
   ref
 ) => {
@@ -217,6 +218,7 @@ export let NodeEditor = (
                             stageRect={stage}
                             onDragEnd={triggerRecalculation}
                             onDragStart={recalculateStageRect}
+                            resolvedValues={resolvedValues[node.id]}
                             key={node.id}
                           />
                         ))}
@@ -238,6 +240,6 @@ export let NodeEditor = (
 };
 NodeEditor = React.forwardRef(NodeEditor);
 export { FlumeConfig, Controls, Colors } from "./typeBuilders";
-export RootEngine from "./RootEngine";
+export { RootEngine } from "./RootEngine";
 export const useRootEngine = (nodes, engine, context) =>
   Object.keys(nodes).length ? engine.resolveRootNode(nodes, { context }) : {};

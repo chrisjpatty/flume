@@ -13,15 +13,15 @@ describe("<NodeEditor/> Interactions", () => {
   });
 
   it("Can add 3 nodes", () => {
-    cy.get("#__node_editor_stage__").rightclick(250, 200);
+    cy.get('[data-flume-stage="true"]').rightclick(250, 200);
     cy.get(`[role="menu"]`)
       .contains(/^Number$/)
       .click();
-    cy.get("#__node_editor_stage__").rightclick(250, 350);
+    cy.get('[data-flume-stage="true"]').rightclick(250, 350);
     cy.get(`[role="menu"]`)
       .contains(/^Number$/)
       .click();
-    cy.get("#__node_editor_stage__").rightclick(500, 250);
+    cy.get('[data-flume-stage="true"]').rightclick(500, 250);
     cy.get(`[role="menu"]`)
       .contains(/^Add Numbers$/)
       .click();
@@ -50,8 +50,9 @@ describe("<NodeEditor/> Interactions", () => {
       .type(20);
 
     getCurrentNodes(nodes => {
-      expect(Object.values(nodes).filter(node => node.type === "number" && node.inputData.number.number === 100).length).to.equal(1)
-      expect(Object.values(nodes).filter(node => node.type === "number" && node.inputData.number.number === 200).length).to.equal(1)
+      console.log(nodes)
+      expect(Object.values(nodes).filter(node => node.type === "number" && node.inputData.number.number === 10).length).to.equal(1)
+      expect(Object.values(nodes).filter(node => node.type === "number" && node.inputData.number.number === 20).length).to.equal(1)
     })
   });
 
