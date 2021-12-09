@@ -50,13 +50,36 @@ const Stage = ({
         if (e.target.clientHeight < e.target.scrollHeight) return;
       }
       e.preventDefault();
-      if (numNodes > 0) {
+      if (numNodes === 0) return;
+      dispatchStageState(({ scale: currentScale, translate: currentTranslate }) => {
         const delta = e.deltaY;
-        dispatchStageState(({ scale }) => ({
-          type: "SET_SCALE",
-          scale: clamp(scale - clamp(delta, -10, 10) * 0.005, 0.1, 7)
-        }));
-      }
+        const newScale = clamp(currentScale - clamp(delta, -10, 10) * 0.005, 0.1, 7);
+
+        const byOldScale = (no) => no * (1 / currentScale);
+        const byNewScale = (no) => no * (1 / newScale);
+
+        const wrapperRect = wrapper.current.getBoundingClientRect();
+
+        const xOld = byOldScale(e.clientX - wrapperRect.x - wrapperRect.width / 2) + byOldScale(currentTranslate.x);
+        const yOld = byOldScale(e.clientY - wrapperRect.y - wrapperRect.height / 2) + byOldScale(currentTranslate.y);
+
+        const xNew = byNewScale(e.clientX - wrapperRect.x - wrapperRect.width / 2) + byNewScale(currentTranslate.x);
+        const yNew = byNewScale(e.clientY - wrapperRect.y - wrapperRect.height / 2) + byNewScale(currentTranslate.y);
+
+        const xDistance = xOld - xNew;
+        const yDistance = yOld - yNew;
+
+
+        return {
+          type: "SET_TRANSLATE_SCALE",
+          scale: newScale,
+          translate: {
+            x: currentTranslate.x + xDistance * newScale,
+            y: currentTranslate.y + yDistance * newScale
+          }
+        }
+      });
+
     },
     [dispatchStageState, numNodes]
   );
@@ -76,6 +99,9 @@ const Stage = ({
   const handleMouseDrag = (coords, e) => {
     const xDistance = dragData.current.x - e.clientX;
     const yDistance = dragData.current.y - e.clientY;
+    const xDelta = translate.x + xDistance;
+    const yDelta = translate.y + yDistance;
+    wrapper.current.style.backgroundPosition = `${-xDelta}px ${-yDelta}px`;
     translateWrapper.current.style.transform = `translate(${-(
       translate.x + xDistance
     )}px, ${-(translate.y + yDistance)}px)`;
@@ -155,7 +181,7 @@ const Stage = ({
   };
 
   React.useEffect(() => {
-    if(!disableZoom){
+    if (!disableZoom) {
       let stageWrapper = wrapper.current;
       stageWrapper.addEventListener("wheel", handleWheel);
       return () => {
@@ -178,7 +204,7 @@ const Stage = ({
           })),
         ["sortIndex", "label"]
       )
-      if(!disableComments){
+      if (!disableComments) {
         options.push({ value: "comment", label: "Comment", description: "A comment for documenting nodes", internalType: "comment" })
       }
       return options
