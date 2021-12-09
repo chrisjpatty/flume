@@ -60,11 +60,11 @@ const Stage = ({
 
         const wrapperRect = wrapper.current.getBoundingClientRect();
 
-        const xOld = byOldScale(e.clientX - wrapperRect.x - wrapperRect.width / 2) + byOldScale(currentTranslate.x);
-        const yOld = byOldScale(e.clientY - wrapperRect.y - wrapperRect.height / 2) + byOldScale(currentTranslate.y);
+        const xOld = byOldScale(e.clientX - wrapperRect.x - wrapperRect.width / 2 + currentTranslate.x);
+        const yOld = byOldScale(e.clientY - wrapperRect.y - wrapperRect.height / 2 + currentTranslate.y);
 
-        const xNew = byNewScale(e.clientX - wrapperRect.x - wrapperRect.width / 2) + byNewScale(currentTranslate.x);
-        const yNew = byNewScale(e.clientY - wrapperRect.y - wrapperRect.height / 2) + byNewScale(currentTranslate.y);
+        const xNew = byNewScale(e.clientX - wrapperRect.x - wrapperRect.width / 2 + currentTranslate.x);
+        const yNew = byNewScale(e.clientY - wrapperRect.y - wrapperRect.height / 2 + currentTranslate.y);
 
         const xDistance = xOld - xNew;
         const yDistance = yOld - yNew;
