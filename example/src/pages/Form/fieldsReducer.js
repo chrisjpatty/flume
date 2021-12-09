@@ -1,4 +1,4 @@
-import nanoid from "nanoid/non-secure/index";
+import { nanoid }from "nanoid/non-secure/index";
 
 const getAttributes = attributes =>
   attributes.reduce((obj, attr) => {
