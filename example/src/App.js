@@ -601,7 +601,7 @@ const engine = new RootEngine(
   }
 );
 
-export default () => {
+const App = () => {
   const [nodes, setNodes] = React.useState({});
   const [comments, setComments] = React.useState({});
   return (
@@ -629,6 +629,8 @@ export default () => {
     </div>
   );
 };
+
+export default App;
 
 const useInfiniteEngine = (nodes, engine, context, options = {}) =>
   Object.keys(nodes).length ? engine.resolveRootNode(nodes, { context, ...options }) : {};
