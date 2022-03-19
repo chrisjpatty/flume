@@ -6,7 +6,7 @@ import PreviewField from './PreviewField';
 import { DesignerDispatchContext, DesignerStateContext, BASE_URL } from './Form'
 import { getFieldValues } from './formHandler'
 
-export default ({
+const Body = ({
   previewFields,
   fields,
   fieldsOrder,
@@ -100,3 +100,5 @@ export default ({
     </form>
   );
 };
+
+export default Body;

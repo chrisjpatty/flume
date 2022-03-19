@@ -5,7 +5,7 @@ import { NodeEditor } from "node-editor";
 
 const Log = console.log;
 
-export default () => {
+const TestEditor = () => {
   const [output, setOutput] = React.useState();
 
   React.useEffect(() => {
@@ -75,3 +75,5 @@ export default () => {
     </div>
   );
 };
+
+export default TestEditor;

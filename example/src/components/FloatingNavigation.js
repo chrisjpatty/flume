@@ -5,7 +5,7 @@ import FormIcon from "../icons/FormIcon";
 import GearIcon from "../icons/GearIcon";
 import { Portal } from "react-portal";
 
-export default () => {
+const FloatingNavigation = () => {
   const [menuOpen, setMenuOpen] = React.useState();
 
   const openMenu = () => {
@@ -40,6 +40,8 @@ export default () => {
     </React.Fragment>
   );
 };
+
+export default FloatingNavigation;
 
 const HoverLink = ({ to, children, label, style }) => {
   const [showLabel, setShowLabel] = React.useState(false);

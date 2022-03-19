@@ -2,7 +2,7 @@ import React from 'react'
 import fieldTypes from './fieldTypes'
 import { FieldsDispatchContext } from './Form'
 
-export default ({ previewing }) => {
+const Sidebar = ({ previewing }) => {
 
   return (
     <div>
@@ -32,3 +32,6 @@ const FieldButton = ({ label, type }) => {
     <button className="form-sidebar-button" onClick={addField}>{label}</button>
   )
 }
+
+
+export default Sidebar;

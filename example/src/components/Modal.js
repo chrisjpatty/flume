@@ -1,7 +1,7 @@
 import React from 'react'
 import { Portal } from 'react-portal'
 
-export default ({ children, onCloseRequested }) => {
+const Modal = ({ children, onCloseRequested }) => {
 
   return (
     <Portal>
@@ -13,4 +13,6 @@ export default ({ children, onCloseRequested }) => {
       </div>
     </Portal>
   )
-}
+};
+
+export default Modal;

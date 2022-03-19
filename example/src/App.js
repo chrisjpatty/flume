@@ -625,7 +625,7 @@ const App = () => {
           return (
             <Wrapper style={{ display: "flex" }}>
               {nodeType.label}
-              {!nodeType.root ? (
+              {nodeType.type === "employee" ? (
                 <button
                   style={{
                     margin: -4,

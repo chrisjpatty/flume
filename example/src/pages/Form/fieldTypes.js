@@ -46,7 +46,7 @@ const optionsAttribute = {
   type: "options"
 };
 
-export default {
+const fieldTypes = {
   text: {
     type: "text",
     label: "Text Input",
@@ -67,3 +67,5 @@ export default {
     attributes: [...commonAttributes, optionsAttribute]
   }
 };
+
+export default fieldTypes;

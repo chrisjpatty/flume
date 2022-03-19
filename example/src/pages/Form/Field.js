@@ -2,7 +2,7 @@ import React from "react";
 import fieldTypes from "./fieldTypes";
 import { DesignerStateContext, DesignerDispatchContext } from "./Form";
 
-export default ({ field }) => {
+const Field = ({ field }) => {
   const designerState = React.useContext(DesignerStateContext);
   const { ownsLabel } = fieldTypes[field.type];
 
@@ -67,6 +67,8 @@ const FieldWrapper = ({
     </div>
   );
 };
+
+export default Field;
 
 const TextInput = ({ value, disabled }) => (
   <div className="dummy-input" data-disabled={disabled}>

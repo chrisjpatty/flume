@@ -1,4 +1,4 @@
-export default {
+const defaultNodes =  {
   "L9y4-xxI2Q": {
     id: "L9y4-xxI2Q",
     x: 912,
@@ -9,3 +9,5 @@ export default {
     inputData: { label: { text: "" }, visible: {}, disabled: {}, required: {} }
   }
 };
+
+export default defaultNodes
