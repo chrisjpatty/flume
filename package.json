@@ -44,7 +44,7 @@
     "cross-env": "^5.1.4",
     "cypress": "^4.9.0",
     "eslint": "6.x",
-    "eslint-config-react-app": "^5.2.0",
+    "eslint-config-react-app": "^7.0.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-config-standard-react": "^6.0.0",
     "eslint-plugin-flowtype": "3.x",
