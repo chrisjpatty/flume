@@ -50,7 +50,6 @@ describe("<NodeEditor/> Interactions", () => {
       .type(20);
 
     getCurrentNodes(nodes => {
-      console.log(nodes)
       expect(Object.values(nodes).filter(node => node.type === "number" && node.inputData.number.number === 10).length).to.equal(1)
       expect(Object.values(nodes).filter(node => node.type === "number" && node.inputData.number.number === 20).length).to.equal(1)
     })
