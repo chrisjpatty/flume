@@ -1,5 +1,5 @@
 import React from "react";
-import nanoid from "nanoid";
+import { nanoid }from "nanoid";
 
 export default ({ label, value, onChange }) => {
   const id = React.useRef(nanoid(10));
