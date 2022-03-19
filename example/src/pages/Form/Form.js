@@ -37,7 +37,7 @@ const initialDesignerState = {
   wizardLogic: {}
 };
 
-export default () => {
+const Form = () => {
   const location = useLocation();
   const { formId } = useParams();
   const history = useHistory();
@@ -144,7 +144,7 @@ export default () => {
     }else{
       setWizardLoading(false)
     }
-  }, [formId, location]);
+  }, [formId, location, triggerFile]);
 
   return (
     <FieldsContext.Provider value={fields}>
@@ -186,3 +186,5 @@ export default () => {
     </FieldsContext.Provider>
   );
 };
+
+export default Form;

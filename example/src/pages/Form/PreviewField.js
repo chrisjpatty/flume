@@ -3,7 +3,7 @@ import { PreviewFieldsDispatchContext } from "./Form";
 import resolveLogic from './resolveLogic'
 import { nanoid }from "nanoid/non-secure/index";
 
-export default ({ field, fields }) => {
+const PreviewField = ({ field, fields }) => {
   const { label, value, disabled, visible, required } = resolveLogic(field, fields) || {};
   const dispatchPreviewFields = React.useContext(PreviewFieldsDispatchContext);
 
@@ -115,3 +115,5 @@ const Select = ({ value, disabled, onChange, options, required }) => (
     ))}
   </select>
 );
+
+export default PreviewField;

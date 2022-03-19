@@ -1,7 +1,7 @@
-module.exports = {
+const sidebar = {
   someSidebar: {
     Concepts: ["overview", "anatomy", "node-editor", "type-safety", "running-logic", "faq"],
-    "Getting Started": [
+    "Guides": [
       "quick-start",
       "basic-config",
       "root-node",
@@ -17,3 +17,5 @@ module.exports = {
     API: ["NodeEditor", "flume-config", "RootEngine", "controls", "colors"]
   }
 };
+
+module.exports = sidebar

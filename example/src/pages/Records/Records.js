@@ -6,7 +6,7 @@ import { statusOptions } from '../Form/wizardLogic/logicTypes'
 import FloatingNavigation from '../../components/FloatingNavigation'
 import "./Records.css";
 
-export default () => {
+const Records = () => {
   const [records, setRecords] = React.useState([]);
 
   React.useEffect(() => {
@@ -41,6 +41,8 @@ export default () => {
     </div>
   );
 };
+
+export default Records;
 
 const RecordBlock = ({ title, status = "approved", fee = 0 }) => (
   <div className="record-block">

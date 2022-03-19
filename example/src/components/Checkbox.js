@@ -1,7 +1,7 @@
 import React from "react";
 import { nanoid }from "nanoid";
 
-export default ({ label, value, onChange }) => {
+const Checkbox = ({ label, value, onChange }) => {
   const id = React.useRef(nanoid(10));
 
   return (
@@ -18,3 +18,5 @@ export default ({ label, value, onChange }) => {
     </div>
   );
 };
+
+export default Checkbox;

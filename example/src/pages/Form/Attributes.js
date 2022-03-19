@@ -13,7 +13,7 @@ import NodeTypes from "./NodeTypes";
 import { getInputTypes } from "./InputTypes";
 import { NodeTypes as WizardNodeTypes, InputTypes as WizardInputTypes } from './wizardLogic/logicTypes'
 
-export default ({ previewing, editingWizard }) => {
+const AttributesWrapper = ({ previewing, editingWizard }) => {
   const designerState = React.useContext(DesignerStateContext);
   const designerDispatch = React.useContext(DesignerDispatchContext);
   const fields = React.useContext(FieldsContext);
@@ -93,6 +93,8 @@ export default ({ previewing, editingWizard }) => {
     </div>
   );
 };
+
+export default AttributesWrapper
 
 const Attributes = ({ attributes = [], currentField }) => {
   return attributes.map(attr => (

@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "./Modal";
 
-export default ({
+const OptionsEditor = ({
   options: initialOptions,
   onChange,
   isOpen,
@@ -13,7 +13,7 @@ export default ({
     if (isOpen === true) {
       setOptions(initialOptions);
     }
-  }, [isOpen]);
+  }, [isOpen, initialOptions]);
 
   const save = () => {
     onChange(options)
@@ -57,6 +57,8 @@ export default ({
     </Modal>
   ) : null;
 };
+
+export default OptionsEditor;
 
 const OptionRow = ({ value, label, onChange }) => {
   const handleChange = (key, val) => {
