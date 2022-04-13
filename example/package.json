@@ -6,7 +6,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "decode-query-string": "^0.1.2",
     "docz": "^2.3.1",
     "local-storage": "^2.0.0",
