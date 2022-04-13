@@ -56,9 +56,9 @@ const IoPorts = ({
   const resolvedOutputs = useTransputs(outputs, 'output', nodeId, inputData, connections);
   
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} data-flume-component="ports">
       {resolvedInputs.length ? (
-        <div className={styles.inputs}>
+        <div className={styles.inputs} data-flume-component="ports-inputs">
           {resolvedInputs.map(input => (
             <Input
               {...input}
@@ -75,7 +75,7 @@ const IoPorts = ({
         </div>
       ) : null}
       {!!resolvedOutputs.length && (
-        <div className={styles.outputs}>
+        <div className={styles.outputs} data-flume-component="ports-outputs">
           {resolvedOutputs.map(output => (
             <Output
               {...output}
@@ -124,6 +124,7 @@ const Input = ({
 
   return (
     <div
+      data-flume-component="port-input"
       className={styles.transput}
       data-controlless={isConnected || noControls || !controls.length}
       onDragStart={e => {
@@ -142,7 +143,7 @@ const Input = ({
         />
       ) : null}
       {(!controls.length || noControls || isConnected) && (
-        <label className={styles.portLabel}>{label || defaultLabel}</label>
+        <label data-flume-component="port-label" className={styles.portLabel}>{label || defaultLabel}</label>
       )}
       {!noControls && !isConnected
         ? (
@@ -183,6 +184,7 @@ const Output = ({
 
   return (
     <div
+      data-flume-component="port-output"
       className={styles.transput}
       data-controlless={true}
       onDragStart={e => {
@@ -190,7 +192,7 @@ const Output = ({
         e.stopPropagation();
       }}
     >
-      <label className={styles.portLabel}>{label || defaultLabel}</label>
+      <label data-flume-component="port-label" className={styles.portLabel}>{label || defaultLabel}</label>
       <Port
         type={type}
         name={name}
@@ -392,6 +394,7 @@ const Port = ({
         data-port-type={type}
         data-port-transput-type={isInput ? "input" : "output"}
         data-node-id={nodeId}
+        data-flume-component="port-handle"
         onDragStart={e => {
           e.preventDefault();
           e.stopPropagation();

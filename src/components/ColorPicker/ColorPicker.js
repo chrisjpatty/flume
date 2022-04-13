@@ -7,7 +7,7 @@ export default ({ x, y, onColorPicked, onRequestClose }) => {
 
   const testClickOutside = React.useCallback(
     e => {
-      if (!wrapper.current.contains(e.target)) {
+      if (wrapper.current && !wrapper.current.contains(e.target)) {
         onRequestClose();
         document.removeEventListener("click", testClickOutside);
         document.removeEventListener("contextmenu", testClickOutside);
@@ -39,6 +39,7 @@ export default ({ x, y, onColorPicked, onRequestClose }) => {
 
   return (
     <div
+      data-flume-component="color-picker"
       ref={wrapper}
       className={styles.wrapper}
       style={{
@@ -63,6 +64,7 @@ export default ({ x, y, onColorPicked, onRequestClose }) => {
 const ColorButton = ({ color, onSelected }) => (
   <div className={styles.colorButtonWrapper}>
     <button
+      data-flume-component="color-button"
       className={styles.colorButton}
       onClick={onSelected}
       data-color={color}

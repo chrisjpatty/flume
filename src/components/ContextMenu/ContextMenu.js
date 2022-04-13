@@ -127,6 +127,7 @@ const ContextMenu = ({
 
   return (
     <div
+      data-flume-component="ctx-menu"
       className={styles.menuWrapper}
       onMouseDown={e => e.stopPropagation()}
       onKeyDown={handleKeyDown}
@@ -141,10 +142,11 @@ const ContextMenu = ({
       aria-activedescendant={`${menuId.current}-${selectedIndex}`}
     >
       {!hideHeader && (label ? true : !!options.length) ? (
-        <div className={styles.menuHeader}>
-          <label className={styles.menuLabel}>{label}</label>
+        <div className={styles.menuHeader} data-flume-component="ctx-menu-header">
+          <label className={styles.menuLabel} data-flume-component="ctx-menu-title">{label}</label>
           {!hideFilter && options.length ? (
             <input
+              data-flume-component="ctx-menu-input"
               type="text"
               placeholder="Filter options"
               value={filter}
@@ -157,6 +159,7 @@ const ContextMenu = ({
         </div>
       ) : null}
       <div
+        data-flume-component="ctx-menu-list"
         className={styles.optionsWrapper}
         role="menu"
         ref={menuOptionsWrapper}
@@ -176,7 +179,7 @@ const ContextMenu = ({
           </ContextOption>
         ))}
         {!options.length ? (
-          <span className={styles.emptyText}>{emptyText}</span>
+          <span data-flume-component="ctx-menu-empty" className={styles.emptyText}>{emptyText}</span>
         ) : null}
       </div>
     </div>
@@ -193,6 +196,7 @@ const ContextOption = ({
 }) => {
   return (
     <div
+      data-flume-component="ctx-menu-option"
       className={styles.option}
       role="menuitem"
       onClick={onClick}

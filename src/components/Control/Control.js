@@ -95,9 +95,9 @@ const Control = ({
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} data-flume-component="control">
       {calculatedLabel && type !== "checkbox" && type !== "custom" && (
-        <label className={styles.controlLabel}>{calculatedLabel}</label>
+        <label data-flume-component="control-label" className={styles.controlLabel}>{calculatedLabel}</label>
       )}
       {getControlByType(type)}
     </div>
