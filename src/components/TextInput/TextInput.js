@@ -31,9 +31,10 @@ const TextInput = ({
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} data-flume-component="text-input">
       {type === "number" ? (
         <input
+          data-flume-component="text-input-number"
           onKeyDown={e => {
             if(e.keyCode === 69){
               e.preventDefault()
@@ -69,6 +70,7 @@ const TextInput = ({
         />
       ) : (
         <textarea
+          data-flume-component="text-input-textarea"
           onChange={e => onChange(e.target.value)}
           onMouseDown={handlePossibleResize}
           type="text"

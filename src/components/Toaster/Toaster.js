@@ -95,6 +95,7 @@ const Toast = ({
 
   return (
     <div
+      data-flume-component="toast"
       ref={wrapper}
       className={styles.toast}
       data-type={type}
@@ -106,9 +107,9 @@ const Toast = ({
       role="alert"
     >
       {
-        title ? <span className={styles.title}>{title}</span> : null
+        title ? <span data-flume-component="toast-title" className={styles.title}>{title}</span> : null
       }
-      <p>{message}</p>
+      <p data-flume-component="toast-message">{message}</p>
       {!paused && (
         <div
           className={styles.timer}
@@ -116,7 +117,7 @@ const Toast = ({
           onAnimationEnd={e => e.stopPropagation()}
         />
       )}
-      <button className={styles.exitButton} onClick={() => {
+      <button data-flume-component="toast-close" className={styles.exitButton} onClick={() => {
         stopTimer()
         onExitRequested(id)
       }}>✕</button>
