@@ -169,6 +169,7 @@ const Node = ({
       onDragEnd={stopDrag}
       innerRef={nodeWrapper}
       data-node-id={id}
+      data-flume-component="node"
       onContextMenu={handleContextMenu}
       stageState={stageState}
       stageRect={stageRect}
@@ -219,7 +220,7 @@ const Node = ({
 };
 
 const NodeHeader = ({ children, className = "", ...props }) => (
-  <h2 {...props} className={styles.label + (className ? ` ${className}` : "")}>
+  <h2 {...props} className={styles.label + (className ? ` ${className}` : "")} data-flume-component="node-header">
     {children}
   </h2>
 );

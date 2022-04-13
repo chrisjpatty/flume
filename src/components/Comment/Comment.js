@@ -149,9 +149,11 @@ export default ({
       onDoubleClick={startTextEdit}
       onWheel={e => e.stopPropagation()}
       data-color={color}
+      data-flume-component="comment"
     >
       {isEditing ? (
         <textarea
+          data-flume-component="comment-textarea"
           className={styles.textarea}
           onChange={handleTextChange}
           onMouseDown={e => e.stopPropagation()}
@@ -162,7 +164,7 @@ export default ({
           ref={textarea}
         />
       ) : (
-        <div data-comment={true} className={styles.text}>
+        <div data-flume-component="comment-text" data-comment={true} className={styles.text}>
           {text}
         </div>
       )}
@@ -172,6 +174,7 @@ export default ({
         stageRect={stageRect}
         onDrag={handleResize}
         onDragEnd={handleResizeEnd}
+        data-flume-component="comment-resize-handle"
       />
       {menuOpen ? (
         <Portal>

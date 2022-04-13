@@ -214,6 +214,7 @@ const Stage = ({
 
   return (
     <Draggable
+      data-flume-component="stage"
       id={`${STAGE_ID}${editorId}`}
       className={styles.wrapper}
       innerRef={wrapper}
