@@ -8,6 +8,7 @@ const Checkbox = ({ label, data, onChange }) => {
   return (
     <div className={styles.wrapper}>
       <input
+        data-flume-component="checkbox"
         className={styles.checkbox}
         type="checkbox"
         id={id}
@@ -15,7 +16,7 @@ const Checkbox = ({ label, data, onChange }) => {
         checked={data}
         onChange={e => onChange(e.target.checked)}
       />
-      <label className={styles.label} htmlFor={id}>
+      <label data-flume-component="checkbox-label" className={styles.label} htmlFor={id}>
         {label}
       </label>
     </div>

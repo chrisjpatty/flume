@@ -121,9 +121,9 @@ const SelectedOption = ({
   wrapperRef,
   onClick
 }) => (
-  <div className={styles.selectedWrapper} onClick={onClick} ref={wrapperRef}>
-    <label>{label}</label>
-    {description ? <p>{description}</p> : null}
+  <div className={styles.selectedWrapper} onClick={onClick} ref={wrapperRef} data-flume-component="select">
+    <label data-flume-component="select-label">{label}</label>
+    {description ? <p data-flume-component="select-desc">{description}</p> : null}
   </div>
 );
 
