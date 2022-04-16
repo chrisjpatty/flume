@@ -42,7 +42,7 @@ const TextInput = ({
             }
           }}
           onChange={e => {
-            const inputValue = e.target.value.replace(/[^0-9.]+/g, '');
+            const inputValue = e.target.value.replace(/e/g, "");
             if (!!inputValue) {
               const value = parseFloat(inputValue, 10);
               if (Number.isNaN(value)) {
