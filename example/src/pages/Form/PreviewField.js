@@ -1,7 +1,7 @@
 import React from "react";
 import { PreviewFieldsDispatchContext } from "./Form";
 import resolveLogic from './resolveLogic'
-import { nanoid }from "nanoid/non-secure/index";
+import { nanoid }from "nanoid/non-secure";
 
 const PreviewField = ({ field, fields }) => {
   const { label, value, disabled, visible, required } = resolveLogic(field, fields) || {};

@@ -3,7 +3,7 @@ import {
   deleteConnectionsByNodeId
 } from "./connectionCalculator";
 import { checkForCircularNodes } from "./utilities";
-import {nanoid} from "nanoid/non-secure/index";
+import {nanoid} from "nanoid/non-secure";
 
 const addConnection = (nodes, input, output, portTypes) => {
   const newNodes = {

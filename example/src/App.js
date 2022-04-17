@@ -645,7 +645,7 @@ const App = () => {
             </Wrapper>
           );
         }}
-        // debug
+        debug
       />
       <div style={{ marginTop: 30 }}>
         <Website nodes={nodes} />
