@@ -1,19 +1,31 @@
-const define = (value, defaultValue) =>
+import {
+  Control,
+  CustomControl,
+  MultiselectControl,
+  NodeType,
+  NodeTypeConfig,
+  NumberControl,
+  PortType,
+  PortTypeBuilder,
+  PortTypeConfig,
+  SelectControl
+} from "./types";
+const define = (value: any, defaultValue: any) =>
   value !== undefined ? value : defaultValue;
 
-const buildControlType = (
-  defaultConfig,
-  validate = () => {},
-  setup = () => ({})
-) => config => {
-  validate(config);
+const buildControlType = <T extends Control>(
+  defaultConfig: Partial<T>,
+  validate?: (config?: Partial<T>) => void,
+  setup?: (config: Partial<T>) => Partial<T>
+) => (config: Partial<T>) => {
+  validate?.(config);
   return {
     type: defaultConfig.type,
     label: define(config.label, defaultConfig.label || ""),
     name: define(config.name, defaultConfig.name || ""),
     defaultValue: define(config.defaultValue, defaultConfig.defaultValue),
     setValue: define(config.setValue, undefined),
-    ...setup(config)
+    ...(setup?.(config) || {})
   };
 };
 
@@ -23,7 +35,7 @@ export const Controls = {
     name: "text",
     defaultValue: ""
   }),
-  select: buildControlType(
+  select: buildControlType<SelectControl>(
     {
       type: "select",
       name: "select",
@@ -31,20 +43,20 @@ export const Controls = {
       defaultValue: ""
     },
     () => {},
-    config => ({
+    (config: Partial<SelectControl>) => ({
       options: define(config.options, []),
       getOptions: define(config.getOptions, undefined),
       placeholder: define(config.placeholder, undefined)
     })
   ),
-  number: buildControlType(
+  number: buildControlType<NumberControl>(
     {
       type: "number",
       name: "number",
       defaultValue: 0
     },
     () => {},
-    config => ({
+    (config: Partial<NumberControl>) => ({
       step: define(config.step, undefined)
     })
   ),
@@ -53,7 +65,7 @@ export const Controls = {
     name: "checkbox",
     defaultValue: false
   }),
-  multiselect: buildControlType(
+  multiselect: buildControlType<MultiselectControl>(
     {
       type: "multiselect",
       name: "multiselect",
@@ -61,21 +73,21 @@ export const Controls = {
       defaultValue: []
     },
     () => {},
-    config => ({
+    (config: Partial<MultiselectControl>) => ({
       options: define(config.options, []),
       getOptions: define(config.getOptions, undefined),
       placeholder: define(config.placeholder, undefined)
     })
   ),
-  custom: buildControlType(
+  custom: buildControlType<CustomControl>(
     {
       type: "custom",
       name: "custom",
-      render: () => {},
+      render: () => null,
       defaultValue: undefined
     },
     () => {},
-    config => ({
+    (config: Partial<CustomControl>) => ({
       render: define(config.render, () => {})
     })
   )
@@ -92,9 +104,11 @@ export const Colors = {
   grey: "grey"
 };
 
-export const getPortBuilders = ports =>
+export const getPortBuilders = (ports: {
+  [portType: string]: PortType;
+}): { [portType: string]: PortTypeBuilder } =>
   Object.values(ports).reduce((obj, port) => {
-    obj[port.type] = (config = {}) => {
+    obj[port.type] = (config: Partial<PortType> = {}) => {
       return {
         type: port.type,
         name: config.name || port.name,
@@ -109,7 +123,13 @@ export const getPortBuilders = ports =>
   }, {});
 
 export class FlumeConfig {
-  constructor(config) {
+  nodeTypes: { [nodeType: string]: NodeType };
+  portTypes: { [portType: string]: PortType };
+
+  constructor(config?: {
+    nodeTypes: { [nodeType: string]: NodeType };
+    portTypes: { [portType: string]: PortType };
+  }) {
     if (config) {
       this.nodeTypes = { ...config.nodeTypes };
       this.portTypes = { ...config.portTypes };
@@ -118,16 +138,16 @@ export class FlumeConfig {
       this.portTypes = {};
     }
   }
-  addRootNodeType(config) {
+  public addRootNodeType(config: NodeTypeConfig) {
     this.addNodeType({
       ...config,
       root: true,
       addable: false,
       deletable: false
-    })
+    });
     return this;
   }
-  addNodeType(config) {
+  public addNodeType(config: NodeTypeConfig) {
     if (typeof config !== "object" && config !== null) {
       throw new Error(
         "You must provide a configuration object when calling addNodeType."
@@ -151,7 +171,7 @@ export class FlumeConfig {
         `A node with type "${config.type}" has already been declared.`
       );
     }
-    const node = {
+    const node: Partial<NodeType> = {
       type: config.type,
       label: define(config.label, ""),
       description: define(config.description, ""),
@@ -166,7 +186,7 @@ export class FlumeConfig {
     }
     if (typeof config.inputs === "function") {
       const inputs = config.inputs(getPortBuilders(this.portTypes));
-      if (!Array.isArray(inputs) && typeof config.inputs !== 'function') {
+      if (!Array.isArray(inputs) && typeof config.inputs !== "function") {
         throw new Error(
           `When providing a function to the "inputs" key, you must return either an array or a function.`
         );
@@ -182,7 +202,7 @@ export class FlumeConfig {
 
     if (typeof config.outputs === "function") {
       const outputs = config.outputs(getPortBuilders(this.portTypes));
-      if (!Array.isArray(outputs) && typeof config.outputs !== 'function') {
+      if (!Array.isArray(outputs) && typeof config.outputs !== "function") {
         throw new Error(
           `When providing a function to the "outputs" key, you must return either an array or a function.`
         );
@@ -204,10 +224,10 @@ export class FlumeConfig {
       }
     }
 
-    this.nodeTypes[config.type] = node;
+    this.nodeTypes[config.type] = node as NodeType;
     return this;
   }
-  removeNodeType(type) {
+  public removeNodeType(type: string) {
     if (!this.nodeTypes[type]) {
       console.error(`Non-existent node type "${type}" cannot be removed.`);
     } else {
@@ -216,7 +236,7 @@ export class FlumeConfig {
     }
     return this;
   }
-  addPortType(config) {
+  public addPortType(config: PortTypeConfig) {
     if (typeof config !== "object" && config !== null) {
       throw new Error(
         "You must provide a configuration object when calling addPortType"
@@ -238,7 +258,7 @@ export class FlumeConfig {
       );
     }
 
-    const port = {
+    const port: Partial<PortType> = {
       type: config.type,
       name: config.name,
       label: define(config.label, ""),
@@ -262,24 +282,24 @@ export class FlumeConfig {
       port.controls = config.controls;
     }
 
-    this.portTypes[config.type] = port;
+    this.portTypes[config.type] = port as PortType;
     return this;
   }
-  removePortType(type, { skipDynamicNodesCheck = false } = {}) {
+  public removePortType(type: string, { skipDynamicNodesCheck = false } = {}) {
     if (!this.portTypes[type]) {
       console.error(`Non-existent port type "${type}" cannot be removed.`);
     } else {
       if (!skipDynamicNodesCheck) {
         const dynamicNodes = Object.values(this.nodeTypes).filter(
           node =>
-            typeof node.inputs === 'function' ||
-            typeof node.outputs === 'function'
+            typeof node.inputs === "function" ||
+            typeof node.outputs === "function"
         );
         if (dynamicNodes.length) {
           console.warn(
             `We've detected that one or more of your nodes is using dynamic inputs/outputs. This is a potentially dangerous operation as we are unable to detect if this portType is being used in one of those nodes. You can quiet this message by passing { skipDynamicNodesCheck: true } in as the second argument.`
           );
-        }  
+        }
       }
       const affectedNodes = Object.values(this.nodeTypes).filter(
         node =>
@@ -302,3 +322,4 @@ export class FlumeConfig {
     return this;
   }
 }
+

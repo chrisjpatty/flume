@@ -2,56 +2,50 @@ import { ReactNode } from "react";
 
 export type InputData = { [portName: string]: { [controlName: string]: any } };
 
-export type Control = {
+export interface Control {
   type: "text" | "select" | "number" | "checkbox" | "multiselect" | "custom";
   label: string;
   name: string;
   defaultValue: any;
   setValue: (newData: any, oldData: any) => any;
-};
+}
 
-export type TextControl = Control & {
+export interface TextControl extends Control {
   type: "text";
   defaultValue: string;
-};
+}
 
-export type SelectOption = {
+export interface SelectOption {
   label: string;
   value: string;
-};
+}
 
-export type SelectControl = Control & {
+export interface SelectControl extends Control {
   type: "select";
   options: SelectOption[];
   defaultValue: string;
-  getOptions?: (
-    inputData: InputData,
-    context: any
-  ) => SelectOption[];
+  getOptions?: (inputData: InputData, context: any) => SelectOption[];
   placeholder?: string;
-};
+}
 
-export type NumberControl = Control & {
+export interface NumberControl extends Control {
   type: "number";
   defaultValue: number;
   step: number;
-};
+}
 
-export type CheckboxControl = Control & {
+export interface CheckboxControl extends Control {
   type: "checkbox";
   defaultValue: boolean;
-};
+}
 
-export type MultiselectControl = Control & {
+export interface MultiselectControl extends Control {
   type: "multiselect";
   options: SelectOption[];
   defaultValue: string[];
-  getOptions?: (
-    inputData: InputData,
-    context: any
-  ) => SelectOption[];
+  getOptions?: (inputData: InputData, context: any) => SelectOption[];
   placeholder?: string;
-};
+}
 
 export type ControlRenderCallback = (
   data: any,
@@ -62,11 +56,11 @@ export type ControlRenderCallback = (
   inputData: InputData
 ) => ReactNode;
 
-export type CustomControl = Control & {
+export interface CustomControl extends Control {
   type: "custom";
   defaultValue: any;
   render: ControlRenderCallback;
-};
+}
 
 export enum Colors {
   yellow = "yellow",
@@ -79,7 +73,7 @@ export enum Colors {
   grey = "grey"
 }
 
-export type PortType = {
+export interface PortType {
   type: string;
   name: string;
   label: string;
@@ -90,29 +84,42 @@ export type PortType = {
   acceptTypes: string[];
 };
 
-export type NodeType = {
+export type PortTypeBuilder = (config: Partial<PortType>) => PortType;
+
+export interface PortTypeConfig extends Partial<PortType> {
+  type: string;
+}
+
+export interface NodeType {
   id: string;
   type: string;
   label: string;
   description: string;
   addable: boolean;
   deletable: boolean;
-  initialWidth: number;
-  sortIndex: number;
-  root: boolean;
   inputs: PortType[];
   outputs: PortType[];
-};
+  initialWidth?: number;
+  sortIndex?: number;
+  root?: boolean;
+}
+
+export interface NodeTypeConfig
+  extends Omit<Partial<NodeType>, "inputs" | "outputs"> {
+  type: string;
+  inputs?: (ports: { [portType: string]: PortTypeBuilder }) => PortType[];
+  outputs?: (ports: { [portType: string]: PortTypeBuilder }) => PortType[];
+}
 
 export type Connection = {
   nodeId: string;
   portName: string;
-}
+};
 
 export type Connections = {
   inputs: { [portName: string]: Connection[] };
   outputs: { [portName: string]: Connection[] };
-}
+};
 
 export type Node = {
   id: string;
@@ -121,5 +128,5 @@ export type Node = {
   x: number;
   y: number;
   inputData: InputData;
-  connections: Connections
+  connections: Connections;
 };
