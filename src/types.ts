@@ -130,3 +130,15 @@ export type Node = {
   inputData: InputData;
   connections: Connections;
 };
+
+export type ToastTypes = 'danger' | 'info' | 'success' | 'warning';
+
+export type Toast = {
+  id: string;
+  title: string;
+  message: string;
+  type: ToastTypes;
+  duration: number;
+  height: number;
+  exiting: boolean;
+};

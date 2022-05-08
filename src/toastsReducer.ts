@@ -1,6 +1,24 @@
 import { nanoid }from "nanoid/non-secure";
+import { Toast, ToastTypes } from "./types";
 
-export default (toasts = [], action) => {
+export enum ToastActionTypes {
+  ADD_TOAST = "ADD_TOAST",
+  REMOVE_TOAST = "REMOVE_TOAST",
+  SET_HEIGHT = "SET_HEIGHT",
+  SET_EXITING = "SET_EXITING",
+}
+
+export type ToastAction = {
+  type: ToastActionTypes;
+  id: string;
+  title: string;
+  message: string;
+  toastType: ToastTypes;
+  duration: number;
+  height: number;
+}
+
+export default (toasts: Toast[] = [], action: ToastAction) => {
   switch (action.type) {
     case "ADD_TOAST":
       return [
