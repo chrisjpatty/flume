@@ -17,5 +17,5 @@
     "allowSyntheticDefaultImports": true
   },
   "exclude": ["dist"],
-  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "src/*.d.ts"]
 }

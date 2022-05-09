@@ -1,11 +1,18 @@
 import React from "react";
+import { ToastAction, ToastActionTypes } from "../../toastsReducer";
+import { Toast } from "../../types";
 import styles from "./Toaster.css";
 
-export default ({ toasts = [], dispatchToasts }) => {
+type ToasterProps = {
+  toasts: Toast[];
+  dispatchToasts: (action: ToastAction) => void;
+};
+
+export default ({ toasts = [], dispatchToasts }: ToasterProps) => {
   const setHeight = React.useCallback(
-    (id, height) => {
+    (id: string, height: number) => {
       dispatchToasts({
-        type: "SET_HEIGHT",
+        type: ToastActionTypes.SET_HEIGHT,
         id,
         height
       });
@@ -14,9 +21,9 @@ export default ({ toasts = [], dispatchToasts }) => {
   );
 
   const startExit = React.useCallback(
-    id => {
+    (id: string) => {
       dispatchToasts({
-        type: "SET_EXITING",
+        type: ToastActionTypes.SET_EXITING,
         id
       });
     },
@@ -24,9 +31,9 @@ export default ({ toasts = [], dispatchToasts }) => {
   );
 
   const removeToast = React.useCallback(
-    id => {
+    (id: string) => {
       dispatchToasts({
-        type: "REMOVE_TOAST",
+        type: ToastActionTypes.REMOVE_TOAST,
         id
       });
     },
@@ -64,12 +71,14 @@ const Toast = ({
   onRemoveRequested
 }) => {
   const [paused, setPaused] = React.useState(false);
-  const wrapper = React.useRef();
-  const timer = React.useRef();
+  const wrapper = React.useRef<HTMLDivElement>(null);
+  const timer = React.useRef<NodeJS.Timeout>();
 
   const stopTimer = React.useCallback(() => {
     setPaused(true);
-    clearTimeout(timer.current);
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
   }, []);
 
   const resumeTimer = React.useCallback(() => {
@@ -78,8 +87,10 @@ const Toast = ({
   }, [id, duration, onExitRequested]);
 
   React.useLayoutEffect(() => {
-    const { height } = wrapper.current.getBoundingClientRect();
-    onHeightReceived(id, height);
+    if (wrapper.current) {
+      const { height } = wrapper.current.getBoundingClientRect();
+      onHeightReceived(id, height);
+    }
   }, [onHeightReceived, id]);
 
   React.useEffect(() => {
@@ -106,9 +117,11 @@ const Toast = ({
       onMouseLeave={resumeTimer}
       role="alert"
     >
-      {
-        title ? <span data-flume-component="toast-title" className={styles.title}>{title}</span> : null
-      }
+      {title ? (
+        <span data-flume-component="toast-title" className={styles.title}>
+          {title}
+        </span>
+      ) : null}
       <p data-flume-component="toast-message">{message}</p>
       {!paused && (
         <div
@@ -117,10 +130,16 @@ const Toast = ({
           onAnimationEnd={e => e.stopPropagation()}
         />
       )}
-      <button data-flume-component="toast-close" className={styles.exitButton} onClick={() => {
-        stopTimer()
-        onExitRequested(id)
-      }}>✕</button>
+      <button
+        data-flume-component="toast-close"
+        className={styles.exitButton}
+        onClick={() => {
+          stopTimer();
+          onExitRequested(id);
+        }}
+      >
+        ✕
+      </button>
     </div>
   );
 };
