@@ -1,7 +1,7 @@
 import { Connections, PortType } from "./types";
 
-class Cache{
-  ports: { [portType: string]: PortType };
+class FlumeCache{
+  ports: { [portType: string]: Element };
   connections: {[id: string]: Connections};
 
   constructor(){
@@ -9,4 +9,4 @@ class Cache{
     this.connections = {};
   }
 }
-export default Cache
+export default FlumeCache

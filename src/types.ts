@@ -90,6 +90,8 @@ export interface PortTypeConfig extends Partial<PortType> {
   type: string;
 }
 
+export type TransputType = "input" | "output";
+
 export interface NodeType {
   id: string;
   type: string;
@@ -155,6 +157,11 @@ export type FlumeComment = {
 }
 
 export type StageTranslate = {
+  x: number;
+  y: number;
+}
+
+export type Coordinate = {
   x: number;
   y: number;
 }
