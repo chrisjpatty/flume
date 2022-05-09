@@ -46,6 +46,7 @@
     "@testing-library/react": "^10.4.3",
     "@types/d3-shape": "^3.0.2",
     "@types/react": "^18.0.5",
+    "@types/react-portal": "^4.0.4",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
     "babel-eslint": "10.x",
