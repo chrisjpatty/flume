@@ -1,7 +1,20 @@
 import React from "react";
 import styles from "./ContextMenu.css";
 import clamp from "lodash/clamp";
-import { nanoid }from "nanoid/non-secure";
+import { nanoid } from "nanoid/non-secure";
+import { SelectOption } from "../../types";
+
+interface ContextMenuProps {
+  x: number;
+  y: number;
+  options: SelectOption[];
+  onRequestClose: () => void;
+  onOptionSelected: (option: SelectOption) => void;
+  label?: string;
+  hideHeader?: boolean;
+  hideFilter?: boolean;
+  emptyText?: string;
+}
 
 const ContextMenu = ({
   x,
@@ -13,33 +26,40 @@ const ContextMenu = ({
   hideHeader,
   hideFilter,
   emptyText
-}) => {
-  const menuWrapper = React.useRef();
-  const menuOptionsWrapper = React.useRef();
-  const filterInput = React.useRef();
+}: ContextMenuProps) => {
+  const menuWrapper = React.useRef<HTMLDivElement>(null);
+  const menuOptionsWrapper = React.useRef<HTMLDivElement>(null);
+  const filterInput = React.useRef<HTMLInputElement>(null);
   const [filter, setFilter] = React.useState("");
   const [menuWidth, setMenuWidth] = React.useState(0);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState<number | null>(0);
   const menuId = React.useRef(nanoid(10));
 
-  const handleOptionSelected = option => {
+  const handleOptionSelected = (option: SelectOption) => {
     onOptionSelected(option);
     onRequestClose();
   };
 
   const testClickOutside = React.useCallback(
-    e => {
-      if (menuWrapper.current && !menuWrapper.current.contains(e.target)) {
+    (e: MouseEvent) => {
+      if (
+        menuWrapper.current &&
+        !menuWrapper.current.contains(e.target as Element)
+      ) {
         onRequestClose();
-        document.removeEventListener("click", testClickOutside, { capture: true });
-        document.removeEventListener("contextmenu", testClickOutside, { capture: true });
+        document.removeEventListener("click", testClickOutside, {
+          capture: true
+        });
+        document.removeEventListener("contextmenu", testClickOutside, {
+          capture: true
+        });
       }
     },
     [menuWrapper, onRequestClose]
   );
 
   const testEscape = React.useCallback(
-    e => {
+    (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
         onRequestClose();
         document.removeEventListener("keydown", testEscape, { capture: true });
@@ -52,13 +72,19 @@ const ContextMenu = ({
     if (filterInput.current) {
       filterInput.current.focus();
     }
-    setMenuWidth(menuWrapper.current.getBoundingClientRect().width);
+    setMenuWidth(menuWrapper.current?.getBoundingClientRect()?.width ?? 0);
     document.addEventListener("keydown", testEscape, { capture: true });
     document.addEventListener("click", testClickOutside, { capture: true });
-    document.addEventListener("contextmenu", testClickOutside, { capture: true });
+    document.addEventListener("contextmenu", testClickOutside, {
+      capture: true
+    });
     return () => {
-      document.removeEventListener("click", testClickOutside, { capture: true });
-      document.removeEventListener("contextmenu", testClickOutside, { capture: true });
+      document.removeEventListener("click", testClickOutside, {
+        capture: true
+      });
+      document.removeEventListener("contextmenu", testClickOutside, {
+        capture: true
+      });
       document.removeEventListener("keydown", testEscape, { capture: true });
     };
   }, [testClickOutside, testEscape]);
@@ -75,14 +101,14 @@ const ContextMenu = ({
     setSelectedIndex(0);
   };
 
-  const handleKeyDown = e => {
+  const handleKeyDown: React.KeyboardEventHandler = e => {
     // Up pressed
     if (e.which === 38) {
       e.preventDefault();
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex > 0) {
-        setSelectedIndex(i => i - 1);
+        setSelectedIndex(i => (i || 0) - 1);
       }
     }
     // Down pressed
@@ -91,7 +117,7 @@ const ContextMenu = ({
       if (selectedIndex === null) {
         setSelectedIndex(0);
       } else if (selectedIndex < filteredOptions.length - 1) {
-        setSelectedIndex(i => i + 1);
+        setSelectedIndex(i => (i || 0) + 1);
       }
     }
     // Enter pressed
@@ -105,7 +131,7 @@ const ContextMenu = ({
 
   React.useEffect(() => {
     if (hideFilter || hideHeader) {
-      menuWrapper.current.focus();
+      menuWrapper.current?.focus();
     }
   }, [hideFilter, hideHeader]);
 
@@ -114,11 +140,12 @@ const ContextMenu = ({
       `${menuId.current}-${selectedIndex}`
     );
     if (menuOption) {
-      const menuRect = menuOptionsWrapper.current.getBoundingClientRect();
+      const menuRect = menuOptionsWrapper.current?.getBoundingClientRect();
       const optionRect = menuOption.getBoundingClientRect();
       if (
-        optionRect.y + optionRect.height > menuRect.y + menuRect.height ||
-        optionRect.y < menuRect.y
+        menuRect &&
+        (optionRect.y + optionRect.height > menuRect.y + menuRect.height ||
+          optionRect.y < menuRect.y)
       ) {
         menuOption.scrollIntoView({ block: "nearest" });
       }
@@ -142,8 +169,16 @@ const ContextMenu = ({
       aria-activedescendant={`${menuId.current}-${selectedIndex}`}
     >
       {!hideHeader && (label ? true : !!options.length) ? (
-        <div className={styles.menuHeader} data-flume-component="ctx-menu-header">
-          <label className={styles.menuLabel} data-flume-component="ctx-menu-title">{label}</label>
+        <div
+          className={styles.menuHeader}
+          data-flume-component="ctx-menu-header"
+        >
+          <label
+            className={styles.menuLabel}
+            data-flume-component="ctx-menu-title"
+          >
+            {label}
+          </label>
           {!hideFilter && options.length ? (
             <input
               data-flume-component="ctx-menu-input"
@@ -179,7 +214,12 @@ const ContextMenu = ({
           </ContextOption>
         ))}
         {!options.length ? (
-          <span data-flume-component="ctx-menu-empty" className={styles.emptyText}>{emptyText}</span>
+          <span
+            data-flume-component="ctx-menu-empty"
+            className={styles.emptyText}
+          >
+            {emptyText}
+          </span>
         ) : null}
       </div>
     </div>

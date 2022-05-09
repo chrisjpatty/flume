@@ -18,6 +18,7 @@ export interface TextControl extends Control {
 export interface SelectOption {
   label: string;
   value: string;
+  description?: string;
 }
 
 export interface SelectControl extends Control {
