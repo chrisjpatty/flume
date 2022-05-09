@@ -1,6 +1,18 @@
 import React from "react";
-import {calculateCurve} from '../../connectionCalculator'
+import { calculateCurve } from "../../connectionCalculator";
+import { Coordinate } from "../../types";
 import styles from "./Connection.css";
+
+interface ConnectionProps {
+  from: Coordinate;
+  to: Coordinate;
+  id: string;
+  lineRef: React.Ref<SVGPathElement>;
+  outputNodeId: string;
+  outputPortName: string;
+  inputNodeId: string;
+  inputPortName: string;
+}
 
 const Connection = ({
   from,
@@ -11,8 +23,8 @@ const Connection = ({
   outputPortName,
   inputNodeId,
   inputPortName
-}) => {
-  const curve = calculateCurve(from, to)
+}: ConnectionProps) => {
+  const curve = calculateCurve(from, to);
   return (
     <svg className={styles.svg} data-flume-component="connection-svg">
       <path
