@@ -142,3 +142,19 @@ export type Toast = {
   height: number;
   exiting: boolean;
 };
+
+export type FlumeComment = {
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: Colors;
+  isNew: boolean;
+}
+
+export type StageTranslate = {
+  x: number;
+  y: number;
+}
