@@ -165,3 +165,8 @@ export type Coordinate = {
   x: number;
   y: number;
 }
+
+export type StageState = {
+  scale: number;
+  translate: StageTranslate;
+}
