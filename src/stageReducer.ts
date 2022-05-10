@@ -1,6 +1,6 @@
 import { StageTranslate } from "./types";
 
-type StageState = {
+export interface StageState {
   translate: StageTranslate;
   scale: number;
 };

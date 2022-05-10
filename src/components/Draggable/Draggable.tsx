@@ -1,19 +1,24 @@
-import React, { MutableRefObject, RefObject } from "react";
+import React, { MouseEventHandler, MutableRefObject, RefObject, WheelEventHandler } from "react";
 import { Coordinate, StageState } from "../../types";
 
 interface DraggableProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   stageState: StageState;
   stageRect: RefObject<DOMRect>;
-  onDragDelayStart: (event: React.MouseEvent | React.TouchEvent) => void;
-  onDragStart: (event: React.MouseEvent | React.TouchEvent) => void;
-  onDrag: (coordinates: Coordinate, event: MouseEvent) => void;
-  onDragEnd: (event: MouseEvent, coordinate: Coordinate) => void;
-  onMouseDown: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  onTouchStart: (event: React.TouchEvent<HTMLDivElement>) => void;
+  onDragDelayStart?: (event: React.MouseEvent | React.TouchEvent) => void;
+  onDragStart?: (event: React.MouseEvent | React.TouchEvent) => void;
+  onDrag?: (coordinates: Coordinate, event: MouseEvent) => void;
+  onDragEnd?: (event: MouseEvent, coordinate: Coordinate) => void;
+  onMouseDown?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onTouchStart?: (event: React.TouchEvent<HTMLDivElement>) => void;
   disabled?: boolean;
   delay?: number;
   innerRef?: MutableRefObject<HTMLDivElement | null>;
+  className?: string;
+  style?: React.CSSProperties;
+  onContextMenu?: MouseEventHandler<HTMLDivElement>;
+  onDoubleClick?: MouseEventHandler<HTMLDivElement>;
+  onWheel?: WheelEventHandler<HTMLDivElement>;
 }
 
 const Draggable = ({

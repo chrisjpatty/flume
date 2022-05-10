@@ -73,16 +73,15 @@ export interface CustomControl extends Control {
   render: ControlRenderCallback;
 }
 
-export enum Colors {
-  yellow = "yellow",
-  orange = "orange",
-  red = "red",
-  pink = "pink",
-  purple = "purple",
-  blue = "blue",
-  green = "green",
-  grey = "grey"
-}
+export type Colors =
+  | "yellow"
+  | "orange"
+  | "red"
+  | "pink"
+  | "purple"
+  | "blue"
+  | "green"
+  | "grey";
 
 export interface PortType {
   type: string;

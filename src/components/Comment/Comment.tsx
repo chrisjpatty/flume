@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEventHandler, RefObject } from "react";
 import styles from "./Comment.css";
 import Draggable from "../Draggable/Draggable";
 import ContextMenu from "../ContextMenu/ContextMenu";
@@ -6,6 +6,22 @@ import ColorPicker from "../ColorPicker/ColorPicker";
 import { StageContext } from "../../context";
 import { Portal } from "react-portal";
 import clamp from "lodash/clamp";
+import { Colors, Coordinate, SelectOption, StageState } from "../../types";
+import { CommentAction, CommentActionTypes } from "../../commentsReducer";
+
+interface CommentProps {
+  dispatch: React.Dispatch<CommentAction>;
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: Colors;
+  text: string;
+  stageRect: RefObject<DOMRect>;
+  onDragStart: () => void;
+  isNew: boolean;
+}
 
 export default ({
   dispatch,
@@ -19,10 +35,10 @@ export default ({
   stageRect,
   onDragStart,
   isNew
-}) => {
-  const stageState = React.useContext(StageContext);
-  const wrapper = React.useRef();
-  const textarea = React.useRef();
+}: CommentProps) => {
+  const stageState = React.useContext(StageContext) as StageState;
+  const wrapper = React.useRef<HTMLDivElement>(null);
+  const textarea = React.useRef<HTMLTextAreaElement>(null);
   const [isEditing, setIsEditing] = React.useState(false);
   const [isPickingColor, setIsPickingColor] = React.useState(false);
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -32,7 +48,7 @@ export default ({
     y: 0
   });
 
-  const handleContextMenu = e => {
+  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = e => {
     e.preventDefault();
     e.stopPropagation();
     setMenuCoordinates({ x: e.clientX, y: e.clientY });
@@ -42,42 +58,46 @@ export default ({
 
   const closeContextMenu = () => setMenuOpen(false);
 
-  const startDrag = e => {
+  const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
     onDragStart();
   };
 
-  const handleDrag = ({ x, y }) => {
-    wrapper.current.style.transform = `translate(${x}px,${y}px)`;
+  const handleDrag = ({ x, y }: Coordinate) => {
+    if (wrapper.current) {
+      wrapper.current.style.transform = `translate(${x}px,${y}px)`;
+    }
   };
 
-  const handleDragEnd = (_, { x, y }) => {
+  const handleDragEnd = (e: MouseEvent, { x, y }) => {
     dispatch({
-      type: "SET_COMMENT_COORDINATES",
+      type: CommentActionTypes.SET_COMMENT_COORDINATES,
       id,
       x,
       y
     });
   };
 
-  const handleResize = coordinates => {
+  const handleResize = (coordinates: Coordinate) => {
     const width = clamp(coordinates.x - x + 10, 80, 10000);
     const height = clamp(coordinates.y - y + 10, 30, 10000);
-    wrapper.current.style.width = `${width}px`;
-    wrapper.current.style.height = `${height}px`;
+    if (wrapper.current) {
+      wrapper.current.style.width = `${width}px`;
+      wrapper.current.style.height = `${height}px`;
+    }
   };
 
-  const handleResizeEnd = (_, coordinates) => {
+  const handleResizeEnd = (e: MouseEvent, coordinates: Coordinate) => {
     const width = clamp(coordinates.x - x + 10, 80, 10000);
     const height = clamp(coordinates.y - y + 10, 30, 10000);
     dispatch({
-      type: "SET_COMMENT_DIMENSIONS",
+      type: CommentActionTypes.SET_COMMENT_DIMENSIONS,
       id,
       width,
       height
     });
   };
 
-  const handleMenuOption = (option, e) => {
+  const handleMenuOption = (option: SelectOption) => {
     switch (option.value) {
       case "edit":
         startTextEdit();
@@ -88,7 +108,7 @@ export default ({
         break;
       case "delete":
         dispatch({
-          type: "DELETE_COMMENT",
+          type: CommentActionTypes.DELETE_COMMENT,
           id
         });
         break;
@@ -104,9 +124,9 @@ export default ({
     setIsEditing(false);
   };
 
-  const handleTextChange = e => {
+  const handleTextChange: ChangeEventHandler<HTMLTextAreaElement> = e => {
     dispatch({
-      type: "SET_COMMENT_TEXT",
+      type: CommentActionTypes.SET_COMMENT_TEXT,
       id,
       text: e.target.value
     });
@@ -114,7 +134,7 @@ export default ({
 
   const handleColorPicked = color => {
     dispatch({
-      type: "SET_COMMENT_COLOR",
+      type: CommentActionTypes.SET_COMMENT_COLOR,
       id,
       color
     });
@@ -124,7 +144,7 @@ export default ({
     if (isNew) {
       setIsEditing(true);
       dispatch({
-        type: "REMOVE_COMMENT_NEW",
+        type: CommentActionTypes.REMOVE_COMMENT_NEW,
         id
       });
     }
@@ -164,7 +184,11 @@ export default ({
           ref={textarea}
         />
       ) : (
-        <div data-flume-component="comment-text" data-comment={true} className={styles.text}>
+        <div
+          data-flume-component="comment-text"
+          data-comment={true}
+          className={styles.text}
+        >
           {text}
         </div>
       )}
