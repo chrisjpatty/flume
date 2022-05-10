@@ -1,7 +1,7 @@
 import styles from "./components/Connection/Connection.css";
 import { CONNECTIONS_ID } from "./constants";
 import { line, curveBasis } from "d3-shape";
-import { Coordinate, Node, TransputType } from "./types";
+import { Coordinate, FlumeNode, TransputType } from "./types";
 import FlumeCache from "./Cache";
 import { RefObject } from "react";
 
@@ -41,7 +41,7 @@ export const getPortRect = (
 };
 
 export const getPortRectsByNodes = (
-  nodes: { [nodeId: string]: Node },
+  nodes: { [nodeId: string]: FlumeNode },
   forEachConnection
 ) =>
   Object.values(nodes).reduce((obj, node) => {
@@ -156,7 +156,7 @@ export const getStageRef = (editorId: string) =>
   ) as HTMLDivElement | null;
 
 export const createConnections = (
-  nodes: { [nodeId: string]: Node },
+  nodes: { [nodeId: string]: FlumeNode },
   { scale, stageId }: { scale: number; stageId: string },
   editorId: string
 ) => {

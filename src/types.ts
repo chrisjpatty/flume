@@ -2,12 +2,22 @@ import { ReactNode } from "react";
 
 export type InputData = { [portName: string]: { [controlName: string]: any } };
 
+export type ControlTypes =
+  | "text"
+  | "number"
+  | "select"
+  | "checkbox"
+  | "multiselect"
+  | "custom";
+
+export type ValueSetter = (newData: any, oldData: any) => any;
+
 export interface Control {
-  type: "text" | "select" | "number" | "checkbox" | "multiselect" | "custom";
+  type: ControlTypes;
   label: string;
   name: string;
   defaultValue: any;
-  setValue: (newData: any, oldData: any) => any;
+  setValue: ValueSetter;
 }
 
 export interface TextControl extends Control {
@@ -83,7 +93,9 @@ export interface PortType {
   hidePort: boolean;
   controls: Control[];
   acceptTypes: string[];
-};
+}
+
+export type PortTypeMap = { [portType: string]: PortType };
 
 export type PortTypeBuilder = (config: Partial<PortType>) => PortType;
 
@@ -93,6 +105,12 @@ export interface PortTypeConfig extends Partial<PortType> {
 
 export type TransputType = "input" | "output";
 
+export type TransputBuilder = (
+  inputData: InputData,
+  connections: Connections,
+  context: any
+) => PortType[];
+
 export interface NodeType {
   id: string;
   type: string;
@@ -100,12 +118,14 @@ export interface NodeType {
   description: string;
   addable: boolean;
   deletable: boolean;
-  inputs: PortType[];
-  outputs: PortType[];
+  inputs: PortType[] | TransputBuilder;
+  outputs: PortType[] | TransputBuilder;
   initialWidth?: number;
   sortIndex?: number;
   root?: boolean;
 }
+
+export type NodeTypeMap = { [nodeType: string]: NodeType };
 
 export interface NodeTypeConfig
   extends Omit<Partial<NodeType>, "inputs" | "outputs"> {
@@ -119,12 +139,14 @@ export type Connection = {
   portName: string;
 };
 
+export type ConnectionMap = { [portName: string]: Connection[] };
+
 export type Connections = {
-  inputs: { [portName: string]: Connection[] };
-  outputs: { [portName: string]: Connection[] };
+  inputs: ConnectionMap;
+  outputs: ConnectionMap;
 };
 
-export type Node = {
+export type FlumeNode = {
   id: string;
   type: string;
   width: number;
@@ -132,9 +154,19 @@ export type Node = {
   y: number;
   inputData: InputData;
   connections: Connections;
+  defaultNode?: boolean;
+  root?: boolean;
 };
 
-export type ToastTypes = 'danger' | 'info' | 'success' | 'warning';
+export type DefaultNode = {
+  type: string;
+  x?: number;
+  y?: number;
+};
+
+export type NodeMap = { [nodeId: string]: FlumeNode };
+
+export type ToastTypes = "danger" | "info" | "success" | "warning";
 
 export type Toast = {
   id: string;
@@ -155,19 +187,21 @@ export type FlumeComment = {
   height: number;
   color: Colors;
   isNew: boolean;
-}
+};
 
 export type StageTranslate = {
   x: number;
   y: number;
-}
+};
 
 export type Coordinate = {
   x: number;
   y: number;
-}
+};
 
 export type StageState = {
   scale: number;
   translate: StageTranslate;
-}
+};
+
+export type CircularBehavior = "prevent" | "warn" | "allow";

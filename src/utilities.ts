@@ -1,7 +1,7 @@
-import { Node } from "./types";
+import { FlumeNode } from "./types";
 
 export const checkForCircularNodes = (
-  nodes: { [nodeId: string]: Node },
+  nodes: { [nodeId: string]: FlumeNode },
   startNodeId: string
 ) => {
   let isCircular = false;

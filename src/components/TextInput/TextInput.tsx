@@ -2,6 +2,15 @@ import React from "react";
 import styles from "./TextInput.css";
 import { RecalculateStageRectContext } from "../../context";
 
+interface TextInputProps {
+  placeholder?: string;
+  updateNodeConnections: () => void;
+  onChange: (value: string | number) => void;
+  data: string | number;
+  step?: number;
+  type?: "number" | "text";
+}
+
 const TextInput = ({
   placeholder,
   updateNodeConnections,
@@ -9,7 +18,7 @@ const TextInput = ({
   data,
   step,
   type
-}) => {
+}: TextInputProps) => {
   const numberInput = React.useRef<HTMLInputElement>(null);
   const recalculateStageRect = React.useContext(RecalculateStageRectContext);
 

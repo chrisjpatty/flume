@@ -8,7 +8,7 @@ import { SelectOption } from "../../types";
 const MAX_LABEL_LENGTH = 50;
 
 interface SelectProps {
-  allowMultiple?: false;
+  allowMultiple?: boolean;
   data: string | string[];
   onChange: (data: string | string[]) => void;
   options: SelectOption[];
