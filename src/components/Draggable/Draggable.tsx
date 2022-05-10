@@ -1,10 +1,9 @@
-import React, { MouseEventHandler, MutableRefObject, RefObject, WheelEventHandler } from "react";
+import React, { HTMLProps, MutableRefObject, RefObject } from "react";
 import { Coordinate, StageState } from "../../types";
 
-interface DraggableProps {
-  children?: React.ReactNode;
+type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & {
   stageState: StageState;
-  stageRect: RefObject<DOMRect>;
+  stageRect?: RefObject<DOMRect>;
   onDragDelayStart?: (event: React.MouseEvent | React.TouchEvent) => void;
   onDragStart?: (event: React.MouseEvent | React.TouchEvent) => void;
   onDrag?: (coordinates: Coordinate, event: MouseEvent) => void;
@@ -14,12 +13,8 @@ interface DraggableProps {
   disabled?: boolean;
   delay?: number;
   innerRef?: MutableRefObject<HTMLDivElement | null>;
-  className?: string;
-  style?: React.CSSProperties;
-  onContextMenu?: MouseEventHandler<HTMLDivElement>;
-  onDoubleClick?: MouseEventHandler<HTMLDivElement>;
-  onWheel?: WheelEventHandler<HTMLDivElement>;
-}
+  id?: string;
+};
 
 const Draggable = ({
   children,
@@ -131,8 +126,7 @@ const Draggable = ({
       onDragDelayStart(e);
     }
     e.stopPropagation();
-    let x;
-    let y;
+    let x: number, y: number;
     if ("ontouchstart" in window && (e as React.TouchEvent).touches) {
       const touch = (e as React.TouchEvent).touches[0];
       x = touch.clientX;

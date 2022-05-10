@@ -3,15 +3,15 @@ import { StageTranslate } from "./types";
 export interface StageState {
   translate: StageTranslate;
   scale: number;
-};
+}
 
-enum StageActionType {
+export enum StageActionType {
   SET_SCALE = "SET_SCALE",
   SET_TRANSLATE = "SET_TRANSLATE",
   SET_TRANSLATE_SCALE = "SET_TRANSLATE_SCALE"
 }
 
-type StageAction =
+export type StageAction =
   | {
       type: StageActionType.SET_SCALE;
       scale: number;
@@ -26,7 +26,7 @@ type StageAction =
       scale: number;
     };
 
-type StageActionSetter = StageAction | ((state: StageState) => StageAction);
+export type StageActionSetter = StageAction | ((state: StageState) => StageAction);
 
 export default (state: StageState, incomingAction: StageActionSetter) => {
   let action =
