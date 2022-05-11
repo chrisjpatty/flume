@@ -1,4 +1,5 @@
 import {
+  Colors as ColorsType,
   Control,
   CustomControl,
   MultiselectControl,
@@ -93,7 +94,7 @@ export const Controls = {
   )
 };
 
-export const Colors = {
+export const Colors: { [key: string]: ColorsType } = {
   yellow: "yellow",
   orange: "orange",
   red: "red",
@@ -322,4 +323,3 @@ export class FlumeConfig {
     return this;
   }
 }
-

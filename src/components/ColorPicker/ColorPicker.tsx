@@ -1,13 +1,21 @@
 import React from "react";
 import styles from "./ColorPicker.css";
 import { Colors } from "../../typeBuilders";
+import { Colors as ColorsType } from "../../types";
 
-export default ({ x, y, onColorPicked, onRequestClose }) => {
-  const wrapper = React.useRef();
+interface ColorPickerProps {
+  x: number;
+  y: number;
+  onColorPicked: (color: ColorsType) => void;
+  onRequestClose: () => void;
+}
+
+export default ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
+  const wrapper = React.useRef<HTMLDivElement>(null);
 
   const testClickOutside = React.useCallback(
-    e => {
-      if (wrapper.current && !wrapper.current.contains(e.target)) {
+    (e: MouseEvent) => {
+      if (wrapper.current && !wrapper.current.contains(e.target as Node)) {
         onRequestClose();
         document.removeEventListener("click", testClickOutside);
         document.removeEventListener("contextmenu", testClickOutside);
@@ -17,7 +25,7 @@ export default ({ x, y, onColorPicked, onRequestClose }) => {
   );
 
   const testEscape = React.useCallback(
-    e => {
+    (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
         onRequestClose();
         document.removeEventListener("keydown", testEscape);
@@ -47,21 +55,30 @@ export default ({ x, y, onColorPicked, onRequestClose }) => {
         top: y
       }}
     >
-      {Object.values(Colors).map(color => (
-        <ColorButton
-          onSelected={() => {
-            onColorPicked(color);
-            onRequestClose();
-          }}
-          color={color}
-          key={color}
-        />
-      ))}
+      {Object.values(Colors).map(colorString => {
+        const color = colorString as ColorsType;
+        return (
+          <ColorButton
+            onSelected={() => {
+              onColorPicked(color);
+              onRequestClose();
+            }}
+            color={color}
+            key={color}
+          />
+        );
+      })}
     </div>
   );
 };
 
-const ColorButton = ({ color, onSelected }) => (
+const ColorButton = ({
+  color,
+  onSelected
+}: {
+  color: ColorsType;
+  onSelected: () => void;
+}) => (
   <div className={styles.colorButtonWrapper}>
     <button
       data-flume-component="color-button"
