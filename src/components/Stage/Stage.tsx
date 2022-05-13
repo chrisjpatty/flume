@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import styles from "./Stage.css";
 import { Portal } from "react-portal";
 import ContextMenu from "../ContextMenu/ContextMenu";
@@ -79,9 +79,10 @@ const Stage = ({
   }, [stageRef, setStageRect]);
 
   const handleWheel = React.useCallback(
-    e => {
-      if (e.target.nodeName === "TEXTAREA" || e.target.dataset.comment) {
-        if (e.target.clientHeight < e.target.scrollHeight) return;
+    (e: WheelEvent) => {
+      const wheelTarget = e.target as HTMLElement;
+      if (wheelTarget.nodeName === "TEXTAREA" || wheelTarget.dataset.comment) {
+        if (wheelTarget.clientHeight < wheelTarget.scrollHeight) return;
       }
       e.preventDefault();
       if (numNodes === 0) return;
@@ -147,11 +148,12 @@ const Stage = ({
     [dispatchStageState, numNodes]
   );
 
-  const handleDragDelayStart = e => {
+  const handleDragDelayStart = () => {
     wrapper.current?.focus();
   };
 
-  const handleDragStart = e => {
+  const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
+    const e = event as React.MouseEvent;
     e.preventDefault();
     dragData.current = {
       x: e.clientX,
@@ -174,7 +176,7 @@ const Stage = ({
     }
   };
 
-  const handleDragEnd = e => {
+  const handleDragEnd = (e: MouseEvent) => {
     const xDistance = dragData.current.x - e.clientX;
     const yDistance = dragData.current.y - e.clientY;
     dragData.current.x = e.clientX;
@@ -188,7 +190,7 @@ const Stage = ({
     }));
   };
 
-  const handleContextMenu = e => {
+  const handleContextMenu: MouseEventHandler = e => {
     e.preventDefault();
     setMenuCoordinates({ x: e.clientX, y: e.clientY });
     setMenuOpen(true);
@@ -228,14 +230,14 @@ const Stage = ({
     }
   };
 
-  const handleDocumentKeyUp = e => {
+  const handleDocumentKeyUp = (e: KeyboardEvent) => {
     if (e.which === 32) {
       setSpaceIsPressed(false);
       document.removeEventListener("keyup", handleDocumentKeyUp);
     }
   };
 
-  const handleKeyDown = e => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.which === 32 && document.activeElement === wrapper.current) {
       e.preventDefault();
       e.stopPropagation();
