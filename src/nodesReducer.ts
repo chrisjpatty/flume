@@ -15,6 +15,7 @@ import {
   NodeType,
   NodeTypeMap,
   PortTypeMap,
+  Toast,
   TransputType,
   ValueSetter
 } from "./types";
@@ -335,7 +336,7 @@ const nodesReducer = (
   nodes: NodeMap,
   action: NodesAction,
   { nodeTypes, portTypes, cache, circularBehavior, context }: FlumeEnvironment,
-  dispatchToasts?: React.Dispatch<ToastAction>
+  dispatchToasts?: React.Dispatch<React.SetStateAction<ToastAction | undefined>>
 ) => {
   switch (action.type) {
     case NodesActionType.ADD_CONNECTION: {
@@ -494,7 +495,7 @@ const nodesReducer = (
 export const connectNodesReducer = (
   reducer: typeof nodesReducer,
   environment: FlumeEnvironment,
-  dispatchToasts: React.Dispatch<ToastAction>
+  dispatchToasts: React.Dispatch<React.SetStateAction<ToastAction | undefined>>
 ) => (state: NodeMap, action: NodesAction) =>
   reducer(state, action, environment, dispatchToasts);
 

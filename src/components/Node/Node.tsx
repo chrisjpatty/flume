@@ -11,7 +11,14 @@ import { Portal } from "react-portal";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import IoPorts from "../IoPorts/IoPorts";
 import Draggable from "../Draggable/Draggable";
-import { ConnectionMap, Connections, Coordinate, InputData, NodeHeaderRenderCallback, SelectOption } from "../../types";
+import {
+  ConnectionMap,
+  Connections,
+  Coordinate,
+  InputData,
+  NodeHeaderRenderCallback,
+  SelectOption
+} from "../../types";
 import { NodesActionType } from "../../nodesReducer";
 
 interface NodeProps {
@@ -19,12 +26,12 @@ interface NodeProps {
   width: number;
   x: number;
   y: number;
-  stageRect: React.MutableRefObject<DOMRect>;
+  stageRect: React.MutableRefObject<DOMRect | undefined>;
   connections: Connections;
   type: string;
   inputData: InputData;
   onDragStart: () => void;
-  renderNodeHeader: NodeHeaderRenderCallback;
+  renderNodeHeader?: NodeHeaderRenderCallback;
 }
 
 const Node = ({
@@ -42,7 +49,10 @@ const Node = ({
   const cache = React.useContext(CacheContext) ?? undefined;
   const nodeTypes = React.useContext(NodeTypesContext) ?? {};
   const nodesDispatch = React.useContext(NodeDispatchContext);
-  const stageState = React.useContext(StageContext) ?? { scale: 0, translate: { x: 0, y: 0 } };
+  const stageState = React.useContext(StageContext) ?? {
+    scale: 0,
+    translate: { x: 0, y: 0 }
+  };
   const currentNodeType = nodeTypes[type];
   const { label, deletable, inputs = [], outputs = [] } = currentNodeType;
 
@@ -52,7 +62,10 @@ const Node = ({
 
   const byScale = (value: number) => (1 / stageState.scale) * value;
 
-  const updateConnectionsByTransput = (transput: ConnectionMap = {}, isOutput?: boolean) => {
+  const updateConnectionsByTransput = (
+    transput: ConnectionMap = {},
+    isOutput?: boolean
+  ) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
       outputs.forEach(output => {
         const toRect = getPortRect(
@@ -79,8 +92,10 @@ const Node = ({
         if (cachedConnection) {
           cnx = cachedConnection;
         } else {
-          cnx = document.querySelector<SVGPathElement>(`[data-connection-id="${combined}"]`);
-          if(cnx && cache && cache.current){
+          cnx = document.querySelector<SVGPathElement>(
+            `[data-connection-id="${combined}"]`
+          );
+          if (cnx && cache && cache.current) {
             cache.current.connections[combined] = cnx;
           }
         }
@@ -88,32 +103,32 @@ const Node = ({
           x:
             byScale(
               (toRect?.x ?? 0) -
-                stageRect.current.x +
+                (stageRect.current?.x ?? 0) +
                 portHalf -
-                stageRect.current.width / 2
+                (stageRect.current?.width ?? 0) / 2
             ) + byScale(stageState.translate.x),
           y:
             byScale(
               (toRect?.y ?? 0) -
-                stageRect.current.y +
+                (stageRect.current?.y ?? 0) +
                 portHalf -
-                stageRect.current.height / 2
+                (stageRect.current?.height ?? 0) / 2
             ) + byScale(stageState.translate.y)
         };
         const to = {
           x:
             byScale(
               (fromRect?.x ?? 0) -
-                stageRect.current.x +
+                (stageRect.current?.x ?? 0) +
                 portHalf -
-                stageRect.current.width / 2
+                (stageRect.current?.width ?? 0) / 2
             ) + byScale(stageState.translate.x),
           y:
             byScale(
               (fromRect?.y ?? 0) -
-                stageRect.current.y +
+                (stageRect.current?.y ?? 0) +
                 portHalf -
-                stageRect.current.height / 2
+                (stageRect.current?.height ?? 0) / 2
             ) + byScale(stageState.translate.y)
         };
         cnx?.setAttribute("d", calculateCurve(from, to));
@@ -137,7 +152,7 @@ const Node = ({
   };
 
   const handleDrag = ({ x, y }: Coordinate) => {
-    if(nodeWrapper.current){
+    if (nodeWrapper.current) {
       nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
       updateNodeConnections();
     }
@@ -238,7 +253,11 @@ const Node = ({
   );
 };
 
-export const NodeHeader: React.FC<HTMLProps<HTMLHeadingElement>> = ({ children, className = "", ...props }) => (
+export const NodeHeader: React.FC<HTMLProps<HTMLHeadingElement>> = ({
+  children,
+  className = "",
+  ...props
+}) => (
   <h2
     {...props}
     className={styles.label + (className ? ` ${className}` : "")}

@@ -3,7 +3,7 @@ import { Coordinate, StageState } from "../../types";
 
 type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & {
   stageState: StageState;
-  stageRect?: RefObject<DOMRect>;
+  stageRect?: RefObject<DOMRect | undefined>;
   onDragDelayStart?: (event: React.MouseEvent | React.TouchEvent) => void;
   onDragStart?: (event: React.MouseEvent | React.TouchEvent) => void;
   onDrag?: (coordinates: Coordinate, event: MouseEvent) => void;

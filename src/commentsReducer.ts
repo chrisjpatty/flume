@@ -62,7 +62,10 @@ const setComment = (
   }
 });
 
-export default (comments: CommentMap = {}, action) => {
+const commentsReducer: React.Reducer<CommentMap, CommentAction> = (
+  comments = {},
+  action
+) => {
   switch (action.type) {
     case CommentActionTypes.ADD_COMMENT: {
       const comment = {
@@ -78,14 +81,14 @@ export default (comments: CommentMap = {}, action) => {
       return {
         ...comments,
         [comment.id]: comment
-      };
+      } as CommentMap;
     }
     case CommentActionTypes.REMOVE_COMMENT_NEW:
       const { isNew: toDelete, ...comment } = comments[action.id];
       return {
         ...comments,
         [action.id]: comment
-      };
+      } as CommentMap;
     case CommentActionTypes.SET_COMMENT_COORDINATES: {
       return setComment(comments, action.id, { x: action.x, y: action.y });
     }
@@ -103,9 +106,11 @@ export default (comments: CommentMap = {}, action) => {
     }
     case CommentActionTypes.DELETE_COMMENT: {
       const { [action.id]: toDelete, ...newComments } = comments;
-      return newComments;
+      return newComments as CommentMap;
     }
     default:
       return comments;
   }
 };
+
+export default commentsReducer;

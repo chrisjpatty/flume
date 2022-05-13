@@ -29,7 +29,7 @@ interface StageProps {
   children: React.ReactNode;
   outerStageChildren: React.ReactNode;
   numNodes: number;
-  stageRef: React.MutableRefObject<DOMRect>;
+  stageRef: React.MutableRefObject<DOMRect | undefined>;
   spaceToPan: boolean;
   dispatchComments: React.Dispatch<CommentAction>;
   disableComments: boolean;
@@ -261,7 +261,7 @@ const Stage = ({
   }, [handleWheel, disableZoom]);
 
   const menuOptions = React.useMemo(() => {
-    const options = orderBy(
+    const options: SelectOption[] = orderBy(
       Object.values(nodeTypes || {})
         .filter(node => node.addable !== false)
         .map(node => ({

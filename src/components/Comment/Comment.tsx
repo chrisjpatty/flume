@@ -18,7 +18,7 @@ interface CommentProps {
   height: number;
   color: Colors;
   text: string;
-  stageRect: RefObject<DOMRect>;
+  stageRect: RefObject<DOMRect | undefined>;
   onDragStart: () => void;
   isNew: boolean;
 }

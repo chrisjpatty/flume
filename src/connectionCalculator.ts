@@ -1,7 +1,7 @@
 import styles from "./components/Connection/Connection.css";
 import { CONNECTIONS_ID } from "./constants";
 import { line, curveBasis } from "d3-shape";
-import { Coordinate, FlumeNode, TransputType } from "./types";
+import { Coordinate, FlumeNode, StageState, TransputType } from "./types";
 import FlumeCache from "./Cache";
 import { RefObject } from "react";
 
@@ -157,7 +157,7 @@ export const getStageRef = (editorId: string) =>
 
 export const createConnections = (
   nodes: { [nodeId: string]: FlumeNode },
-  { scale, stageId }: { scale: number; stageId: string },
+  { scale }: StageState,
   editorId: string
 ) => {
   const stageRef = getStageRef(editorId);

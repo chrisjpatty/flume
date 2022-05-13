@@ -204,6 +204,8 @@ export type FlumeComment = {
   isNew: boolean;
 };
 
+export type FlumeCommentMap = { [commentId: string]: FlumeComment };
+
 export type StageTranslate = {
   x: number;
   y: number;
