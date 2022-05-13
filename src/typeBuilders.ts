@@ -9,21 +9,12 @@ import {
   PortType,
   PortTypeBuilder,
   PortTypeConfig,
-  SelectControl,
-  ValueSetter
+  SelectControl
 } from "./types";
 const define = (value: any, defaultValue: any) =>
   value !== undefined ? value : defaultValue;
 
-interface PartialControl {
-  type: string;
-  label?: string;
-  name?: string;
-  defaultValue: any;
-  setValue?: ValueSetter;
-}
-
-const buildControlType = <T extends PartialControl>(
+const buildControlType = <T extends Control>(
   defaultConfig: Partial<T>,
   validate?: (config?: Partial<T>) => void,
   setup?: (config: Partial<T>) => Partial<T>
