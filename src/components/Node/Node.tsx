@@ -1,4 +1,4 @@
-import React from "react";
+import React, { HTMLProps } from "react";
 import styles from "./Node.css";
 import {
   NodeTypesContext,
@@ -11,6 +11,21 @@ import { Portal } from "react-portal";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import IoPorts from "../IoPorts/IoPorts";
 import Draggable from "../Draggable/Draggable";
+import { ConnectionMap, Connections, Coordinate, InputData, NodeHeaderRenderCallback, SelectOption } from "../../types";
+import { NodesActionType } from "../../nodesReducer";
+
+interface NodeProps {
+  id: string;
+  width: number;
+  x: number;
+  y: number;
+  stageRect: React.MutableRefObject<DOMRect>;
+  connections: Connections;
+  type: string;
+  inputData: InputData;
+  onDragStart: () => void;
+  renderNodeHeader: NodeHeaderRenderCallback;
+}
 
 const Node = ({
   id,
@@ -23,21 +38,21 @@ const Node = ({
   inputData,
   onDragStart,
   renderNodeHeader
-}) => {
-  const cache = React.useContext(CacheContext);
-  const nodeTypes = React.useContext(NodeTypesContext);
+}: NodeProps) => {
+  const cache = React.useContext(CacheContext) ?? undefined;
+  const nodeTypes = React.useContext(NodeTypesContext) ?? {};
   const nodesDispatch = React.useContext(NodeDispatchContext);
-  const stageState = React.useContext(StageContext);
+  const stageState = React.useContext(StageContext) ?? { scale: 0, translate: { x: 0, y: 0 } };
   const currentNodeType = nodeTypes[type];
   const { label, deletable, inputs = [], outputs = [] } = currentNodeType;
 
-  const nodeWrapper = React.useRef();
+  const nodeWrapper = React.useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [menuCoordinates, setMenuCoordinates] = React.useState({ x: 0, y: 0 });
 
-  const byScale = value => (1 / stageState.scale) * value;
+  const byScale = (value: number) => (1 / stageState.scale) * value;
 
-  const updateConnectionsByTransput = (transput = {}, isOutput) => {
+  const updateConnectionsByTransput = (transput: ConnectionMap = {}, isOutput?: boolean) => {
     Object.entries(transput).forEach(([portName, outputs]) => {
       outputs.forEach(output => {
         const toRect = getPortRect(
@@ -52,32 +67,34 @@ const Node = ({
           isOutput ? "input" : "output",
           cache
         );
-        const portHalf = fromRect.width / 2;
+        const portHalf = (fromRect?.width ?? 0) / 2;
         let combined;
         if (isOutput) {
           combined = id + portName + output.nodeId + output.portName;
         } else {
           combined = output.nodeId + output.portName + id + portName;
         }
-        let cnx;
-        const cachedConnection = cache.current.connections[combined];
+        let cnx: SVGPathElement | Connections | null;
+        const cachedConnection = cache?.current?.connections[combined];
         if (cachedConnection) {
           cnx = cachedConnection;
         } else {
-          cnx = document.querySelector(`[data-connection-id="${combined}"]`);
-          cache.current.connections[combined] = cnx;
+          cnx = document.querySelector<SVGPathElement>(`[data-connection-id="${combined}"]`);
+          if(cnx && cache && cache.current){
+            cache.current.connections[combined] = cnx;
+          }
         }
         const from = {
           x:
             byScale(
-              toRect.x -
+              (toRect?.x ?? 0) -
                 stageRect.current.x +
                 portHalf -
                 stageRect.current.width / 2
             ) + byScale(stageState.translate.x),
           y:
             byScale(
-              toRect.y -
+              (toRect?.y ?? 0) -
                 stageRect.current.y +
                 portHalf -
                 stageRect.current.height / 2
@@ -86,20 +103,20 @@ const Node = ({
         const to = {
           x:
             byScale(
-              fromRect.x -
+              (fromRect?.x ?? 0) -
                 stageRect.current.x +
                 portHalf -
                 stageRect.current.width / 2
             ) + byScale(stageState.translate.x),
           y:
             byScale(
-              fromRect.y -
+              (fromRect?.y ?? 0) -
                 stageRect.current.y +
                 portHalf -
                 stageRect.current.height / 2
             ) + byScale(stageState.translate.y)
         };
-        cnx.setAttribute("d", calculateCurve(from, to));
+        cnx?.setAttribute("d", calculateCurve(from, to));
       });
     });
   };
@@ -111,24 +128,26 @@ const Node = ({
     }
   };
 
-  const stopDrag = (e, coordinates) => {
-    nodesDispatch({
-      type: "SET_NODE_COORDINATES",
+  const stopDrag = (e: any, coordinates: Coordinate) => {
+    nodesDispatch?.({
+      type: NodesActionType.SET_NODE_COORDINATES,
       ...coordinates,
       nodeId: id
     });
   };
 
-  const handleDrag = ({ x, y }) => {
-    nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
-    updateNodeConnections();
+  const handleDrag = ({ x, y }: Coordinate) => {
+    if(nodeWrapper.current){
+      nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
+      updateNodeConnections();
+    }
   };
 
-  const startDrag = e => {
+  const startDrag = () => {
     onDragStart();
   };
 
-  const handleContextMenu = e => {
+  const handleContextMenu = (e: MouseEvent | React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setMenuCoordinates({ x: e.clientX, y: e.clientY });
@@ -141,13 +160,13 @@ const Node = ({
   };
 
   const deleteNode = () => {
-    nodesDispatch({
-      type: "REMOVE_NODE",
+    nodesDispatch?.({
+      type: NodesActionType.REMOVE_NODE,
       nodeId: id
     });
   };
 
-  const handleMenuOption = ({ value }) => {
+  const handleMenuOption = ({ value }: SelectOption) => {
     switch (value) {
       case "deleteNode":
         deleteNode();
@@ -219,8 +238,12 @@ const Node = ({
   );
 };
 
-const NodeHeader = ({ children, className = "", ...props }) => (
-  <h2 {...props} className={styles.label + (className ? ` ${className}` : "")} data-flume-component="node-header">
+export const NodeHeader: React.FC<HTMLProps<HTMLHeadingElement>> = ({ children, className = "", ...props }) => (
+  <h2
+    {...props}
+    className={styles.label + (className ? ` ${className}` : "")}
+    data-flume-component="node-header"
+  >
     {children}
   </h2>
 );

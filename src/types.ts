@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { HTMLProps, ReactNode } from "react";
 
 export type InputData = { [portName: string]: { [controlName: string]: any } };
 
@@ -59,11 +59,11 @@ export type ControlRenderCallback = (
   context: any,
   redraw: () => void,
   portProps: {
-    label: string,
-    name: string,
-    portName: string,
-    inputLabel: string,
-    defaultValue: any,
+    label: string;
+    name: string;
+    portName: string;
+    inputLabel: string;
+    defaultValue: any;
   },
   inputData: InputData
 ) => ReactNode;
@@ -220,3 +220,15 @@ export type StageState = {
 };
 
 export type CircularBehavior = "prevent" | "warn" | "allow";
+
+export type NodeHeaderActions = {
+  openMenu: (event: MouseEvent | React.MouseEvent) => void | any;
+  closeMenu: () => void | any;
+  deleteNode: () => void | any;
+}
+
+export type NodeHeaderRenderCallback = (
+  Wrapper: React.FC<HTMLProps<HTMLHeadingElement>>,
+  nodeType: NodeType,
+  actions: NodeHeaderActions
+) => ReactNode;

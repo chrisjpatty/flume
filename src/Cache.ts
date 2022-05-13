@@ -2,7 +2,7 @@ import { Connections, PortType } from "./types";
 
 class FlumeCache{
   ports: { [portType: string]: Element };
-  connections: {[id: string]: Connections};
+  connections: {[id: string]: SVGPathElement};
 
   constructor(){
     this.ports = {};
