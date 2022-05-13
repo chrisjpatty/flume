@@ -227,10 +227,30 @@ export type NodeHeaderActions = {
   openMenu: (event: MouseEvent | React.MouseEvent) => void | any;
   closeMenu: () => void | any;
   deleteNode: () => void | any;
-}
+};
 
 export type NodeHeaderRenderCallback = (
   Wrapper: React.FC<HTMLProps<HTMLHeadingElement>>,
   nodeType: NodeType,
   actions: NodeHeaderActions
 ) => ReactNode;
+
+export type PortResolver = (
+  portType: string,
+  data: InputData,
+  context: any
+) => any;
+
+export type NodeResolver = (
+  node: FlumeNode,
+  inputValues: InputData,
+  nodeType: NodeType,
+  context: any
+) => { [outputPortName: string]: any };
+
+export interface RootEngineOptions {
+  rootNodeId?: string;
+  context?: any;
+  maxLoops?: number;
+  onlyResolveConnected?: boolean;
+}

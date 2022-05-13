@@ -1,14 +1,14 @@
 import React from "react";
 import { ToastAction, ToastActionTypes } from "../../toastsReducer";
-import { Toast } from "../../types";
+import { Toast as ToastType } from "../../types";
 import styles from "./Toaster.css";
 
 type ToasterProps = {
-  toasts: Toast[];
+  toasts: ToastType[];
   dispatchToasts: (action: ToastAction) => void;
 };
 
-export default ({ toasts = [], dispatchToasts }: ToasterProps) => {
+const Toaster = ({ toasts = [], dispatchToasts }: ToasterProps) => {
   const setHeight = React.useCallback(
     (id: string, height: number) => {
       dispatchToasts({
@@ -143,3 +143,5 @@ const Toast = ({
     </div>
   );
 };
+
+export default Toaster;
