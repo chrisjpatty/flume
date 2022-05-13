@@ -140,7 +140,7 @@ export interface PortType {
 
 export type PortTypeMap = { [portType: string]: PortType };
 
-export type PortTypeBuilder = (config: Partial<PortType>) => PortType;
+export type PortTypeBuilder = (config?: Partial<PortType>) => PortType;
 
 export interface PortTypeConfig extends Partial<PortType> {
   type: string;
