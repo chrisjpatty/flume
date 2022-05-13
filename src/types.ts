@@ -100,13 +100,41 @@ export type Colors =
   | "grey";
 
 export interface PortType {
+  /**
+   * A unique string identifier for the port. Preferred to be camelCased.
+   */
   type: string;
+  /**
+   * A default string identifier used when the port is constructed.
+   */
   name: string;
+  /**
+   * A default human-readable label for the port.
+   */
   label: string;
+  /**
+   * When true the port will not render its controls.
+   *
+   * @defaultValue false
+   */
   noControls: boolean;
+  /**
+   * The color of the port. Should be one of the colors defined by the Colors type.
+   */
   color: Colors;
+  /**
+   * If true the ports controls will render but the actual port will not. This disallows connections.
+   *
+   * @defaultValue false
+   */
   hidePort: boolean;
+  /**
+   * An array of controls to render on the port.
+   */
   controls: Control[];
+  /**
+   * An array of port type strings. Only port types included in this array will be allowed to connect to this port. By default ports always accept their own type.
+   */
   acceptTypes: string[];
 }
 
@@ -116,6 +144,7 @@ export type PortTypeBuilder = (config: Partial<PortType>) => PortType;
 
 export interface PortTypeConfig extends Partial<PortType> {
   type: string;
+  name: string;
 }
 
 export type TransputType = "input" | "output";
@@ -127,11 +156,33 @@ export type TransputBuilder = (
 ) => PortType[];
 
 export interface NodeType {
+  /**
+   * A unique randomly-generated string identifier for the node.
+   */
   id: string;
+  /**
+   * A unique string identifier for the node. Preferred to be camelCased.
+   */
   type: string;
+  /**
+   * A human-readable label for the node.
+   */
   label: string;
+  /**
+   * A human-readable description for the node. Renders in the "Add Node" context menu.
+   */
   description: string;
+  /**
+   * If false the node may not be added to the canvas.
+   *
+   * @defaultValue true
+   */
   addable: boolean;
+  /**
+   * If false the node may not be removed from the canvas.
+   *
+   * @defaultValue true
+   */
   deletable: boolean;
   inputs: PortType[] | TransputBuilder;
   outputs: PortType[] | TransputBuilder;
@@ -142,11 +193,79 @@ export interface NodeType {
 
 export type NodeTypeMap = { [nodeType: string]: NodeType };
 
+export type DynamicPortTypeBuilder = (
+  inputData: InputData,
+  connections: Connections,
+  context: any
+) => PortType[];
+
 export interface NodeTypeConfig
   extends Omit<Partial<NodeType>, "inputs" | "outputs"> {
   type: string;
-  inputs?: (ports: { [portType: string]: PortTypeBuilder }) => PortType[];
-  outputs?: (ports: { [portType: string]: PortTypeBuilder }) => PortType[];
+  /**
+   * Represents the ports available to be connected as inputs to the node. Must be one of the following types:
+   * - An array of ports
+   * - A function that returns an array of ports at definition time
+   * - A function that returns a function that returns an array of ports at runtime
+   *
+   * @example
+   * ### Static ports
+   * ```
+   * inputs: ports => [
+   *   ports.string({name: "stringPortName", label: "String Port Label"}),
+   *   ports.number({name: "numberPortName", label: "Number Port Label"}),
+   * ]
+   * ```
+   *
+   * ### Dynamic ports
+   * ```
+   * inputs: ports => (inputData, connections, context) => {
+   *   if(inputData.isAdmin.boolean) {
+   *     return [ports.string({label: "Admin Name"})]
+   *   }else{
+   *    return []
+   *   }
+   * }
+   * ```
+   */
+  inputs?:
+    | PortType[]
+    | ((ports: { [portType: string]: PortTypeBuilder }) => PortType[])
+    | ((ports: {
+        [portType: string]: PortTypeBuilder;
+      }) => DynamicPortTypeBuilder);
+  /**
+   * Represents the ports available to be connected as outputs from the node. Must be one of the following types:
+   * - An array of ports
+   * - A function that returns an array of ports at definition time
+   * - A function that returns a function that returns an array of ports at runtime
+   *
+   * @example
+   * ### Static ports
+   * ```
+   * inputs: ports => [
+   *   ports.string({name: "stringPortName", label: "String Port Label"}),
+   *   ports.number({name: "numberPortName", label: "Number Port Label"}),
+   * ]
+   * ```
+   *
+   * ### Dynamic ports
+   * ```
+   * inputs: ports => (inputData, connections, context) => {
+   *   if(inputData.isAdmin.boolean) {
+   *     return [ports.string({label: "Admin Name"})]
+   *   }else{
+   *    return []
+   *   }
+   * }
+   * ```
+   */
+  outputs?:
+    | PortType[]
+    | ((ports: { [portType: string]: PortTypeBuilder }) => PortType[])
+    | ((ports: {
+        [portType: string]: PortTypeBuilder;
+      }) => DynamicPortTypeBuilder);
 }
 
 export type Connection = {

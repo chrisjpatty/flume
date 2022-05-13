@@ -3,5 +3,9 @@
   "globals": {
     "cy": true,
     "Cypress": true
+  },
+  "plugins": ["eslint-plugin-tsdoc"],
+  "rules": {
+    "tsdoc/syntax": "warn"
   }
 }

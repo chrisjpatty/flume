@@ -4,7 +4,7 @@ import Checkbox from "../Checkbox/Checkbox";
 import TextInput from "../TextInput/TextInput";
 import Select from "../Select/Select";
 import { NodeDispatchContext, ContextContext } from "../../context";
-import { ControlRenderCallback, ControlTypes, SelectOption, ValueSetter } from "../../types";
+import { ControlRenderCallback, ControlTypes, InputData, SelectOption, ValueSetter } from "../../types";
 import { NodesActionType } from "../../nodesReducer";
 
 interface CommonProps {
@@ -14,7 +14,7 @@ interface CommonProps {
   label: string;
   inputLabel: string;
   allData: any;
-  inputData: any;
+  inputData: InputData;
   triggerRecalculation: () => void;
   updateNodeConnections: () => void;
   setValue?: ValueSetter;
@@ -48,7 +48,7 @@ interface SelectProps extends CommonProps {
   options: SelectOption[];
   defaultValue?: string;
   placeholder?: string;
-  getOptions?: (inputData: any, executionContext: any) => SelectOption[];
+  getOptions?: (inputData: InputData, executionContext: any) => SelectOption[];
 }
 
 interface MultiSelectProps extends CommonProps {
@@ -57,7 +57,7 @@ interface MultiSelectProps extends CommonProps {
   options: SelectOption[];
   defaultValue?: string[];
   placeholder?: string;
-  getOptions?: (inputData: any, executionContext: any) => SelectOption[];
+  getOptions?: (inputData: InputData, executionContext: any) => SelectOption[];
 }
 
 interface CustomProps extends CommonProps {
