@@ -9,12 +9,21 @@ import {
   PortType,
   PortTypeBuilder,
   PortTypeConfig,
-  SelectControl
+  SelectControl,
+  ValueSetter
 } from "./types";
 const define = (value: any, defaultValue: any) =>
   value !== undefined ? value : defaultValue;
 
-const buildControlType = <T extends Control>(
+interface PartialControl {
+  type: string;
+  label?: string;
+  name?: string;
+  defaultValue: any;
+  setValue?: ValueSetter;
+}
+
+const buildControlType = <T extends PartialControl>(
   defaultConfig: Partial<T>,
   validate?: (config?: Partial<T>) => void,
   setup?: (config: Partial<T>) => Partial<T>
@@ -36,7 +45,7 @@ export const Controls = {
     name: "text",
     defaultValue: ""
   }),
-  select: buildControlType<SelectControl>(
+  select: buildControlType<SelectControl & Control>(
     {
       type: "select",
       name: "select",
@@ -50,7 +59,7 @@ export const Controls = {
       placeholder: define(config.placeholder, undefined)
     })
   ),
-  number: buildControlType<NumberControl>(
+  number: buildControlType<NumberControl & Control>(
     {
       type: "number",
       name: "number",
@@ -61,12 +70,12 @@ export const Controls = {
       step: define(config.step, undefined)
     })
   ),
-  checkbox: buildControlType({
+  checkbox: buildControlType<Control>({
     type: "checkbox",
     name: "checkbox",
     defaultValue: false
   }),
-  multiselect: buildControlType<MultiselectControl>(
+  multiselect: buildControlType<MultiselectControl & Control>(
     {
       type: "multiselect",
       name: "multiselect",
@@ -80,7 +89,7 @@ export const Controls = {
       placeholder: define(config.placeholder, undefined)
     })
   ),
-  custom: buildControlType<CustomControl>(
+  custom: buildControlType<CustomControl & Control>(
     {
       type: "custom",
       name: "custom",

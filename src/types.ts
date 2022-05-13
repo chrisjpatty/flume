@@ -12,15 +12,7 @@ export type ControlTypes =
 
 export type ValueSetter = (newData: any, oldData: any) => any;
 
-export interface Control {
-  type: ControlTypes;
-  label: string;
-  name: string;
-  defaultValue: any;
-  setValue: ValueSetter;
-}
-
-export interface TextControl extends Control {
+export interface TextControl {
   type: "text";
   defaultValue: string;
 }
@@ -34,7 +26,7 @@ export interface SelectOption {
   internalType?: "comment";
 }
 
-export interface SelectControl extends Control {
+export interface SelectControl {
   type: "select";
   options: SelectOption[];
   defaultValue: string;
@@ -42,18 +34,18 @@ export interface SelectControl extends Control {
   placeholder?: string;
 }
 
-export interface NumberControl extends Control {
+export interface NumberControl {
   type: "number";
   defaultValue: number;
   step: number;
 }
 
-export interface CheckboxControl extends Control {
+export interface CheckboxControl {
   type: "checkbox";
   defaultValue: boolean;
 }
 
-export interface MultiselectControl extends Control {
+export interface MultiselectControl {
   type: "multiselect";
   options: SelectOption[];
   defaultValue: string[];
@@ -66,15 +58,36 @@ export type ControlRenderCallback = (
   onChange: (newData: any) => void,
   context: any,
   redraw: () => void,
-  portProps: PortType,
+  portProps: {
+    label: string,
+    name: string,
+    portName: string,
+    inputLabel: string,
+    defaultValue: any,
+  },
   inputData: InputData
 ) => ReactNode;
 
-export interface CustomControl extends Control {
+export interface CustomControl {
   type: "custom";
   defaultValue: any;
   render: ControlRenderCallback;
 }
+
+export type Control = {
+  type: ControlTypes;
+  label: string;
+  name: string;
+  defaultValue: any;
+  setValue: ValueSetter;
+} & (
+  | TextControl
+  | SelectControl
+  | NumberControl
+  | CheckboxControl
+  | MultiselectControl
+  | CustomControl
+);
 
 export type Colors =
   | "yellow"
@@ -91,7 +104,7 @@ export interface PortType {
   name: string;
   label: string;
   noControls: boolean;
-  color: string;
+  color: Colors;
   hidePort: boolean;
   controls: Control[];
   acceptTypes: string[];

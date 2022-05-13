@@ -13,9 +13,26 @@ import Connection from "../Connection/Connection";
 import { PortTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
 import { calculateCurve, getPortRect } from "../../connectionCalculator";
-import { STAGE_ID, DRAG_CONNECTION_ID } from '../../constants'
+import { STAGE_ID, DRAG_CONNECTION_ID } from "../../constants";
+import {
+  Colors,
+  Connections,
+  Control as ControlType,
+  InputData,
+  PortType,
+  PortTypeMap,
+  TransputBuilder,
+  TransputType
+} from "../../types";
+import { NodesActionType } from "../../nodesReducer";
 
-function useTransputs (transputsFn, transputType, nodeId, inputData, connections) {
+function useTransputs(
+  transputsFn: PortType[] | TransputBuilder,
+  transputType: TransputType,
+  nodeId: string,
+  inputData: InputData,
+  connections: Connections
+) {
   const nodesDispatch = React.useContext(NodeDispatchContext);
   const executionContext = React.useContext(ContextContext);
 
@@ -23,23 +40,39 @@ function useTransputs (transputsFn, transputType, nodeId, inputData, connections
     if (Array.isArray(transputsFn)) return transputsFn;
     return transputsFn(inputData, connections, executionContext);
   }, [transputsFn, inputData, connections, executionContext]);
-  const prevTransputs = usePrevious(transputs);
+  const prevTransputs = usePrevious<PortType[]>(transputs);
 
   React.useEffect(() => {
     if (!prevTransputs || Array.isArray(transputsFn)) return;
     for (const transput of prevTransputs) {
       const current = transputs.find(({ name }) => transput.name === name);
       if (!current) {
-        nodesDispatch({
-          type: 'DESTROY_TRANSPUT',
+        nodesDispatch?.({
+          type: NodesActionType.DESTROY_TRANSPUT,
           transputType,
-          transput: { nodeId, portName: '' + transput.name }
+          transput: { nodeId, portName: "" + transput.name }
         });
       }
     }
-  }, [transputsFn, transputs, prevTransputs, nodesDispatch, nodeId, transputType]);
+  }, [
+    transputsFn,
+    transputs,
+    prevTransputs,
+    nodesDispatch,
+    nodeId,
+    transputType
+  ]);
 
   return transputs;
+}
+
+interface IoPortsProps {
+  nodeId: string;
+  inputs: PortType[] | TransputBuilder;
+  outputs: PortType[] | TransputBuilder;
+  connections: Connections;
+  inputData: InputData;
+  updateNodeConnections: () => void;
 }
 
 const IoPorts = ({
@@ -49,12 +82,24 @@ const IoPorts = ({
   connections,
   inputData,
   updateNodeConnections
-}) => {
+}: IoPortsProps) => {
   const inputTypes = React.useContext(PortTypesContext);
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
-  const resolvedInputs = useTransputs(inputs, 'input', nodeId, inputData, connections);
-  const resolvedOutputs = useTransputs(outputs, 'output', nodeId, inputData, connections);
-  
+  const resolvedInputs = useTransputs(
+    inputs,
+    "input",
+    nodeId,
+    inputData,
+    connections
+  );
+  const resolvedOutputs = useTransputs(
+    outputs,
+    "output",
+    nodeId,
+    inputData,
+    connections
+  );
+
   return (
     <div className={styles.wrapper} data-flume-component="ports">
       {resolvedInputs.length ? (
@@ -64,9 +109,9 @@ const IoPorts = ({
               {...input}
               data={inputData[input.name] || {}}
               isConnected={!!connections.inputs[input.name]}
-              triggerRecalculation={triggerRecalculation}
+              triggerRecalculation={triggerRecalculation ?? (() => {})}
               updateNodeConnections={updateNodeConnections}
-              inputTypes={inputTypes}
+              inputTypes={inputTypes ?? {}}
               nodeId={nodeId}
               inputData={inputData}
               key={input.name}
@@ -82,8 +127,6 @@ const IoPorts = ({
               triggerRecalculation={triggerRecalculation}
               inputTypes={inputTypes}
               nodeId={nodeId}
-              inputData={inputData}
-              portOnRight
               key={output.name}
             />
           ))}
@@ -94,6 +137,22 @@ const IoPorts = ({
 };
 
 export default IoPorts;
+
+interface InputProps {
+  type: string;
+  label: string;
+  name: string;
+  nodeId: string;
+  data: { [controlName: string]: any };
+  controls: ControlType[];
+  inputTypes: PortTypeMap;
+  noControls?: boolean;
+  triggerRecalculation: () => void;
+  updateNodeConnections: () => void;
+  isConnected?: boolean;
+  inputData: InputData;
+  hidePort?: boolean;
+}
 
 const Input = ({
   type,
@@ -109,7 +168,7 @@ const Input = ({
   isConnected,
   inputData,
   hidePort
-}) => {
+}: InputProps) => {
   const { label: defaultLabel, color, controls: defaultControls = [] } =
     inputTypes[type] || {};
   const prevConnected = usePrevious(isConnected);
@@ -143,34 +202,41 @@ const Input = ({
         />
       ) : null}
       {(!controls.length || noControls || isConnected) && (
-        <label data-flume-component="port-label" className={styles.portLabel}>{label || defaultLabel}</label>
+        <label data-flume-component="port-label" className={styles.portLabel}>
+          {label || defaultLabel}
+        </label>
       )}
-      {!noControls && !isConnected
-        ? (
-          <div className={styles.controls}>
-            {
-              controls.map(control => (
-                  <Control
-                    {...control}
-                    nodeId={nodeId}
-                    portName={name}
-                    triggerRecalculation={triggerRecalculation}
-                    updateNodeConnections={updateNodeConnections}
-                    inputLabel={label}
-                    data={data[control.name]}
-                    allData={data}
-                    key={control.name}
-                    inputData={inputData}
-                    isMonoControl={controls.length === 1}
-                  />
-                ))
-            }
-          </div>
-        )
-        : null}
+      {!noControls && !isConnected ? (
+        <div className={styles.controls}>
+          {controls.map(control => (
+            <Control
+              {...control}
+              nodeId={nodeId}
+              portName={name}
+              triggerRecalculation={triggerRecalculation}
+              updateNodeConnections={updateNodeConnections}
+              inputLabel={label}
+              data={data[control.name]}
+              allData={data}
+              key={control.name}
+              inputData={inputData}
+              isMonoControl={controls.length === 1}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };
+
+interface OutputProps {
+  label;
+  name;
+  nodeId;
+  type;
+  inputTypes;
+  triggerRecalculation;
+}
 
 const Output = ({
   label,
@@ -192,7 +258,9 @@ const Output = ({
         e.stopPropagation();
       }}
     >
-      <label data-flume-component="port-label" className={styles.portLabel}>{label || defaultLabel}</label>
+      <label data-flume-component="port-label" className={styles.portLabel}>
+        {label || defaultLabel}
+      </label>
       <Port
         type={type}
         name={name}
@@ -204,6 +272,15 @@ const Output = ({
   );
 };
 
+interface PortProps {
+  color: Colors;
+  name: string;
+  type: string;
+  isInput?: boolean;
+  nodeId: string;
+  triggerRecalculation: () => void;
+}
+
 const Port = ({
   color = "grey",
   name = "",
@@ -211,52 +288,55 @@ const Port = ({
   isInput,
   nodeId,
   triggerRecalculation
-}) => {
+}: PortProps) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
-  const stageState = React.useContext(StageContext);
+  const stageState = React.useContext(StageContext) || {
+    scale: 1,
+    translate: { x: 0, y: 0 }
+  };
   const editorId = React.useContext(EditorIdContext);
-  const stageId = `${STAGE_ID}${editorId}`
-  const inputTypes = React.useContext(PortTypesContext);
+  const stageId = `${STAGE_ID}${editorId}`;
+  const inputTypes = React.useContext(PortTypesContext) || {};
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStartCoordinates, setDragStartCoordinates] = React.useState({
     x: 0,
     y: 0
   });
   const dragStartCoordinatesCache = React.useRef(dragStartCoordinates);
-  const port = React.useRef();
-  const line = React.useRef();
-  const lineInToPort = React.useRef();
+  const port = React.useRef<HTMLDivElement>(null);
+  const line = React.useRef<SVGPathElement>(null);
+  const lineInToPort = React.useRef<HTMLDivElement | null>(null);
 
-  const byScale = value => (1 / stageState.scale) * value;
+  const byScale = (value: number) => (1 / (stageState?.scale ?? 1)) * value;
 
-  const handleDrag = e => {
-    const stage = document
+  const handleDrag = (e: MouseEvent) => {
+    const { x, y, width, height } = document
       .getElementById(stageId)
-      .getBoundingClientRect();
+      ?.getBoundingClientRect() ?? { x: 0, y: 0, width: 0, height: 0 };
 
     if (isInput) {
       const to = {
         x:
-          byScale(e.clientX - stage.x - stage.width / 2) +
-          byScale(stageState.translate.x),
+          byScale(e.clientX - x - width / 2) +
+          byScale(stageState?.translate?.x ?? 1),
         y:
-          byScale(e.clientY - stage.y - stage.height / 2) +
-          byScale(stageState.translate.y)
+          byScale(e.clientY - y - height / 2) +
+          byScale(stageState?.translate?.y ?? 1)
       };
-      lineInToPort.current.setAttribute(
+      lineInToPort.current?.setAttribute(
         "d",
         calculateCurve(dragStartCoordinatesCache.current, to)
       );
     } else {
       const to = {
         x:
-          byScale(e.clientX - stage.x - stage.width / 2) +
-          byScale(stageState.translate.x),
+          byScale(e.clientX - x - width / 2) +
+          byScale(stageState?.translate?.x ?? 1),
         y:
-          byScale(e.clientY - stage.y - stage.height / 2) +
-          byScale(stageState.translate.y)
+          byScale(e.clientY - y - height / 2) +
+          byScale(stageState?.translate?.y ?? 1)
       };
-      line.current.setAttribute(
+      line.current?.setAttribute(
         "d",
         calculateCurve(dragStartCoordinatesCache.current, to)
       );
@@ -268,13 +348,13 @@ const Port = ({
 
     if (isInput) {
       const {
-        inputNodeId,
-        inputPortName,
-        outputNodeId,
-        outputPortName
-      } = lineInToPort.current.dataset;
-      nodesDispatch({
-        type: "REMOVE_CONNECTION",
+        inputNodeId = "",
+        inputPortName = "",
+        outputNodeId = "",
+        outputPortName = ""
+      } = lineInToPort.current?.dataset ?? {};
+      nodesDispatch?.({
+        type: NodesActionType.REMOVE_CONNECTION,
         input: { nodeId: inputNodeId, portName: inputPortName },
         output: { nodeId: outputNodeId, portName: outputPortName }
       });
@@ -291,8 +371,8 @@ const Port = ({
             connectToPortType
           ].acceptTypes.includes(type);
           if (inputWillAcceptConnection) {
-            nodesDispatch({
-              type: "ADD_CONNECTION",
+            nodesDispatch?.({
+              type: NodesActionType.ADD_CONNECTION,
               input: { nodeId: connectToNodeId, portName: connectToPortName },
               output: { nodeId: outputNodeId, portName: outputPortName }
             });
@@ -313,8 +393,8 @@ const Port = ({
             inputNodeType
           ].acceptTypes.includes(type);
           if (inputWillAcceptConnection) {
-            nodesDispatch({
-              type: "ADD_CONNECTION",
+            nodesDispatch?.({
+              type: NodesActionType.ADD_CONNECTION,
               output: { nodeId, portName: name },
               input: { nodeId: inputNodeId, portName: inputPortName }
             });
@@ -331,31 +411,51 @@ const Port = ({
   const handleDragStart = e => {
     e.preventDefault();
     e.stopPropagation();
-    const startPort = port.current.getBoundingClientRect();
-    const stage = document
-      .getElementById(stageId)
-      .getBoundingClientRect();
+    const {
+      x: startPortX = 0,
+      y: startPortY = 0,
+      width: startPortWidth = 0,
+      height: startPortHeight = 0
+    } = port.current?.getBoundingClientRect() || {};
+
+    const {
+      x: stageX = 0,
+      y: stageY = 0,
+      width: stageWidth = 0,
+      height: stageHeight = 0
+    } = document.getElementById(stageId)?.getBoundingClientRect() || {};
 
     if (isInput) {
       lineInToPort.current = document.querySelector(
         `[data-input-node-id="${nodeId}"][data-input-port-name="${name}"]`
       );
       const portIsConnected = !!lineInToPort.current;
-      if (portIsConnected) {
-        lineInToPort.current.parentNode.style.zIndex = 9999;
-        const outputPort = getPortRect(
-          lineInToPort.current.dataset.outputNodeId,
-          lineInToPort.current.dataset.outputPortName,
-          "output"
-        );
+      if (
+        portIsConnected &&
+        lineInToPort.current &&
+        lineInToPort.current.parentElement
+      ) {
+        lineInToPort.current.parentElement.style.zIndex = "9999";
+        const {
+          x: outputPortX = 0,
+          y: outputPortY = 0,
+          width: outputPortWidth = 0,
+          height: outputPortHeight = 0
+        } =
+          getPortRect(
+            lineInToPort.current.dataset.outputNodeId || "",
+            lineInToPort.current.dataset.outputPortName || "",
+            "output"
+          ) || {};
+
         const coordinates = {
           x:
             byScale(
-              outputPort.x - stage.x + outputPort.width / 2 - stage.width / 2
+              outputPortX - stageX + outputPortWidth / 2 - stageWidth / 2
             ) + byScale(stageState.translate.x),
           y:
             byScale(
-              outputPort.y - stage.y + outputPort.width / 2 - stage.height / 2
+              outputPortY - stageY + outputPortWidth / 2 - stageHeight / 2
             ) + byScale(stageState.translate.y)
         };
         setDragStartCoordinates(coordinates);
@@ -367,13 +467,11 @@ const Port = ({
     } else {
       const coordinates = {
         x:
-          byScale(
-            startPort.x - stage.x + startPort.width / 2 - stage.width / 2
-          ) + byScale(stageState.translate.x),
+          byScale(startPortX - stageX + startPortWidth / 2 - stageWidth / 2) +
+          byScale(stageState.translate.x),
         y:
-          byScale(
-            startPort.y - stage.y + startPort.width / 2 - stage.height / 2
-          ) + byScale(stageState.translate.y)
+          byScale(startPortY - stageY + startPortWidth / 2 - stageHeight / 2) +
+          byScale(stageState.translate.y)
       };
       setDragStartCoordinates(coordinates);
       dragStartCoordinatesCache.current = coordinates;

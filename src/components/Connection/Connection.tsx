@@ -6,12 +6,12 @@ import styles from "./Connection.css";
 interface ConnectionProps {
   from: Coordinate;
   to: Coordinate;
-  id: string;
+  id?: string;
   lineRef: React.Ref<SVGPathElement>;
-  outputNodeId: string;
-  outputPortName: string;
-  inputNodeId: string;
-  inputPortName: string;
+  outputNodeId?: string;
+  outputPortName?: string;
+  inputNodeId?: string;
+  inputPortName?: string;
 }
 
 const Connection = ({

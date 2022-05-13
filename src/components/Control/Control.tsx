@@ -4,7 +4,7 @@ import Checkbox from "../Checkbox/Checkbox";
 import TextInput from "../TextInput/TextInput";
 import Select from "../Select/Select";
 import { NodeDispatchContext, ContextContext } from "../../context";
-import { ControlTypes, SelectOption } from "../../types";
+import { ControlRenderCallback, ControlTypes, SelectOption, ValueSetter } from "../../types";
 import { NodesActionType } from "../../nodesReducer";
 
 interface CommonProps {
@@ -17,7 +17,7 @@ interface CommonProps {
   inputData: any;
   triggerRecalculation: () => void;
   updateNodeConnections: () => void;
-  setValue: (value: any) => void;
+  setValue?: ValueSetter;
   isMonoControl?: boolean;
 }
 
@@ -64,20 +64,7 @@ interface CustomProps extends CommonProps {
   type: "custom";
   data: any;
   defaultValue?: any;
-  render: (
-    data: any,
-    onChange: (value: any) => void,
-    executionContext: any,
-    triggerRecalculation: () => void,
-    controlProps: {
-      label: string;
-      name: string;
-      portName: string;
-      inputLabel: string;
-      defaultValue: any;
-    },
-    allData: any
-  ) => React.ReactNode;
+  render?: ControlRenderCallback;
 }
 
 type ControlProps =
@@ -181,7 +168,7 @@ const Control = (props: ControlProps) => {
       case "custom": {
         const { render } = props as CustomProps;
 
-        return render(
+        return render?.(
           data,
           onChange,
           executionContext,
@@ -194,7 +181,7 @@ const Control = (props: ControlProps) => {
             defaultValue
           },
           allData
-        );
+        ) ?? null;
       }
       default:
         return <div>Control</div>;
