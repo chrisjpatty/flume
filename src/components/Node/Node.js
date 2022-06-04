@@ -159,7 +159,7 @@ const Node = ({
 
   return (
     <Draggable
-      className={styles.wrapper}
+      className={[styles.wrapper, label, id].join(" ")}
       style={{
         width,
         transform: `translate(${x}px, ${y}px)`
