@@ -111,6 +111,10 @@ export let NodeEditor = (
     },
     getComments: () => {
       return comments;
+    },
+    setNodes: newNodes => {
+      dispatchNodes({ type: "SET_NODES", nodes: newNodes });
+      triggerRecalculation();
     }
   }));
 
