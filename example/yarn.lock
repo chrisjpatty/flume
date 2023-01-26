@@ -13568,8 +13568,13 @@ node-dir@^0.1.10:
     minimatch "^3.0.2"
 
 "node-editor@link:..":
-  version "0.0.0"
-  uid ""
+  version "0.8.0"
+  dependencies:
+    "@reach/auto-id" "^0.10.5"
+    d3-shape "^1.3.7"
+    lodash "^4.17.15"
+    nanoid "^3.1.30"
+    react-portal "^4.2.1"
 
 node-emoji@^1.10.0:
   version "1.10.0"
@@ -16132,7 +16137,6 @@ react-docgen@^4.1.1:
 
 "react-dom@link:../node_modules/react-dom":
   version "0.0.0"
-  uid ""
 
 react-error-overlay@^3.0.0:
   version "3.0.0"
@@ -16368,7 +16372,6 @@ react@^16.8.0:
 
 "react@link:../node_modules/react":
   version "0.0.0"
-  uid ""
 
 read-chunk@^3.2.0:
   version "3.2.0"
@@ -19136,9 +19139,9 @@ typography-theme-moraga@^0.16.19:
     typography-breakpoint-constants "^0.16.19"
 
 ua-parser-js@^0.7.18:
-  version "0.7.21"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.21.tgz#853cf9ce93f642f67174273cc34565ae6f308777"
-  integrity sha512-+O8/qh/Qj8CgC6eYBVBykMrNtp5Gebn4dlGD/kKXVkJNDwyrAwSIqwz8CDf+tsAIWVycKcku6gIXJ0qwx/ZXaQ==
+  version "0.7.33"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.33.tgz#1d04acb4ccef9293df6f70f2c3d22f3030d8b532"
+  integrity sha512-s8ax/CeZdK9R/56Sui0WM6y9OFREJarMRHqLB2EwkovemBxNQ+Bqu8GAsUnVcXKgphb++ghr/B2BZx4mahujPw==
 
 uglify-js@3.4.x:
   version "3.4.10"
