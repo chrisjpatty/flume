@@ -88,11 +88,11 @@ export let NodeEditor = (
     createConnections(nodes, stageState, editorId);
   }, [nodes, editorId, stageState]);
 
-  const recalculateStageRect = () => {
+  const recalculateStageRect = React.useCallback(() => {
     stage.current = document
       .getElementById(`${STAGE_ID}${editorId}`)
       .getBoundingClientRect();
-  };
+  }, [editorId]);
 
   React.useLayoutEffect(() => {
     if (shouldRecalculateConnections) {
@@ -101,9 +101,9 @@ export let NodeEditor = (
     }
   }, [shouldRecalculateConnections, recalculateConnections]);
 
-  const triggerRecalculation = () => {
+  const triggerRecalculation = React.useCallback(() => {
     setShouldRecalculateConnections(true);
-  };
+  }, []);
 
   React.useImperativeHandle(ref, () => ({
     getNodes: () => {
