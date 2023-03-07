@@ -25,8 +25,8 @@
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/plugin-syntax-async-generators": "^7.8.4",
@@ -58,8 +58,8 @@
     "jest-puppeteer": "^4.4.0",
     "np": "^7.2.0",
     "postcss-nested": "^4.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-scripts": "^5.0.0",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^3.0.7",
