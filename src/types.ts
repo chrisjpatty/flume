@@ -1,6 +1,7 @@
 import { HTMLProps, ReactNode } from "react";
 
-export type InputData = { [portName: string]: { [controlName: string]: any } };
+export type ControlData = { [controlName: string]: any };
+export type InputData = { [portName: string]: ControlData };
 
 export type ControlTypes =
   | "text"
@@ -12,7 +13,15 @@ export type ControlTypes =
 
 export type ValueSetter = (newData: any, oldData: any) => any;
 
-export interface TextControl {
+export interface GenericControl {
+  type: ControlTypes;
+  label: string;
+  name: string;
+  defaultValue: any;
+  setValue?: ValueSetter;
+}
+
+export interface TextControl extends GenericControl {
   type: "text";
   defaultValue: string;
 }
@@ -26,7 +35,7 @@ export interface SelectOption {
   internalType?: "comment";
 }
 
-export interface SelectControl {
+export interface SelectControl extends GenericControl {
   type: "select";
   options: SelectOption[];
   defaultValue: string;
@@ -34,18 +43,18 @@ export interface SelectControl {
   placeholder?: string;
 }
 
-export interface NumberControl {
+export interface NumberControl extends GenericControl {
   type: "number";
   defaultValue: number;
-  step: number;
+  step?: number;
 }
 
-export interface CheckboxControl {
+export interface CheckboxControl extends GenericControl {
   type: "checkbox";
   defaultValue: boolean;
 }
 
-export interface MultiselectControl {
+export interface MultiselectControl extends GenericControl {
   type: "multiselect";
   options: SelectOption[];
   defaultValue: string[];
@@ -68,26 +77,19 @@ export type ControlRenderCallback = (
   inputData: InputData
 ) => ReactNode;
 
-export interface CustomControl {
+export interface CustomControl extends GenericControl {
   type: "custom";
   defaultValue: any;
   render: ControlRenderCallback;
 }
 
-export type Control = {
-  type: ControlTypes;
-  label: string;
-  name: string;
-  defaultValue: any;
-  setValue: ValueSetter;
-} & (
+export type Control =
   | TextControl
   | SelectControl
   | NumberControl
   | CheckboxControl
   | MultiselectControl
-  | CustomControl
-);
+  | CustomControl;
 
 export type Colors =
   | "yellow"

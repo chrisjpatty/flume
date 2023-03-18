@@ -6,7 +6,8 @@ import {
   Controls,
   Colors,
   RootEngine,
-  useRootEngine
+  useRootEngine,
+  NodeMap
 } from "node-editor";
 
 const colors = [
@@ -197,7 +198,7 @@ flumeConfig
           return (
             <div
               style={{
-                background: inputData.color,
+                background: inputData.color.color,
                 borderRadius: 4,
                 width: "100%",
                 height: 60
@@ -212,7 +213,7 @@ flumeConfig
     type: "multiColor",
     name: "multiColor",
     label: "Multicolor",
-    multiColor: Colors.grey,
+    // multiColor: Colors.grey,
     controls: [
       Controls.multiselect({
         name: "multiColor",
@@ -635,7 +636,7 @@ const App = () => {
                     border: "none",
                     padding: 0,
                     fontSize: 14,
-                    color: '#222'
+                    color: "#222"
                   }}
                   onClick={actions.openMenu}
                 >
@@ -656,25 +657,38 @@ const App = () => {
 
 export default App;
 
-const useInfiniteEngine = (nodes, engine, context, options = {}) =>
-  Object.keys(nodes).length ? engine.resolveRootNode(nodes, { context, ...options }) : {};
+const useInfiniteEngine = <T extends { [inputName: string]: any }>(
+  nodes: NodeMap,
+  engine: RootEngine,
+  context: any,
+  options = {}
+): T =>
+  Object.keys(nodes).length
+    ? engine.resolveRootNode<T>(nodes, { context, ...options })
+    : ({} as T);
 
-const Website = ({ nodes }) => {
+const Website = ({ nodes }: { nodes: NodeMap }) => {
   const {
     title,
     description,
     showDashboard,
-    showContactForm,
-    showLoginButton
-  } = useInfiniteEngine(nodes, engine, { someContext: true }, { maxLoops: 10 });
+    showBody,
+    showLogin
+  } = useInfiniteEngine<{
+    title: string;
+    description: string;
+    showDashboard: boolean;
+    showBody: boolean;
+    showLogin: boolean;
+  }>(nodes, engine, { someContext: true }, { maxLoops: 10 });
 
   return (
     <div className="website-wrapper">
       <h1>{title}</h1>
       <p>{description}</p>
       {showDashboard && <div>Dashboard</div>}
-      {showContactForm && <div>Contact Form</div>}
-      {showLoginButton && <button>Login</button>}
+      {showBody && <div>Contact Form</div>}
+      {showLogin && <button>Login</button>}
     </div>
   );
 };

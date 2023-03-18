@@ -18,6 +18,7 @@ import {
   Colors,
   Connections,
   Control as ControlType,
+  ControlData,
   InputData,
   PortType,
   PortTypeMap,
@@ -143,7 +144,7 @@ interface InputProps {
   label: string;
   name: string;
   nodeId: string;
-  data: { [controlName: string]: any };
+  data: ControlData;
   controls: ControlType[];
   inputTypes: PortTypeMap;
   noControls?: boolean;

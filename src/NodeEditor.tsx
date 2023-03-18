@@ -109,17 +109,21 @@ export let NodeEditor = React.forwardRef(
           context
         )
     );
+
     const [comments, dispatchComments] = React.useReducer(
       commentsReducer,
       initialComments || {}
     );
+
     React.useEffect(() => {
       dispatchNodes({ type: NodesActionType.HYDRATE_DEFAULT_NODES });
     }, []);
+
     const [
       shouldRecalculateConnections,
       setShouldRecalculateConnections
     ] = React.useState(true);
+
     const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
       scale: typeof initialScale === "number" ? clamp(initialScale, 0.1, 7) : 1,
       translate: { x: 0, y: 0 }
@@ -129,11 +133,11 @@ export let NodeEditor = React.forwardRef(
       createConnections(nodes, stageState, editorId);
     }, [nodes, editorId, stageState]);
 
-    const recalculateStageRect = () => {
+    const recalculateStageRect = React.useCallback(() => {
       stage.current = document
         .getElementById(`${STAGE_ID}${editorId}`)
         ?.getBoundingClientRect();
-    };
+    }, [editorId]);
 
     React.useLayoutEffect(() => {
       if (shouldRecalculateConnections) {
@@ -142,9 +146,9 @@ export let NodeEditor = React.forwardRef(
       }
     }, [shouldRecalculateConnections, recalculateConnections]);
 
-    const triggerRecalculation = () => {
+    const triggerRecalculation = React.useCallback(() => {
       setShouldRecalculateConnections(true);
-    };
+    }, []);
 
     React.useImperativeHandle(ref, () => ({
       getNodes: () => {

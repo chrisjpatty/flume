@@ -32,6 +32,7 @@ interface NodeProps {
   inputData: InputData;
   onDragStart: () => void;
   renderNodeHeader?: NodeHeaderRenderCallback;
+  root?: boolean;
 }
 
 const Node = ({

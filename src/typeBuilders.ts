@@ -1,7 +1,9 @@
+import { CheckboxControl } from "./../dist/types.d";
 import {
   Colors as ColorsType,
   Control,
   CustomControl,
+  GenericControl,
   MultiselectControl,
   NodeType,
   NodeTypeConfig,
@@ -9,89 +11,134 @@ import {
   PortType,
   PortTypeBuilder,
   PortTypeConfig,
-  SelectControl
+  SelectControl,
+  TextControl
 } from "./types";
-const define = (value: any, defaultValue: any) =>
+const define = <T extends any>(value: T, defaultValue: T): T =>
   value !== undefined ? value : defaultValue;
 
-const buildControlType = <T extends Control>(
-  defaultConfig: Partial<T>,
-  validate?: (config?: Partial<T>) => void,
-  setup?: (config: Partial<T>) => Partial<T>
-) => (config: Partial<T>) => {
-  validate?.(config);
+const buildDefaultConfig = (
+  defaultConfig: Partial<GenericControl>,
+  config: Partial<GenericControl>
+): Omit<GenericControl, "type"> => {
   return {
-    type: defaultConfig.type,
-    label: define(config.label, defaultConfig.label || ""),
-    name: define(config.name, defaultConfig.name || ""),
-    defaultValue: define(config.defaultValue, defaultConfig.defaultValue),
-    setValue: define(config.setValue, undefined),
-    ...(setup?.(config) || {})
+    label: config.label ?? defaultConfig.label ?? "",
+    name: config.name ?? defaultConfig.name ?? "",
+    defaultValue: config.defaultValue ?? defaultConfig.defaultValue
+  };
+};
+
+const buildTextControl = (
+  config: Omit<Partial<TextControl>, "type">
+): TextControl => {
+  const defaultConfig = buildDefaultConfig(
+    {
+      name: "text",
+      defaultValue: ""
+    },
+    config
+  );
+  return {
+    ...defaultConfig,
+    type: "text"
+  };
+};
+
+const buildSelectControl = (
+  config: Omit<Partial<SelectControl>, "type">
+): SelectControl => {
+  const defaultConfig = buildDefaultConfig(
+    {
+      name: "select",
+      defaultValue: ""
+    },
+    config
+  );
+  return {
+    ...defaultConfig,
+    type: "select",
+    options: config.options ?? [],
+    getOptions: config.getOptions,
+    placeholder: config.placeholder
+  };
+};
+
+const buildNumberControl = (
+  config: Omit<Partial<NumberControl>, "type">
+): NumberControl => {
+  const defaultConfig = buildDefaultConfig(
+    {
+      name: "number",
+      defaultValue: 0
+    },
+    config
+  );
+  return {
+    ...defaultConfig,
+    type: "number",
+    step: config.step
+  };
+};
+
+const buildCheckboxControl = (
+  config: Omit<Partial<CheckboxControl>, "type">
+): CheckboxControl => {
+  const defaultConfig = buildDefaultConfig(
+    {
+      name: "checkbox",
+      defaultValue: false
+    },
+    config
+  );
+  return {
+    ...defaultConfig,
+    type: "checkbox"
+  };
+};
+
+const buildMultiselectControl = (
+  config: Omit<Partial<MultiselectControl>, "type">
+): MultiselectControl => {
+  const defaultConfig = buildDefaultConfig(
+    {
+      name: "multiselect",
+      defaultValue: []
+    },
+    config
+  );
+  return {
+    ...defaultConfig,
+    type: "multiselect",
+    options: config.options ?? [],
+    getOptions: config.getOptions,
+    placeholder: config.placeholder
+  };
+};
+
+const buildCustomControl = (
+  config: Omit<Partial<CustomControl>, "type">
+): CustomControl => {
+  const defaultConfig = buildDefaultConfig(
+    {
+      name: "custom",
+      defaultValue: undefined
+    },
+    config
+  );
+  return {
+    ...defaultConfig,
+    type: "custom",
+    render: config.render ?? (() => null)
   };
 };
 
 export const Controls = {
-  text: buildControlType({
-    type: "text",
-    name: "text",
-    defaultValue: ""
-  }),
-  select: buildControlType<SelectControl & Control>(
-    {
-      type: "select",
-      name: "select",
-      options: [],
-      defaultValue: ""
-    },
-    () => {},
-    (config: Partial<SelectControl>) => ({
-      options: define(config.options, []),
-      getOptions: define(config.getOptions, undefined),
-      placeholder: define(config.placeholder, undefined)
-    })
-  ),
-  number: buildControlType<NumberControl & Control>(
-    {
-      type: "number",
-      name: "number",
-      defaultValue: 0
-    },
-    () => {},
-    (config: Partial<NumberControl>) => ({
-      step: define(config.step, undefined)
-    })
-  ),
-  checkbox: buildControlType<Control>({
-    type: "checkbox",
-    name: "checkbox",
-    defaultValue: false
-  }),
-  multiselect: buildControlType<MultiselectControl & Control>(
-    {
-      type: "multiselect",
-      name: "multiselect",
-      options: [],
-      defaultValue: []
-    },
-    () => {},
-    (config: Partial<MultiselectControl>) => ({
-      options: define(config.options, []),
-      getOptions: define(config.getOptions, undefined),
-      placeholder: define(config.placeholder, undefined)
-    })
-  ),
-  custom: buildControlType<CustomControl & Control>(
-    {
-      type: "custom",
-      name: "custom",
-      render: () => null,
-      defaultValue: undefined
-    },
-    () => {},
-    (config: Partial<CustomControl>) => ({
-      render: define(config.render, () => {})
-    })
-  )
+  text: buildTextControl,
+  select: buildSelectControl,
+  number: buildNumberControl,
+  checkbox: buildCheckboxControl,
+  multiselect: buildMultiselectControl,
+  custom: buildCustomControl
 };
 
 export const Colors: { [key: string]: ColorsType } = {

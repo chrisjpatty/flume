@@ -248,7 +248,7 @@ const Stage = ({
 
   const handleMouseEnter = () => {
     if (!wrapper.current?.contains(document.activeElement)) {
-      wrapper.current?.focus();
+      wrapper.current?.focus({ preventScroll: true });
     }
   };
 

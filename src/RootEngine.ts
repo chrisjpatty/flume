@@ -40,10 +40,12 @@ export class RootEngine {
     this.loops = 0;
     this.maxLoops = 1000;
   }
+
   private resetLoops = (maxLoops?: number) => {
     this.maxLoops = maxLoops !== undefined ? maxLoops : 1000;
     this.loops = 0;
   };
+
   private checkLoops = () => {
     if (this.maxLoops >= 0 && this.loops > this.maxLoops) {
       throw new LoopError(
@@ -54,6 +56,7 @@ export class RootEngine {
       this.loops++;
     }
   };
+
   private getRootNode = (nodes: NodeMap) => {
     const roots = Object.values(nodes).filter(n => n.root);
     if (roots.length > 1) {
@@ -63,6 +66,7 @@ export class RootEngine {
     }
     return roots[0];
   };
+
   private reduceRootInputs = (
     inputs: ConnectionMap,
     callback: (
@@ -70,11 +74,15 @@ export class RootEngine {
       connection: Connection[]
     ) => { name: string; value: any }
   ) =>
-    Object.entries(inputs).reduce((obj, [inputName, connections]) => {
-      const input = callback(inputName, connections);
-      obj[input.name] = input.value;
-      return obj;
-    }, {});
+    Object.entries(inputs).reduce<{ [inputName: string]: any }>(
+      (obj, [inputName, connections]) => {
+        const input = callback(inputName, connections);
+        obj[input.name] = input.value;
+        return obj;
+      },
+      {}
+    );
+
   private resolveInputValues = (
     node: FlumeNode,
     nodeType: NodeType,
@@ -103,6 +111,7 @@ export class RootEngine {
       return obj;
     }, {});
   };
+
   private getValueOfConnection = (
     connection: Connection,
     nodes: NodeMap,
@@ -125,7 +134,11 @@ export class RootEngine {
     )[connection.portName];
     return outputResult;
   };
-  public resolveRootNode(nodes: NodeMap, rawOptions?: RootEngineOptions) {
+
+  public resolveRootNode<T extends { [inputName: string]: any }>(
+    nodes: NodeMap,
+    rawOptions?: RootEngineOptions
+  ): T {
     const options = rawOptions ?? {};
     const rootNode = options.rootNodeId
       ? nodes[options.rootNodeId]
@@ -139,7 +152,9 @@ export class RootEngine {
           options.context
         );
       }
-      const controlValues = inputs.reduce((obj, input) => {
+      const controlValues = inputs.reduce<{
+        [controlName: string]: any;
+      }>((obj, input) => {
         obj[input.name] = this.resolveInputControls(
           input.type,
           rootNode.inputData[input.name] || {},
@@ -176,15 +191,15 @@ export class RootEngine {
         }
       );
       if (options.onlyResolveConnected) {
-        return inputValues;
+        return inputValues as T;
       } else {
-        return { ...controlValues, ...inputValues };
+        return { ...controlValues, ...inputValues } as T;
       }
     } else {
       console.error(
         "A root node was not found. The Root Engine requires that exactly one node be marked as the root node."
       );
-      return {};
+      return {} as T;
     }
   }
 }
