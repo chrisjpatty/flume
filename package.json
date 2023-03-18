@@ -25,8 +25,8 @@
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -43,11 +43,11 @@
     "@rollup/plugin-typescript": "^8.3.2",
     "@svgr/rollup": "^2.4.1",
     "@testing-library/dom": "^7.20.0",
-    "@testing-library/react": "^10.4.3",
     "@types/d3-shape": "^3.0.2",
     "@types/lodash": "^4.14.182",
     "@types/react": "^18.0.5",
     "@types/react-portal": "^4.0.4",
+    "@testing-library/react": "^14.0.0",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
     "babel-eslint": "10.x",
@@ -72,8 +72,8 @@
     "jest-puppeteer": "^4.4.0",
     "np": "^7.2.0",
     "postcss-nested": "^4.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-scripts": "^5.0.0",
     "rollup": "^2.70.2",
     "rollup-plugin-peer-deps-external": "^2.2.0",

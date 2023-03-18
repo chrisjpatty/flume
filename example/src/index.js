@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import App from "./App";
 import TestEditor from './TestRoutes/TestEditor'
@@ -12,7 +12,10 @@ const FormStyles = () => (
   <style>{`body{background: rgb(198, 203, 208);}`}</style>
 );
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+
+root.render(
   <Router>
     <Route exact path="/" render={() => <App />} />
     <Switch>
@@ -56,14 +59,7 @@ ReactDOM.render(
           </React.Fragment>
         )}
       />
-      <Route
-        exact
-        path="/test"
-        render={() => (
-          <TestEditor />
-        )}
-      />
+      <Route exact path="/test" render={() => <TestEditor />} />
     </Switch>
-  </Router>,
-  document.getElementById("root")
+  </Router>
 );
