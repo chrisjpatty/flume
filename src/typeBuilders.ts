@@ -141,7 +141,7 @@ export const Controls = {
   custom: buildCustomControl
 };
 
-export const Colors: { [key: string]: ColorsType } = {
+export const Colors = {
   yellow: "yellow",
   orange: "orange",
   red: "red",
@@ -150,7 +150,7 @@ export const Colors: { [key: string]: ColorsType } = {
   blue: "blue",
   green: "green",
   grey: "grey"
-};
+} as const;
 
 export const getPortBuilders = (ports: {
   [portType: string]: PortType;
