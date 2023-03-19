@@ -14,6 +14,7 @@ import { PortTypesContext } from "../../context";
 import usePrevious from "../../hooks/usePrevious";
 import { calculateCurve, getPortRect } from "../../connectionCalculator";
 import { STAGE_ID, DRAG_CONNECTION_ID } from '../../constants'
+import { getPort } from "../../utilities";
 
 function useTransputs (transputsFn, transputType, nodeId, inputData, connections) {
   const nodesDispatch = React.useContext(NodeDispatchContext);
@@ -54,7 +55,7 @@ const IoPorts = ({
   const triggerRecalculation = React.useContext(ConnectionRecalculateContext);
   const resolvedInputs = useTransputs(inputs, 'input', nodeId, inputData, connections);
   const resolvedOutputs = useTransputs(outputs, 'output', nodeId, inputData, connections);
-  
+
   return (
     <div className={styles.wrapper} data-flume-component="ports">
       {resolvedInputs.length ? (
@@ -267,18 +268,21 @@ const Port = ({
     const droppedOnPort = !!e.target.dataset.portName;
 
     if (isInput) {
+
       const {
         inputNodeId,
         inputPortName,
         outputNodeId,
-        outputPortName
+        outputPortName,
       } = lineInToPort.current.dataset;
+
       nodesDispatch({
         type: "REMOVE_CONNECTION",
         input: { nodeId: inputNodeId, portName: inputPortName },
         output: { nodeId: outputNodeId, portName: outputPortName }
       });
       if (droppedOnPort) {
+
         const {
           portName: connectToPortName,
           nodeId: connectToNodeId,
@@ -286,10 +290,17 @@ const Port = ({
           portTransputType: connectToTransputType
         } = e.target.dataset;
         const isNotSameNode = outputNodeId !== connectToNodeId;
+
         if (isNotSameNode && connectToTransputType !== "output") {
-          const inputWillAcceptConnection = inputTypes[
-            connectToPortType
-          ].acceptTypes.includes(type);
+
+            const outputPortType = getPort(outputNodeId, outputPortName, "output").dataset.portType
+
+            const inputWillAcceptConnection = inputTypes[
+                    connectToPortType
+                ].acceptTypes.includes(outputPortType) || inputTypes[
+                    connectToPortType
+                ].acceptTypes.includes('any');
+
           if (inputWillAcceptConnection) {
             nodesDispatch({
               type: "ADD_CONNECTION",
@@ -310,8 +321,12 @@ const Port = ({
         const isNotSameNode = inputNodeId !== nodeId;
         if (isNotSameNode && inputTransputType !== "output") {
           const inputWillAcceptConnection = inputTypes[
-            inputNodeType
-          ].acceptTypes.includes(type);
+                    inputNodeType
+                ].acceptTypes.includes(type) || inputTypes[
+                    inputNodeType
+                ].acceptTypes.includes('any')
+
+
           if (inputWillAcceptConnection) {
             nodesDispatch({
               type: "ADD_CONNECTION",
@@ -342,6 +357,7 @@ const Port = ({
       );
       const portIsConnected = !!lineInToPort.current;
       if (portIsConnected) {
+
         lineInToPort.current.parentNode.style.zIndex = 9999;
         const outputPort = getPortRect(
           lineInToPort.current.dataset.outputNodeId,
@@ -382,6 +398,7 @@ const Port = ({
       document.addEventListener("mousemove", handleDrag);
     }
   };
+
 
   return (
     <React.Fragment>
