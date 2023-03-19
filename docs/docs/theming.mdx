@@ -57,3 +57,30 @@ The following is a comprehensive list of all available data attributes. Each com
 - `ctx-menu-list`
 - `ctx-menu-empty`
 - `ctx-menu-option`
+
+## Theming based on node type
+
+In some cases you may want to style some nodes based on their type. There are a few dynamic data attributes you can use for this.
+
+- `data-flume-node-type=[nodeType]` 
+- `data-flume-component-is-root=[boolean]`
+- `data-port-color=[color]`
+- `data-port-name=[portName]`
+- `data-port-type=[portType]
+
+For example, to target a node with type `addNumbers` you could add this to your CSS:
+
+```css
+[data-flume-node-type="addNumbers"] {
+  background: linear-gradient(to top, #4e2020 0%, #20204e 100%);
+  border: 1px solid rgba(255,255,255,.5);
+  color: #fff;
+}
+[data-flume-node-type="addNumbers"] [data-flume-component="node-header"] {
+  background: none;
+}
+```
+
+import {DynamicThemingExample} from '../components/DynamicThemingExample'
+
+<DynamicThemingExample />

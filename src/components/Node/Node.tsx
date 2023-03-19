@@ -206,6 +206,7 @@ const Node = ({
       innerRef={nodeWrapper}
       data-node-id={id}
       data-flume-component="node"
+      data-flume-node-type={currentNodeType.type}
       data-flume-component-is-root={!!root}
       onContextMenu={handleContextMenu}
       stageState={stageState}
