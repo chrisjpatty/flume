@@ -21,6 +21,7 @@ const Node = ({
   connections,
   type,
   inputData,
+  root,
   onDragStart,
   renderNodeHeader
 }) => {
@@ -171,6 +172,7 @@ const Node = ({
       data-node-id={id}
       data-flume-component="node"
       data-flume-node-type={currentNodeType.type}
+      data-flume-component-is-root={!!root}
       onContextMenu={handleContextMenu}
       stageState={stageState}
       stageRect={stageRect}
