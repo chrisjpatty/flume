@@ -74,7 +74,7 @@ export type ControlRenderCallback = (
     inputLabel: string;
     defaultValue: any;
   },
-  inputData: InputData
+  controlData: ControlData
 ) => ReactNode;
 
 export interface CustomControl extends GenericControl {
