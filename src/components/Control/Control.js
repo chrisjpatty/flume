@@ -22,6 +22,7 @@ const Control = ({
   triggerRecalculation,
   updateNodeConnections,
   getOptions,
+  isOptionEqualToValue,
   setValue,
   defaultValue,
   isMonoControl
@@ -56,8 +57,9 @@ const Control = ({
           <Select
             {...commonProps}
             options={
-              getOptions ? getOptions(inputData, executionContext) : options
+              getOptions ? getOptions(inputData, executionContext, nodeId) : options
             }
+            isOptionEqualToValue={isOptionEqualToValue}
             placeholder={placeholder}
           />
         );
@@ -75,8 +77,9 @@ const Control = ({
             allowMultiple
             {...commonProps}
             options={
-              getOptions ? getOptions(inputData, executionContext) : options
+              getOptions ? getOptions(inputData, executionContext, nodeId) : options
             }
+            isOptionEqualToValue={isOptionEqualToValue}
             placeholder={placeholder}
             label={label}
           />

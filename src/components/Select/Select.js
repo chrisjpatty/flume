@@ -6,8 +6,11 @@ import styles from "./Select.css";
 
 const MAX_LABEL_LENGTH = 50;
 
+const isOptionEqualToValueDefault = (option, value) => option === value
+
 const Select = ({
   options = [],
+  isOptionEqualToValue,
   placeholder = "[Select an option]",
   onChange,
   data,
@@ -19,6 +22,15 @@ const Select = ({
     y: 0
   });
   const wrapper = React.useRef();
+  const [ theOptions, setTheOptions ] = React.useState([])
+
+  React.useEffect(() => {
+    if (options.then) {
+      options.then(setTheOptions)
+    } else {
+      setTheOptions(options)
+    }
+  }, [ options ])
 
   const closeDrawer = () => {
     setDrawerOpen(false);
@@ -47,14 +59,17 @@ const Select = ({
     onChange([...data.slice(0, optionIndex), ...data.slice(optionIndex + 1)]);
   };
 
-  const getFilteredOptions = () => (
+  const getFilteredOptions = React.useCallback(() => (
     allowMultiple ?
-    options.filter(opt => !data.includes(opt.value))
-    : options
-  )
+    theOptions.filter(opt => !data.includes(opt.value))
+    : theOptions
+  ), [ theOptions, data ])
 
   const selectedOption = React.useMemo(() => {
-    const option = options.find(o => o.value === data);
+    const option = theOptions.find(o => isOptionEqualToValue
+                                    ? isOptionEqualToValue(o.value, data)
+                                    : isOptionEqualToValueDefault(o.value, data)
+                                  );
     if (option) {
       return {
         ...option,
@@ -64,7 +79,7 @@ const Select = ({
             : option.label
       };
     }
-  }, [options, data]);
+  }, [theOptions, data]);
 
   return (
     <React.Fragment>
@@ -73,7 +88,10 @@ const Select = ({
           <div className={styles.chipsWrapper}>
             {data.map((val, i) => {
               const optLabel =
-                (options.find(opt => opt.value === val) || {}).label || "";
+                (theOptions.find(opt => isOptionEqualToValue
+                                  ? isOptionEqualToValue(opt.value, val)
+                                  : isOptionEqualToValueDefault(opt.value, val)
+                                ) || {}).label || "";
               return (
                 <OptionChip
                   onRequestDelete={() => handleOptionDeleted(i)}
