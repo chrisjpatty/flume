@@ -329,6 +329,12 @@ const nodesReducer = (
       return removeNode(nodes, nodeId);
     }
 
+    case "SET_NODES": {
+      const newNodes = { ...action.nodes };
+      nodesReducer(newNodes, { type: "HYDRATE_DEFAULT_NODES", nodes: newNodes }, { nodeTypes, portTypes, cache, circularBehavior, context, connectionMode }, dispatchToasts);
+      return newNodes;
+    }
+
     case "HYDRATE_DEFAULT_NODES": {
       const newNodes = { ...nodes };
       for (const key in newNodes) {
