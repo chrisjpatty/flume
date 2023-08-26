@@ -1,7 +1,7 @@
-.wrapper{
-  background: rgba(91, 96, 99, 0.9);
+.wrapper {
+  background: rgba(114, 120, 124, 0.9);
   border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0,0,0,.4);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
   position: absolute;
   left: 0px;
   top: 0px;
@@ -11,13 +11,13 @@
   z-index: 1;
   cursor: default;
 }
-.label{
+.label {
   font-size: 13px;
   text-transform: uppercase;
   padding: 5px;
-  background: #464b4e;
+  background: #53585a;
   border-radius: 5px 5px 0px 0px;
   margin: 0px;
   margin-bottom: 3px;
-  border-bottom: 1px solid rgba(0,0,0,.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
