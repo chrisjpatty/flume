@@ -15,6 +15,12 @@ import config from './config'
 
 const App = () => {
   const [nodes, setNodes] = React.useState({})
+
+  React.useCallback((nodes) => {
+    // Do whatever you want with the nodes
+    setNodes(nodes)
+  }, [])
+
   return (
     <div style={{width: 800, height: 600}}>
       <NodeEditor
@@ -29,6 +35,11 @@ const App = () => {
 ```
 
 The `onChange` handler will be called any time any of the nodes change? This includes any time their position or control values change.
+
+:::warning
+It's critical to note that the `onChange` handler **MUST** be memoized. If you don't memoize the handler you will get an infinite loop.
+:::
+
 
 ## `getNodes`
 
