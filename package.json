@@ -9,6 +9,9 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "engines": {
     "node": ">=8",
     "npm": ">=5"
