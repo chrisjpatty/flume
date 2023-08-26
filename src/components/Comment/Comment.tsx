@@ -105,6 +105,7 @@ export default ({
       case "color":
         setColorPickerCoordinates(menuCoordinates);
         setIsPickingColor(true);
+        console.log(menuCoordinates);
         break;
       case "delete":
         dispatch({
@@ -139,6 +140,11 @@ export default ({
       color
     });
   };
+
+  const handleRequestClose = React.useCallback(
+    () => setIsPickingColor(false),
+    []
+  );
 
   React.useEffect(() => {
     if (isNew) {
@@ -234,7 +240,7 @@ export default ({
           <ColorPicker
             x={colorPickerCoordinates.x}
             y={colorPickerCoordinates.y}
-            onRequestClose={() => setIsPickingColor(false)}
+            onRequestClose={handleRequestClose}
             onColorPicked={handleColorPicked}
           />
         </Portal>

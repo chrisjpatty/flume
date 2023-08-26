@@ -15,6 +15,7 @@ export default ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
 
   const testClickOutside = React.useCallback(
     (e: MouseEvent) => {
+      console.log("testClickOutside", e.type);
       if (wrapper.current && !wrapper.current.contains(e.target as Node)) {
         onRequestClose();
         document.removeEventListener("click", testClickOutside);
@@ -26,7 +27,7 @@ export default ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
 
   const testEscape = React.useCallback(
     (e: KeyboardEvent) => {
-      if (e.keyCode === 27) {
+      if (e.key === "Escape") {
         onRequestClose();
         document.removeEventListener("keydown", testEscape);
       }
@@ -35,9 +36,11 @@ export default ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
   );
 
   React.useEffect(() => {
-    document.addEventListener("keydown", testEscape);
-    document.addEventListener("click", testClickOutside);
-    document.addEventListener("contextmenu", testClickOutside);
+    setTimeout(() => {
+      document.addEventListener("keydown", testEscape);
+      document.addEventListener("click", testClickOutside);
+      document.addEventListener("contextmenu", testClickOutside);
+    });
     return () => {
       document.removeEventListener("click", testClickOutside);
       document.removeEventListener("contextmenu", testClickOutside);
