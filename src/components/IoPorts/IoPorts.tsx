@@ -375,7 +375,8 @@ const Port = ({
             nodesDispatch?.({
               type: NodesActionType.ADD_CONNECTION,
               input: { nodeId: connectToNodeId, portName: connectToPortName },
-              output: { nodeId: outputNodeId, portName: outputPortName }
+              output: { nodeId: outputNodeId, portName: outputPortName },
+              portType: type
             });
           }
         }
@@ -397,7 +398,8 @@ const Port = ({
             nodesDispatch?.({
               type: NodesActionType.ADD_CONNECTION,
               output: { nodeId, portName: name },
-              input: { nodeId: inputNodeId, portName: inputPortName }
+              input: { nodeId: inputNodeId, portName: inputPortName },
+              portType: type
             });
             triggerRecalculation();
           }
