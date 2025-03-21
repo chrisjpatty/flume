@@ -1,6 +1,6 @@
 {
   "name": "flume",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A node editor for React",
   "author": "chrisjpatty",
   "license": "MIT",
@@ -27,6 +27,17 @@
     "prop-types": "^15.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "prop-types": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
