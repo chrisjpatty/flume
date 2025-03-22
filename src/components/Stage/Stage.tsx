@@ -34,6 +34,7 @@ interface StageProps {
   disableComments: boolean;
   disablePan: boolean;
   disableZoom: boolean;
+  disableFocusCapture: boolean;
 }
 
 const Stage = ({
@@ -49,7 +50,8 @@ const Stage = ({
   dispatchComments,
   disableComments,
   disablePan,
-  disableZoom
+  disableZoom,
+  disableFocusCapture
 }: StageProps) => {
   const nodeTypes = React.useContext(NodeTypesContext);
   const dispatchNodes = React.useContext(NodeDispatchContext);
@@ -246,7 +248,7 @@ const Stage = ({
   };
 
   const handleMouseEnter = () => {
-    if (!wrapper.current?.contains(document.activeElement)) {
+    if (!disableFocusCapture && !wrapper.current?.contains(document.activeElement)) {
       wrapper.current?.focus({ preventScroll: true });
     }
   };

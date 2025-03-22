@@ -11,7 +11,7 @@ By default, the node editor can be zoomed in and out using the scroll wheel, and
 ## Importing
 
 ```js
-import { NodeEditor } from 'flume'
+import { NodeEditor } from "flume";
 ```
 
 ## Props
@@ -37,10 +37,10 @@ Optional. An object of comments previously generated through the node editor.
 Optional. For many logic graphs, it's helpful to have the editor start with a set of default nodes. To define these nodes, pass an array of objects with the type of the node, and an x and y position relative to the center of the editor.
 
 | Key  | Type         | Default | Required | Description                                                                                                                   |
-|------|--------------|---------|----------|-------------------------------------------------------------------------------------------------------------------------------|
+| ---- | ------------ | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | type | string       | ""      | Required | The type key of the node you want to add as a default. This type must have been previously defined in the `nodeTypes` object. |
-| x    | int \| float | 0       | Optional | The **horizontal** starting position of the node, relative to the center of the node editor.                                       |
-| y    | int \| float | 0       | Optional | The **vertical** starting position of the node, relative to the center of the node editor.                                         |
+| x    | int \| float | 0       | Optional | The **horizontal** starting position of the node, relative to the center of the node editor.                                  |
+| y    | int \| float | 0       | Optional | The **vertical** starting position of the node, relative to the center of the node editor.                                    |
 
 ### `onChange` : function
 
@@ -86,6 +86,10 @@ Optional. If the current node editor contains comment blocks, they will not be r
 
 Optional. Prevents the user from adding additional comments. Defaults to `false`.
 
+### `disableFocusCapture` : boolean
+
+Optional. Prevents the node editor from capturing focus when mousing over the editor. This can help prevent focus bugs in complex applications. Defaults to `false`.
+
 ### `circularBehavior` : string
 
 Optional. Can be one of 3 possible values:
@@ -95,6 +99,7 @@ Optional. Can be one of 3 possible values:
 - `allow`: Creating circular connections is allowed without a warning.
 
 ### `renderNodeHeader` : function
+
 Optional. Allows you to override the rendering of the node header. Common use-cases might include overriding the label of a node, or adding custom UI elements like a button to delete the node, or open the node context menu. This prop accepts a function which is expected to return jsx.
 
 #### Function parameters
@@ -102,12 +107,12 @@ Optional. Allows you to override the rendering of the node header. Common use-ca
 The `renderNodeHeader` function provides three parameters to help you render a custom header. Together they make up the following function signature:
 
 ```jsx
-(Wrapper, nodeType, actions) => jsx
+(Wrapper, nodeType, actions) => jsx;
 ```
 
 #### Wrapper
 
-Wrapper is a React component in which you can render your custom UI. Usage of the wrapper is not required, but is recommended for accessibility and consistency with the other components of the UI. 
+Wrapper is a React component in which you can render your custom UI. Usage of the wrapper is not required, but is recommended for accessibility and consistency with the other components of the UI.
 
 #### nodeType
 

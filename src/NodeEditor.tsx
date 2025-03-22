@@ -57,6 +57,7 @@ interface NodeEditorProps {
   disableComments?: boolean;
   disableZoom?: boolean;
   disablePan?: boolean;
+  disableFocusCapture?: boolean;
   circularBehavior?: CircularBehavior;
   renderNodeHeader?: NodeHeaderRenderCallback;
   debug?: boolean;
@@ -79,6 +80,7 @@ export let NodeEditor = React.forwardRef(
       disableComments = false,
       disableZoom = false,
       disablePan = false,
+      disableFocusCapture = false,
       circularBehavior,
       renderNodeHeader,
       debug
@@ -207,6 +209,7 @@ export let NodeEditor = React.forwardRef(
                           dispatchStageState={dispatchStageState}
                           dispatchComments={dispatchComments}
                           disableComments={disableComments || hideComments}
+                          disableFocusCapture={disableFocusCapture}
                           stageRef={stage}
                           numNodes={Object.keys(nodes).length}
                           outerStageChildren={
