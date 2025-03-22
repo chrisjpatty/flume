@@ -27,12 +27,12 @@ const TextInput = ({
     document.removeEventListener("mouseup", handleDragEnd);
   };
 
-  const handleMouseMove = e => {
+  const handleMouseMove = (e: MouseEvent) => {
     e.stopPropagation();
     updateNodeConnections();
   };
 
-  const handlePossibleResize = e => {
+  const handlePossibleResize: React.MouseEventHandler<HTMLInputElement | HTMLTextAreaElement> = e => {
     e.stopPropagation();
     recalculateStageRect?.();
     document.addEventListener("mousemove", handleMouseMove);

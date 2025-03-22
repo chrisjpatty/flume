@@ -20,9 +20,6 @@
     "start": "rollup -c -w",
     "release": "changeset publish"
   },
-  "np": {
-    "testScript": "test"
-  },
   "peerDependencies": {
     "prop-types": "^15.5.4",
     "react": "^18.2.0",

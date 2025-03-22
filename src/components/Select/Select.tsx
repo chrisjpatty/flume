@@ -72,6 +72,8 @@ const Select = ({
             : option.label
       };
     }
+
+    return undefined;
   }, [options, data]);
 
   return (
@@ -155,7 +157,12 @@ const SelectedOption = ({
   </div>
 );
 
-const OptionChip = ({ children, onRequestDelete }) => (
+interface OptionChipProps {
+  children: React.ReactNode;
+  onRequestDelete: () => void;
+}
+
+const OptionChip = ({ children, onRequestDelete }: OptionChipProps) => (
   <div className={styles.chipWrapper}>
     {children}
     <button

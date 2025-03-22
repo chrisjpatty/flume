@@ -16,7 +16,6 @@ import {
   StageTranslate
 } from "../../types";
 import {
-  StageAction,
   StageActionSetter,
   StageActionType
 } from "../../stageReducer";
@@ -107,28 +106,28 @@ const Stage = ({
 
           const xOld = byOldScale(
             e.clientX -
-              wrapperRect.x -
-              wrapperRect.width / 2 +
-              currentTranslate.x
+            wrapperRect.x -
+            wrapperRect.width / 2 +
+            currentTranslate.x
           );
           const yOld = byOldScale(
             e.clientY -
-              wrapperRect.y -
-              wrapperRect.height / 2 +
-              currentTranslate.y
+            wrapperRect.y -
+            wrapperRect.height / 2 +
+            currentTranslate.y
           );
 
           const xNew = byNewScale(
             e.clientX -
-              wrapperRect.x -
-              wrapperRect.width / 2 +
-              currentTranslate.x
+            wrapperRect.x -
+            wrapperRect.width / 2 +
+            currentTranslate.x
           );
           const yNew = byNewScale(
             e.clientY -
-              wrapperRect.y -
-              wrapperRect.height / 2 +
-              currentTranslate.y
+            wrapperRect.y -
+            wrapperRect.height / 2 +
+            currentTranslate.y
           );
 
           const xDistance = xOld - xNew;
@@ -152,8 +151,8 @@ const Stage = ({
     wrapper.current?.focus();
   };
 
-  const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
-    const e = event as React.MouseEvent;
+  const handleDragStart = (event: MouseEvent | TouchEvent) => {
+    const e = event as MouseEvent;
     e.preventDefault();
     dragData.current = {
       x: e.clientX,

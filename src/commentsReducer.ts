@@ -15,52 +15,57 @@ export enum CommentActionTypes {
 
 export type CommentAction =
   | {
-      type: CommentActionTypes.ADD_COMMENT;
-      x: number;
-      y: number;
-    }
+    type: CommentActionTypes.ADD_COMMENT;
+    x: number;
+    y: number;
+  }
   | {
-      type: CommentActionTypes.REMOVE_COMMENT_NEW;
-      id: string;
-    }
+    type: CommentActionTypes.REMOVE_COMMENT_NEW;
+    id: string;
+  }
   | {
-      type: CommentActionTypes.SET_COMMENT_COORDINATES;
-      id: string;
-      x: number;
-      y: number;
-    }
+    type: CommentActionTypes.SET_COMMENT_COORDINATES;
+    id: string;
+    x: number;
+    y: number;
+  }
   | {
-      type: CommentActionTypes.SET_COMMENT_DIMENSIONS;
-      id: string;
-      width: number;
-      height: number;
-    }
+    type: CommentActionTypes.SET_COMMENT_DIMENSIONS;
+    id: string;
+    width: number;
+    height: number;
+  }
   | {
-      type: CommentActionTypes.SET_COMMENT_TEXT;
-      id: string;
-      text: string;
-    }
+    type: CommentActionTypes.SET_COMMENT_TEXT;
+    id: string;
+    text: string;
+  }
   | {
-      type: CommentActionTypes.SET_COMMENT_COLOR;
-      id: string;
-      color: Colors;
-    }
+    type: CommentActionTypes.SET_COMMENT_COLOR;
+    id: string;
+    color: Colors;
+  }
   | {
-      type: CommentActionTypes.DELETE_COMMENT;
-      id: string;
-    };
+    type: CommentActionTypes.DELETE_COMMENT;
+    id: string;
+  };
 
 const setComment = (
   comments: CommentMap,
   id: string,
   merge: Partial<FlumeComment>
-): CommentMap => ({
-  ...comments,
-  [id]: {
-    ...comments[id],
-    ...merge
-  }
-});
+): CommentMap => {
+  const existingComment = comments[id];
+  if (!existingComment) return comments;
+
+  return {
+    ...comments,
+    [id]: {
+      ...existingComment,
+      ...merge
+    }
+  } as CommentMap;
+};
 
 const commentsReducer: React.Reducer<CommentMap, CommentAction> = (
   comments = {},

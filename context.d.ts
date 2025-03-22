@@ -1,0 +1,13 @@
+import { NodeTypeMap, StageState, PortTypeMap } from "./types";
+import { NodesAction } from "./nodesReducer";
+import React from "react";
+import FlumeCache from "./Cache";
+export declare const NodeTypesContext: React.Context<NodeTypeMap | null>;
+export declare const PortTypesContext: React.Context<PortTypeMap | null>;
+export declare const NodeDispatchContext: React.Context<React.Dispatch<NodesAction> | null>;
+export declare const ConnectionRecalculateContext: React.Context<(() => void) | null>;
+export declare const ContextContext: React.Context<any>;
+export declare const StageContext: React.Context<StageState | null>;
+export declare const CacheContext: React.Context<React.RefObject<FlumeCache> | null>;
+export declare const RecalculateStageRectContext: React.Context<(() => void) | null>;
+export declare const EditorIdContext: React.Context<string>;

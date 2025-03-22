@@ -58,6 +58,20 @@ const Toaster = ({ toasts = [], dispatchToasts }: ToasterProps) => {
   );
 };
 
+interface ToastProps {
+  id: string;
+  title?: string;
+  message: string;
+  duration: number;
+  type: string;
+  exiting: boolean;
+  y: number;
+  onHeightReceived: (id: string, height: number) => void;
+  onExitRequested: (id: string) => void;
+  onRemoveRequested: (id: string) => void;
+}
+
+
 const Toast = ({
   id,
   title,
@@ -69,7 +83,7 @@ const Toast = ({
   onHeightReceived,
   onExitRequested,
   onRemoveRequested
-}) => {
+}: ToastProps) => {
   const [paused, setPaused] = React.useState(false);
   const wrapper = React.useRef<HTMLDivElement>(null);
   const timer = React.useRef<NodeJS.Timeout>();

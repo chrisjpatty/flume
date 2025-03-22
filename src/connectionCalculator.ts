@@ -42,9 +42,9 @@ export const getPortRect = (
 
 export const getPortRectsByNodes = (
   nodes: { [nodeId: string]: FlumeNode },
-  forEachConnection
+  forEachConnection: (connection: { to: DOMRect | null; from: DOMRect | null; name: string }) => void
 ) =>
-  Object.values(nodes).reduce((obj, node) => {
+  Object.values(nodes).reduce<{ [key: string]: DOMRect | null }>((obj, node) => {
     if (node.connections && node.connections.inputs) {
       Object.entries(node.connections.inputs).forEach(
         ([inputName, outputs]) => {
@@ -72,8 +72,6 @@ export const getPortRectsByNodes = (
   }, {});
 
 export const calculateCurve = (from: Coordinate, to: Coordinate) => {
-  console.log("from", from);
-  console.log("to", to);
   const length = to.x - from.x;
   const thirdLength = length / 3;
 

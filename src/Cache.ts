@@ -1,10 +1,8 @@
-import { Connections, PortType } from "./types";
-
-class FlumeCache{
+class FlumeCache {
   ports: { [portType: string]: Element };
-  connections: {[id: string]: SVGPathElement};
+  connections: { [id: string]: SVGPathElement };
 
-  constructor(){
+  constructor() {
     this.ports = {};
     this.connections = {};
   }
