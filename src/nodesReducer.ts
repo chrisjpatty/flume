@@ -12,6 +12,7 @@ import {
   Connections,
   DefaultNode,
   FlumeNode,
+  InputData,
   NodeMap,
   NodeType,
   NodeTypeMap,
@@ -21,7 +22,6 @@ import {
 } from "./types";
 import FlumeCache from "./Cache";
 import { ToastAction, ToastActionTypes } from "./toastsReducer";
-import { InputData } from "../dist/types";
 
 const addConnection = (nodes: NodeMap, input: ProposedConnection, output: ProposedConnection, portTypes: PortTypeMap) => {
   const newNodes = {

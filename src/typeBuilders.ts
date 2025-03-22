@@ -1,5 +1,5 @@
-import { CheckboxControl } from "./../dist/types.d";
 import {
+  CheckboxControl,
   CustomControl,
   GenericControl,
   MultiselectControl,
@@ -12,6 +12,7 @@ import {
   SelectControl,
   TextControl
 } from "./types";
+
 const define = <T extends any>(value: T, defaultValue: T): T =>
   value !== undefined ? value : defaultValue;
 
