@@ -137,7 +137,7 @@ export interface PortType {
   /**
    * An array of port type strings. Only port types included in this array will be allowed to connect to this port. By default ports always accept their own type.
    */
-  acceptTypes: string[];
+  acceptTypes?: string[];
 }
 
 export type PortTypeMap = { [portType: string]: PortType };
@@ -231,11 +231,11 @@ export interface NodeTypeConfig
    * ```
    */
   inputs?:
-    | PortType[]
-    | ((ports: { [portType: string]: PortTypeBuilder }) => PortType[])
-    | ((ports: {
-        [portType: string]: PortTypeBuilder;
-      }) => DynamicPortTypeBuilder);
+  | PortType[]
+  | ((ports: { [portType: string]: PortTypeBuilder }) => PortType[])
+  | ((ports: {
+    [portType: string]: PortTypeBuilder;
+  }) => DynamicPortTypeBuilder);
   /**
    * Represents the ports available to be connected as outputs from the node. Must be one of the following types:
    * - An array of ports
@@ -263,11 +263,11 @@ export interface NodeTypeConfig
    * ```
    */
   outputs?:
-    | PortType[]
-    | ((ports: { [portType: string]: PortTypeBuilder }) => PortType[])
-    | ((ports: {
-        [portType: string]: PortTypeBuilder;
-      }) => DynamicPortTypeBuilder);
+  | PortType[]
+  | ((ports: { [portType: string]: PortTypeBuilder }) => PortType[])
+  | ((ports: {
+    [portType: string]: PortTypeBuilder;
+  }) => DynamicPortTypeBuilder);
 }
 
 export type Connection = {

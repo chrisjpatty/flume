@@ -101,6 +101,10 @@ const IoPorts = ({
     connections
   );
 
+  if (!triggerRecalculation || !inputTypes) {
+    return null;
+  }
+
   return (
     <div className={styles.wrapper} data-flume-component="ports">
       {resolvedInputs.length ? (
@@ -110,7 +114,7 @@ const IoPorts = ({
               {...input}
               data={inputData[input.name] || {}}
               isConnected={!!connections.inputs[input.name]}
-              triggerRecalculation={triggerRecalculation ?? (() => {})}
+              triggerRecalculation={triggerRecalculation ?? (() => { })}
               updateNodeConnections={updateNodeConnections}
               inputTypes={inputTypes ?? {}}
               nodeId={nodeId}
@@ -231,12 +235,12 @@ const Input = ({
 };
 
 interface OutputProps {
-  label;
-  name;
-  nodeId;
-  type;
-  inputTypes;
-  triggerRecalculation;
+  label: string;
+  name: string;
+  nodeId: string;
+  type: string;
+  inputTypes: PortTypeMap;
+  triggerRecalculation: () => void;
 }
 
 const Output = ({
@@ -246,7 +250,7 @@ const Output = ({
   type,
   inputTypes,
   triggerRecalculation
-}) => {
+}: OutputProps) => {
   const { label: defaultLabel, color } = inputTypes[type] || {};
 
   return (
@@ -297,7 +301,7 @@ const Port = ({
   };
   const editorId = React.useContext(EditorIdContext);
   const stageId = `${STAGE_ID}${editorId}`;
-  const inputTypes = React.useContext(PortTypesContext) || {};
+  const inputTypes = React.useContext(PortTypesContext) ?? {};
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStartCoordinates, setDragStartCoordinates] = React.useState({
     x: 0,
@@ -344,8 +348,8 @@ const Port = ({
     }
   };
 
-  const handleDragEnd = e => {
-    const droppedOnPort = !!e.target.dataset.portName;
+  const handleDragEnd = (e: MouseEvent) => {
+    const droppedOnPort = !!(e.target as HTMLElement)?.dataset?.portName;
 
     if (isInput) {
       const {
@@ -365,12 +369,18 @@ const Port = ({
           nodeId: connectToNodeId,
           portType: connectToPortType,
           portTransputType: connectToTransputType
-        } = e.target.dataset;
+        } = (e.target as HTMLElement).dataset;
+
+        if (!connectToPortName || !connectToNodeId || !connectToPortType || !connectToTransputType) {
+          return;
+        }
+
         const isNotSameNode = outputNodeId !== connectToNodeId;
+
         if (isNotSameNode && connectToTransputType !== "output") {
           const inputWillAcceptConnection = inputTypes[
             connectToPortType
-          ].acceptTypes.includes(type);
+          ]?.acceptTypes?.includes(type);
           if (inputWillAcceptConnection) {
             nodesDispatch?.({
               type: NodesActionType.ADD_CONNECTION,
@@ -387,12 +397,18 @@ const Port = ({
           nodeId: inputNodeId,
           portType: inputNodeType,
           portTransputType: inputTransputType
-        } = e.target.dataset;
+        } = (e.target as HTMLElement).dataset;
+
+        if (!inputPortName || !inputNodeId || !inputNodeType || !inputTransputType) {
+          return;
+        }
+
         const isNotSameNode = inputNodeId !== nodeId;
         if (isNotSameNode && inputTransputType !== "output") {
           const inputWillAcceptConnection = inputTypes[
             inputNodeType
-          ].acceptTypes.includes(type);
+          ]?.acceptTypes?.includes(type);
+
           if (inputWillAcceptConnection) {
             nodesDispatch?.({
               type: NodesActionType.ADD_CONNECTION,
@@ -409,14 +425,13 @@ const Port = ({
     document.removeEventListener("mousemove", handleDrag);
   };
 
-  const handleDragStart = e => {
+  const handleDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     const {
       x: startPortX = 0,
       y: startPortY = 0,
-      width: startPortWidth = 0,
-      height: startPortHeight = 0
+      width: startPortWidth = 0
     } = port.current?.getBoundingClientRect() || {};
 
     const {
@@ -440,8 +455,7 @@ const Port = ({
         const {
           x: outputPortX = 0,
           y: outputPortY = 0,
-          width: outputPortWidth = 0,
-          height: outputPortHeight = 0
+          width: outputPortWidth = 0
         } =
           getPortRect(
             lineInToPort.current.dataset.outputNodeId || "",

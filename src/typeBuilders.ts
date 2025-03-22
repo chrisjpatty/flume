@@ -1,7 +1,5 @@
-import { CheckboxControl } from "./../dist/types.d";
 import {
-  Colors as ColorsType,
-  Control,
+  CheckboxControl,
   CustomControl,
   GenericControl,
   MultiselectControl,
@@ -14,6 +12,7 @@ import {
   SelectControl,
   TextControl
 } from "./types";
+
 const define = <T extends any>(value: T, defaultValue: T): T =>
   value !== undefined ? value : defaultValue;
 
@@ -155,16 +154,16 @@ export const Colors = {
 export const getPortBuilders = (ports: {
   [portType: string]: PortType;
 }): { [portType: string]: PortTypeBuilder } =>
-  Object.values(ports).reduce((obj, port) => {
+  Object.values(ports).reduce<{ [portType: string]: PortTypeBuilder }>((obj, port) => {
     obj[port.type] = (config: Partial<PortType> = {}) => {
       return {
         type: port.type,
         name: config.name || port.name,
         label: config.label || port.label,
-        noControls: define(config.noControls, false),
+        noControls: !!define(config.noControls, false),
         color: config.color || port.color,
-        hidePort: define(config.hidePort, port.hidePort),
-        controls: define(config.controls, port.controls)
+        hidePort: !!define(config.hidePort, port.hidePort),
+        controls: define(config.controls, port.controls) ?? []
       };
     };
     return obj;

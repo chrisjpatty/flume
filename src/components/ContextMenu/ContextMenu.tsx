@@ -95,7 +95,7 @@ const ContextMenu = ({
     return options.filter(opt => opt.label.toLowerCase().includes(lowerFilter));
   }, [filter, options]);
 
-  const handleFilterChange = e => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFilter(value);
     setSelectedIndex(0);
@@ -226,6 +226,15 @@ const ContextMenu = ({
   );
 };
 
+interface ContextOptionProps {
+  menuId: string;
+  index: number;
+  children: React.ReactNode;
+  onClick: () => void;
+  selected: boolean;
+  onMouseEnter: () => void;
+}
+
 const ContextOption = ({
   menuId,
   index,
@@ -233,7 +242,7 @@ const ContextOption = ({
   onClick,
   selected,
   onMouseEnter
-}) => {
+}: ContextOptionProps) => {
   return (
     <div
       data-flume-component="ctx-menu-option"

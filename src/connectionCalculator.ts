@@ -42,9 +42,9 @@ export const getPortRect = (
 
 export const getPortRectsByNodes = (
   nodes: { [nodeId: string]: FlumeNode },
-  forEachConnection
+  forEachConnection: (connection: { to: DOMRect | null; from: DOMRect | null; name: string }) => void
 ) =>
-  Object.values(nodes).reduce((obj, node) => {
+  Object.values(nodes).reduce<{ [key: string]: DOMRect | null }>((obj, node) => {
     if (node.connections && node.connections.inputs) {
       Object.entries(node.connections.inputs).forEach(
         ([inputName, outputs]) => {
@@ -74,14 +74,44 @@ export const getPortRectsByNodes = (
 export const calculateCurve = (from: Coordinate, to: Coordinate) => {
   const length = to.x - from.x;
   const thirdLength = length / 3;
-  const curve =
-    line().curve(curveBasis)([
+
+  let curveCoords: [number, number][] = [];
+
+  if (to.x > from.x - 6) {
+    curveCoords = [
       [from.x, from.y],
       [from.x + thirdLength, from.y],
       [from.x + thirdLength * 2, to.y],
       [to.x, to.y]
-    ]) ?? "";
-  return curve;
+    ];
+  } else {
+    const outD = 50;
+    const height = Math.abs(to.y - from.y);
+    const heightThird = height / 3;
+
+    if (to.y > from.y) {
+      curveCoords = [
+        [from.x, from.y],
+        [from.x + outD, from.y],
+        [from.x + outD, from.y + heightThird],
+        [to.x - outD, to.y - heightThird],
+        [to.x - outD, to.y],
+        [to.x, to.y]
+      ];
+    } else {
+      curveCoords = [
+        [from.x, from.y],
+        [from.x + outD, from.y],
+        [from.x + outD, from.y - heightThird],
+        [to.x - outD, to.y + heightThird],
+        [to.x - outD, to.y],
+        [to.x, to.y]
+      ];
+    }
+  }
+
+  const curve = line().curve(curveBasis)(curveCoords);
+  return curve ?? "";
 };
 
 export const deleteConnection = ({ id }: { id: string }) => {

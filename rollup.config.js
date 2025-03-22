@@ -34,7 +34,9 @@ export default {
       exclude: 'node_modules/**',
       babelHelpers: 'runtime',
     }),
-    typescript({tsconfig: './tsconfig.json'}),
+    typescript({
+      tsconfig: './tsconfig.json'
+    }),
     commonjs(),
     postcss({
       modules: true,

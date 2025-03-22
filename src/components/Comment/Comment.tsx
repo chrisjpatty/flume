@@ -23,7 +23,7 @@ interface CommentProps {
   isNew: boolean;
 }
 
-export default ({
+const Comment = ({
   dispatch,
   id,
   x,
@@ -58,7 +58,7 @@ export default ({
 
   const closeContextMenu = () => setMenuOpen(false);
 
-  const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
+  const startDrag = (e: MouseEvent | TouchEvent) => {
     onDragStart();
   };
 
@@ -68,7 +68,7 @@ export default ({
     }
   };
 
-  const handleDragEnd = (e: MouseEvent, { x, y }) => {
+  const handleDragEnd = (e: MouseEvent, { x, y }: Coordinate) => {
     dispatch({
       type: CommentActionTypes.SET_COMMENT_COORDINATES,
       id,
@@ -105,7 +105,6 @@ export default ({
       case "color":
         setColorPickerCoordinates(menuCoordinates);
         setIsPickingColor(true);
-        console.log(menuCoordinates);
         break;
       case "delete":
         dispatch({
@@ -133,7 +132,7 @@ export default ({
     });
   };
 
-  const handleColorPicked = color => {
+  const handleColorPicked = (color: Colors) => {
     dispatch({
       type: CommentActionTypes.SET_COMMENT_COLOR,
       id,
@@ -248,3 +247,5 @@ export default ({
     </Draggable>
   );
 };
+
+export default Comment;

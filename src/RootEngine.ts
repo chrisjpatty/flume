@@ -6,8 +6,6 @@ import {
   Connection,
   FlumeNode,
   NodeType,
-  NodeTypeMap,
-  Connections,
   RootEngineOptions
 } from "./types";
 import { FlumeConfig } from "./typeBuilders";
@@ -93,7 +91,7 @@ export class RootEngine {
     if (typeof inputs === "function") {
       inputs = inputs(node.inputData, node.connections, context);
     }
-    return inputs.reduce((obj, input) => {
+    return inputs.reduce<Record<string, any>>((obj, input) => {
       const inputConnections = node.connections.inputs[input.name] || [];
       if (inputConnections.length > 0) {
         obj[input.name] = this.getValueOfConnection(
@@ -106,7 +104,7 @@ export class RootEngine {
           input.type,
           node.inputData[input.name] || {},
           context
-        );
+        )
       }
       return obj;
     }, {});

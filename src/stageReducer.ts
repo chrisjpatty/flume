@@ -13,22 +13,22 @@ export enum StageActionType {
 
 export type StageAction =
   | {
-      type: StageActionType.SET_SCALE;
-      scale: number;
-    }
+    type: StageActionType.SET_SCALE;
+    scale: number;
+  }
   | {
-      type: StageActionType.SET_TRANSLATE;
-      translate: StageTranslate;
-    }
+    type: StageActionType.SET_TRANSLATE;
+    translate: StageTranslate;
+  }
   | {
-      type: StageActionType.SET_TRANSLATE_SCALE;
-      translate: StageTranslate;
-      scale: number;
-    };
+    type: StageActionType.SET_TRANSLATE_SCALE;
+    translate: StageTranslate;
+    scale: number;
+  };
 
 export type StageActionSetter = StageAction | ((state: StageState) => StageAction);
 
-export default (state: StageState, incomingAction: StageActionSetter) => {
+const stageReducer = (state: StageState, incomingAction: StageActionSetter) => {
   let action =
     typeof incomingAction === "function"
       ? incomingAction(state)
@@ -45,3 +45,5 @@ export default (state: StageState, incomingAction: StageActionSetter) => {
       return state;
   }
 };
+
+export default stageReducer;

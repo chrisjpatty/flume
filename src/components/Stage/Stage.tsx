@@ -16,7 +16,6 @@ import {
   StageTranslate
 } from "../../types";
 import {
-  StageAction,
   StageActionSetter,
   StageActionType
 } from "../../stageReducer";
@@ -35,6 +34,7 @@ interface StageProps {
   disableComments: boolean;
   disablePan: boolean;
   disableZoom: boolean;
+  disableFocusCapture: boolean;
 }
 
 const Stage = ({
@@ -50,7 +50,8 @@ const Stage = ({
   dispatchComments,
   disableComments,
   disablePan,
-  disableZoom
+  disableZoom,
+  disableFocusCapture
 }: StageProps) => {
   const nodeTypes = React.useContext(NodeTypesContext);
   const dispatchNodes = React.useContext(NodeDispatchContext);
@@ -65,7 +66,7 @@ const Stage = ({
     if (wrapper.current) {
       stageRef.current = wrapper.current.getBoundingClientRect();
     }
-  }, []);
+  }, [stageRef]);
 
   React.useEffect(() => {
     if (wrapper.current) {
@@ -107,28 +108,28 @@ const Stage = ({
 
           const xOld = byOldScale(
             e.clientX -
-              wrapperRect.x -
-              wrapperRect.width / 2 +
-              currentTranslate.x
+            wrapperRect.x -
+            wrapperRect.width / 2 +
+            currentTranslate.x
           );
           const yOld = byOldScale(
             e.clientY -
-              wrapperRect.y -
-              wrapperRect.height / 2 +
-              currentTranslate.y
+            wrapperRect.y -
+            wrapperRect.height / 2 +
+            currentTranslate.y
           );
 
           const xNew = byNewScale(
             e.clientX -
-              wrapperRect.x -
-              wrapperRect.width / 2 +
-              currentTranslate.x
+            wrapperRect.x -
+            wrapperRect.width / 2 +
+            currentTranslate.x
           );
           const yNew = byNewScale(
             e.clientY -
-              wrapperRect.y -
-              wrapperRect.height / 2 +
-              currentTranslate.y
+            wrapperRect.y -
+            wrapperRect.height / 2 +
+            currentTranslate.y
           );
 
           const xDistance = xOld - xNew;
@@ -152,8 +153,8 @@ const Stage = ({
     wrapper.current?.focus();
   };
 
-  const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
-    const e = event as React.MouseEvent;
+  const handleDragStart = (event: MouseEvent | TouchEvent) => {
+    const e = event as MouseEvent;
     e.preventDefault();
     dragData.current = {
       x: e.clientX,
@@ -247,7 +248,7 @@ const Stage = ({
   };
 
   const handleMouseEnter = () => {
-    if (!wrapper.current?.contains(document.activeElement)) {
+    if (!disableFocusCapture && !wrapper.current?.contains(document.activeElement)) {
       wrapper.current?.focus({ preventScroll: true });
     }
   };

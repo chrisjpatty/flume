@@ -1,11 +1,11 @@
 import React, { HTMLProps, MutableRefObject, RefObject } from "react";
 import { Coordinate, StageState } from "../../types";
 
-type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & {
+type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd" | "onDragStart"> & {
   stageState: StageState;
   stageRect?: RefObject<DOMRect | undefined>;
   onDragDelayStart?: (event: React.MouseEvent | React.TouchEvent) => void;
-  onDragStart?: (event: React.MouseEvent | React.TouchEvent) => void;
+  onDragStart?: (event: MouseEvent | TouchEvent) => void;
   onDrag?: (coordinates: Coordinate, event: MouseEvent) => void;
   onDragEnd?: (event: MouseEvent, coordinate: Coordinate) => void;
   onMouseDown?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -44,17 +44,17 @@ const Draggable = ({
     const x =
       byScale(
         e.clientX -
-          (stageRect ? stageRect.current?.left ?? 0 : 0) -
-          offsetX -
-          (stageRect ? stageRect.current?.width ?? 0 : 0) / 2
+        (stageRect ? stageRect.current?.left ?? 0 : 0) -
+        offsetX -
+        (stageRect ? stageRect.current?.width ?? 0 : 0) / 2
       ) + byScale(stageState.translate.x);
 
     const y =
       byScale(
         e.clientY -
-          (stageRect ? stageRect.current?.top ?? 0 : 0) -
-          offsetY -
-          (stageRect ? stageRect.current?.height ?? 0 : 0) / 2
+        (stageRect ? stageRect.current?.top ?? 0 : 0) -
+        offsetY -
+        (stageRect ? stageRect.current?.height ?? 0 : 0) / 2
       ) + byScale(stageState.translate.y);
 
     return { x, y };
@@ -76,7 +76,7 @@ const Draggable = ({
     window.removeEventListener("mousemove", updateCoordinates);
   };
 
-  const startDrag = e => {
+  const startDrag = (e: MouseEvent | TouchEvent) => {
     if (onDragStart) {
       onDragStart(e);
     }

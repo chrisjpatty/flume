@@ -10,12 +10,11 @@ interface ColorPickerProps {
   onRequestClose: () => void;
 }
 
-export default ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
+const ColorPicker = ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
   const wrapper = React.useRef<HTMLDivElement>(null);
 
   const testClickOutside = React.useCallback(
     (e: MouseEvent) => {
-      console.log("testClickOutside", e.type);
       if (wrapper.current && !wrapper.current.contains(e.target as Node)) {
         onRequestClose();
         document.removeEventListener("click", testClickOutside);
@@ -92,3 +91,5 @@ const ColorButton = ({
     />
   </div>
 );
+
+export default ColorPicker;
