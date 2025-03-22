@@ -14,8 +14,9 @@
     "npm": ">=5"
   },
   "scripts": {
-    "test": "cross-env CI=1 react-scripts test --env=jsdom && npx cypress run",
-    "test:watch": "react-scripts test --env=jsdom",
+    "test": "jest && npx cypress run",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "build": "rollup -c",
     "start": "rollup -c -w",
     "release": "changeset publish"
@@ -41,7 +42,9 @@
     "@rollup/plugin-typescript": "^8.3.2",
     "@svgr/rollup": "^2.4.1",
     "@testing-library/dom": "^7.20.0",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/d3-shape": "^3.0.2",
     "@types/lodash": "^4.14.182",
     "@types/react": "^18.0.5",
@@ -49,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
     "babel-eslint": "10.x",
+    "babel-jest": "^29.7.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
@@ -67,6 +71,9 @@
     "eslint-plugin-standard": "^3.1.0",
     "eslint-plugin-tsdoc": "^0.2.16",
     "gh-pages": "^1.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "jest-puppeteer": "^4.4.0",
     "postcss-nested": "^4.2.1",
     "react": "^18.2.0",
@@ -76,6 +83,7 @@
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-url": "^1.4.0",
+    "text-encoding": "^0.7.0",
     "tslib": "^2.3.1",
     "typescript": "^4.6.3",
     "wait-on": "^5.2.1",
@@ -91,10 +99,5 @@
     "nanoid": "^3.3.2",
     "react-portal": "^4.2.1",
     "rollup-plugin-typescript2": "^0.31.2"
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(nanoid)/)"
-    ]
   }
 }
