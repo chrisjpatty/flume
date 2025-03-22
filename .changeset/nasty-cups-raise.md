@@ -1,0 +1,5 @@
+---
+"flume": minor
+---
+
+Prettier connections
