@@ -23,6 +23,17 @@ import {
 import FlumeCache from "./Cache";
 import { ToastAction, ToastActionTypes } from "./toastsReducer";
 
+export enum NodesActionType {
+  ADD_CONNECTION = "ADD_CONNECTION",
+  REMOVE_CONNECTION = "REMOVE_CONNECTION",
+  DESTROY_TRANSPUT = "DESTROY_TRANSPUT",
+  ADD_NODE = "ADD_NODE",
+  REMOVE_NODE = "REMOVE_NODE",
+  HYDRATE_DEFAULT_NODES = "HYDRATE_DEFAULT_NODES",
+  SET_PORT_DATA = "SET_PORT_DATA",
+  SET_NODE_COORDINATES = "SET_NODE_COORDINATES"
+}
+
 const addConnection = (nodes: NodeMap, input: ProposedConnection, output: ProposedConnection, portTypes: PortTypeMap) => {
   const newNodes = {
     ...nodes,
@@ -270,17 +281,6 @@ const getDefaultData = ({
     return obj;
   }, {});
 };
-
-export enum NodesActionType {
-  ADD_CONNECTION = "ADD_CONNECTION",
-  REMOVE_CONNECTION = "REMOVE_CONNECTION",
-  DESTROY_TRANSPUT = "DESTROY_TRANSPUT",
-  ADD_NODE = "ADD_NODE",
-  REMOVE_NODE = "REMOVE_NODE",
-  HYDRATE_DEFAULT_NODES = "HYDRATE_DEFAULT_NODES",
-  SET_PORT_DATA = "SET_PORT_DATA",
-  SET_NODE_COORDINATES = "SET_NODE_COORDINATES"
-}
 
 type ProposedConnection = { nodeId: string; portName: string };
 

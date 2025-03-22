@@ -23,7 +23,7 @@ interface CommentProps {
   isNew: boolean;
 }
 
-export default ({
+const Comment = ({
   dispatch,
   id,
   x,
@@ -247,3 +247,5 @@ export default ({
     </Draggable>
   );
 };
+
+export default Comment;

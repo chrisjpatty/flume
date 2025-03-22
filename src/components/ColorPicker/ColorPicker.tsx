@@ -10,7 +10,7 @@ interface ColorPickerProps {
   onRequestClose: () => void;
 }
 
-export default ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
+const ColorPicker = ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
   const wrapper = React.useRef<HTMLDivElement>(null);
 
   const testClickOutside = React.useCallback(
@@ -91,3 +91,5 @@ const ColorButton = ({
     />
   </div>
 );
+
+export default ColorPicker;

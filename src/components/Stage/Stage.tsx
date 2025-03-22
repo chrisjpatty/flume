@@ -64,7 +64,7 @@ const Stage = ({
     if (wrapper.current) {
       stageRef.current = wrapper.current.getBoundingClientRect();
     }
-  }, []);
+  }, [stageRef]);
 
   React.useEffect(() => {
     if (wrapper.current) {
