@@ -22,7 +22,7 @@ import {
 import FlumeCache from "./Cache";
 import { ToastAction, ToastActionTypes } from "./toastsReducer";
 
-const addConnection = (nodes: NodeMap, input, output, portTypes) => {
+const addConnection = (nodes: NodeMap, input, output, portType: string) => {
   const newNodes = {
     ...nodes,
     [input.nodeId]: {
@@ -35,7 +35,8 @@ const addConnection = (nodes: NodeMap, input, output, portTypes) => {
             ...(nodes[input.nodeId].connections.inputs[input.portName] || []),
             {
               nodeId: output.nodeId,
-              portName: output.portName
+              portName: output.portName,
+              portType
             }
           ]
         }
@@ -52,7 +53,8 @@ const addConnection = (nodes: NodeMap, input, output, portTypes) => {
               []),
             {
               nodeId: input.nodeId,
-              portName: input.portName
+              portName: input.portName,
+              portType
             }
           ]
         }
@@ -285,10 +287,16 @@ type ProposedConnection = { nodeId: string; portName: string };
 
 export type NodesAction =
   | {
-      type: NodesActionType.ADD_CONNECTION | NodesActionType.REMOVE_CONNECTION;
+      type: NodesActionType.ADD_CONNECTION;
       input: ProposedConnection;
       output: ProposedConnection;
+      portType: string;
     }
+  | {
+      type: NodesActionType.REMOVE_CONNECTION;
+      input: ProposedConnection;
+      output: ProposedConnection;
+    } 
   | {
       type: NodesActionType.DESTROY_TRANSPUT;
       transput: ProposedConnection;
@@ -340,14 +348,14 @@ const nodesReducer = (
 ) => {
   switch (action.type) {
     case NodesActionType.ADD_CONNECTION: {
-      const { input, output } = action;
+      const { input, output, portType } = action;
       const inputIsNotConnected = !nodes[input.nodeId].connections.inputs[
         input.portName
       ];
       if (inputIsNotConnected) {
         const allowCircular =
           circularBehavior === "warn" || circularBehavior === "allow";
-        const newNodes = addConnection(nodes, input, output, portTypes);
+        const newNodes = addConnection(nodes, input, output, portType);
         const isCircular = checkForCircularNodes(newNodes, output.nodeId);
         if (isCircular && !allowCircular) {
           dispatchToasts?.({
