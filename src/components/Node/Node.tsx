@@ -101,39 +101,40 @@ const Node = ({
             cache.current.connections[combined] = cnx;
           }
         }
+
+        // Calculate coordinates relative to stage center
         const from = {
-          x:
-            byScale(
-              (toRect?.x ?? 0) -
-                (stageRect.current?.x ?? 0) +
-                portHalf -
-                (stageRect.current?.width ?? 0) / 2
-            ) + byScale(stageState.translate.x),
-          y:
-            byScale(
-              (toRect?.y ?? 0) -
-                (stageRect.current?.y ?? 0) +
-                portHalf -
-                (stageRect.current?.height ?? 0) / 2
-            ) + byScale(stageState.translate.y)
+          x: byScale(
+            (fromRect?.x ?? 0) -
+            (stageRect.current?.x ?? 0) +
+            portHalf -
+            (stageRect.current?.width ?? 0) / 2
+          ) + byScale(stageState.translate.x),
+          y: byScale(
+            ((fromRect?.y ?? 0) -
+              (stageRect.current?.y ?? 0) -
+              (stageRect.current?.height ?? 0) / 2) + portHalf
+          ) + byScale(stageState.translate.y)
         };
         const to = {
-          x:
-            byScale(
-              (fromRect?.x ?? 0) -
-                (stageRect.current?.x ?? 0) +
-                portHalf -
-                (stageRect.current?.width ?? 0) / 2
-            ) + byScale(stageState.translate.x),
-          y:
-            byScale(
-              (fromRect?.y ?? 0) -
-                (stageRect.current?.y ?? 0) +
-                portHalf -
-                (stageRect.current?.height ?? 0) / 2
-            ) + byScale(stageState.translate.y)
+          x: byScale(
+            (toRect?.x ?? 0) -
+            (stageRect.current?.x ?? 0) -
+            (stageRect.current?.width ?? 0) / 2
+          ) + byScale(stageState.translate.x),
+          y: byScale(
+            ((toRect?.y ?? 0) -
+              (stageRect.current?.y ?? 0) -
+              (stageRect.current?.height ?? 0) / 2) + portHalf
+          ) + byScale(stageState.translate.y)
         };
-        cnx?.setAttribute("d", calculateCurve(from, to));
+        cnx?.setAttribute(
+          "d",
+          calculateCurve(
+            isOutput ? to : from,
+            isOutput ? from : to
+          )
+        );
       });
     });
   };
@@ -237,12 +238,12 @@ const Node = ({
             options={[
               ...(deletable !== false
                 ? [
-                    {
-                      label: "Delete Node",
-                      value: "deleteNode",
-                      description: "Deletes a node and all of its connections."
-                    }
-                  ]
+                  {
+                    label: "Delete Node",
+                    value: "deleteNode",
+                    description: "Deletes a node and all of its connections."
+                  }
+                ]
                 : [])
             ]}
             onRequestClose={closeContextMenu}
