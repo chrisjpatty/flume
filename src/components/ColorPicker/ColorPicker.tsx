@@ -15,7 +15,6 @@ export default ({ x, y, onColorPicked, onRequestClose }: ColorPickerProps) => {
 
   const testClickOutside = React.useCallback(
     (e: MouseEvent) => {
-      console.log("testClickOutside", e.type);
       if (wrapper.current && !wrapper.current.contains(e.target as Node)) {
         onRequestClose();
         document.removeEventListener("click", testClickOutside);

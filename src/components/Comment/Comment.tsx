@@ -105,7 +105,6 @@ export default ({
       case "color":
         setColorPickerCoordinates(menuCoordinates);
         setIsPickingColor(true);
-        console.log(menuCoordinates);
         break;
       case "delete":
         dispatch({
