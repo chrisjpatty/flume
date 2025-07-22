@@ -23,8 +23,8 @@
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -85,8 +85,8 @@
     "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-url": "^1.4.0",
     "text-encoding": "^0.7.0",
-    "tslib": "^2.3.1",
-    "typescript": "^4.6.3",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.4",
     "wait-on": "^5.2.1",
     "y18n": "^5.0.8"
   },

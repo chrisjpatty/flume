@@ -86,6 +86,7 @@ const Stage = ({
         if (wheelTarget.clientHeight < wheelTarget.scrollHeight) return;
       }
       e.preventDefault();
+      e.stopPropagation();
       if (numNodes === 0) return;
 
       const wrapperRect = wrapper.current?.getBoundingClientRect();
@@ -306,8 +307,8 @@ const Stage = ({
       disabled={disablePan || (spaceToPan && !spaceIsPressed)}
       data-flume-stage={true}
     >
-      {menuOpen ? (
-        <Portal>
+      <Portal>
+        <div style={{ display: menuOpen ? "block" : "none" }}>
           <ContextMenu
             x={menuCoordinates.x}
             y={menuCoordinates.y}
@@ -316,8 +317,8 @@ const Stage = ({
             onOptionSelected={addNode}
             label="Add Node"
           />
-        </Portal>
-      ) : null}
+        </div>
+      </Portal>
       <div
         ref={translateWrapper}
         className={styles.transformWrapper}
