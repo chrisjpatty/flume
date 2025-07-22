@@ -156,7 +156,7 @@ const ContextMenu = ({
     <div
       data-flume-component="ctx-menu"
       className={styles.menuWrapper}
-      onMouseDown={e => e.stopPropagation()}
+      onClick={e => e.preventDefault()}
       onKeyDown={handleKeyDown}
       style={{
         left: x,
