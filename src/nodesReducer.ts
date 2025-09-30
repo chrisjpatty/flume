@@ -342,36 +342,43 @@ const nodesReducer = (
   switch (action.type) {
     case NodesActionType.ADD_CONNECTION: {
       const { input, output } = action;
+
       const inputIsNotConnected = !nodes[input.nodeId].connections.inputs[
         input.portName
       ];
-      if (inputIsNotConnected) {
-        const allowCircular =
-          circularBehavior === "warn" || circularBehavior === "allow";
-        const newNodes = addConnection(nodes, input, output, portTypes);
-        const isCircular = checkForCircularNodes(newNodes, output.nodeId);
-        if (isCircular && !allowCircular) {
-          dispatchToasts?.({
-            type: ToastActionTypes.ADD_TOAST,
-            title: "Unable to connect",
-            message: "Connecting these nodes would result in an infinite loop.",
-            toastType: "warning",
-            duration: 5000
-          });
-          return nodes;
-        } else {
-          if (isCircular && circularBehavior === "warn") {
-            dispatchToasts?.({
-              type: ToastActionTypes.ADD_TOAST,
-              title: "Circular Connection Detected",
-              message: "Connecting these nodes has created an infinite loop.",
-              toastType: "warning",
-              duration: 5000
-            });
-          }
-          return newNodes;
-        }
-      } else return nodes;
+
+      if (!inputIsNotConnected)
+        return nodes;
+
+      const newNodes = addConnection(nodes, input, output, portTypes);
+
+      if (circularBehavior === "allow")
+        return newNodes;
+
+      const isCircular = checkForCircularNodes(newNodes, output.nodeId);
+      if (!isCircular)
+        return newNodes;
+
+      if (circularBehavior === "prevent") {
+        dispatchToasts?.({
+          type: ToastActionTypes.ADD_TOAST,
+          title: "Unable to connect",
+          message: "Connecting these nodes would result in an infinite loop.",
+          toastType: "warning",
+          duration: 5000
+        });
+        return nodes;
+      }
+
+      dispatchToasts?.({
+        type: ToastActionTypes.ADD_TOAST,
+        title: "Circular Connection Detected",
+        message: "Connecting these nodes has created an infinite loop.",
+        toastType: "warning",
+        duration: 5000
+      });
+
+      return newNodes;
     }
 
     case NodesActionType.REMOVE_CONNECTION: {

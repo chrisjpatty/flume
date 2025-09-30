@@ -4,25 +4,33 @@ export const checkForCircularNodes = (
   nodes: { [nodeId: string]: FlumeNode },
   startNodeId: string
 ) => {
-  let isCircular = false;
-  const walk = (nodeId: string) => {
-    const outputs = Object.values(nodes[nodeId].connections.outputs);
-    for (var i = 0; i < outputs.length; i++) {
-      if (isCircular) {
-        break;
-      }
-      const outputConnections = outputs[i];
-      for (var k = 0; k < outputConnections.length; k++) {
-        const connectedTo = outputConnections[k];
-        if (connectedTo.nodeId === startNodeId) {
-          isCircular = true;
-          break;
-        } else {
-          walk(connectedTo.nodeId);
-        }
-      }
+
+  let queue: string[] = [startNodeId]
+  let visitedNodes: FlumeNode[] = []
+
+  while (queue.length > 0) {
+    let currentNodeId = queue.pop();
+    if (currentNodeId == undefined)
+      return;
+
+    let currentNode = nodes[currentNodeId];
+
+    if (visitedNodes.includes(currentNode)) {
+      return true;
     }
-  };
-  walk(startNodeId);
-  return isCircular;
+
+    visitedNodes.push(currentNode);
+
+    if (currentNode.connections == undefined)
+      continue;
+    let outputs = currentNode.connections.outputs;
+
+    for (let output in outputs) {
+      let outputArray = outputs[output]
+      queue = queue.concat(outputArray.map(x => x.nodeId).filter((value, index, array) => array.indexOf(value) == index));
+    }
+  }
+
+  return false;
+
 };
