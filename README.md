@@ -4,6 +4,8 @@
 
 # Flume
 
+![A screenshot of a live Flume editor](https://github.com/chrisjpatty/flume/blob/master/readme-header.jpg?raw=true)
+
 ## Guides & Examples
 
 [flume.dev](https://flume.dev)
