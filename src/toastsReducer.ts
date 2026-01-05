@@ -43,6 +43,7 @@ const toastsReducer = (toasts: Toast[] = [], action: ToastAction) => {
       ];
     case ToastActionTypes.SET_HEIGHT: {
       const index = toasts.findIndex(t => t.id === action.id);
+      if (index === -1) return toasts;
       return [
         ...toasts.slice(0, index),
         {
@@ -54,6 +55,7 @@ const toastsReducer = (toasts: Toast[] = [], action: ToastAction) => {
     }
     case ToastActionTypes.SET_EXITING: {
       const index = toasts.findIndex(t => t.id === action.id);
+      if (index === -1) return toasts;
       return [
         ...toasts.slice(0, index),
         {
@@ -65,6 +67,7 @@ const toastsReducer = (toasts: Toast[] = [], action: ToastAction) => {
     }
     case ToastActionTypes.REMOVE_TOAST: {
       const index = toasts.findIndex(t => t.id === action.id);
+      if (index === -1) return toasts;
       return [
         ...toasts.slice(0, index),
         ...toasts.slice(index + 1)
