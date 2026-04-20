@@ -65,78 +65,63 @@ export class RootEngine {
     return roots[0];
   };
 
-  private reduceRootInputs = (
-    inputs: ConnectionMap,
-    callback: (
-      inputName: string,
-      connection: Connection[]
-    ) => { name: string; value: any }
-  ) =>
-    Object.entries(inputs).reduce<{ [inputName: string]: any }>(
-      (obj, [inputName, connections]) => {
-        const input = callback(inputName, connections);
-        obj[input.name] = input.value;
-        return obj;
-      },
-      {}
-    );
-
-  private resolveInputValues = (
+  private async resolveInputValues(
     node: FlumeNode,
     nodeType: NodeType,
     nodes: NodeMap,
     context: any
-  ) => {
+  ): Promise<Record<string, any>> {
     let inputs = nodeType.inputs;
     if (typeof inputs === "function") {
       inputs = inputs(node.inputData, node.connections, context);
     }
-    return inputs.reduce<Record<string, any>>((obj, input) => {
+    const inputValues: Record<string, any> = {};
+    for (const input of inputs) {
       const inputConnections = node.connections.inputs[input.name] || [];
       if (inputConnections.length > 0) {
-        obj[input.name] = this.getValueOfConnection(
+        inputValues[input.name] = await this.getValueOfConnection(
           inputConnections[0],
           nodes,
           context
         );
       } else {
-        obj[input.name] = this.resolveInputControls(
+        inputValues[input.name] = this.resolveInputControls(
           input.type,
           node.inputData[input.name] || {},
           context
-        )
+        );
       }
-      return obj;
-    }, {});
-  };
+    }
+    return inputValues;
+  }
 
-  private getValueOfConnection = (
+  private async getValueOfConnection(
     connection: Connection,
     nodes: NodeMap,
     context: any
-  ) => {
+  ): Promise<any> {
     this.checkLoops();
     const outputNode = nodes[connection.nodeId];
     const outputNodeType = this.config.nodeTypes[outputNode.type];
-    const inputValues = this.resolveInputValues(
+    const inputValues = await this.resolveInputValues(
       outputNode,
       outputNodeType,
       nodes,
       context
     );
-    const outputResult = this.fireNodeFunction(
+    const outputResult = await this.fireNodeFunction(
       outputNode,
       inputValues,
       outputNodeType,
       context
-    )[connection.portName];
-    return outputResult;
-  };
+    );
+    return outputResult[connection.portName];
+  }
 
-  public resolveRootNode<T extends { [inputName: string]: any }>(
+  public async resolveRootNode<T extends { [inputName: string]: any }>(
     nodes: NodeMap,
     rawOptions?: RootEngineOptions
-  ): T {
+  ): Promise<T> {
     const options = rawOptions ?? {};
     const rootNode = options.rootNodeId
       ? nodes[options.rootNodeId]
@@ -160,34 +145,30 @@ export class RootEngine {
         );
         return obj;
       }, {});
-      const inputValues = this.reduceRootInputs(
-        rootNode.connections.inputs,
-        (inputName, connections) => {
-          this.resetLoops(options.maxLoops);
-          let value;
-          try {
-            value = this.getValueOfConnection(
-              connections[0],
-              nodes,
-              options.context
+      const inputValues: { [inputName: string]: any } = {};
+      for (const [inputName, connections] of Object.entries(
+        rootNode.connections.inputs
+      )) {
+        this.resetLoops(options.maxLoops);
+        let value;
+        try {
+          value = await this.getValueOfConnection(
+            connections[0],
+            nodes,
+            options.context
+          );
+        } catch (e) {
+          const err = e as LoopError;
+          if (err.code === LoopError.maxLoopsExceeded) {
+            console.error(
+              `${err.message} Circular nodes detected in ${inputName} port.`
             );
-          } catch (e) {
-            const err = e as LoopError;
-            if (err.code === LoopError.maxLoopsExceeded) {
-              console.error(
-                `${err.message} Circular nodes detected in ${inputName} port.`
-              );
-            } else {
-              console.error(e);
-            }
-          } finally {
-            return {
-              name: inputName,
-              value
-            };
+          } else {
+            console.error(e);
           }
         }
-      );
+        inputValues[inputName] = value;
+      }
       if (options.onlyResolveConnected) {
         return inputValues as T;
       } else {

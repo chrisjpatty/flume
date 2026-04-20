@@ -27,3 +27,4 @@ example/.docz/.cache
 .docz
 cypress/screenshots
 cypress/videos
+bun.lock
