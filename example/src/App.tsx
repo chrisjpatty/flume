@@ -308,19 +308,6 @@ flumeConfig
     outputs: ports => [ports.text()]
   })
   .addNodeType({
-    type: "stringEquals",
-    label: "Text Equals",
-    description: "Outputs if text equals another string of text.",
-    initialWidth: 170,
-    sortIndex: 33,
-    inputs: ports => [
-      ports.text({ name: "string1", label: "First String" }),
-      ports.text({ name: "string2", label: "Second String" }),
-      ports.boolean({ name: "caseSensitive" })
-    ],
-    outputs: ports => [ports.boolean({ name: "result" })]
-  })
-  .addNodeType({
     type: "user",
     label: "Current User",
     description: "Represents the current user",
@@ -354,18 +341,6 @@ flumeConfig
       ports.text({ name: "string2", label: "Second half" })
     ],
     outputs: ports => [ports.text({ name: "result", label: "Joined Text" })]
-  })
-  .addNodeType({
-    type: "textSwitch",
-    label: "Text Switch",
-    description: "Outputs one string if true, or a different string if false",
-    initialWidth: 180,
-    inputs: ports => [
-      ports.boolean({ name: "test", label: "Test" }),
-      ports.text({ name: "string1", label: "Text if true" }),
-      ports.text({ name: "string2", label: "Text if false" })
-    ],
-    outputs: ports => [ports.text({ name: "result" })]
   })
   .addNodeType({
     type: "and",
@@ -573,6 +548,103 @@ flumeConfig
     inputs: ports => [ports.employeeType()],
     outputs: ports => [ports.employeeType()]
   });
+
+
+// add the "generic" port and the new genertic nodes
+flumeConfig
+  .addPortType({
+    type: "any",
+    name: "Any",
+    label: "Any type",
+    color: Colors.blue,
+    controls: [
+      Controls.custom({
+        name: "unknown",
+        render: (_, $, $$, $$$, $$$$, inputData) => {
+          return (
+            <div />
+          );
+        }
+      })
+    ],
+    acceptTypes: Object.keys(flumeConfig.portTypes)
+
+  })
+  .addNodeType({
+    type: "switch",
+    label: "Switch",
+    description: "Switches between two values based on a boolean",
+    inputs: ports => (data, connections) => {
+      let value1Type = (connections.inputs.value1 || [{ portName: 'any' }])[0]?.portType
+      let port = ports[value1Type] || ports.any;
+
+      return [
+        ports.boolean({ name: "condition", label: "Condition" }),
+        port({ name: "value1", label: "Value 1" }),
+        port({ name: "value2", label: "Value 2" })
+      ];
+    },
+    outputs: ports =>
+      (data, connections) => {
+        let value1Type = (connections.inputs.value1 || [{ portName: 'any' }])[0]?.portType
+        let port = ports[value1Type] || ports.any;
+        return [
+          port({ name: "result", label: "Result" })
+        ];
+      }
+  })
+  .addNodeType({
+    type: "Equals",
+    label: "Equals",
+    description: "Outputs if value1 equals value2.",
+    initialWidth: 170,
+    sortIndex: 33,
+    inputs: ports => (data, connections) => {
+      let value1Type = (connections.inputs.value1 || [{ portName: 'any' }])[0]?.portType
+      let port = ports[value1Type] || ports.any;
+
+      return [
+        port({ name: "value1", label: "Value 1" }),
+        port({ name: "value2", label: "Value 2" }),
+        value1Type === 'text' ? ports.boolean({ name: "caseSensitive", label: "Case Sensitive" }) : null,
+        value1Type === 'number' ? ports.boolean({ name: "abs", label: "Absolute Value" }) : null,
+      ].filter(t => t !== null);
+    },
+    outputs: ports => [ports.boolean({ name: "result" })]
+  })
+  .addNodeType({
+    type: "index",
+    label: "Index Value",
+    description: "Select a single item from a list.",
+    initialWidth: 170,
+    sortIndex: 33,
+    inputs: ports => (data, connections) => {
+      let value1Type = (connections.inputs.item0 || [{ portName: 'any' }])[0]?.portType
+      let port = ports[value1Type] || ports.any;
+      let count = data?.count?.num || 0;
+      if (count < 1) count = 1;
+
+      let portItems = Array.from({ length: count }, (_, index) =>
+        port({ name: `item${index}`, label: `Item ${index}` })
+      );
+
+      return [
+        ports.number({ name: "count", label: "Count" }),
+        ports.number({ name: "index", label: "Index" }),
+        ...portItems,
+      ];
+    },
+    outputs: ports =>
+      (data, connections) => {
+        let value1Type = (connections.inputs.item0 || [{ portName: 'any' }])[0]?.portType
+        let port = ports[value1Type] || ports.any;
+        return [
+          port({ name: "result", label: "Result" })
+        ];
+      }
+  })
+
+  ;
 
 const engine = new RootEngine(
   flumeConfig,

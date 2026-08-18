@@ -100,5 +100,8 @@
     "nanoid": "^3.3.2",
     "react-portal": "^4.2.1",
     "rollup-plugin-typescript2": "^0.31.2"
+  },
+  "volta": {
+    "node": "18.20.8"
   }
 }

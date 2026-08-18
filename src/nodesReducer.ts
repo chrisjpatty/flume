@@ -34,7 +34,7 @@ export enum NodesActionType {
   SET_NODE_COORDINATES = "SET_NODE_COORDINATES"
 }
 
-const addConnection = (nodes: NodeMap, input: ProposedConnection, output: ProposedConnection, portTypes: PortTypeMap) => {
+const addConnection = (nodes: NodeMap, input: ProposedConnection, output: ProposedConnection, portType: string) => {
   const newNodes = {
     ...nodes,
     [input.nodeId]: {
@@ -47,7 +47,8 @@ const addConnection = (nodes: NodeMap, input: ProposedConnection, output: Propos
             ...(nodes[input.nodeId].connections.inputs[input.portName] || []),
             {
               nodeId: output.nodeId,
-              portName: output.portName
+              portName: output.portName,
+              portType
             }
           ]
         }
@@ -64,7 +65,8 @@ const addConnection = (nodes: NodeMap, input: ProposedConnection, output: Propos
               []),
             {
               nodeId: input.nodeId,
-              portName: input.portName
+              portName: input.portName,
+              portType
             }
           ]
         }
@@ -286,7 +288,13 @@ type ProposedConnection = { nodeId: string; portName: string };
 
 export type NodesAction =
   | {
-    type: NodesActionType.ADD_CONNECTION | NodesActionType.REMOVE_CONNECTION;
+    type: NodesActionType.ADD_CONNECTION;
+    input: ProposedConnection;
+    output: ProposedConnection;
+    portType: string;
+  }
+   | {
+    type: NodesActionType.REMOVE_CONNECTION;
     input: ProposedConnection;
     output: ProposedConnection;
   }
@@ -341,7 +349,7 @@ const nodesReducer = (
 ) => {
   switch (action.type) {
     case NodesActionType.ADD_CONNECTION: {
-      const { input, output } = action;
+      const { input, output, portType} = action;
 
       const inputIsNotConnected = !nodes[input.nodeId].connections.inputs[
         input.portName
@@ -350,7 +358,7 @@ const nodesReducer = (
       if (!inputIsNotConnected)
         return nodes;
 
-      const newNodes = addConnection(nodes, input, output, portTypes);
+      const newNodes = addConnection(nodes, input, output, portType);
 
       if (circularBehavior === "allow")
         return newNodes;
